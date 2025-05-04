@@ -1,6 +1,0 @@
-pyproject.toml
-kg_builder.egg-info/PKG-INFO
-kg_builder.egg-info/SOURCES.txt
-kg_builder.egg-info/dependency_links.txt
-kg_builder.egg-info/requires.txt
-kg_builder.egg-info/top_level.txt

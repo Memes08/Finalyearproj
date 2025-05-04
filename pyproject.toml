@@ -19,12 +19,7 @@ dependencies = [
     "gunicorn",
     "psycopg2-binary",
     "werkzeug",
-    "pandas",
-    "openai-whisper>=20230306",
-    "pytube>=15.0.0",
-    "openai>=0.8.0",
-    "groq>=0.11.0",
-    "anthropic>=0.26.0",
+    "pandas"
 ]
 
 [tool.setuptools]

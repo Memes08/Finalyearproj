@@ -4,210 +4,73 @@
 
 {% block additional_head %}
 <style>
-    /* Graph Tooltip */
     .d3-tooltip {
         position: absolute;
-        padding: 12px;
-        font: 13px sans-serif;
-        background: rgba(30, 30, 30, 0.9);
+        text-align: center;
+        padding: 8px;
+        font: 12px sans-serif;
+        background: rgba(0, 0, 0, 0.8);
         color: #fff;
-        border: 0;
-        border-radius: 6px;
+        border: 0px;
+        border-radius: 4px;
         pointer-events: none;
-        max-width: 300px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
+        max-width: 200px;
     }
     
-    /* Graph Legend */
     .graph-legend {
-        background-color: rgba(35, 35, 35, 0.8);
-        border-radius: 8px;
-        padding: 16px;
-        margin-top: 20px;
+        margin-top: 15px;
+        padding: 10px;
+        border: 1px solid #333;
+        border-radius: 4px;
     }
     
     .legend-item {
         display: flex;
         align-items: center;
-        margin-bottom: 8px;
-        background-color: rgba(50, 50, 50, 0.3);
-        border-radius: 4px;
-        padding: 6px 10px;
-        transition: all 0.2s ease;
-    }
-    
-    .legend-item:hover {
-        background-color: rgba(70, 70, 70, 0.3);
+        margin-bottom: 5px;
     }
     
     .legend-color {
-        margin-right: 10px;
+        width: 15px;
+        height: 15px;
         border-radius: 50%;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Graph SVG Styles */
-    .graph-svg {
-        background-color: #1a1a1a;
-        border-radius: 4px;
-    }
-    
-    .graph-filters {
-        background-color: rgba(35, 35, 35, 0.8);
-        border-radius: 8px;
-        padding: 16px;
-        margin-top: 20px;
-    }
-    
-    /* Custom Progress Bar */
-    .progress-indicator {
-        margin: 20px 0;
-    }
-    
-    .progress {
-        height: 12px;
-        border-radius: 6px;
-        background-color: rgba(0, 0, 0, .2);
-    }
-    
-    .progress-bar {
-        border-radius: 6px;
-    }
-    
-    .progress-status {
-        font-size: 14px;
-        font-weight: 500;
-    }
-    
-    /* Card hover effect */
-    .control-card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    .control-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Node and link highlight styles */
-    .node {
-        transition: all 0.3s ease;
-    }
-    
-    .node.highlighted {
-        stroke: #ffcc00;
-        stroke-width: 3px;
-    }
-    
-    .link {
-        transition: all 0.3s ease;
-    }
-    
-    .link.highlighted {
-        stroke-width: 3px;
-        stroke-opacity: 1;
-    }
-    
-    /* Search result indication */
-    .search-result-count {
-        position: absolute;
-        right: 50px;
-        top: 12px;
-        font-size: 12px;
-    }
-    
-    /* Quick filter pills */
-    .quick-filter-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        margin-bottom: 10px;
-    }
-    
-    .quick-filter-pill {
-        border-radius: 20px;
-        padding: 5px 12px;
-        font-size: 12px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .quick-filter-pill:hover {
-        transform: translateY(-2px);
+        margin-right: 8px;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
-    <!-- Page Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}" class="text-decoration-none">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ graph.name }}</li>
-                </ol>
-            </nav>
-            
-            <div class="d-flex align-items-center justify-content-between">
-                <h2 class="mb-0">
-                    <i class="fas fa-project-diagram me-2 text-info"></i>
-                    {{ graph.name }}
-                </h2>
-                <div>
-                    <span class="badge bg-info px-3 py-2 fs-6">{{ graph.domain }}</span>
-                </div>
-            </div>
-            <p class="text-muted mt-2">
-                {% if graph.description %}
-                    {{ graph.description }}
-                {% else %}
-                    No description provided.
-                {% endif %}
-            </p>
-        </div>
-    </div>
-    
-    <!-- Progress Indicator -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div id="graph-visualization-progress-container"></div>
-        </div>
-    </div>
-    
-    <!-- Main Content -->
     <div class="row">
-        <!-- Sidebar -->
         <div class="col-md-3">
-            <!-- Graph Information Card -->
-            <div class="card mb-4 shadow-sm control-card">
+            <div class="card mb-4">
                 <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Graph Details</h5>
-                    <span class="badge bg-secondary" id="entity-count">-</span>
+                    <h5 class="mb-0">Graph Info</h5>
+                    <span class="badge bg-info">{{ graph.domain }}</span>
                 </div>
-                <div class="card-body">                    
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <small class="text-muted d-block">Created</small>
-                            <strong>{{ graph.created_at.strftime('%Y-%m-%d') }}</strong>
-                        </div>
-                        <div>
-                            <small class="text-muted d-block">Last Updated</small>
-                            <strong>{{ graph.updated_at.strftime('%Y-%m-%d') }}</strong>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <h4>{{ graph.name }}</h4>
+                    <p class="text-muted">
+                        {% if graph.description %}
+                            {{ graph.description }}
+                        {% else %}
+                            No description provided.
+                        {% endif %}
+                    </p>
                     
                     <hr>
                     
-                    <h6 class="mb-3">Input Sources</h6>
-                    {% if input_sources %}
-                        <div class="list-group">
-                            {% for source in input_sources %}
-                                <div class="list-group-item bg-dark border-secondary">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div class="mb-3">
+                        <strong>Created:</strong> {{ graph.created_at.strftime('%Y-%m-%d') }}<br>
+                        <strong>Last Updated:</strong> {{ graph.updated_at.strftime('%Y-%m-%d') }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Input Sources</h6>
+                        {% if input_sources %}
+                            <ul class="list-group">
+                                {% for source in input_sources %}
+                                    <li class="list-group-item bg-dark d-flex justify-content-between align-items-center">
                                         <div>
                                             {% if source.source_type == 'video' %}
                                                 <i class="fas fa-film me-2 text-info"></i>
@@ -217,40 +80,32 @@
                                                 <i class="fab fa-github me-2 text-warning"></i>
                                             {% endif %}
                                             
-                                            <strong>
-                                                {% if source.filename %}
-                                                    {{ source.filename|truncate(20) }}
-                                                {% elif source.url %}
-                                                    {{ source.url.split('/')[-1]|truncate(20) }}
-                                                {% else %}
-                                                    Unknown source
-                                                {% endif %}
-                                            </strong>
+                                            {% if source.filename %}
+                                                {{ source.filename }}
+                                            {% elif source.url %}
+                                                {{ source.url.split('/')[-1] }}
+                                            {% else %}
+                                                Unknown source
+                                            {% endif %}
                                         </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between small">
-                                        <span class="text-muted">{{ source.created_at.strftime('%Y-%m-%d') }}</span>
                                         <div>
-                                            <span class="badge bg-info me-1" title="Entities">
-                                                {{ source.entity_count }}<i class="fas fa-cube ms-1"></i>
+                                            <span class="badge bg-secondary" title="Entities">
+                                                {{ source.entity_count }}E
                                             </span>
-                                            <span class="badge bg-primary" title="Relationships">
-                                                {{ source.relationship_count }}<i class="fas fa-link ms-1"></i>
+                                            <span class="badge bg-secondary" title="Relationships">
+                                                {{ source.relationship_count }}R
                                             </span>
                                         </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="alert alert-dark">
-                            <i class="fas fa-info-circle me-2"></i>
-                            No input sources added yet.
-                        </div>
-                    {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No input sources added yet.</p>
+                        {% endif %}
+                    </div>
                     
-                    <div class="d-grid gap-2 mt-3">
-                        <a href="{{ url_for('process_data', graph_id=graph.id) }}" class="btn btn-primary">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('process_data', graph_id=graph.id) }}" class="btn btn-outline-info">
                             <i class="fas fa-file-upload me-2"></i> Add More Data
                         </a>
                         <a href="{{ url_for('query_graph', graph_id=graph.id) }}" class="btn btn-outline-info">
@@ -260,40 +115,26 @@
                 </div>
             </div>
             
-            <!-- Graph Controls Card -->
-            <div class="card mb-4 shadow-sm control-card">
+            <div class="card">
                 <div class="card-header bg-dark">
-                    <h5 class="mb-0">Visualization Controls</h5>
+                    <h5 class="mb-0">Controls</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Quick Filter Pills -->
-                    <div class="mb-3">
-                        <label class="form-label">Quick Filters</label>
-                        <div class="quick-filter-pills" id="quick-filter-pills">
-                            <!-- Will be dynamically populated -->
-                        </div>
-                    </div>
-                    
-                    <!-- Zoom Controls -->
                     <div class="mb-3">
                         <label class="form-label">Zoom</label>
-                        <div class="btn-group w-100">
-                            <button id="zoom-in" class="btn btn-sm btn-outline-secondary">
+                        <div class="d-flex">
+                            <button id="zoom-in" class="btn btn-sm btn-outline-secondary me-2">
                                 <i class="fas fa-search-plus"></i>
                             </button>
-                            <button id="zoom-out" class="btn btn-sm btn-outline-secondary">
+                            <button id="zoom-out" class="btn btn-sm btn-outline-secondary me-2">
                                 <i class="fas fa-search-minus"></i>
                             </button>
                             <button id="zoom-reset" class="btn btn-sm btn-outline-secondary">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
-                            <button id="zoom-fit" class="btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-compress-arrows-alt"></i>
-                            </button>
                         </div>
                     </div>
                     
-                    <!-- Layout Options -->
                     <div class="mb-3">
                         <label class="form-label">Layout</label>
                         <select id="layout-select" class="form-select">
@@ -303,90 +144,30 @@
                         </select>
                     </div>
                     
-                    <!-- Force Strength Slider -->
-                    <div class="mb-3">
-                        <label for="force-strength" class="form-label d-flex justify-content-between">
-                            <span>Force Strength</span>
-                            <span class="badge bg-secondary" id="force-strength-value">-400</span>
-                        </label>
-                        <input type="range" class="form-range" min="-800" max="-100" value="-400" step="50" id="force-strength">
-                    </div>
-                    
-                    <!-- Link Distance Slider -->
-                    <div class="mb-3">
-                        <label for="link-distance" class="form-label d-flex justify-content-between">
-                            <span>Link Distance</span>
-                            <span class="badge bg-secondary" id="link-distance-value">180</span>
-                        </label>
-                        <input type="range" class="form-range" min="50" max="300" value="180" step="10" id="link-distance">
-                    </div>
-                    
-                    <!-- Label Options -->
                     <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" id="show-labels">
                         <label class="form-check-label" for="show-labels">Show All Labels</label>
                     </div>
                     
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="show-relationship-labels">
-                        <label class="form-check-label" for="show-relationship-labels">Show Relationship Labels</label>
-                    </div>
-                    
                     <hr>
                     
-                    <!-- Graph Statistics -->
                     <div id="graph-info" class="small">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span><i class="fas fa-cube me-2"></i> Nodes</span>
-                            <span class="badge bg-info" id="node-count">-</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span><i class="fas fa-link me-2"></i> Relationships</span>
-                            <span class="badge bg-primary" id="relationship-count">-</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span><i class="fas fa-sitemap me-2"></i> Node Types</span>
-                            <span class="badge bg-success" id="node-type-count">-</span>
-                        </div>
+                        <p class="mb-1"><strong>Nodes:</strong> <span id="node-count">-</span></p>
+                        <p class="mb-1"><strong>Relationships:</strong> <span id="relationship-count">-</span></p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Main Graph Area -->
         <div class="col-md-9">
-            <!-- Search and Filter Card -->
-            <div class="card mb-4 shadow-sm" id="graph-filters-card">
+            <div class="card">
                 <div class="card-header bg-dark">
-                    <h5 class="mb-0">Filter & Search</h5>
-                </div>
-                <div class="card-body" id="graph-filters">
-                    <!-- Filter controls will be added by the JS -->
-                </div>
-            </div>
-            
-            <!-- Graph Visualization Card -->
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Knowledge Graph</h5>
-                    <div class="btn-group">
-                        <button id="download-svg" class="btn btn-sm btn-outline-light" title="Download SVG">
-                            <i class="fas fa-download me-1"></i> SVG
-                        </button>
-                        <button id="download-png" class="btn btn-sm btn-outline-light" title="Download PNG">
-                            <i class="fas fa-download me-1"></i> PNG
-                        </button>
-                    </div>
+                    <h5 class="mb-0">Knowledge Graph Visualization</h5>
                 </div>
                 <div class="card-body p-0">
-                    <div id="graph-visualization-container" class="d-flex flex-column">
-                        <div id="graph-visualization" data-graph-id="{{ graph.id }}" class="w-100" style="height: 700px;"></div>
-                    </div>
+                    <div id="graph-visualization" data-graph-id="{{ graph.id }}" class="w-100" style="height: 700px;"></div>
                 </div>
             </div>
-            
-            <!-- Legend Container -->
-            <div id="graph-legend" class="mt-4"></div>
         </div>
     </div>
 </div>
@@ -402,18 +183,16 @@
         // Initialize visualization
         const graphViz = new KnowledgeGraphVisualizer('graph-visualization', {
             nodeRadius: 15,
-            linkDistance: 180,
+            linkDistance: 150,
             chargeStrength: -400
         });
         
         // Load graph data
         graphViz.loadData(graphId);
         
-        // Add zoom control handlers
+        // Add control handlers
         document.getElementById('zoom-in').addEventListener('click', function() {
             const svgElement = document.querySelector('#graph-visualization svg');
-            if (!svgElement) return;
-            
             const currentZoom = d3.zoomTransform(svgElement);
             
             d3.select(svgElement)
@@ -425,8 +204,6 @@
         
         document.getElementById('zoom-out').addEventListener('click', function() {
             const svgElement = document.querySelector('#graph-visualization svg');
-            if (!svgElement) return;
-            
             const currentZoom = d3.zoomTransform(svgElement);
             
             d3.select(svgElement)
@@ -438,20 +215,6 @@
         
         document.getElementById('zoom-reset').addEventListener('click', function() {
             const svgElement = document.querySelector('#graph-visualization svg');
-            if (!svgElement) return;
-            
-            d3.select(svgElement)
-                .transition()
-                .duration(300)
-                .call(d3.zoom().transform, d3.zoomIdentity);
-        });
-        
-        document.getElementById('zoom-fit').addEventListener('click', function() {
-            // This would fit the graph to the view
-            // Implementation would depend on knowing the bounds of the graph
-            // For simplicity, just reset zoom
-            const svgElement = document.querySelector('#graph-visualization svg');
-            if (!svgElement) return;
             
             d3.select(svgElement)
                 .transition()
@@ -463,9 +226,7 @@
         document.getElementById('layout-select').addEventListener('change', function() {
             // This would normally change the layout algorithm
             // For simplicity, we'll just restart the simulation
-            if (graphViz.simulation) {
-                graphViz.simulation.alpha(1).restart();
-            }
+            graphViz.simulation.alpha(1).restart();
         });
         
         // Toggle node labels
@@ -474,37 +235,7 @@
             
             d3.selectAll('.node-label')
                 .style('display', showLabels ? 'block' : null)
-                .style('font-size', showLabels ? '12px' : '11px');
-        });
-        
-        // Toggle relationship labels
-        document.getElementById('show-relationship-labels').addEventListener('change', function() {
-            const showLabels = this.checked;
-            
-            d3.selectAll('.link-label')
-                .style('display', showLabels ? 'block' : 'none');
-        });
-        
-        // Force strength slider
-        document.getElementById('force-strength').addEventListener('input', function() {
-            const value = parseInt(this.value);
-            document.getElementById('force-strength-value').textContent = value;
-            
-            if (graphViz.simulation) {
-                graphViz.simulation.force("charge").strength(value);
-                graphViz.simulation.alpha(1).restart();
-            }
-        });
-        
-        // Link distance slider
-        document.getElementById('link-distance').addEventListener('input', function() {
-            const value = parseInt(this.value);
-            document.getElementById('link-distance-value').textContent = value;
-            
-            if (graphViz.simulation) {
-                graphViz.simulation.force("link").distance(value);
-                graphViz.simulation.alpha(1).restart();
-            }
+                .style('font-size', showLabels ? '12px' : '10px');
         });
         
         // Update graph info when data is loaded
@@ -525,187 +256,11 @@
             
             document.getElementById('node-count').textContent = nodeCount;
             document.getElementById('relationship-count').textContent = relationshipCount;
-            document.getElementById('entity-count').textContent = `${nodeCount} nodes`;
-            
-            // Count node types
-            if (graphViz.nodeTypes) {
-                document.getElementById('node-type-count').textContent = graphViz.nodeTypes.size;
-            }
-            
-            // Set initial state for relationship labels (hidden by default)
-            d3.selectAll('.link-label').style('display', 'none');
-            
-            // Setup quick filter pills
-            setupQuickFilterPills();
         }
-        
-        function setupQuickFilterPills() {
-            if (!graphViz.relationshipTypes) return;
-            
-            const pillsContainer = document.getElementById('quick-filter-pills');
-            if (!pillsContainer) return;
-            
-            // Clear existing pills
-            pillsContainer.innerHTML = '';
-            
-            // Add "All" pill
-            const allPill = document.createElement('span');
-            allPill.className = 'quick-filter-pill badge bg-secondary';
-            allPill.textContent = 'All';
-            allPill.addEventListener('click', function() {
-                // Reset all filters
-                graphViz.activeFilters.nodeTypes = new Set();
-                graphViz.activeFilters.relationshipTypes = new Set();
-                graphViz.applyFilters();
-                
-                // Update pill visual state
-                document.querySelectorAll('.quick-filter-pill').forEach(pill => {
-                    pill.classList.remove('bg-info', 'bg-success', 'bg-warning');
-                    pill.classList.add('bg-secondary');
-                });
-                allPill.classList.remove('bg-secondary');
-                allPill.classList.add('bg-info');
-            });
-            pillsContainer.appendChild(allPill);
-            
-            // Add node type pills (first 5)
-            if (graphViz.nodeTypes && graphViz.nodeTypes.size > 0) {
-                [...graphViz.nodeTypes].sort().slice(0, 5).forEach(type => {
-                    const pill = document.createElement('span');
-                    pill.className = 'quick-filter-pill badge bg-secondary';
-                    pill.textContent = type;
-                    pill.addEventListener('click', function() {
-                        // Filter to this node type
-                        graphViz.activeFilters.nodeTypes = new Set([type]);
-                        graphViz.activeFilters.relationshipTypes = new Set();
-                        graphViz.applyFilters();
-                        
-                        // Update pill visual state
-                        document.querySelectorAll('.quick-filter-pill').forEach(p => {
-                            p.classList.remove('bg-info', 'bg-success', 'bg-warning');
-                            p.classList.add('bg-secondary');
-                        });
-                        pill.classList.remove('bg-secondary');
-                        pill.classList.add('bg-success');
-                    });
-                    pillsContainer.appendChild(pill);
-                });
-            }
-            
-            // Add relationship type pills (first 5)
-            if (graphViz.relationshipTypes && graphViz.relationshipTypes.size > 0) {
-                [...graphViz.relationshipTypes].sort().slice(0, 5).forEach(type => {
-                    const pill = document.createElement('span');
-                    pill.className = 'quick-filter-pill badge bg-secondary';
-                    pill.textContent = type;
-                    pill.addEventListener('click', function() {
-                        // Filter to this relationship type
-                        graphViz.activeFilters.relationshipTypes = new Set([type]);
-                        graphViz.activeFilters.nodeTypes = new Set();
-                        graphViz.applyFilters();
-                        
-                        // Update pill visual state
-                        document.querySelectorAll('.quick-filter-pill').forEach(p => {
-                            p.classList.remove('bg-info', 'bg-success', 'bg-warning');
-                            p.classList.add('bg-secondary');
-                        });
-                        pill.classList.remove('bg-secondary');
-                        pill.classList.add('bg-warning');
-                    });
-                    pillsContainer.appendChild(pill);
-                });
-            }
-            
-            // Highlight "All" pill initially
-            allPill.classList.remove('bg-secondary');
-            allPill.classList.add('bg-info');
-        }
-        
-        // Export graph as SVG
-        document.getElementById('download-svg').addEventListener('click', function() {
-            const svgElement = document.querySelector('#graph-visualization svg');
-            if (!svgElement) return;
-            
-            // Create a copy of the SVG element to modify
-            const svgCopy = svgElement.cloneNode(true);
-            
-            // Set proper namespaces
-            svgCopy.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            svgCopy.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-            
-            // Set background
-            svgCopy.style.background = '#1a1a1a';
-            
-            // Convert SVG to string
-            const serializer = new XMLSerializer();
-            let svgString = serializer.serializeToString(svgCopy);
-            
-            // Create a Blob and download link
-            const blob = new Blob([svgString], {type: 'image/svg+xml'});
-            const url = URL.createObjectURL(blob);
-            
-            const downloadLink = document.createElement('a');
-            downloadLink.href = url;
-            downloadLink.download = `knowledge-graph-${graphId}.svg`;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-            URL.revokeObjectURL(url);
-        });
-        
-        // Export graph as PNG
-        document.getElementById('download-png').addEventListener('click', function() {
-            const svgElement = document.querySelector('#graph-visualization svg');
-            if (!svgElement) return;
-            
-            // Create a copy of the SVG element to modify
-            const svgCopy = svgElement.cloneNode(true);
-            
-            // Set proper namespaces
-            svgCopy.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            
-            // Set background
-            svgCopy.style.background = '#1a1a1a';
-            
-            // Convert SVG to string
-            const serializer = new XMLSerializer();
-            let svgString = serializer.serializeToString(svgCopy);
-            
-            // Create canvas
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            
-            // Create image
-            const img = new Image();
-            img.onload = function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                
-                // Draw white background
-                context.fillStyle = '#1a1a1a';
-                context.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Draw SVG on canvas
-                context.drawImage(img, 0, 0);
-                
-                // Create download link
-                const downloadLink = document.createElement('a');
-                downloadLink.download = `knowledge-graph-${graphId}.png`;
-                downloadLink.href = canvas.toDataURL('image/png');
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-            };
-            
-            // Convert SVG to data URL
-            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
-        });
         
         // Handle window resize
         window.addEventListener('resize', function() {
-            if (graphViz.resize) {
-                graphViz.resize();
-            }
+            graphViz.resize();
         });
     });
 </script>

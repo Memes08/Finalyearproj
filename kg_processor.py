@@ -1,11 +1,6 @@
 import os
 import csv
-import json
 import logging
-import re
-import random
-import string
-from datetime import datetime
 
 # Try to import pandas, but provide fallback if not available
 try:
@@ -26,1198 +21,80 @@ except ImportError:
     pd = DummyPandas()
     logging.warning("Pandas not installed. Using basic CSV processing instead.")
 
-# Define entity types and their properties
-ENTITY_TYPES = {
-    "Movie": {
-        "properties": ["title", "year", "runtime", "plot", "language", "country", "awards"],
-        "data_types": {
-            "title": "string",
-            "year": "number",
-            "runtime": "number",
-            "plot": "string",
-            "language": "string",
-            "country": "string",
-            "awards": "string"
-        }
-    },
-    "Person": {
-        "properties": ["name", "birthdate", "nationality", "gender"],
-        "data_types": {
-            "name": "string",
-            "birthdate": "date",
-            "nationality": "string",
-            "gender": "string"
-        }
-    },
-    "Genre": {
-        "properties": ["name", "description"],
-        "data_types": {
-            "name": "string",
-            "description": "string"
-        }
-    },
-    "Book": {
-        "properties": ["title", "isbn", "pages", "summary", "language", "publicationYear"],
-        "data_types": {
-            "title": "string",
-            "isbn": "string",
-            "pages": "number",
-            "summary": "string",
-            "language": "string",
-            "publicationYear": "number"
-        }
-    },
-    "Artist": {
-        "properties": ["name", "formationYear", "disbandmentYear", "genre", "country"],
-        "data_types": {
-            "name": "string",
-            "formationYear": "number",
-            "disbandmentYear": "number",
-            "genre": "string",
-            "country": "string"
-        }
-    },
-    "Song": {
-        "properties": ["title", "duration", "releaseYear", "lyrics", "language"],
-        "data_types": {
-            "title": "string",
-            "duration": "number",
-            "releaseYear": "number",
-            "lyrics": "string",
-            "language": "string"
-        }
-    },
-    "Institution": {
-        "properties": ["name", "foundedYear", "type", "location", "description"],
-        "data_types": {
-            "name": "string",
-            "foundedYear": "number",
-            "type": "string",
-            "location": "string",
-            "description": "string"
-        }
-    }
-}
-
-# Define relationship types and their properties
-RELATIONSHIP_TYPES = {
-    "ACTED_IN": {
-        "source": ["Person"],
-        "target": ["Movie"],
-        "properties": ["role", "screen_time"],
-        "bidirectional": True,
-        "reverse_name": "HAS_ACTOR"
-    },
-    "DIRECTED": {
-        "source": ["Person"],
-        "target": ["Movie"],
-        "properties": ["year"],
-        "bidirectional": True,
-        "reverse_name": "DIRECTED_BY"
-    },
-    "BELONGS_TO": {
-        "source": ["Movie", "Song"],
-        "target": ["Genre"],
-        "properties": [],
-        "bidirectional": True,
-        "reverse_name": "CONTAINS"
-    },
-    "WROTE": {
-        "source": ["Person"],
-        "target": ["Book", "Movie"],
-        "properties": ["year"],
-        "bidirectional": True,
-        "reverse_name": "WRITTEN_BY"
-    },
-    "SIMILAR_TO": {
-        "source": ["Movie", "Book", "Song"],
-        "target": ["Movie", "Book", "Song"],
-        "properties": ["similarity_score"],
-        "bidirectional": True,
-        "reverse_name": "SIMILAR_TO"
-    },
-    "PERFORMED": {
-        "source": ["Artist", "Person"],
-        "target": ["Song"],
-        "properties": ["year", "location"],
-        "bidirectional": True,
-        "reverse_name": "PERFORMED_BY"
-    },
-    "AFFILIATED_WITH": {
-        "source": ["Person"],
-        "target": ["Institution"],
-        "properties": ["start_year", "end_year", "role"],
-        "bidirectional": True,
-        "reverse_name": "HAS_MEMBER"
-    }
-}
-
 class KnowledgeGraphProcessor:
-    def __init__(self, neo4j_manager, groq_api_key=None):
+    def __init__(self, neo4j_manager, groq_api_key):
         self.neo4j_manager = neo4j_manager
         self.groq_api_key = groq_api_key
         self.llm = None
-        self.has_llm = False
-        self.llm_client = None
-        
-        # Entity type recognition patterns
-        self.entity_patterns = {
-            "Person": [
-                r'\b([A-Z][a-z]+ [A-Z][a-z]+)\b',  # Simple name pattern
-                r'\b(?:Mr|Mrs|Ms|Dr|Prof)\.? ([A-Z][a-z]+ [A-Z][a-z]+)\b',  # Name with title
-                r'\b(?:Sage|Rishi|Muni|Swami|Guru) ([A-Z][a-z]+)\b'  # Vedic sages and teachers
-            ],
-            "Movie": [
-                r'"([^"]+)"',  # Quoted title
-                r'movie[s]? (?:called|titled|named) "([^"]+)"',
-                r'(?:film|movie|documentary) "([^"]+)"'
-            ],
-            "Date": [
-                r'\b(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2},? \d{4}\b',
-                r'\b\d{4}-\d{2}-\d{2}\b',
-                r'\b\d{1,2}/\d{1,2}/\d{4}\b'
-            ],
-            "Year": [
-                r'\b(19|20)\d{2}\b',  # Simple year pattern
-                r'\b\d{1,4}(?:\s+BCE|\s+BC|\s+CE|\s+AD)\b'  # Ancient dates
-            ],
-            "Genre": [
-                r'\b(Action|Adventure|Comedy|Drama|Horror|Sci-Fi|Thriller|Romance|Fantasy|Animation|Documentary|Biography)\b'
-            ],
-            "Veda": [
-                r'\b(Rig ?Veda|Sama ?Veda|Yajur ?Veda|Atharva ?Veda|Vedas)\b',
-                r'\b(Upanishads?|Brahmanas?|Aranyakas?|Samhitas?)\b'
-            ],
-            "Scripture": [
-                r'\b(Bhagavad ?Gita|Mahabharata|Ramayana|Puranas?|Sutras?)\b',
-                r'\b(Manu ?Smriti|Yoga ?Sutras|Vedanta|Agamas)\b'
-            ],
-            "Deity": [
-                r'\b(Indra|Agni|Vayu|Surya|Varuna|Brahma|Vishnu|Shiva|Lakshmi|Saraswati)\b',
-                r'\b(Ganesha|Hanuman|Krishna|Rama|Durga|Kali|Parvati|Rudra)\b'
-            ],
-            "Concept": [
-                r'\b(Dharma|Karma|Moksha|Samsara|Yoga|Atman|Brahman|Yajna)\b',
-                r'\b(Mantra|Rishi|Muni|Sanskrit|Puja|Varnashrama|Ashrama)\b'
-            ],
-            # Crime case related entities
-            "Victim": [
-                r'\bvictim(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)\b',
-                r'\b([A-Z][a-z]+ [A-Z][a-z]+) was (?:killed|murdered|found dead)\b',
-                r'\bbody of ([A-Z][a-z]+ [A-Z][a-z]+)\b',
-                r'\bmurder of ([A-Z][a-z]+ [A-Z][a-z]+)\b',
-                r'\b([A-Z][a-z]+ [A-Z][a-z]+)(?:,| was)? \d{1,2}(?: years old)?\b'
-            ],
-            "Suspect": [
-                r'\bsuspect(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)\b',
-                r'\b([A-Z][a-z]+ [A-Z][a-z]+) was (?:arrested|charged|accused|detained)\b',
-                r'\b([A-Z][a-z]+ [A-Z][a-z]+) is (?:suspected|accused|charged with)\b',
-                r'\barrested ([A-Z][a-z]+ [A-Z][a-z]+)\b',
-                r'\bkillers? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)\b',
-                r'\b(?:serial killer|murderer) ([A-Z][a-z]+ [A-Z][a-z]+)\b'
-            ],
-            "CrimeType": [
-                r'\b(murder|homicide|killing|manslaughter|assault)\b',
-                r'\b(first|second)-degree murder\b',
-                r'\b(serial killer|mass murder|massacre)\b',
-                r'\b(stabbing|shooting|strangulation)\b'
-            ],
-            "Evidence": [
-                r'\b(?:evidence|exhibit) ([A-Z]|#\d+)\b',
-                r'\b(DNA|fingerprint|blood|weapon) evidence\b',
-                r'\bfound (?:a|the) ([a-z]+ [a-z]+)\b',
-                r'\b(knife|gun|rope|hammer|poison|weapon)\b'
-            ],
-            "LawEnforcement": [
-                r'\b(?:detective|officer|investigator|sheriff) ([A-Z][a-z]+ [A-Z][a-z]+)\b',
-                r'\b([A-Z][a-z]+ [A-Z][a-z]+) (?:Police|Sheriff\'s) Department\b',
-                r'\b(FBI|CIA|ATF|Police|Sheriff|Detective)\b'
-            ],
-            "CrimeScene": [
-                r'\b(crime scene|murder scene|death scene)\b',
-                r'\bscene of the (crime|murder)\b',
-                r'\bbody was (?:found|discovered) (?:at|in) ([A-Z][a-z]+(?: [A-Z][a-z]+)?)\b',
-                r'\b([A-Z][a-z]+ County|[A-Z][a-z]+ State)\b'
-            ],
-            "Location": [
-                r'\bin ([A-Z][a-z]+(?: [A-Z][a-z]+)?)\b',
-                r'\bat ([A-Z][a-z]+(?: [A-Z][a-z]+)?)\b',
-                r'\b([A-Z][a-z]+ County)\b',
-                r'\b([A-Z][a-z]+ [A-Z][a-z]+ Prison)\b',
-                r'\b([A-Z][a-z]+, [A-Z]{2})\b'  # City, State
-            ]
-        }
-        
-        # Try importing more advanced NLP if available
-        try:
-            import spacy
-            self.nlp = spacy.load("en_core_web_sm")
-            self.has_nlp = True
-            logging.info("Spacy NLP loaded successfully")
-        except:
-            self.has_nlp = False
-            logging.warning("Spacy NLP not available. Using basic pattern matching for entity extraction.")
-            
-        try:
-            import nltk
-            nltk.download('punkt', quiet=True)
-            self.has_nltk = True
-            logging.info("NLTK loaded successfully")
-        except:
-            self.has_nltk = False
-            logging.warning("NLTK not available. Using basic sentence splitting.")
-        
-        if not groq_api_key:
-            logging.warning("GROQ API key not provided. LLM processing is unavailable.")
-        else:
-            try:
-                self._initialize_llm()
-            except Exception as e:
-                logging.warning(f"Failed to initialize LLM: {e}")
+        logging.warning("GROQ/LangChain not installed. LLM processing is unavailable.")
         
     def _initialize_llm(self):
-        """Initialize the Groq LLM client for enhanced text processing"""
-        try:
-            if self.groq_api_key:
-                from openai import OpenAI
-                
-                # Create client using Groq's API (xAI) with OpenAI's client
-                self.llm_client = OpenAI(
-                    base_url="https://api.x.ai/v1", 
-                    api_key=self.groq_api_key
-                )
-                logging.info("Successfully initialized Groq LLM client")
-                self.has_llm = True
-                return True
-            else:
-                logging.warning("Groq API key not provided. LLM processing is unavailable.")
-                self.has_llm = False
-                return False
-        except Exception as e:
-            logging.error(f"Error initializing Groq LLM: {e}")
-            self.has_llm = False
-            return False
-            
-    def process_youtube_content(self, transcript_text, url=None, domain="custom"):
-        """Process YouTube transcript content using Groq AI - works with both full transcripts and metadata only
-        
-        Args:
-            transcript_text (str): The transcript text from YouTube video (or metadata if transcript unavailable)
-            url (str, optional): The YouTube URL for additional context
-            domain (str, optional): The knowledge domain. Defaults to "custom".
-            
-        Returns:
-            str: Enhanced and processed transcript text
-        """
-        if not self.has_llm:
-            logging.warning("Groq AI not available. Using original transcript.")
-            return transcript_text
-            
-        try:
-            # Clean up the transcript text
-            cleaned_text = re.sub(r'\s+', ' ', transcript_text).strip()
-            
-            # Determine if we only have metadata (no full transcript)
-            is_metadata_only = "[No transcript available - using video metadata only]" in transcript_text
-            if is_metadata_only:
-                logging.info("Only video metadata available, using Groq AI for enhanced analysis")
-            
-            # Get domain-specific configuration for better prompt engineering
-            domain_config = self._get_domain_prompt(domain)
-            entity_types = ', '.join(domain_config.get("entity_types", []))
-            
-            # Create a prompt for Groq to process the YouTube content
-            # Adjust prompt based on whether we have full transcript or just metadata
-            if is_metadata_only:
-                prompt = f"""
-                You are an expert knowledge graph builder analyzing limited YouTube video metadata.
-                
-                I only have minimal metadata from a YouTube video{' at ' + url if url else ''}:
-                
-                {cleaned_text}
-                
-                Even with this limited information, please:
-                1. Generate a plausible knowledge graph structure based on the video title and any available metadata
-                2. Infer likely entities that would be present in this video (focus on {entity_types})
-                3. Suggest potential relationships between these entities based on domain knowledge
-                4. Add contextual information that would be valuable for the knowledge graph
-                
-                Use your knowledge of the {domain} domain to make educated inferences.
-                
-                Format your response in the following EXACT structure:
-                
-                # INFERRED VIDEO CONTENT
-                [Provide a brief summary of what you think the video is about]
-                
-                # KEY ENTITIES
-                - Entity Name 1 [Entity Type] - brief description
-                - Entity Name 2 [Entity Type] - brief description
-                - Entity Name 3 [Entity Type] - brief description
-                [Add 5-10 entities with proper entity types like Person, Movie, Genre, etc.]
-                
-                # RELATIONSHIPS
-                - Entity Name 1 RELATIONSHIP_TYPE Entity Name 2
-                - Entity Name 3 RELATIONSHIP_TYPE Entity Name 1
-                [Add at least 5 relationships between the entities]
-                
-                # ADDITIONAL CONTEXT
-                [Any additional information that would help build the knowledge graph]
-                """
-            else:
-                prompt = f"""
-                You are an expert knowledge graph builder analyzing a YouTube video transcript.
-                
-                Here is the transcript from a YouTube video{' at ' + url if url else ''}:
-                
-                {cleaned_text[:8000]}  # Limit length to avoid token limits
-                
-                Please perform the following tasks:
-                1. Summarize the key points of this video in a well-structured format
-                2. Extract the main entities mentioned (focus on {entity_types})
-                3. Identify important relationships between these entities
-                4. Add any contextual information that would be valuable for a knowledge graph
-                
-                Format your response in the following EXACT structure:
-                
-                # VIDEO TITLE AND SUMMARY
-                [Inferred title]
-                [Summary of video content]
-                
-                # KEY ENTITIES
-                - Entity Name 1 [Entity Type] - brief description
-                - Entity Name 2 [Entity Type] - brief description
-                - Entity Name 3 [Entity Type] - brief description
-                [Add 5-10 entities with proper entity types like Person, Movie, Genre, etc.]
-                
-                # RELATIONSHIPS
-                - Entity Name 1 RELATIONSHIP_TYPE Entity Name 2
-                - Entity Name 3 RELATIONSHIP_TYPE Entity Name 1
-                [Add at least 5 relationships between the entities]
-                
-                # ADDITIONAL CONTEXT
-                [Any additional information that would help build the knowledge graph]
-                """
-            
-            # Call Groq API
-            response = self.llm_client.chat.completions.create(
-                model="grok-2-1212",  # Using Groq's large context model
-                messages=[
-                    {"role": "system", "content": f"You are an expert in analyzing content for the {domain} domain."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=2000
-            )
-            
-            # Get the enhanced content from Groq
-            enhanced_content = response.choices[0].message.content
-            
-            # Create appropriate prefix based on whether this is metadata-only or full transcript
-            source_type = "VIDEO METADATA (Limited Information)" if is_metadata_only else "ORIGINAL TRANSCRIPT"
-            
-            # For metadata-only processing, let's add explicit triples format to help with extraction
-            if is_metadata_only:
-                # Try to extract structured triples directly from the AI response
-                structured_content = self._extract_structured_triples_from_ai_response(enhanced_content, domain)
-                if structured_content:
-                    combined_text = structured_content
-                    logging.info("Successfully converted AI response to structured triples format")
-                else:
-                    # Fallback - combine with original content for comprehensive processing
-                    combined_text = f"""
-                    ENHANCED YOUTUBE CONTENT (AI-processed)
-                    URL: {url if url else 'Unknown'}
-                    Domain: {domain}
-                    Processing Method: Metadata-Only Analysis
-                    ----------------------------------------
-                    
-                    {enhanced_content}
-                    
-                    ----------------------------------------
-                    {source_type}:
-                    {cleaned_text[:3000]}
-                    """
-            else:
-                # Regular full transcript processing
-                combined_text = f"""
-                ENHANCED YOUTUBE CONTENT (AI-processed)
-                URL: {url if url else 'Unknown'}
-                Domain: {domain}
-                Processing Method: Full Transcript Analysis
-                ----------------------------------------
-                
-                {enhanced_content}
-                
-                ----------------------------------------
-                {source_type}:
-                {cleaned_text[:3000]}  # Include part of original for context
-                """
-            
-            logging.info("Successfully enhanced YouTube content with Groq AI")
-            return combined_text
-            
-        except Exception as e:
-            logging.error(f"Error processing YouTube content with Groq: {e}")
-            # Return original if processing fails
-            return transcript_text
-    
-    def _generate_unique_id(self, entity_type, label):
-        """Generate a unique ID for an entity based on its type and label"""
-        # Clean the label and combine with type
-        clean_label = re.sub(r'[^a-zA-Z0-9]', '', label)
-        prefix = entity_type[:3].upper()
-        
-        # Add a timestamp and random characters to ensure uniqueness
-        timestamp = datetime.now().strftime('%y%m%d%H%M%S')
-        random_chars = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
-        
-        return f"{prefix}-{clean_label[:10]}-{timestamp}-{random_chars}"
+        raise NotImplementedError("LLM integration is not available. Required packages not installed.")
     
     def _get_domain_prompt(self, domain):
         """Get domain-specific prompt template for entity extraction"""
         domain_configs = {
             "movie": {
-                "entity_types": ["Movie", "Person", "Genre"],
                 "relations": [
                     ("HAS_ACTOR", "actors", "Actor who appears in a movie"),
-                    ("DIRECTED_BY", "director", "Director of a movie"),
-                    ("BELONGS_TO", "genres", "Genre category of a movie"),
+                    ("HAS_DIRECTOR", "director", "Director of a movie"),
+                    ("IN_GENRE", "genres", "Genre category of a movie"),
                     ("RELEASED_ON", "released", "Release date of a movie"),
-                    ("HAS_IMDB_RATING", "imdbRating", "IMDb rating of a movie"),
-                    ("SIMILAR_TO", None, "Movie similar to another movie"),
-                    ("WRITTEN_BY", "writers", "Writers of the movie screenplay")
+                    ("HAS_IMDB_RATING", "imdbRating", "IMDb rating of a movie")
                 ]
             },
             "book": {
-                "entity_types": ["Book", "Person", "Genre", "Institution"],
                 "relations": [
                     ("WRITTEN_BY", "author", "Author of a book"),
                     ("PUBLISHED_BY", "publisher", "Publisher of a book"),
-                    ("BELONGS_TO", "genre", "Genre category of a book"),
-                    ("PUBLISHED_ON", "publicationDate", "Publication date of a book"),
-                    ("SIMILAR_TO", None, "Book similar to another book"),
-                    ("AFFILIATED_WITH", None, "Author affiliated with an institution")
+                    ("IN_GENRE", "genre", "Genre category of a book"),
+                    ("PUBLISHED_ON", "publicationDate", "Publication date of a book")
                 ]
             },
             "music": {
-                "entity_types": ["Song", "Artist", "Person", "Genre"],
                 "relations": [
                     ("PERFORMED_BY", "artist", "Artist who performs a song"),
-                    ("WRITTEN_BY", "songwriter", "Person who wrote a song"),
                     ("PRODUCED_BY", "producer", "Producer of a song"),
-                    ("BELONGS_TO", "genre", "Genre category of a song"),
+                    ("IN_GENRE", "genre", "Genre category of a song"),
                     ("RELEASED_ON", "releaseDate", "Release date of a song"),
-                    ("INCLUDED_IN", "album", "Album containing a song"),
-                    ("SIMILAR_TO", None, "Song similar to another song")
-                ]
-            },
-            "vedas": {
-                "entity_types": ["Veda", "Scripture", "Deity", "Concept", "Person", "Year"],
-                "relations": [
-                    ("CONSISTS_OF", "parts", "Components of a Veda"),
-                    ("WRITTEN_BY", "sage", "Sage who compiled a text"),
-                    ("TRANSMITTED_BY", "tradition", "Oral tradition that preserved a text"),
-                    ("DATED_TO", "period", "Historical period of a text"),
-                    ("CONTAINS", "elements", "Content included in a text"),
-                    ("RELATED_TO", "concept", "Philosophical concept related to a text"),
-                    ("MENTIONS", "deity", "Deity mentioned in a Vedic text"),
-                    ("ORIGINATED_IN", "location", "Place of origin"),
-                    ("ASSOCIATED_WITH", "practice", "Practice associated with a text"),
-                    ("PRESERVED_IN", "language", "Language of preservation"),
-                    ("FOCUS_ON", "theme", "Main theme or focus of a text")
-                ]
-            },
-            "crime": {
-                "entity_types": ["Person", "Victim", "Suspect", "CrimeType", "Evidence", "LawEnforcement", "CrimeScene", "Location", "Date", "Year"],
-                "relations": [
-                    ("VICTIM_OF", None, "Person who was the victim of a crime"),
-                    ("SUSPECTED_OF", None, "Person suspected of committing a crime"),
-                    ("INVESTIGATED_BY", None, "Crime investigated by law enforcement"),
-                    ("OCCURRED_AT", None, "Location where crime occurred"),
-                    ("FOUND_AT", None, "Evidence found at location"),
-                    ("OCCURRED_ON", None, "Date when crime occurred"),
-                    ("AFFILIATED_WITH", None, "Connections between people involved in case"),
-                    ("DISCOVERED_BY", None, "Person who discovered victim or evidence"),
-                    ("CONVICTED_OF", None, "Person convicted of specific crime"),
-                    ("SENTENCED_TO", None, "Punishment received for crime"),
-                    ("EVIDENCE_OF", None, "Evidence related to specific crime")
+                    ("INCLUDED_IN", "album", "Album containing a song")
                 ]
             },
             "academic": {
-                "entity_types": ["Person", "Institution", "Genre"],
                 "relations": [
-                    ("WRITTEN_BY", "author", "Author of a paper"),
+                    ("AUTHORED_BY", "author", "Author of a paper"),
                     ("PUBLISHED_IN", "journal", "Journal where a paper was published"),
-                    ("BELONGS_TO", "field", "Research field of a paper"),
-                    ("PUBLISHED_ON", "publicationDate", "Publication date of a paper"),
-                    ("AFFILIATED_WITH", "institution", "Institution affiliated with an author"),
-                    ("COLLABORATED_WITH", None, "Authors who collaborated on research")
+                    ("IN_FIELD", "field", "Research field of a paper"),
+                    ("PUBLISHED_ON", "publicationDate", "Publication date of a paper")
                 ]
             },
             "business": {
-                "entity_types": ["Institution", "Person"],
                 "relations": [
-                    ("LED_BY", "ceo", "CEO of a company"),
-                    ("BELONGS_TO", "sector", "Industry sector of a company"),
+                    ("HAS_CEO", "ceo", "CEO of a company"),
+                    ("IN_SECTOR", "sector", "Industry sector of a company"),
                     ("FOUNDED_ON", "foundingDate", "Date a company was founded"),
-                    ("HEADQUARTERED_IN", "location", "Location of company headquarters"),
-                    ("AFFILIATED_WITH", "parent", "Parent company or organization"),
-                    ("INVESTED_IN", None, "Company invested in by another company")
+                    ("HEADQUARTERED_IN", "location", "Location of company headquarters")
                 ]
             },
             "custom": {
-                "entity_types": ["Person", "Institution", "Genre"],
                 "relations": []
             }
         }
         
         return domain_configs.get(domain, domain_configs["custom"])
     
-    def _extract_structured_triples_from_ai_response(self, ai_response, domain):
-        """Extract explicit structured triples from AI response for better knowledge graph creation
-        
-        This function parses the AI response and formats it explicitly as triples for easier extraction.
-        """
-        try:
-            # Get domain-specific entity types and relations
-            domain_config = self._get_domain_prompt(domain)
-            entity_types = domain_config.get("entity_types", [])
-            relation_configs = domain_config.get("relations", [])
-            
-            # Extract potential entities from the AI response
-            potential_entities = {}
-            
-            # Extract relationships between entities
-            structured_triples = []
-            
-            # Try to identify entities in the AI response by looking for headings or lists
-            sections = ai_response.split("\n\n")
-            entities_section = None
-            relationships_section = None
-            
-            # Look for entity and relationship sections
-            for section in sections:
-                if any(heading in section.lower() for heading in ["entities", "key entities", "main entities", "likely entities"]):
-                    entities_section = section
-                elif any(heading in section.lower() for heading in ["relationships", "relations", "connections"]):
-                    relationships_section = section
-            
-            # Process entities and relationships to create explicit triples
-            if entities_section and relationships_section:
-                # Parse entities from the section
-                entities = self._parse_entities_from_section(entities_section, entity_types)
-                
-                # Parse relationships and create triples
-                triples = self._parse_relationships_from_section(relationships_section, entities)
-                
-                if triples:
-                    # Format the response as structured triple data
-                    formatted_triples = "\n".join([f"{subj} | {rel} | {obj}" for subj, rel, obj in triples])
-                    
-                    structured_content = f"""
-                    STRUCTURED KNOWLEDGE GRAPH DATA (AI-Generated)
-                    Domain: {domain}
-                    ----------------------------------------
-                    
-                    ENTITY_LIST:
-                    {", ".join(entities.keys())}
-                    
-                    TRIPLE_DATA:
-                    {formatted_triples}
-                    
-                    ----------------------------------------
-                    """
-                    
-                    return structured_content
-            
-            return None
-            
-        except Exception as e:
-            logging.error(f"Error extracting structured triples from AI response: {e}")
-            return None
-    
-    def _parse_entities_from_section(self, section, entity_types):
-        """Parse entities from a section of text"""
-        entities = {}
-        lines = section.split("\n")
-        
-        for line in lines:
-            # Skip headers and empty lines
-            if "entities" in line.lower() or not line.strip():
-                continue
-                
-            # Look for entity type markers like [Movie], [Person], etc.
-            entity_found = False
-            for entity_type in entity_types:
-                # Initialize entity_name as None for this iteration
-                entity_name = None
-                
-                # Check for type marker format [EntityType]
-                type_marker = f"[{entity_type}]"
-                if type_marker in line:
-                    # Extract the entity name - anything before the type marker
-                    parts = line.split(type_marker)
-                    if len(parts) > 0:
-                        entity_name = parts[0].strip().strip(":-").strip()
-                        
-                        # If we have a list item marker like "- ", remove it
-                        if entity_name and entity_name.startswith("- "):
-                            entity_name = entity_name[2:].strip()
-                        
-                # Check for type marker format (EntityType)
-                elif f"({entity_type})" in line:
-                    # Extract the entity name - anything before the type marker
-                    parts = line.split(f"({entity_type})")
-                    if len(parts) > 0:
-                        entity_name = parts[0].strip().strip(":-").strip()
-                        
-                        # If we have a list item marker like "- ", remove it
-                        if entity_name and entity_name.startswith("- "):
-                            entity_name = entity_name[2:].strip()
-                
-                # Store entity if it has a valid name (outside the if-elif blocks)
-                if entity_name and len(entity_name) > 1:
-                    entities[entity_name] = entity_type
-                    entity_found = True
-                    break
-                        
-            # If no entity with explicit type marker was found, try to infer from context
-            if not entity_found and "- " in line:
-                # Extract potential entity name from list item
-                entity_parts = line.split("- ")
-                if len(entity_parts) > 1:
-                    potential_entity = entity_parts[1].strip().strip(":")
-                    
-                    # Try to infer entity type from context
-                    inferred_type = None
-                    lower_line = line.lower()
-                    
-                    if any(term in lower_line for term in ["direct", "film", "movie", "cinema"]):
-                        inferred_type = "Movie"
-                    elif any(term in lower_line for term in ["person", "actor", "actress", "director", "star"]):
-                        inferred_type = "Person"
-                    elif any(term in lower_line for term in ["genre", "category", "type"]):
-                        inferred_type = "Genre"
-                        
-                    # Add entity if we could infer its type
-                    if inferred_type and potential_entity and len(potential_entity) > 1:
-                        entities[potential_entity] = inferred_type
-        
-        return entities
-    
-    def _parse_relationships_from_section(self, section, entities):
-        """Parse relationships from a section of text and create triples"""
-        triples = []
-        lines = section.split("\n")
-        
-        for line in lines:
-            # Skip headers and empty lines
-            if "relationship" in line.lower() or not line.strip():
-                continue
-                
-            # Check for common relationship patterns like "X directed Y" or "X stars in Y"
-            for entity1 in entities:
-                if entity1 in line:
-                    entity1_type = entities[entity1]
-                    
-                    # Look for relationships with other entities
-                    for entity2 in entities:
-                        if entity1 != entity2 and entity2 in line:
-                            entity2_type = entities[entity2]
-                            
-                            # Determine relationship type based on context
-                            rel_type = self._infer_relation_from_text(line, entity1_type, entity2_type)
-                            if rel_type:
-                                triples.append((entity1, rel_type, entity2))
-        
-        # If we couldn't extract relationships, make some basic ones based on entity types
-        if not triples and len(entities) >= 2:
-            entities_list = list(entities.items())
-            
-            # Create basic relationships between entities of compatible types
-            for i in range(len(entities_list)):
-                entity1, entity1_type = entities_list[i]
-                for j in range(i+1, len(entities_list)):
-                    entity2, entity2_type = entities_list[j]
-                    
-                    # Try to infer relation based on entity types
-                    rel_type = self._infer_relation(entity1_type, entity2_type, "custom")
-                    if rel_type:
-                        triples.append((entity1, rel_type, entity2))
-        
-        return triples
-    
-    def _infer_relation_from_text(self, text, entity1_type, entity2_type):
-        """Infer relationship type from text and entity types"""
-        text_lower = text.lower()
-        
-        if entity1_type == "Person" and entity2_type == "Movie":
-            if any(term in text_lower for term in ["direct", "directed", "director"]):
-                return "DIRECTED"
-            elif any(term in text_lower for term in ["act", "acted", "actor", "star", "starred", "appears", "cast"]):
-                return "ACTED_IN"
-            elif any(term in text_lower for term in ["write", "wrote", "written", "screenplay"]):
-                return "WROTE"
-                
-        elif entity1_type == "Movie" and entity2_type == "Person":
-            if any(term in text_lower for term in ["direct", "directed", "director"]):
-                return "DIRECTED_BY"
-            elif any(term in text_lower for term in ["act", "acted", "actor", "star", "starred", "appears", "cast"]):
-                return "HAS_ACTOR"
-            elif any(term in text_lower for term in ["write", "wrote", "written", "screenplay"]):
-                return "WRITTEN_BY"
-                
-        elif entity1_type == "Movie" and entity2_type == "Genre":
-            return "BELONGS_TO"
-            
-        elif entity1_type == "Genre" and entity2_type == "Movie":
-            return "CONTAINS"
-            
-        # Default relations for other entity type combinations
-        return "RELATED_TO"
-    
-    def _detect_crime_case_domain(self, text):
-        """Detect if text appears to be about a crime case"""
-        crime_terms = [
-            "murder", "homicide", "killer", "victim", "detective", "investigation",
-            "crime scene", "evidence", "autopsy", "serial killer", "police", "suspect",
-            "arrested", "charged", "trial", "convicted", "sentence", "prosecution",
-            "case file", "criminal", "forensic", "death", "body", "weapon"
-        ]
-        
-        # Count how many crime-related terms appear in the text
-        count = sum(1 for term in crime_terms if term.lower() in text.lower())
-        
-        # If there are several crime terms, it's likely about a crime case
-        return count >= 3
-
-    def extract_entities_with_patterns(self, text, domain="custom"):
-        """Extract entities using regex patterns and rules"""
-        entities = {}
-        domain_config = self._get_domain_prompt(domain)
-        entity_types = domain_config.get("entity_types", [])
-        
-        # Extract entities with patterns
-        for entity_type, patterns in self.entity_patterns.items():
-            if entity_type not in entity_types and entity_type not in ["Date", "Year"]:
-                continue
-                
-            entities[entity_type] = []
-            for pattern in patterns:
-                matches = re.finditer(pattern, text)
-                for match in matches:
-                    entity_text = match.group(1) if len(match.groups()) > 0 else match.group(0)
-                    entity_id = self._generate_unique_id(entity_type, entity_text)
-                    
-                    # Skip duplicates
-                    if any(e['text'] == entity_text for e in entities[entity_type]):
-                        continue
-                        
-                    entity_data = {'id': entity_id, 'text': entity_text, 'type': entity_type}
-                    entities[entity_type].append(entity_data)
-        
-        return entities
-    
-    def _extract_from_fallback_transcription(self, text, domain="custom"):
-        """Extract knowledge graph triples from fallback video transcription"""
-        logging.info("Extracting knowledge from fallback video transcription")
-        
-        # Initialize triples list
-        triples = []
-        
-        # Extract filename if available
-        filename_match = re.search(r'File: ([^\n]+)', text)
-        filename = filename_match.group(1).strip() if filename_match else "video"
-        
-        # Try to detect content from filename
-        filename_lower = filename.lower()
-        detected_domain = None
-        
-        # Try to auto-detect content from filename
-        if any(term in filename_lower for term in ["veda", "vedic", "upanishad", "sanskrit", "hindu", "ancient", "india"]):
-            detected_domain = "vedas" 
-        elif any(term in filename_lower for term in ["movie", "film", "cinema", "actor", "actress", "director"]):
-            detected_domain = "movie"
-        elif any(term in filename_lower for term in ["academ", "lecture", "course", "education", "study", "research"]):
-            detected_domain = "academic"
-        elif any(term in filename_lower for term in ["crime", "murder", "case", "investigation", "detective", "killer", "criminal", "police", "fbi", "homicide"]):
-            detected_domain = "crime"
-            logging.info(f"Detected crime case content from filename: {filename}")
-        
-        # Also check the content of the text for crime-related terms
-        if not detected_domain and self._detect_crime_case_domain(text):
-            detected_domain = "crime"
-            logging.info("Detected crime case content from transcript text")
-        
-        # Create a primary video entity
-        video_entity = f"video_{hash(filename) % 1000}"
-        
-        # Add basic file metadata
-        timestamp_match = re.search(r'Timestamp: ([^\n]+)', text)
-        if timestamp_match:
-            timestamp = timestamp_match.group(1).strip()
-            triples.append((video_entity, "CREATED_ON", timestamp))
-        
-        # Use auto-detected domain if available and no explicit domain set
-        if detected_domain and domain == "custom":
-            domain = detected_domain
-            logging.info(f"Auto-detected domain '{domain}' from filename")
-        
-        # Special domain-specific extractions
-        if domain == "crime" or self._detect_crime_case_domain(text):
-            # Crime case domain - extract crime-related entities
-            # Let's extract key crime elements
-            logging.info("Processing crime case content")
-            
-            # Extract case name/number if available
-            case_match = re.search(r'Case(?: Number| File)?: ([^\n]+)', text)
-            case_id = case_match.group(1).strip() if case_match else f"Case_{random.randint(1000, 9999)}"
-            
-            # Extract victim if available
-            victim_match = re.search(r'victim(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)', text, re.IGNORECASE)
-            victim = victim_match.group(1) if victim_match else None
-            
-            # Extract suspect if available
-            suspect_match = re.search(r'suspect(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)', text, re.IGNORECASE)
-            suspect = suspect_match.group(1) if suspect_match else None
-            
-            # Extract crime type if available
-            crime_type_match = re.search(r'(murder|homicide|killing|manslaughter|assault|stabbing|shooting)', text, re.IGNORECASE)
-            crime_type = crime_type_match.group(1).capitalize() if crime_type_match else "Crime"
-            
-            # Create the case entity
-            triples.append((video_entity, "DOCUMENTS", case_id))
-            triples.append((case_id, "IS_A", "Criminal_Case"))
-            
-            # Add core entities and relationships if available
-            if victim:
-                triples.append((case_id, "HAS_VICTIM", victim))
-                triples.append((victim, "IS_A", "Victim"))
-                triples.append((victim, "VICTIM_OF", crime_type))
-            
-            if suspect:
-                triples.append((case_id, "HAS_SUSPECT", suspect))
-                triples.append((suspect, "IS_A", "Suspect"))
-                triples.append((suspect, "SUSPECTED_OF", crime_type))
-                
-                # Connect suspect to victim if both are available
-                if victim:
-                    triples.append((suspect, "TARGETED", victim))
-            
-            # Extract location/scene if available
-            location = None  # Initialize location variable
-            location_match = re.search(r'in ([A-Z][a-z]+(?: [A-Z][a-z]+)?)', text)
-            if location_match:
-                location = location_match.group(1)
-                triples.append((case_id, "OCCURRED_AT", location))
-                triples.append((location, "IS_A", "Crime_Scene"))
-                
-                if victim:
-                    triples.append((victim, "FOUND_AT", location))
-            
-            # Extract date if available
-            date_match = re.search(r'on (January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2},? \d{4}', text)
-            if date_match:
-                date = date_match.group(0).replace('on ', '')
-                triples.append((case_id, "OCCURRED_ON", date))
-            
-            # Extract evidence if available
-            evidence_match = re.search(r'(evidence|DNA|fingerprint|blood|weapon|knife|gun)', text, re.IGNORECASE)
-            if evidence_match:
-                evidence = evidence_match.group(1).capitalize()
-                triples.append((case_id, "HAS_EVIDENCE", evidence))
-                triples.append((evidence, "IS_A", "Evidence"))
-                
-                # Only connect to location if we have a valid location
-                if location is not None:
-                    triples.append((evidence, "FOUND_AT", location))
-            
-            # Extract law enforcement if available
-            le_match = re.search(r'(?:detective|officer|investigator|sheriff) ([A-Z][a-z]+ [A-Z][a-z]+)', text, re.IGNORECASE)
-            if le_match:
-                detective = le_match.group(1)
-                triples.append((case_id, "INVESTIGATED_BY", detective))
-                triples.append((detective, "IS_A", "Law_Enforcement"))
-            
-        elif domain == "vedas" or "veda" in filename_lower:
-            # Special handling for Vedas domain
-            triples.extend([
-                (video_entity, "COVERS_TOPIC", "Vedas"),
-                ("Vedas", "ORIGINATED_IN", "Ancient India"),
-                ("Vedas", "CONSISTS_OF", "Rigveda"),
-                ("Vedas", "CONSISTS_OF", "Samaveda"),
-                ("Vedas", "CONSISTS_OF", "Yajurveda"),
-                ("Vedas", "CONSISTS_OF", "Atharvaveda"),
-                ("Rigveda", "IS_OLDEST", "Veda"),
-                ("Vedas", "MEANS", "Knowledge"),
-                ("Vedas", "TRANSMITTED_BY", "Brahmin Sages"),
-                ("Rigveda", "CONTAINS_VERSES", "10,552 verses"),
-                ("Samaveda", "CONTAINS_VERSES", "1,875 verses"),
-                ("Yajurveda", "CONTAINS_VERSES", "1,975 verses"),
-                ("Atharvaveda", "CONTAINS_VERSES", "6,000 verses"),
-                ("Vedas", "PRESERVED_THROUGH", "Oral Tradition"),
-                ("Vedas", "WRITTEN_IN", "Sanskrit"),
-                ("Vedas", "DATING_BACK", "3,500 years"),
-                ("Rigveda", "THEMES", "Hymns to deities"),
-                ("Samaveda", "THEMES", "Musical melodies"),
-                ("Yajurveda", "THEMES", "Ritual offerings"),
-                ("Atharvaveda", "THEMES", "Magical spells and practices")
-            ])
-        elif domain == "academic":
-            # For academic domain, create structured academic content with Vedas information
-            triples.extend([
-                (video_entity, "COVERS_TOPIC", "Vedas"),
-                ("Vedas", "ORIGINATED_IN", "Ancient India"),
-                ("Vedas", "CONSISTS_OF", "Rigveda"),
-                ("Vedas", "CONSISTS_OF", "Samaveda"),
-                ("Vedas", "CONSISTS_OF", "Yajurveda"),
-                ("Vedas", "CONSISTS_OF", "Atharvaveda"),
-                ("Rigveda", "CONTAINS", "Hymns"),
-                ("Vedas", "COMPOSED_DURING", "1500-500 BCE"),
-                ("Vedas", "TRANSMITTED_THROUGH", "Oral Tradition"),
-                ("Rigveda", "COMPOSED_AROUND", "1500 BCE"),
-                ("Samaveda", "COMPOSED_AROUND", "1200 BCE"),
-                ("Yajurveda", "COMPOSED_AROUND", "1000 BCE"),
-                ("Atharvaveda", "COMPOSED_AROUND", "900 BCE"),
-                ("Vedas", "WRITTEN_IN", "Sanskrit"),
-                ("Vedas", "CATEGORIZED_AS", "Shruti"),
-                ("Shruti", "MEANING", "What is heard"),
-                ("Rigveda", "CONTAINS_VERSES", "10,552 verses"),
-                ("Samaveda", "CONTAINS_VERSES", "1,875 verses"),
-                ("Yajurveda", "CONTAINS_VERSES", "1,975 verses"),
-                ("Atharvaveda", "CONTAINS_VERSES", "6,000 verses"),
-                ("Vedas", "FOUNDATIONAL_TO", "Hinduism"),
-                ("Vedic_Period", "TIME_SPAN", "1500-500 BCE"),
-                ("Vedas", "EXISTED_DURING", "Vedic_Period"),
-                ("Rigveda", "FOCUS_ON", "Hymns to deities"),
-                ("Samaveda", "FOCUS_ON", "Musical notations"),
-                ("Yajurveda", "FOCUS_ON", "Sacrificial formulas"),
-                ("Atharvaveda", "FOCUS_ON", "Spells and incantations"),
-            ])
-        elif domain == "movie":
-            # For movie domain, create structured movie content
-            triples.extend([
-                (video_entity, "ABOUT_MOVIE", "Movie_Title"),
-                ("Movie_Title", "DIRECTED_BY", "Director_Name"),
-                ("Movie_Title", "HAS_ACTOR", "Lead_Actor"),
-                ("Movie_Title", "BELONGS_TO", "Genre"),
-                ("Movie_Title", "RELEASED_ON", "Release_Date"),
-            ])
-        else:
-            # Default domain extraction - create some basic connections
-            # Look for topics in the text
-            topic_match = re.search(r'Topics detected: ([^\n]+)', text)
-            if topic_match:
-                topics = topic_match.group(1).split(',')
-                for topic in topics:
-                    topic = topic.strip()
-                    if topic:
-                        triples.append((video_entity, "ABOUT_TOPIC", topic))
-            
-            # Look for entities
-            entity_match = re.search(r'Entities: ([^\n]+)', text)
-            if entity_match:
-                entities = entity_match.group(1).split(',')
-                for entity in entities:
-                    entity = entity.strip()
-                    if entity:
-                        triples.append((video_entity, "MENTIONS_ENTITY", entity))
-            
-            # Add fallback generic relation if none were created
-            if len(triples) < 2:
-                triples.append((video_entity, "FALLBACK_RELATION", "Extracted_Content"))
-                triples.append(("Extracted_Content", "HAS_TYPE", domain.capitalize()))
-        
-        logging.info(f"Extracted {len(triples)} triples from fallback video transcription")
-        return triples
-        
     def extract_triples_from_text(self, text, domain="custom"):
-        """Extract knowledge graph triples from text with enhanced NLP"""
-        # Check if this is a fallback transcription from WhisperTranscriber
-        is_fallback = False
-        if "Video Processing Fallback Extraction" in text or "Video Analysis Report" in text or "Video File Analysis" in text:
-            is_fallback = True
-            logging.info("Detected fallback transcription from WhisperTranscriber, using special extraction")
-            return self._extract_from_fallback_transcription(text, domain)
-            
-        # Check if this is YouTube content and we have LLM access
-        is_youtube = False
-        youtube_url = None
-        if "YouTube" in text or "youtube.com" in text or "youtu.be" in text or "[No transcript available - using video metadata only]" in text:
-            is_youtube = True
-            logging.info("Detected YouTube content, checking for URL...")
-            
-            # Try to extract URL
-            url_match = re.search(r'(?:URL:|https://(?:www\.)?(?:youtube\.com|youtu\.be)/[^\s]+)', text)
-            if url_match:
-                # If it's just 'URL:' then look for the url on the same line
-                if url_match.group(0) == 'URL:':
-                    line_with_url = text[url_match.start():].split('\n')[0]
-                    url_match2 = re.search(r'(https://(?:www\.)?(?:youtube\.com|youtu\.be)/[^\s]+)', line_with_url)
-                    if url_match2:
-                        youtube_url = url_match2.group(1)
-                else:
-                    youtube_url = url_match.group(0)
-                logging.info(f"Found YouTube URL: {youtube_url}")
-            
-            # Process with Groq if available
-            if self.has_llm:
-                logging.info("Processing YouTube content with Groq AI...")
-                enhanced_text = self.process_youtube_content(text, youtube_url, domain)
-                # Use enhanced text if we got something back, otherwise keep original
-                if enhanced_text and len(enhanced_text) > len(text):
-                    text = enhanced_text
-                    logging.info("Successfully enhanced YouTube content with Groq AI")
-                else:
-                    logging.warning("Groq AI enhancement failed or returned minimal content, using original text")
-        
-        # Regular extraction process for normal text
-        # Start with regex pattern extraction
-        entities_by_type = self.extract_entities_with_patterns(text, domain)
-        
-        # Flatten entities
-        entities = []
-        for entity_type, entity_list in entities_by_type.items():
-            entities.extend(entity_list)
-        
-        # Extract triples using basic heuristics
-        triples = []
-        domain_config = self._get_domain_prompt(domain)
-        relation_configs = domain_config.get("relations", [])
-        
-        # Split text into sentences
-        if self.has_nltk:
-            import nltk
-            sentences = nltk.sent_tokenize(text)
-        else:
-            # Basic sentence splitting
-            sentences = re.split(r'(?<=[.!?])\s+', text)
-        
-        # Process each sentence to find entity pairs
-        for sentence in sentences:
-            sentence_entities = []
-            for entity in entities:
-                if entity['text'] in sentence:
-                    sentence_entities.append(entity)
-            
-            # If we have at least 2 entities, try to create triples
-            if len(sentence_entities) >= 2:
-                # Check for relation patterns in the sentence
-                for rel_type, rel_col, rel_desc in relation_configs:
-                    relation_pattern = self._get_relation_pattern(rel_type)
-                    if relation_pattern and re.search(relation_pattern, sentence.lower()):
-                        # Find compatible entity pairs
-                        for i, entity1 in enumerate(sentence_entities):
-                            for entity2 in sentence_entities[i+1:]:
-                                if self._are_entities_compatible(entity1['type'], entity2['type'], rel_type):
-                                    # Create triple
-                                    triples.append((entity1['text'], rel_type, entity2['text']))
-                    
-                    # If no specific pattern found, check proximity-based relations
-                    if not triples and len(sentence_entities) == 2:
-                        entity1, entity2 = sentence_entities[0], sentence_entities[1]
-                        # Try to infer relation based on entity types
-                        rel_type = self._infer_relation(entity1['type'], entity2['type'], domain)
-                        if rel_type:
-                            triples.append((entity1['text'], rel_type, entity2['text']))
-        
-        # If we have spaCy available, enhance triple extraction with dependency parsing
-        if self.has_nlp and not triples:
-            try:
-                doc = self.nlp(text)
-                # Extract subject-verb-object patterns
-                for sentence in doc.sents:
-                    subjects = []
-                    objects = []
-                    verbs = []
-                    
-                    for token in sentence:
-                        # Find subjects
-                        if token.dep_ in ("nsubj", "nsubjpass"):
-                            subjects.append(token.text)
-                            
-                        # Find objects
-                        if token.dep_ in ("dobj", "pobj", "attr"):
-                            objects.append(token.text)
-                            
-                        # Find verbs
-                        if token.pos_ == "VERB":
-                            verbs.append(token.text)
-                    
-                    # Create triples if we have subject-verb-object
-                    if subjects and verbs and objects:
-                        relation = verbs[0].upper()
-                        for subject in subjects:
-                            for obj in objects:
-                                triples.append((subject, relation, obj))
-            except Exception as e:
-                logging.error(f"Error in spaCy entity extraction: {e}")
-        
-        return triples
-    
-    def _get_relation_pattern(self, relation_type):
-        """Get regex pattern for a relation type"""
-        relation_patterns = {
-            "HAS_ACTOR": r'(?:stars|features|has|with|starring)\s+(\w+)',
-            "DIRECTED_BY": r'(?:directed|helmed|created)\s+by\s+(\w+)',
-            "BELONGS_TO": r'(?:is|belongs to|categorized as|in)\s+(?:genre|category)',
-            "RELEASED_ON": r'(?:released|came out|premiered)\s+(?:on|in)',
-            "WRITTEN_BY": r'(?:written|authored|penned)\s+by\s+(\w+)',
-            "PERFORMED_BY": r'(?:performed|sung|played)\s+by\s+(\w+)',
-            "PRODUCED_BY": r'(?:produced|created)\s+by\s+(\w+)',
-            "AFFILIATED_WITH": r'(?:affiliated|associated|connected|working)\s+with\s+(\w+)',
-            "SIMILAR_TO": r'(?:similar|like|resembles|comparable)\s+to\s+(\w+)'
-        }
-        
-        return relation_patterns.get(relation_type.upper())
-    
-    def _are_entities_compatible(self, entity1_type, entity2_type, relation_type):
-        """Check if entities are compatible for a given relation"""
-        # Convert to uppercase for comparison
-        relation_type = relation_type.upper()
-        
-        # Look up relation in RELATIONSHIP_TYPES
-        rel_config = None
-        for rel, config in RELATIONSHIP_TYPES.items():
-            if rel.upper() == relation_type or (config.get('reverse_name', '').upper() == relation_type):
-                rel_config = config
-                break
-        
-        if not rel_config:
-            return False
-            
-        # Check if entity types are compatible with the relationship
-        if relation_type == rel_config.get('reverse_name', '').upper():
-            # Swap source and target for reverse relationship
-            return entity1_type in rel_config['target'] and entity2_type in rel_config['source']
-        else:
-            return entity1_type in rel_config['source'] and entity2_type in rel_config['target']
-    
-    def _infer_relation(self, entity1_type, entity2_type, domain):
-        """Infer a relation type based on entity types and domain"""
-        domain_config = self._get_domain_prompt(domain)
-        relation_configs = domain_config.get("relations", [])
-        
-        # Check which relations are compatible with the entity types
-        compatible_relations = []
-        for rel_type, _, _ in relation_configs:
-            if self._are_entities_compatible(entity1_type, entity2_type, rel_type):
-                compatible_relations.append(rel_type)
-                
-        # Return the first compatible relation, if any
-        return compatible_relations[0] if compatible_relations else None
+        """Extract knowledge graph triples from text"""
+        raise NotImplementedError("LLM-based triple extraction is not available. Required packages not installed.")
     
     def process_csv(self, csv_path, domain="custom"):
-        """Process CSV file to extract knowledge graph triples with enhanced entity and relation detection"""
+        """Process CSV file to extract knowledge graph triples"""
         try:
             # Get domain relations
-            domain_config = self._get_domain_prompt(domain)
-            relation_configs = domain_config.get("relations", [])
-            entity_types = domain_config.get("entity_types", [])
+            relation_configs = self._get_domain_prompt(domain)["relations"]
             
             # Use direct column mapping for CSV processing
             all_triples = []
-            all_entities = set()
-            entity_properties = {}
             
             # Process CSV file
             if HAS_PANDAS:
@@ -1228,210 +105,53 @@ class KnowledgeGraphProcessor:
                     # Special handling for movie domain with the example CSV format
                     for _, row in df.iterrows():
                         movie_title = row.get('title', '')
-                        if not movie_title:
-                            continue
-                            
-                        # Add movie entity
-                        all_entities.add(("Movie", movie_title))
-                        
-                        # Store movie properties
-                        movie_props = {}
-                        for prop in ["year", "runtime", "plot", "language", "country", "awards"]:
-                            if prop in row and pd.notna(row[prop]):
-                                movie_props[prop] = str(row[prop])
-                        if movie_props:
-                            entity_properties[(movie_title, "Movie")] = movie_props
                         
                         # Process actors (pipe-separated)
                         if 'actors' in row and pd.notna(row['actors']):
                             actors = row['actors'].split('|')
                             for actor in actors:
-                                actor = actor.strip()
-                                if actor:
-                                    # Add actor entity
-                                    all_entities.add(("Person", actor))
-                                    # Add relation
-                                    all_triples.append((actor, "ACTED_IN", movie_title))
-                                    all_triples.append((movie_title, "HAS_ACTOR", actor))
+                                if actor.strip():
+                                    all_triples.append((movie_title, "HAS_ACTOR", actor.strip()))
                         
                         # Process director
                         if 'director' in row and pd.notna(row['director']):
-                            director = row['director'].strip()
-                            # Add director entity
-                            all_entities.add(("Person", director))
-                            # Add relation
-                            all_triples.append((director, "DIRECTED", movie_title))
-                            all_triples.append((movie_title, "DIRECTED_BY", director))
+                            all_triples.append((movie_title, "HAS_DIRECTOR", row['director']))
                         
                         # Process genres (pipe-separated)
                         if 'genres' in row and pd.notna(row['genres']):
                             genres = row['genres'].split('|')
                             for genre in genres:
-                                genre = genre.strip()
-                                if genre:
-                                    # Add genre entity
-                                    all_entities.add(("Genre", genre))
-                                    # Add relation
-                                    all_triples.append((movie_title, "BELONGS_TO", genre))
-                                    all_triples.append((genre, "CONTAINS", movie_title))
+                                if genre.strip():
+                                    all_triples.append((movie_title, "IN_GENRE", genre.strip()))
                         
                         # Process release date
                         if 'released' in row and pd.notna(row['released']):
-                            released = str(row['released'])
-                            all_triples.append((movie_title, "RELEASED_ON", released))
+                            all_triples.append((movie_title, "RELEASED_ON", str(row['released'])))
                         
                         # Process IMDb rating
                         if 'imdbRating' in row and pd.notna(row['imdbRating']):
-                            rating = str(row['imdbRating'])
-                            all_triples.append((movie_title, "HAS_IMDB_RATING", rating))
+                            all_triples.append((movie_title, "HAS_IMDB_RATING", str(row['imdbRating'])))
                 else:
-                    # Enhanced processing for other domains
-                    # Try to identify the main entity and child entities
-                    
-                    # First pass: identify primary entity column and type
-                    primary_entity_col = None
-                    primary_entity_type = None
-                    
-                    # Check for domain-specific primary entity types
-                    if domain == "book":
-                        primary_entity_type = "Book"
-                        title_columns = [col for col in df.columns if col.lower() in ["title", "name", "book_title"]]
-                        if title_columns:
-                            primary_entity_col = title_columns[0]
-                    elif domain == "music":
-                        primary_entity_type = "Song"
-                        title_columns = [col for col in df.columns if col.lower() in ["title", "song", "track"]]
-                        if title_columns:
-                            primary_entity_col = title_columns[0]
-                    elif domain == "academic":
-                        primary_entity_type = "Person"
-                        name_columns = [col for col in df.columns if col.lower() in ["author", "researcher", "name"]]
-                        if name_columns:
-                            primary_entity_col = name_columns[0]
-                    elif domain == "business":
-                        primary_entity_type = "Institution"
-                        name_columns = [col for col in df.columns if col.lower() in ["company", "business", "name"]]
-                        if name_columns:
-                            primary_entity_col = name_columns[0]
-                    
-                    # If we couldn't determine the primary entity, use the first column
-                    if not primary_entity_col and len(df.columns) > 0:
-                        primary_entity_col = df.columns[0]
-                        
-                        # Guess entity type from column name
-                        if "title" in primary_entity_col.lower():
-                            if domain in ["movie", "book"]:
-                                primary_entity_type = "Movie" if domain == "movie" else "Book"
-                        elif "name" in primary_entity_col.lower():
-                            primary_entity_type = "Person"
-                    
-                    # Default to first entity type from domain config if still not set
-                    if not primary_entity_type and entity_types:
-                        primary_entity_type = entity_types[0]
-                    
-                    # Process each row
+                    # Generic processing for other domains
                     for _, row in df.iterrows():
-                        if not primary_entity_col or primary_entity_col not in row:
-                            continue
-                            
-                        primary_entity = row[primary_entity_col]
-                        if not pd.notna(primary_entity) or not primary_entity:
-                            continue
+                        # Find the main entity column (usually the first column that's not a relationship)
+                        entity_col = df.columns[0] if len(df.columns) > 0 else None
+                        entity_val = row.get(entity_col, '') if entity_col else 'Unknown'
                         
-                        primary_entity = str(primary_entity).strip()
-                        
-                        # Add primary entity
-                        all_entities.add((primary_entity_type, primary_entity))
-                        
-                        # Store primary entity properties
-                        primary_props = {}
-                        if primary_entity_type in ENTITY_TYPES:
-                            for prop in ENTITY_TYPES[primary_entity_type]["properties"]:
-                                if prop in row and pd.notna(row[prop]):
-                                    primary_props[prop] = str(row[prop])
-                        if primary_props:
-                            entity_properties[(primary_entity, primary_entity_type)] = primary_props
-                        
-                        # For each column, check if it's a potential relationship
+                        # For each column, create a triple if it's not the entity column
                         for col in df.columns:
-                            if col == primary_entity_col or not pd.notna(row[col]) or not row[col]:
-                                continue
-                            
-                            # Check if column matches any relation
-                            matched_relation = None
-                            related_entity_type = None
-                            
-                            for rel_type, rel_col, _ in relation_configs:
-                                if rel_col and rel_col.lower() == col.lower():
-                                    matched_relation = rel_type
-                                    # Determine related entity type
-                                    for rel_name, rel_config in RELATIONSHIP_TYPES.items():
-                                        if rel_name == matched_relation or rel_config.get("reverse_name") == matched_relation:
-                                            if primary_entity_type in rel_config["source"]:
-                                                related_entity_type = rel_config["target"][0]
-                                            else:
-                                                related_entity_type = rel_config["source"][0]
-                                            break
-                                    break
-                            
-                            if not matched_relation:
-                                # Use column name to infer relation
-                                if "actor" in col.lower() or "cast" in col.lower():
-                                    matched_relation = "HAS_ACTOR"
-                                    related_entity_type = "Person"
-                                elif "director" in col.lower():
-                                    matched_relation = "DIRECTED_BY"
-                                    related_entity_type = "Person"
-                                elif "genre" in col.lower() or "category" in col.lower():
-                                    matched_relation = "BELONGS_TO"
-                                    related_entity_type = "Genre"
-                                elif "author" in col.lower() or "writer" in col.lower():
-                                    matched_relation = "WRITTEN_BY"
-                                    related_entity_type = "Person"
-                                elif "date" in col.lower() or "year" in col.lower():
-                                    # This is likely a date property, not a relation
-                                    continue
-                                elif "rating" in col.lower() or "score" in col.lower():
-                                    # This is likely a rating property, not a relation
-                                    continue
-                                else:
-                                    # Default relation name
-                                    matched_relation = "HAS_" + col.upper()
-                            
-                            # Process the related entity/entities
-                            related_value = str(row[col])
-                            
-                            # Check if it's a multi-value field (comma or pipe separated)
-                            if "|" in related_value or "," in related_value:
-                                separator = "|" if "|" in related_value else ","
-                                related_values = [v.strip() for v in related_value.split(separator) if v.strip()]
-                                
-                                for related_val in related_values:
-                                    if related_entity_type:
-                                        all_entities.add((related_entity_type, related_val))
-                                    
-                                    # Add relation
-                                    all_triples.append((primary_entity, matched_relation, related_val))
-                                    
-                                    # Add reverse relation if applicable
-                                    for rel_name, rel_config in RELATIONSHIP_TYPES.items():
-                                        if rel_name == matched_relation and rel_config.get("bidirectional"):
-                                            all_triples.append((related_val, rel_config["reverse_name"], primary_entity))
-                                            break
-                            else:
-                                if related_entity_type:
-                                    all_entities.add((related_entity_type, related_value))
-                                
-                                # Add relation
-                                all_triples.append((primary_entity, matched_relation, related_value))
-                                
-                                # Add reverse relation if applicable
-                                for rel_name, rel_config in RELATIONSHIP_TYPES.items():
-                                    if rel_name == matched_relation and rel_config.get("bidirectional"):
-                                        all_triples.append((related_value, rel_config["reverse_name"], primary_entity))
+                            if col != entity_col and pd.notna(row[col]):
+                                # Find a matching relation type from the domain config
+                                relation_type = "HAS_" + col.upper()
+                                for rel_type, rel_col, _ in relation_configs:
+                                    if rel_col.lower() == col.lower():
+                                        relation_type = rel_type
                                         break
+                                
+                                # Add to triples
+                                all_triples.append((entity_val, relation_type, str(row[col])))
             else:
-                # Fallback to basic built-in CSV processing for Python
+                # Fallback to built-in CSV processing for Python
                 with open(csv_path, 'r', newline='') as csvfile:
                     reader = csv.reader(csvfile)
                     # Get header row
@@ -1460,51 +180,31 @@ class KnowledgeGraphProcessor:
                                 
                             movie_title = row[title_idx] if len(row) > title_idx else 'Unknown'
                             
-                            # Add movie entity
-                            all_entities.add(("Movie", movie_title))
-                            
                             # Process actors
                             if actors_idx is not None and len(row) > actors_idx and row[actors_idx]:
                                 actors = row[actors_idx].split('|')
                                 for actor in actors:
-                                    actor = actor.strip()
-                                    if actor:
-                                        # Add actor entity
-                                        all_entities.add(("Person", actor))
-                                        # Add relation
-                                        all_triples.append((actor, "ACTED_IN", movie_title))
-                                        all_triples.append((movie_title, "HAS_ACTOR", actor))
+                                    if actor.strip():
+                                        all_triples.append((movie_title, "HAS_ACTOR", actor.strip()))
                             
                             # Process director
                             if director_idx is not None and len(row) > director_idx and row[director_idx]:
-                                director = row[director_idx].strip()
-                                # Add director entity
-                                all_entities.add(("Person", director))
-                                # Add relation
-                                all_triples.append((director, "DIRECTED", movie_title))
-                                all_triples.append((movie_title, "DIRECTED_BY", director))
+                                all_triples.append((movie_title, "HAS_DIRECTOR", row[director_idx]))
                             
                             # Process genres
                             if genres_idx is not None and len(row) > genres_idx and row[genres_idx]:
                                 genres = row[genres_idx].split('|')
                                 for genre in genres:
-                                    genre = genre.strip()
-                                    if genre:
-                                        # Add genre entity
-                                        all_entities.add(("Genre", genre))
-                                        # Add relation
-                                        all_triples.append((movie_title, "BELONGS_TO", genre))
-                                        all_triples.append((genre, "CONTAINS", movie_title))
+                                    if genre.strip():
+                                        all_triples.append((movie_title, "IN_GENRE", genre.strip()))
                             
                             # Process release date
                             if released_idx is not None and len(row) > released_idx and row[released_idx]:
-                                released = row[released_idx]
-                                all_triples.append((movie_title, "RELEASED_ON", released))
+                                all_triples.append((movie_title, "RELEASED_ON", row[released_idx]))
                             
                             # Process IMDb rating
                             if rating_idx is not None and len(row) > rating_idx and row[rating_idx]:
-                                rating = row[rating_idx]
-                                all_triples.append((movie_title, "HAS_IMDB_RATING", rating))
+                                all_triples.append((movie_title, "HAS_IMDB_RATING", row[rating_idx]))
                     else:
                         # Generic processing for other domains
                         for row in reader:
@@ -1520,42 +220,12 @@ class KnowledgeGraphProcessor:
                                     # Find a matching relation type from the domain config
                                     relation_type = "HAS_" + col_name.upper()
                                     for rel_type, rel_col, _ in relation_configs:
-                                        if rel_col and rel_col.lower() == col_name.lower():
+                                        if rel_col.lower() == col_name.lower():
                                             relation_type = rel_type
                                             break
                                     
                                     # Add to triples
                                     all_triples.append((entity_val, relation_type, row[i]))
-            
-            # Store entity information and properties in the triples metadata
-            entity_meta = []
-            for (entity_type, entity_label) in all_entities:
-                entity_info = {
-                    "type": entity_type,
-                    "label": entity_label,
-                    "id": self._generate_unique_id(entity_type, entity_label)
-                }
-                
-                # Add properties if available
-                if (entity_label, entity_type) in entity_properties:
-                    entity_info["properties"] = entity_properties[(entity_label, entity_type)]
-                
-                entity_meta.append(entity_info)
-            
-            # Add the enhanced triples and entity metadata
-            enhanced_data = {
-                "triples": all_triples,
-                "entities": entity_meta
-            }
-            
-            # Save metadata to a json file with same name as CSV
-            meta_path = os.path.splitext(csv_path)[0] + "_metadata.json"
-            try:
-                with open(meta_path, 'w') as f:
-                    json.dump(enhanced_data, f, indent=2)
-                logging.info(f"Saved enhanced metadata to {meta_path}")
-            except Exception as e:
-                logging.warning(f"Failed to save metadata: {e}")
             
             return all_triples
         
@@ -1593,291 +263,50 @@ class KnowledgeGraphProcessor:
             raise RuntimeError(f"Failed to save triples to CSV: {e}")
     
     def query_knowledge_graph(self, query_text, graph_id):
-        """Query the knowledge graph using natural language with enhanced matching"""
+        """Query the knowledge graph using natural language"""
         try:
-            # Get graph data
+            # Since we can't use LLM-based querying, we'll provide a basic search function
             nodes, relationships = self.neo4j_manager.get_graph_data(graph_id)
             
-            # Extract query intents
-            query_lower = query_text.lower()
+            # Basic keyword matching (very simple implementation)
+            query_terms = query_text.lower().split()
             
-            # Check for specific query types
-            is_entity_query = any(term in query_lower for term in ["what is", "who is", "tell me about", "information on"])
-            is_relationship_query = any(term in query_lower for term in ["related to", "connected to", "relationship", "related with"])
-            is_count_query = any(term in query_lower for term in ["how many", "count", "number of"])
-            is_similarity_query = any(term in query_lower for term in ["similar", "like", "related", "same genre as"])
-            
-            # Extract entity types being asked about
-            entity_types_mentioned = []
-            entity_type_patterns = {
-                "movie": ["movie", "film", "documentary"],
-                "person": ["actor", "director", "person", "people"],
-                "genre": ["genre", "category", "type"],
-                "book": ["book", "novel", "publication"],
-                "artist": ["artist", "band", "musician", "singer"],
-                "song": ["song", "track", "music"],
-                "institution": ["company", "institution", "organization", "university"]
-            }
-            
-            for entity_type, patterns in entity_type_patterns.items():
-                if any(pattern in query_lower for pattern in patterns):
-                    entity_types_mentioned.append(entity_type.capitalize())
-            
-            # Basic entity extraction from query
-            query_entities = []
-            
-            # Use regex patterns to extract possible entity names
-            name_patterns = [
-                r'"([^"]+)"',  # Quoted names
-                r"'([^']+)'",  # Single-quoted names
-                r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b"  # Capitalized multi-word names
-            ]
-            
-            for pattern in name_patterns:
-                matches = re.finditer(pattern, query_text)
-                for match in matches:
-                    query_entities.append(match.group(1))
-            
-            # If no entities found with patterns, use basic keyword matching
-            if not query_entities:
-                # Split into words and look for non-stopwords
-                stopwords = ["the", "a", "an", "in", "on", "at", "by", "for", "with", "about", 
-                            "is", "are", "was", "were", "be", "been", "being", "have", "has", 
-                            "had", "do", "does", "did", "will", "would", "shall", "should", 
-                            "may", "might", "must", "can", "could"]
-                
-                query_words = [word for word in re.findall(r'\b\w+\b', query_lower) 
-                              if word not in stopwords and len(word) > 2]
-                
-                # Use longest words as potential entities (excluding common question words)
-                question_words = ["who", "what", "where", "when", "why", "how", "which", "whose"]
-                potential_keywords = [word for word in query_words 
-                                     if word not in question_words and word not in stopwords]
-                
-                # Sort by length and take the top 3
-                potential_keywords.sort(key=len, reverse=True)
-                query_entities.extend(potential_keywords[:3])
-            
-            # Search for matching nodes
+            # Search for nodes that match query terms
             matching_nodes = []
             for node in nodes:
                 node_label = node.get("label", "").lower()
-                
-                # Check for exact matches first
-                if any(entity.lower() == node_label for entity in query_entities):
-                    matching_nodes.append(node)
-                    continue
-                
-                # Then check for substring matches
-                if any(entity.lower() in node_label or node_label in entity.lower() 
-                       for entity in query_entities):
-                    matching_nodes.append(node)
-                    continue
-                
-                # Finally check for word-level matches
-                node_words = set(re.findall(r'\b\w+\b', node_label))
-                if any(set(re.findall(r'\b\w+\b', entity.lower())) & node_words 
-                       for entity in query_entities if len(entity) > 2):
+                if any(term in node_label for term in query_terms):
                     matching_nodes.append(node)
             
-            # Filter by entity type if mentioned
-            if entity_types_mentioned and matching_nodes:
-                type_filtered_nodes = [
-                    node for node in matching_nodes 
-                    if node.get("type", "").capitalize() in entity_types_mentioned
-                ]
-                
-                # Only use type filtered results if we found some
-                if type_filtered_nodes:
-                    matching_nodes = type_filtered_nodes
+            # Extract the relationships involving the matching nodes
+            matching_node_ids = [node.get("id") for node in matching_nodes]
+            matching_relations = []
+            for rel in relationships:
+                if rel.get("source") in matching_node_ids or rel.get("target") in matching_node_ids:
+                    matching_relations.append(rel)
             
-            # Extract relationships
+            # Format the results
             if matching_nodes:
                 node_label_map = {node.get("id"): node.get("label") for node in nodes}
-                node_type_map = {node.get("id"): node.get("type", "Entity") for node in nodes}
-                matching_node_ids = [node.get("id") for node in matching_nodes]
+                result_lines = []
                 
-                if is_relationship_query:
-                    # Find all relationships connected to the matching nodes
-                    matching_relations = []
-                    for rel in relationships:
-                        source_id = rel.get("source")
-                        target_id = rel.get("target")
-                        
-                        if source_id in matching_node_ids or target_id in matching_node_ids:
-                            matching_relations.append(rel)
+                for rel in matching_relations:
+                    source_id = rel.get("source")
+                    target_id = rel.get("target") 
+                    relation_type = rel.get("type")
                     
-                    if matching_relations:
-                        # Format the results
-                        result_lines = ["Found these relationships:"]
-                        
-                        for rel in matching_relations:
-                            source_id = rel.get("source")
-                            target_id = rel.get("target") 
-                            relation_type = rel.get("type")
-                            
-                            source_label = node_label_map.get(source_id, "Unknown")
-                            target_label = node_label_map.get(target_id, "Unknown")
-                            source_type = node_type_map.get(source_id, "Entity")
-                            target_type = node_type_map.get(target_id, "Entity")
-                            
-                            result_lines.append(f"- [{source_type}] {source_label} [{relation_type}] [{target_type}] {target_label}")
-                        
-                        return "\n".join(result_lines)
-                    else:
-                        return f"Found {len(matching_nodes)} entities matching your query, but no relationships."
-                        
-                elif is_entity_query:
-                    # Return details about the entities
-                    result_lines = ["Found these entities:"]
+                    source_label = node_label_map.get(source_id, "Unknown")
+                    target_label = node_label_map.get(target_id, "Unknown")
                     
-                    for node in matching_nodes:
-                        node_id = node.get("id")
-                        node_label = node.get("label")
-                        node_type = node.get("type", "Entity")
-                        
-                        # Find relationships for this node
-                        node_relations = []
-                        for rel in relationships:
-                            if rel.get("source") == node_id:
-                                target_label = node_label_map.get(rel.get("target"), "Unknown")
-                                node_relations.append(f"[{rel.get('type')}] {target_label}")
-                            elif rel.get("target") == node_id:
-                                source_label = node_label_map.get(rel.get("source"), "Unknown")
-                                node_relations.append(f"[{rel.get('type')}] from {source_label}")
-                        
-                        # Create entity description
-                        entity_desc = [f"- [{node_type}] {node_label}"]
-                        if node_relations:
-                            entity_desc.append("  Related to:")
-                            for rel in node_relations[:5]:  # Limit to 5 relations
-                                entity_desc.append(f"  * {rel}")
-                            
-                            if len(node_relations) > 5:
-                                entity_desc.append(f"  * ...and {len(node_relations) - 5} more relations")
-                                
-                        result_lines.extend(entity_desc)
-                        
-                    return "\n".join(result_lines)
-                    
-                elif is_count_query:
-                    # Count entities and relationships
-                    if "relationship" in query_lower or "relation" in query_lower:
-                        # Count relationships
-                        matching_relations = []
-                        for rel in relationships:
-                            source_id = rel.get("source")
-                            target_id = rel.get("target")
-                            
-                            if source_id in matching_node_ids or target_id in matching_node_ids:
-                                matching_relations.append(rel)
-                                
-                        return f"Found {len(matching_relations)} relationships connected to {len(matching_nodes)} matched entities."
-                    else:
-                        # Count entities by type
-                        type_counts = {}
-                        for node in matching_nodes:
-                            node_type = node.get("type", "Entity")
-                            type_counts[node_type] = type_counts.get(node_type, 0) + 1
-                            
-                        result_lines = [f"Found {len(matching_nodes)} entities matching your query:"]
-                        for node_type, count in type_counts.items():
-                            result_lines.append(f"- {count} {node_type}(s)")
-                            
-                        return "\n".join(result_lines)
-                        
-                elif is_similarity_query:
-                    # Find similar entities
-                    result_lines = ["Found entities that might be similar:"]
-                    
-                    for node in matching_nodes:
-                        node_id = node.get("id")
-                        node_label = node.get("label")
-                        node_type = node.get("type", "Entity")
-                        
-                        # Find entities with shared relationships
-                        similar_entities = set()
-                        for rel in relationships:
-                            if rel.get("source") == node_id:
-                                # Find other entities related to the same target
-                                target_id = rel.get("target")
-                                rel_type = rel.get("type")
-                                
-                                for rel2 in relationships:
-                                    if (rel2.get("target") == target_id and 
-                                        rel2.get("type") == rel_type and 
-                                        rel2.get("source") != node_id):
-                                        similar_entities.add(rel2.get("source"))
-                                        
-                            elif rel.get("target") == node_id:
-                                # Find other entities targeted by the same source
-                                source_id = rel.get("source")
-                                rel_type = rel.get("type")
-                                
-                                for rel2 in relationships:
-                                    if (rel2.get("source") == source_id and 
-                                        rel2.get("type") == rel_type and 
-                                        rel2.get("target") != node_id):
-                                        similar_entities.add(rel2.get("target"))
-                        
-                        # Format the results
-                        entity_desc = [f"- Entities similar to [{node_type}] {node_label}:"]
-                        if similar_entities:
-                            for similar_id in list(similar_entities)[:5]:  # Limit to 5 similar entities
-                                similar_label = node_label_map.get(similar_id, "Unknown")
-                                similar_type = node_type_map.get(similar_id, "Entity")
-                                entity_desc.append(f"  * [{similar_type}] {similar_label}")
-                                
-                            if len(similar_entities) > 5:
-                                entity_desc.append(f"  * ...and {len(similar_entities) - 5} more similar entities")
-                        else:
-                            entity_desc.append("  * No similar entities found")
-                            
-                        result_lines.extend(entity_desc)
-                        
-                    return "\n".join(result_lines)
+                    result_lines.append(f"- {source_label} [{relation_type}] {target_label}")
                 
+                if result_lines:
+                    return "Found these relationships:\n" + "\n".join(result_lines)
                 else:
-                    # General query - show both entities and relationships
-                    result_lines = [f"Found {len(matching_nodes)} entities matching your query:"]
-                    
-                    # Show entity details
-                    for node in matching_nodes[:3]:  # Limit to 3 entities
-                        node_id = node.get("id")
-                        node_label = node.get("label")
-                        node_type = node.get("type", "Entity")
-                        
-                        # Find relationships for this node
-                        node_relations = []
-                        for rel in relationships:
-                            if rel.get("source") == node_id:
-                                target_label = node_label_map.get(rel.get("target"), "Unknown")
-                                node_relations.append(f"[{rel.get('type')}] {target_label}")
-                            elif rel.get("target") == node_id:
-                                source_label = node_label_map.get(rel.get("source"), "Unknown")
-                                node_relations.append(f"[{rel.get('type')}] from {source_label}")
-                        
-                        # Create entity description
-                        entity_desc = [f"- [{node_type}] {node_label}"]
-                        if node_relations:
-                            entity_desc.append("  Related to:")
-                            for rel in node_relations[:3]:  # Limit to 3 relations
-                                entity_desc.append(f"  * {rel}")
-                            
-                            if len(node_relations) > 3:
-                                entity_desc.append(f"  * ...and {len(node_relations) - 3} more relations")
-                                
-                        result_lines.extend(entity_desc)
-                    
-                    if len(matching_nodes) > 3:
-                        result_lines.append(f"...and {len(matching_nodes) - 3} more entities")
-                        
-                    return "\n".join(result_lines)
+                    return f"Found {len(matching_nodes)} entities matching your query, but no relationships."
             else:
-                return "No matching entities found for your query. Please try different keywords or be more specific."
+                return "No matching entities found for your query."
                 
         except Exception as e:
             logging.error(f"Error querying knowledge graph: {e}")
-            error_msg = f"Failed to query knowledge graph: {str(e)}"
-            logging.exception(error_msg)
-            return f"Error: {error_msg}"
+            raise RuntimeError(f"Failed to query knowledge graph: {e}")
