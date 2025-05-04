@@ -48,6 +48,14 @@
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
+                                    <button class="nav-link w-100 py-3" id="youtube-transcript-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#youtube-transcript-content" type="button" role="tab" 
+                                            aria-controls="youtube-transcript-content" aria-selected="false"
+                                            onclick="selectInputType('youtube_transcript')">
+                                        <i class="fas fa-closed-captioning me-2"></i> YouTube Transcript
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
                                     <button class="nav-link w-100 py-3" id="csv-tab" data-bs-toggle="pill" 
                                             data-bs-target="#csv-content" type="button" role="tab" 
                                             aria-controls="csv-content" aria-selected="false"
@@ -70,6 +78,7 @@
                         <div style="display: none;">
                             {{ form.input_type(id="input_type_video", value="video") }}
                             {{ form.input_type(id="input_type_youtube", value="youtube") }}
+                            {{ form.input_type(id="input_type_youtube_transcript", value="youtube_transcript") }}
                             {{ form.input_type(id="input_type_csv", value="csv") }}
                             {{ form.input_type(id="input_type_url", value="url") }}
                             <input type="hidden" id="selected_input_type" name="selected_input_type" value="video">
@@ -129,6 +138,38 @@
                                             {% if form.youtube_url.errors %}
                                                 <div class="text-danger mt-2">
                                                     {% for error in form.youtube_url.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- YouTube Transcript Tab -->
+                                <div class="tab-pane fade" id="youtube-transcript-content" role="tabpanel" aria-labelledby="youtube-transcript-tab">
+                                    <div class="text-center">
+                                        <div class="mb-4">
+                                            <i class="fas fa-closed-captioning fa-3x text-warning mb-3"></i>
+                                            <h5 class="fw-bold">YouTube Video Transcript</h5>
+                                            <p class="text-muted">
+                                                Paste the YouTube video transcript text directly.<br>
+                                                <small>This is a workaround for videos with API access restrictions. To get the transcript: Open the YouTube video, click "..." under the video, click "Show transcript", and copy all the text.</small>
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="w-75 mx-auto">
+                                            <!-- Video title field (optional) -->
+                                            {{ form.youtube_title(class="form-control form-control-lg mb-3" + (" is-invalid" if form.youtube_title.errors else ""), 
+                                                placeholder="Video Title (Optional)") }}
+                                            
+                                            <!-- Transcript textarea -->
+                                            {{ form.youtube_transcript(class="form-control form-control-lg" + (" is-invalid" if form.youtube_transcript.errors else ""), 
+                                                placeholder="Paste the YouTube transcript here...", rows="10") }}
+                                                
+                                            {% if form.youtube_transcript.errors %}
+                                                <div class="text-danger mt-2">
+                                                    {% for error in form.youtube_transcript.errors %}
                                                         {{ error }}
                                                     {% endfor %}
                                                 </div>
