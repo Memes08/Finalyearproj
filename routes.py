@@ -458,36 +458,134 @@ def process_data(graph_id):
                         }
                         session.modified = True
                         
-                        # Try basic metadata extraction directly
+                        # Multi-tiered fallback system - try multiple approaches
                         try:
-                            logging.info("Attempting metadata extraction as fallback")
+                            # First try: Basic metadata extraction directly with ffprobe
+                            logging.info("Attempting metadata extraction as primary fallback")
                             transcription = whisper_transcriber._extract_video_metadata(video_path)
                             logging.info("Used fallback metadata extraction for transcription")
-                        except Exception as inner_e:
-                            logging.error(f"Even fallback extraction failed: {str(inner_e)}")
-                            # Most basic fallback
-                            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                            base_filename = os.path.splitext(filename)[0]
-                            title = base_filename.replace('_', ' ').replace('-', ' ')
-                            # Extract words with 3+ chars for basic entities
-                            words = []
-                            for word in re.findall(r"\b\w{3,}\b", title):
-                                words.append(word.capitalize())
+                            
+                        except Exception as metadata_e:
+                            logging.error(f"Metadata extraction fallback failed: {str(metadata_e)}")
+                            
+                            # Update progress to show second fallback
+                            session[progress_key] = {
+                                'status': 'Using secondary fallback...',
+                                'percent': 45,
+                                'step': 'fallback2'
+                            }
+                            session.modified = True
+                            
+                            try:
+                                # Second try: Check if we can extract some audio features
+                                logging.info("Attempting audio feature extraction as secondary fallback")
                                 
-                            # Build the transcription safely
-                            transcription = f"""
-                                Basic Video Information (All Processing Failed)
-                                Timestamp: {timestamp}
-                                File: {filename}
-                                Suspected Title: {title}
+                                # Create a simple audio path for extraction attempt
+                                audio_dir = os.path.dirname(video_path)
+                                audio_path = os.path.join(audio_dir, f"fallback_audio_{uuid.uuid4().hex[:8]}.wav")
                                 
-                                Unable to extract detailed content from this video.
-                                The system encountered errors during processing.
+                                # Try super simple audio extraction
+                                extraction_cmd = [
+                                    "ffmpeg", "-y", "-i", video_path, 
+                                    "-vn", "-acodec", "pcm_s16le", 
+                                    "-ar", "16000", "-ac", "1", 
+                                    "-t", "30",  # Just first 30 seconds
+                                    audio_path
+                                ]
                                 
-                                Basic entities detected from filename: 
-                                {', '.join(words)}
-                            """
-                            logging.warning("Using minimal fallback transcription from filename only")
+                                # Run with high timeout and capture output
+                                subprocess.run(extraction_cmd, timeout=90, capture_output=True, text=True)
+                                
+                                # Check if we got an audio file
+                                if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
+                                    # Try to get audio duration with ffprobe
+                                    duration_cmd = [
+                                        "ffprobe", "-v", "error", "-show_entries", 
+                                        "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", 
+                                        audio_path
+                                    ]
+                                    duration_result = subprocess.run(duration_cmd, capture_output=True, text=True)
+                                    duration = float(duration_result.stdout.strip()) if duration_result.stdout.strip() else 0
+                                    
+                                    # Use audio info to create better fallback
+                                    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                    base_filename = os.path.splitext(filename)[0]
+                                    title = base_filename.replace('_', ' ').replace('-', ' ')
+                                    
+                                    # Create basic transcript with audio info
+                                    transcription = f"""
+                                        Video Analysis with Audio Detection
+                                        Timestamp: {timestamp}
+                                        File: {filename}
+                                        Title: {title}
+                                        Audio Duration: {int(duration//60)} minutes {int(duration%60)} seconds
+                                        
+                                        The system detected audio in this video file but could not
+                                        fully transcribe the content due to processing limitations.
+                                        
+                                        Basic information extracted:
+                                        - Video contains audio track
+                                        - Audio appears to be {'stereo' if 'stereo' in subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'stream=channels', '-of', 'default=noprint_wrappers=1:nokey=1', audio_path], capture_output=True, text=True).stdout else 'mono'}
+                                        - Audio sample rate: {subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'stream=sample_rate', '-of', 'default=noprint_wrappers=1:nokey=1', audio_path], capture_output=True, text=True).stdout.strip()} Hz
+                                    """
+                                    
+                                    # Clean up temp file
+                                    try:
+                                        os.remove(audio_path)
+                                    except:
+                                        pass
+                                        
+                                    logging.info("Created improved fallback using audio analysis")
+                                else:
+                                    # If audio extraction failed, raise to go to next fallback
+                                    raise Exception("Failed to extract audio for fallback")
+                                    
+                            except Exception as audio_e:
+                                logging.error(f"Audio-based fallback also failed: {str(audio_e)}")
+                                
+                                # Update progress to show final fallback
+                                session[progress_key] = {
+                                    'status': 'Using minimal filename-based fallback...',
+                                    'percent': 48,
+                                    'step': 'fallback3'
+                                }
+                                session.modified = True
+                                
+                                # Third try: Most basic fallback from filename
+                                timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                base_filename = os.path.splitext(filename)[0]
+                                title = base_filename.replace('_', ' ').replace('-', ' ')
+                                
+                                # Extract words with 3+ chars for basic entities
+                                words = []
+                                for word in re.findall(r"\b\w{3,}\b", title):
+                                    words.append(word.capitalize())
+                                    
+                                # Check for potential domain-specific content
+                                domain_hints = []
+                                if any(term in filename.lower() for term in ["veda", "upanishad", "sanskrit", "hindu"]):
+                                    domain_hints.append("Likely contains Vedic or ancient text content")
+                                elif any(term in filename.lower() for term in ["movie", "film", "cinema", "actor"]):
+                                    domain_hints.append("Appears to be movie or film-related content")
+                                elif any(term in filename.lower() for term in ["crime", "case", "investigation", "detective"]):
+                                    domain_hints.append("May contain crime case or investigation content")
+                                
+                                # Build the transcription with any domain hints
+                                transcription = f"""
+                                    Basic Video Information (All Processing Failed)
+                                    Timestamp: {timestamp}
+                                    File: {filename}
+                                    Suspected Title: {title}
+                                    
+                                    Unable to extract detailed content from this video.
+                                    The system encountered errors during processing.
+                                    
+                                    Basic entities detected from filename: 
+                                    {', '.join(words)}
+                                    
+                                    {domain_hints[0] if domain_hints else "No specific domain detected from filename"}
+                                """
+                                logging.warning("Using minimal fallback transcription from filename only")
                     
                     # Update progress - showing summary for approval
                     session[progress_key] = {
