@@ -13,7 +13,7 @@
                 </ol>
             </nav>
             
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-dark d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">Add Data to "{{ graph.name }}"</h4>
                     <span class="badge bg-info">{{ graph.domain }}</span>
@@ -22,37 +22,55 @@
                     <form method="POST" action="{{ url_for('process_data', graph_id=graph.id) }}" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
                         
-                        <div class="mb-4 input-selection-group">
-                            <label class="form-label">Select Input Type</label>
+                        <!-- Input Type Selection -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Select Input Source</h5>
                             
-                            <div class="form-check">
-                                {{ form.input_type(type="radio", id="input_type_video", value="video", class="form-check-input") }}
-                                <label class="form-check-label" for="input_type_video">
-                                    <i class="fas fa-film me-2"></i> Video File
-                                    <small class="d-block text-muted mt-1">
-                                        Upload a video file to be transcribed and analyzed. Supports MP4, AVI, MOV, and MKV formats.
-                                    </small>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check">
-                                {{ form.input_type(type="radio", id="input_type_csv", value="csv", class="form-check-input") }}
-                                <label class="form-check-label" for="input_type_csv">
-                                    <i class="fas fa-file-csv me-2"></i> CSV Upload
-                                    <small class="d-block text-muted mt-1">
-                                        Upload a CSV file containing structured data for relationship extraction.
-                                    </small>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check">
-                                {{ form.input_type(type="radio", id="input_type_url", value="url", class="form-check-input") }}
-                                <label class="form-check-label" for="input_type_url">
-                                    <i class="fab fa-github me-2"></i> GitHub CSV URL
-                                    <small class="d-block text-muted mt-1">
-                                        Provide a raw GitHub URL to a CSV file for analysis.
-                                    </small>
-                                </label>
+                            <div class="input-options">
+                                <div class="form-check-card mb-3">
+                                    <input type="radio" name="input_type" id="input_type_video" value="video" class="form-check-input" checked>
+                                    <label class="form-check-label p-3 border rounded d-flex" for="input_type_video">
+                                        <div class="me-3 fs-3">
+                                            <i class="fas fa-film text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Video File</h6>
+                                            <small class="text-muted">
+                                                Upload a video file to be transcribed and analyzed.
+                                            </small>
+                                        </div>
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check-card mb-3">
+                                    <input type="radio" name="input_type" id="input_type_csv" value="csv" class="form-check-input">
+                                    <label class="form-check-label p-3 border rounded d-flex" for="input_type_csv">
+                                        <div class="me-3 fs-3">
+                                            <i class="fas fa-file-csv text-success"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">CSV Upload</h6>
+                                            <small class="text-muted">
+                                                Upload a CSV file containing structured data.
+                                            </small>
+                                        </div>
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check-card mb-3">
+                                    <input type="radio" name="input_type" id="input_type_url" value="url" class="form-check-input">
+                                    <label class="form-check-label p-3 border rounded d-flex" for="input_type_url">
+                                        <div class="me-3 fs-3">
+                                            <i class="fab fa-github text-info"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">GitHub CSV URL</h6>
+                                            <small class="text-muted">
+                                                Provide a raw GitHub URL to a CSV file.
+                                            </small>
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
                             
                             {% if form.input_type.errors %}
@@ -64,8 +82,11 @@
                             {% endif %}
                         </div>
                         
-                        <div id="video-form-group" class="mb-4" style="display: none;">
-                            <label class="form-label" for="{{ form.video_file.id }}">Upload Video File</label>
+                        <hr class="my-4">
+                        
+                        <!-- Video Upload Section -->
+                        <div id="video-form-group" class="mb-4 input-section">
+                            <h5 class="mb-3">Upload Video File</h5>
                             <div class="input-group">
                                 {{ form.video_file(class="form-control" + (" is-invalid" if form.video_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
                                 <label class="input-group-text" for="{{ form.video_file.id }}">Browse</label>
@@ -78,14 +99,16 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i> 
-                                The video will be transcribed using Whisper and relationships will be extracted from the transcription.
+                            <div class="alert alert-info mt-3 small">
+                                <i class="fas fa-info-circle me-2"></i> 
+                                The video will be transcribed and relationships extracted from the content.
+                                Supports MP4, AVI, MOV, and MKV formats.
                             </div>
                         </div>
                         
-                        <div id="csv-form-group" class="mb-4" style="display: none;">
-                            <label class="form-label" for="{{ form.csv_file.id }}">Upload CSV File</label>
+                        <!-- CSV Upload Section -->
+                        <div id="csv-form-group" class="mb-4 input-section" style="display: none;">
+                            <h5 class="mb-3">Upload CSV File</h5>
                             <div class="input-group">
                                 {{ form.csv_file(class="form-control" + (" is-invalid" if form.csv_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
                                 <label class="input-group-text" for="{{ form.csv_file.id }}">Browse</label>
@@ -98,14 +121,15 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i>
+                            <div class="alert alert-info mt-3 small">
+                                <i class="fas fa-info-circle me-2"></i>
                                 Your CSV should contain structured data with column headers.
                             </div>
                         </div>
                         
-                        <div id="url-form-group" class="mb-4" style="display: none;">
-                            <label class="form-label" for="{{ form.github_url.id }}">GitHub Raw CSV URL</label>
+                        <!-- GitHub URL Section -->
+                        <div id="url-form-group" class="mb-4 input-section" style="display: none;">
+                            <h5 class="mb-3">GitHub Raw CSV URL</h5>
                             {{ form.github_url(class="form-control" + (" is-invalid" if form.github_url.errors else ""), placeholder="https://raw.githubusercontent.com/username/repo/main/data.csv") }}
                             {% if form.github_url.errors %}
                                 <div class="text-danger mt-2">
@@ -114,38 +138,51 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Use the "Raw" URL of a CSV file from GitHub. Example: https://raw.githubusercontent.com/username/repo/main/data.csv
+                            <div class="alert alert-info mt-3 small">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Use the "Raw" URL of a CSV file from GitHub.<br>
+                                Example: https://raw.githubusercontent.com/username/repo/main/data.csv
                             </div>
                         </div>
                         
+                        <hr class="my-4">
+                        
+                        <!-- Processing Information -->
                         <div class="card bg-dark mb-4">
                             <div class="card-body">
-                                <h5 class="card-title">Processing Information</h5>
-                                <p class="card-text">
-                                    <i class="fas fa-info-circle me-2 text-info"></i>
-                                    Data will be processed using AI to extract entities and relationships based on the "{{ graph.domain }}" domain.
+                                <h5 class="card-title">
+                                    <i class="fas fa-cogs me-2"></i>
+                                    Processing Information
+                                </h5>
+                                <p class="card-text text-muted">
+                                    Data will be processed to extract entities and relationships for the "{{ graph.domain }}" domain.
                                 </p>
-                                <ul class="list-group list-group-flush bg-dark">
-                                    <li class="list-group-item bg-dark">
-                                        <i class="fas fa-check-circle me-2 text-success"></i>
-                                        The extracted relationships will be added to your knowledge graph.
-                                    </li>
-                                    <li class="list-group-item bg-dark">
-                                        <i class="fas fa-check-circle me-2 text-success"></i>
-                                        You can visualize and query the graph after processing is complete.
-                                    </li>
-                                    <li class="list-group-item bg-dark">
-                                        <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
-                                        Processing may take some time, especially for video files.
-                                    </li>
-                                </ul>
+                                <div class="d-flex flex-column gap-2 mt-3">
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-success rounded-circle p-2 me-2">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <span>Relationships will be added to your knowledge graph</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-success rounded-circle p-2 me-2">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <span>You can visualize and query the graph after processing</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-warning rounded-circle p-2 me-2">
+                                            <i class="fas fa-exclamation"></i>
+                                        </span>
+                                        <span>Processing may take some time, especially for video files</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
+                        <!-- Submit Button -->
                         <div class="d-grid gap-2">
-                            {{ form.submit(class="btn btn-primary") }}
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
                         </div>
                     </form>
                 </div>
@@ -153,6 +190,33 @@
         </div>
     </div>
 </div>
+
+<style>
+    .form-check-card input[type="radio"] {
+        display: none;
+    }
+    
+    .form-check-card .form-check-label {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-color: #444 !important;
+    }
+    
+    .form-check-card input[type="radio"]:checked + .form-check-label {
+        border-color: #0d6efd !important;
+        background-color: rgba(13, 110, 253, 0.1);
+        box-shadow: 0 0 0 1px #0d6efd;
+    }
+    
+    .input-section {
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 
 <script>
     function updateFileLabel(input) {
@@ -166,30 +230,14 @@
     }
     
     document.addEventListener('DOMContentLoaded', function() {
-        console.log("DOM Content Loaded"); // Debug logging
-        
         // Get form elements
         const inputTypeRadios = document.querySelectorAll('input[name="input_type"]');
         const videoFormGroup = document.getElementById('video-form-group');
         const csvFormGroup = document.getElementById('csv-form-group');
         const urlFormGroup = document.getElementById('url-form-group');
         
-        console.log("Form groups found:", 
-            "video:", videoFormGroup !== null, 
-            "csv:", csvFormGroup !== null, 
-            "url:", urlFormGroup !== null
-        );
-        
-        // Force-check the first radio button to initialize form
-        if (inputTypeRadios && inputTypeRadios.length > 0) {
-            inputTypeRadios[0].checked = true;
-        }
-        
         function updateFormGroups() {
-            const selectedRadio = document.querySelector('input[name="input_type"]:checked');
-            const selectedValue = selectedRadio ? selectedRadio.value : null;
-            
-            console.log("Selected input type:", selectedValue);
+            const selectedValue = document.querySelector('input[name="input_type"]:checked')?.value;
             
             // Show/hide form groups based on selection
             if (videoFormGroup) videoFormGroup.style.display = selectedValue === 'video' ? 'block' : 'none';
@@ -199,23 +247,11 @@
         
         // Add change event listeners
         inputTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                console.log("Radio changed to:", this.value);
-                updateFormGroups();
-            });
+            radio.addEventListener('change', updateFormGroups);
         });
         
         // Initial setup
         updateFormGroups();
-        
-        // Fix for URL input field
-        if (urlFormGroup) {
-            const githubUrlInput = document.getElementById('{{ form.github_url.id }}');
-            if (githubUrlInput) {
-                console.log("GitHub URL input found");
-                githubUrlInput.style.width = '100%';
-            }
-        }
     });
 </script>
 {% endblock %}
