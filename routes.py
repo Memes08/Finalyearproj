@@ -194,69 +194,141 @@ def process_data(graph_id):
             if form.input_type.data == 'video':
                 # Check if video processing is available
                 if not app.config.get('HAS_VIDEO_PROCESSING', False):
+                    # Instead of rejecting the upload, provide a fallback
                     session[progress_key] = {
-                        'status': 'Video processing is unavailable.',
-                        'percent': 0,
-                        'step': 'error'
+                        'status': 'Using fallback mode for video processing...',
+                        'percent': 15,
+                        'step': 'fallback'
                     }
                     session.modified = True
-                    flash('Video processing is currently unavailable. Please install the required packages.', 'warning')
-                    return render_template('process.html', form=form, graph=graph)
-                
-                # Update progress - 15%
-                session[progress_key] = {
-                    'status': 'Saving video file...',
-                    'percent': 15,
-                    'step': 'upload'
-                }
-                session.modified = True
-                
-                # Save video file
-                video_file = form.video_file.data
-                filename = secure_filename(video_file.filename)
-                video_path = os.path.join(input_dir, filename)
-                video_file.save(video_path)
-                
-                # Update progress - 30%
-                session[progress_key] = {
-                    'status': 'Transcribing video to text...',
-                    'percent': 30,
-                    'step': 'transcription'
-                }
-                session.modified = True
-                
-                # Transcribe video
-                audio_path = os.path.join(input_dir, 'audio.wav')
-                transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
-                
-                # Update progress - 60%
-                session[progress_key] = {
-                    'status': 'Extracting entities and relationships...',
-                    'percent': 60,
-                    'step': 'extraction'
-                }
-                session.modified = True
-                
-                # Save output as CSV for Neo4j
-                csv_path = os.path.join(input_dir, 'transcription_triples.csv')
-                triples = kg_processor.extract_triples_from_text(transcription, domain=graph.domain)
-                kg_processor.save_triples_to_csv(triples, csv_path)
-                
-                # Update input source details
-                input_source.filename = filename
-                input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples]))
-                input_source.relationship_count = len(triples)
-                
-                # Update progress - 80%
-                session[progress_key] = {
-                    'status': 'Importing to graph database...',
-                    'percent': 80,
-                    'step': 'database'
-                }
-                session.modified = True
-                
-                # Insert into Neo4j
-                neo4j_manager.import_triples(triples, graph.id)
+                    
+                    # Save video file
+                    video_file = form.video_file.data
+                    filename = secure_filename(video_file.filename)
+                    video_path = os.path.join(input_dir, filename)
+                    video_file.save(video_path)
+                    
+                    # Update progress
+                    session[progress_key] = {
+                        'status': 'Video saved. Extracting basic metadata...',
+                        'percent': 30,
+                        'step': 'extraction'
+                    }
+                    session.modified = True
+                    
+                    # Create basic metadata triples from filename
+                    # This is a minimal fallback when transcription isn't available
+                    try:
+                        # Get basic info from filename (remove extension)
+                        base_filename = os.path.splitext(filename)[0]
+                        # Replace underscores and dashes with spaces
+                        title = base_filename.replace('_', ' ').replace('-', ' ')
+                        
+                        # Create some basic triples about the video
+                        triples = [
+                            (f"video_{graph.id}_{process_id}", "title", title),
+                            (f"video_{graph.id}_{process_id}", "type", "Video"),
+                            (f"video_{graph.id}_{process_id}", "filename", filename),
+                            (f"video_{graph.id}_{process_id}", "upload_date", datetime.now().strftime('%Y-%m-%d')),
+                            (f"video_{graph.id}_{process_id}", "knowledge_graph", f"{graph.name}")
+                        ]
+                        
+                        # Add additional context based on domain if available
+                        if graph.domain == "movie":
+                            triples.append((f"video_{graph.id}_{process_id}", "category", "Movie"))
+                        elif graph.domain == "music":
+                            triples.append((f"video_{graph.id}_{process_id}", "category", "Music Video"))
+                        
+                        # Update progress
+                        session[progress_key] = {
+                            'status': 'Created basic metadata from video file...',
+                            'percent': 60,
+                            'step': 'extraction'
+                        }
+                        session.modified = True
+                        
+                        # Update input source details
+                        input_source.filename = filename
+                        input_source.entity_count = 1  # Just the video entity
+                        input_source.relationship_count = len(triples)
+                        
+                        # Update progress - 80%
+                        session[progress_key] = {
+                            'status': 'Importing to graph database...',
+                            'percent': 80,
+                            'step': 'database'
+                        }
+                        session.modified = True
+                        
+                        # Insert into Neo4j
+                        neo4j_manager.import_triples(triples, graph.id)
+                        
+                        # Continue to the normal completion code
+                    except Exception as e:
+                        logging.error(f"Error in fallback video processing: {e}")
+                        session[progress_key] = {
+                            'status': f'Error processing video: {str(e)}',
+                            'percent': 0,
+                            'step': 'error'
+                        }
+                        session.modified = True
+                        flash(f'Error processing video: {str(e)}', 'danger')
+                        return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
+                else:
+                    # Update progress - 15%
+                    session[progress_key] = {
+                        'status': 'Saving video file...',
+                        'percent': 15,
+                        'step': 'upload'
+                    }
+                    session.modified = True
+                    
+                    # Save video file
+                    video_file = form.video_file.data
+                    filename = secure_filename(video_file.filename)
+                    video_path = os.path.join(input_dir, filename)
+                    video_file.save(video_path)
+                    
+                    # Update progress - 30%
+                    session[progress_key] = {
+                        'status': 'Transcribing video to text...',
+                        'percent': 30,
+                        'step': 'transcription'
+                    }
+                    session.modified = True
+                    
+                    # Transcribe video
+                    audio_path = os.path.join(input_dir, 'audio.wav')
+                    transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
+                    
+                    # Update progress - 60%
+                    session[progress_key] = {
+                        'status': 'Extracting entities and relationships...',
+                        'percent': 60,
+                        'step': 'extraction'
+                    }
+                    session.modified = True
+                    
+                    # Save output as CSV for Neo4j
+                    csv_path = os.path.join(input_dir, 'transcription_triples.csv')
+                    triples = kg_processor.extract_triples_from_text(transcription, domain=graph.domain)
+                    kg_processor.save_triples_to_csv(triples, csv_path)
+                    
+                    # Update input source details
+                    input_source.filename = filename
+                    input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples]))
+                    input_source.relationship_count = len(triples)
+                    
+                    # Update progress - 80%
+                    session[progress_key] = {
+                        'status': 'Importing to graph database...',
+                        'percent': 80,
+                        'step': 'database'
+                    }
+                    session.modified = True
+                    
+                    # Insert into Neo4j
+                    neo4j_manager.import_triples(triples, graph.id)
                 
             elif form.input_type.data == 'csv':
                 # Update progress - 15%
@@ -335,7 +407,7 @@ def process_data(graph_id):
                     except Exception as inner_e:
                         logging.error(f"Fallback CSV processing failed: {inner_e}")
                         flash(f"Error processing CSV data: {str(inner_e)}", 'danger')
-                        return render_template('process.html', form=form, graph=graph)
+                        return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
                 
                 # Update input source details
                 input_source.filename = filename
@@ -358,10 +430,10 @@ def process_data(graph_id):
                     except Exception as e:
                         logging.error(f"Error downloading CSV from URL: {e}")
                         flash(f"Error downloading CSV: {str(e)}", 'danger')
-                        return render_template('process.html', form=form, graph=graph)
+                        return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
                 else:
                     flash("No GitHub URL provided", 'danger')
-                    return render_template('process.html', form=form, graph=graph)
+                    return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
                 
                 # Process CSV file - with fallback for missing pandas
                 try:
@@ -401,7 +473,7 @@ def process_data(graph_id):
                     except Exception as inner_e:
                         logging.error(f"Fallback CSV processing failed: {inner_e}")
                         flash(f"Error processing CSV data: {str(inner_e)}", 'danger')
-                        return render_template('process.html', form=form, graph=graph)
+                        return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
                 
                 # Update input source details
                 input_source.url = url
