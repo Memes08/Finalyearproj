@@ -162,7 +162,8 @@ class KnowledgeGraphProcessor:
         self.entity_patterns = {
             "Person": [
                 r'\b([A-Z][a-z]+ [A-Z][a-z]+)\b',  # Simple name pattern
-                r'\b(?:Mr|Mrs|Ms|Dr|Prof)\.? ([A-Z][a-z]+ [A-Z][a-z]+)\b'  # Name with title
+                r'\b(?:Mr|Mrs|Ms|Dr|Prof)\.? ([A-Z][a-z]+ [A-Z][a-z]+)\b',  # Name with title
+                r'\b(?:Sage|Rishi|Muni|Swami|Guru) ([A-Z][a-z]+)\b'  # Vedic sages and teachers
             ],
             "Movie": [
                 r'"([^"]+)"',  # Quoted title
@@ -175,10 +176,27 @@ class KnowledgeGraphProcessor:
                 r'\b\d{1,2}/\d{1,2}/\d{4}\b'
             ],
             "Year": [
-                r'\b(19|20)\d{2}\b'  # Simple year pattern
+                r'\b(19|20)\d{2}\b',  # Simple year pattern
+                r'\b\d{1,4}(?:\s+BCE|\s+BC|\s+CE|\s+AD)\b'  # Ancient dates
             ],
             "Genre": [
                 r'\b(Action|Adventure|Comedy|Drama|Horror|Sci-Fi|Thriller|Romance|Fantasy|Animation|Documentary|Biography)\b'
+            ],
+            "Veda": [
+                r'\b(Rig ?Veda|Sama ?Veda|Yajur ?Veda|Atharva ?Veda|Vedas)\b',
+                r'\b(Upanishads?|Brahmanas?|Aranyakas?|Samhitas?)\b'
+            ],
+            "Scripture": [
+                r'\b(Bhagavad ?Gita|Mahabharata|Ramayana|Puranas?|Sutras?)\b',
+                r'\b(Manu ?Smriti|Yoga ?Sutras|Vedanta|Agamas)\b'
+            ],
+            "Deity": [
+                r'\b(Indra|Agni|Vayu|Surya|Varuna|Brahma|Vishnu|Shiva|Lakshmi|Saraswati)\b',
+                r'\b(Ganesha|Hanuman|Krishna|Rama|Durga|Kali|Parvati|Rudra)\b'
+            ],
+            "Concept": [
+                r'\b(Dharma|Karma|Moksha|Samsara|Yoga|Atman|Brahman|Yajna)\b',
+                r'\b(Mantra|Rishi|Muni|Sanskrit|Puja|Varnashrama|Ashrama)\b'
             ]
         }
         
@@ -269,6 +287,22 @@ class KnowledgeGraphProcessor:
                     ("SIMILAR_TO", None, "Song similar to another song")
                 ]
             },
+            "vedas": {
+                "entity_types": ["Veda", "Scripture", "Deity", "Concept", "Person", "Year"],
+                "relations": [
+                    ("CONSISTS_OF", "parts", "Components of a Veda"),
+                    ("WRITTEN_BY", "sage", "Sage who compiled a text"),
+                    ("TRANSMITTED_BY", "tradition", "Oral tradition that preserved a text"),
+                    ("DATED_TO", "period", "Historical period of a text"),
+                    ("CONTAINS", "elements", "Content included in a text"),
+                    ("RELATED_TO", "concept", "Philosophical concept related to a text"),
+                    ("MENTIONS", "deity", "Deity mentioned in a Vedic text"),
+                    ("ORIGINATED_IN", "location", "Place of origin"),
+                    ("ASSOCIATED_WITH", "practice", "Practice associated with a text"),
+                    ("PRESERVED_IN", "language", "Language of preservation"),
+                    ("FOCUS_ON", "theme", "Main theme or focus of a text")
+                ]
+            },
             "academic": {
                 "entity_types": ["Person", "Institution", "Genre"],
                 "relations": [
@@ -337,6 +371,18 @@ class KnowledgeGraphProcessor:
         filename_match = re.search(r'File: ([^\n]+)', text)
         filename = filename_match.group(1).strip() if filename_match else "video"
         
+        # Try to detect content from filename
+        filename_lower = filename.lower()
+        detected_domain = None
+        
+        # Try to auto-detect content from filename
+        if any(term in filename_lower for term in ["veda", "vedic", "upanishad", "sanskrit", "hindu", "ancient", "india"]):
+            detected_domain = "vedas" 
+        elif any(term in filename_lower for term in ["movie", "film", "cinema", "actor", "actress", "director"]):
+            detected_domain = "movie"
+        elif any(term in filename_lower for term in ["academ", "lecture", "course", "education", "study", "research"]):
+            detected_domain = "academic"
+        
         # Create a primary video entity
         video_entity = f"video_{hash(filename) % 1000}"
         
@@ -346,8 +392,13 @@ class KnowledgeGraphProcessor:
             timestamp = timestamp_match.group(1).strip()
             triples.append((video_entity, "CREATED_ON", timestamp))
         
+        # Use auto-detected domain if available and no explicit domain set
+        if detected_domain and domain == "custom":
+            domain = detected_domain
+            logging.info(f"Auto-detected domain '{domain}' from filename")
+        
         # Special domain-specific extractions
-        if domain == "vedas":
+        if domain == "vedas" or "veda" in filename_lower:
             # Special handling for Vedas domain
             triples.extend([
                 (video_entity, "COVERS_TOPIC", "Vedas"),
