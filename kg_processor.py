@@ -265,30 +265,155 @@ class KnowledgeGraphProcessor:
     def query_knowledge_graph(self, query_text, graph_id):
         """Query the knowledge graph using natural language"""
         try:
-            # Since we can't use LLM-based querying, we'll provide a basic search function
+            # Since we can't use LLM-based querying, we'll provide a rule-based search function
             nodes, relationships = self.neo4j_manager.get_graph_data(graph_id)
             
-            # Basic keyword matching (very simple implementation)
-            query_terms = query_text.lower().split()
+            # Create node maps for efficient lookup
+            node_label_map = {node.get("id"): node.get("label") for node in nodes}
+            node_id_map = {node.get("label").lower(): node.get("id") for node in nodes}
             
-            # Search for nodes that match query terms
+            # Process specific question patterns
+            query_lower = query_text.lower()
+            
+            # Handle "What movies did X direct?" type questions
+            if "movies" in query_lower and "direct" in query_lower:
+                # Extract director name from the query
+                # This assumes the director name is the main entity being searched
+                director_terms = []
+                for term in query_lower.split():
+                    if term not in ["what", "movies", "did", "direct", "directed", "by", "?", "films"]:
+                        director_terms.append(term)
+                
+                if director_terms:
+                    director_name = " ".join(director_terms)
+                    
+                    # Find all HAS_DIRECTOR relationships
+                    director_movies = []
+                    for rel in relationships:
+                        # Check if this is a director relationship
+                        if rel.get("type") == "HAS_DIRECTOR":
+                            # Get target (director) label
+                            target_id = rel.get("target")
+                            director_label = node_label_map.get(target_id, "").lower()
+                            
+                            # Check if this director matches our search
+                            if director_name in director_label:
+                                # Get source (movie) label
+                                source_id = rel.get("source")
+                                movie_label = node_label_map.get(source_id, "Unknown")
+                                director_movies.append((movie_label, node_label_map.get(target_id, "Unknown")))
+                    
+                    if director_movies:
+                        result_lines = ["Found these relationships:"]
+                        for movie, director in director_movies:
+                            result_lines.append(f"- {movie} [HAS_DIRECTOR] {director}")
+                        return "\n".join(result_lines)
+                    
+                    # Also check the reverse direction (sometimes the graph might store it in reverse)
+                    for rel in relationships:
+                        if rel.get("type") == "HAS_DIRECTOR":
+                            # Check if source (could be director) label matches
+                            source_id = rel.get("source")
+                            director_label = node_label_map.get(source_id, "").lower()
+                            
+                            if director_name in director_label:
+                                # Get target (could be movie) label
+                                target_id = rel.get("target")
+                                movie_label = node_label_map.get(target_id, "Unknown")
+                                director_movies.append((director_label, movie_label))
+                    
+                    if director_movies:
+                        result_lines = ["Found these relationships:"]
+                        for director, movie in director_movies:
+                            result_lines.append(f"- {movie} [HAS_DIRECTOR] {director}")
+                        return "\n".join(result_lines)
+            
+            # Handle "Which actors starred in X?" type questions
+            elif "actors" in query_lower and ("starred" in query_lower or "appear" in query_lower or "in" in query_lower):
+                # Extract movie name from the query
+                movie_terms = []
+                skip_terms = ["which", "actors", "starred", "in", "?", "appear", "did", "who", "was", "were", "the"]
+                for term in query_lower.split():
+                    if term not in skip_terms:
+                        movie_terms.append(term)
+                
+                if movie_terms:
+                    movie_name = " ".join(movie_terms)
+                    
+                    # Find all HAS_ACTOR relationships
+                    movie_actors = []
+                    for rel in relationships:
+                        # Check if this is an actor relationship
+                        if rel.get("type") == "HAS_ACTOR":
+                            # Get source (movie) label
+                            source_id = rel.get("source")
+                            movie_label = node_label_map.get(source_id, "").lower()
+                            
+                            # Check if this movie matches our search
+                            if movie_name in movie_label:
+                                # Get target (actor) label
+                                target_id = rel.get("target")
+                                actor_label = node_label_map.get(target_id, "Unknown")
+                                movie_actors.append((node_label_map.get(source_id, "Unknown"), actor_label))
+                    
+                    if movie_actors:
+                        result_lines = ["Found these relationships:"]
+                        for movie, actor in movie_actors:
+                            result_lines.append(f"- {movie} [HAS_ACTOR] {actor}")
+                        return "\n".join(result_lines)
+            
+            # Handle general queries by searching for entities in the query
+            
+            # Extract potential search terms (names, titles, etc.)
+            # Skip common words that are likely not entity names
+            skip_words = {"what", "which", "who", "where", "when", "how", "did", "does", "is", "are", "was", "were", 
+                         "has", "have", "had", "the", "a", "an", "in", "on", "at", "by", "to", "for", "with", 
+                         "from", "about", "movies", "actors", "directors", "character", "film", "star", "direct"}
+            
+            search_terms = []
+            for term in query_lower.split():
+                if term not in skip_words and len(term) > 2:  # Skip short terms like "of", "as", etc.
+                    search_terms.append(term)
+            
+            # Combine consecutive terms to catch multi-word entities
+            phrase_search_terms = []
+            if len(search_terms) >= 2:
+                for i in range(len(search_terms) - 1):
+                    phrase_search_terms.append(f"{search_terms[i]} {search_terms[i+1]}")
+            
+            # Add triple word phrases
+            if len(search_terms) >= 3:
+                for i in range(len(search_terms) - 2):
+                    phrase_search_terms.append(f"{search_terms[i]} {search_terms[i+1]} {search_terms[i+2]}")
+            
+            # Search for nodes that match search terms
             matching_nodes = []
-            for node in nodes:
-                node_label = node.get("label", "").lower()
-                if any(term in node_label for term in query_terms):
-                    matching_nodes.append(node)
+            # First try exact multi-word phrase matches
+            for phrase in phrase_search_terms:
+                for node in nodes:
+                    node_label = node.get("label", "").lower()
+                    if phrase in node_label and node not in matching_nodes:
+                        matching_nodes.append(node)
+            
+            # Then try individual word matches
+            if not matching_nodes:
+                for node in nodes:
+                    node_label = node.get("label", "").lower()
+                    if any(term in node_label for term in search_terms) and node not in matching_nodes:
+                        matching_nodes.append(node)
             
             # Extract the relationships involving the matching nodes
             matching_node_ids = [node.get("id") for node in matching_nodes]
             matching_relations = []
             for rel in relationships:
-                if rel.get("source") in matching_node_ids or rel.get("target") in matching_node_ids:
+                source_id = rel.get("source")
+                target_id = rel.get("target")
+                if source_id in matching_node_ids or target_id in matching_node_ids:
                     matching_relations.append(rel)
             
             # Format the results
-            if matching_nodes:
-                node_label_map = {node.get("id"): node.get("label") for node in nodes}
-                result_lines = []
+            if matching_relations:
+                result_lines = ["Found these relationships:"]
                 
                 for rel in matching_relations:
                     source_id = rel.get("source")
@@ -300,10 +425,9 @@ class KnowledgeGraphProcessor:
                     
                     result_lines.append(f"- {source_label} [{relation_type}] {target_label}")
                 
-                if result_lines:
-                    return "Found these relationships:\n" + "\n".join(result_lines)
-                else:
-                    return f"Found {len(matching_nodes)} entities matching your query, but no relationships."
+                return "\n".join(result_lines)
+            elif matching_nodes:
+                return f"Found {len(matching_nodes)} entities matching your query, but no relationships."
             else:
                 return "No matching entities found for your query."
                 
