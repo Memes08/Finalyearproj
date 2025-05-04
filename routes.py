@@ -602,8 +602,8 @@ def video_summary(graph_id, process_id):
         flash('You do not have permission to access this graph', 'danger')
         return redirect(url_for('dashboard'))
     
-    # Use the process_id to get the working directory
-    input_dir = os.path.join('uploads', str(current_user.id), 'graphs', str(graph_id), process_id)
+    # Get the processing directory using the same structure as in process_data
+    input_dir = os.path.join(app.config['UPLOAD_FOLDER'], process_id)
     
     # Check if directory exists
     if not os.path.exists(input_dir):
@@ -690,8 +690,8 @@ def approve_video(graph_id, process_id):
         flash('You do not have permission to access this graph', 'danger')
         return redirect(url_for('dashboard'))
     
-    # Get the processing directory
-    input_dir = os.path.join('uploads', str(current_user.id), 'graphs', str(graph_id), process_id)
+    # Get the processing directory using the same structure as in process_data
+    input_dir = os.path.join(app.config['UPLOAD_FOLDER'], process_id)
     
     # Check if directory exists
     if not os.path.exists(input_dir):
@@ -761,8 +761,8 @@ def reject_video(graph_id, process_id):
         flash('You do not have permission to access this graph', 'danger')
         return redirect(url_for('dashboard'))
     
-    # Get the processing directory
-    input_dir = os.path.join('uploads', str(current_user.id), 'graphs', str(graph_id), process_id)
+    # Get the processing directory using the same structure as in process_data
+    input_dir = os.path.join(app.config['UPLOAD_FOLDER'], process_id)
     
     # Delete the input source record
     input_source = InputSource.query.filter_by(
