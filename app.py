@@ -31,6 +31,7 @@ if database_url and database_url.startswith("postgres://"):
     # Handle Heroku-style PostgreSQL URLs
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
+# Use the newly created Replit database
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 logging.info(f"Using database URL: {database_url}")
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {

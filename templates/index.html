@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron bg-dark text-white">
+    <div class="container py-5">
+        <h1 class="display-4">Knowledge Graph Builder</h1>
+        <p class="lead">Transform various input sources into structured knowledge graphs.</p>
+        
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg mt-3">
+            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+        </a>
+        {% else %}
+        <div class="mt-4">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Register
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-video fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Video Processing</h3>
+                    <p class="card-text">Process video content into structured knowledge graphs.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-table fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">CSV Support</h3>
+                    <p class="card-text">Convert CSV data into knowledge graph entities and relationships.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-project-diagram fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Multiple Domains</h3>
+                    <p class="card-text">Support for movies, books, music, and more.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h2><i class="fas fa-question-circle me-2"></i>What is a Knowledge Graph?</h2>
+            <p>
+                A knowledge graph is a structured representation of entities and their relationships. 
+                It helps organize information in a way that's both human-readable and machine-processable, 
+                allowing for advanced querying and insights.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <h2><i class="fas fa-lightbulb me-2"></i>How it Works</h2>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item">Upload your data (video, CSV, etc.)</li>
+                <li class="list-group-item">Our AI analyzes and extracts entities and relationships</li>
+                <li class="list-group-item">View, explore, and query your knowledge graph</li>
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %}
