@@ -80,22 +80,40 @@ class DataInputForm(FlaskForm):
     submit = SubmitField('Process Data')
     
     def validate(self, **kwargs):
+        # Import logging and request here to avoid circular import
+        import logging
+        from flask import request
+        
+        # Check if we have a selected_input_type in the form data
+        selected_type = request.form.get('selected_input_type')
+        if selected_type and selected_type in ['video', 'youtube', 'youtube_transcript', 'text', 'url']:
+            logging.info(f"Setting input_type from selected_input_type: {selected_type}")
+            self.input_type.data = selected_type
+        
         if not super().validate():
+            logging.warning("Form failed standard validation")
             return False
             
+        logging.info(f"Validating form with input_type={self.input_type.data}")
+        
         if self.input_type.data == 'video' and not self.video_file.data:
+            logging.warning("Video file validation failed: No file uploaded")
             self.video_file.errors.append('Please upload a video file.')
             return False
         elif self.input_type.data == 'youtube_transcript' and not self.youtube_transcript.data:
+            logging.warning("YouTube transcript validation failed: No transcript provided")
             self.youtube_transcript.errors = ['Please paste the YouTube transcript.']
             return False
         elif self.input_type.data == 'text' and not (self.text_file.data or self.text_content.data):
+            logging.warning("Text validation failed: No text file or content provided")
             self.text_file.errors.append('Please either upload a text file or paste text directly.')
             return False
         elif self.input_type.data == 'url' and not self.github_url.data:
+            logging.warning("URL validation failed: No GitHub URL provided")
             self.github_url.errors.append('Please enter a GitHub raw file URL.')
             return False
             
+        logging.info(f"Form validation successful for input type: {self.input_type.data}")
         return True
 
 

@@ -289,8 +289,22 @@ def process_data(graph_id):
         logging.info(f"Form submitted with method POST")
         form_data = {key: value for key, value in request.form.items()}
         logging.info(f"Raw form data: {form_data}")
+        
+        # Log the important fields specifically
+        logging.info(f"YouTube transcript data: {bool(request.form.get('youtube_transcript', ''))}")
+        logging.info(f"Selected input type: {request.form.get('selected_input_type', 'not set')}")
+        logging.info(f"Input type radio: {request.form.get('input_type', 'not set')}")
     
-    if form.validate_on_submit():
+    # Check form validation
+    is_valid = form.validate_on_submit()
+    logging.info(f"Form validation result: {is_valid}")
+    
+    if not is_valid and request.method == 'POST':
+        logging.warning("Form validation failed")
+        if hasattr(form, 'errors') and form.errors:
+            logging.warning(f"Form errors: {form.errors}")
+    
+    if is_valid:
         logging.info(f"Form validated successfully")
         # Create a unique directory for this input
         process_id = str(uuid.uuid4())
@@ -898,7 +912,8 @@ def process_data(graph_id):
                 
             elif form.input_type.data == 'youtube_transcript':
                 # Process YouTube transcript directly
-                logging.info("Processing YouTube transcript input type")
+                logging.info("====== PROCESSING YOUTUBE TRANSCRIPT INPUT ======")
+                logging.info(f"YouTube transcript field data present: {bool(form.youtube_transcript.data)}")
                 youtube_transcript = form.youtube_transcript.data
                 youtube_title = form.youtube_title.data or "YouTube Video Transcript"
                 
