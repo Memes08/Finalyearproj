@@ -8,3 +8,4 @@ psycopg2-binary
 werkzeug
 pandas
 openai-whisper>=20230306
+pytube>=15.0.0

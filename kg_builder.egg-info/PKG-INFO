@@ -14,3 +14,4 @@ Requires-Dist: psycopg2-binary
 Requires-Dist: werkzeug
 Requires-Dist: pandas
 Requires-Dist: openai-whisper>=20230306
+Requires-Dist: pytube>=15.0.0

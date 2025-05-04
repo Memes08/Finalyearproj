@@ -204,7 +204,7 @@ def process_data(graph_id):
     
     # Check if we're getting a custom selected_input_type field from our form
     selected_input_type = request.form.get('selected_input_type')
-    if selected_input_type and selected_input_type in ['video', 'csv', 'url']:
+    if selected_input_type and selected_input_type in ['video', 'youtube', 'csv', 'url']:
         form.input_type.data = selected_input_type
     
     if form.validate_on_submit():

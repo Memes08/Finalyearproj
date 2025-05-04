@@ -26,6 +26,7 @@ class WhisperTranscriber:
         self.model = None
         self.has_whisper = False
         self.has_ffmpeg = self._check_ffmpeg()
+        self.has_pytube = PYTUBE_AVAILABLE
         
         try:
             import whisper
@@ -34,6 +35,160 @@ class WhisperTranscriber:
             self._load_model()
         except ImportError:
             logging.warning("Whisper package not installed. Using fallback transcription.")
+            
+    def download_youtube_video(self, youtube_url, output_dir):
+        """Download audio from a YouTube video URL
+        
+        Args:
+            youtube_url (str): The YouTube URL
+            output_dir (str): Directory to save the downloaded audio
+            
+        Returns:
+            tuple: (success, audio_path or error_message)
+        """
+        if not self.has_pytube:
+            return False, "PyTube not available for YouTube processing"
+            
+        try:
+            logging.info(f"Downloading YouTube video: {youtube_url}")
+            
+            # Create a unique filename based on the current timestamp
+            timestamp = int(time.time())
+            output_filename = f"youtube_{timestamp}.mp4"
+            output_path = os.path.join(output_dir, output_filename)
+            
+            # Make directory if it doesn't exist
+            os.makedirs(output_dir, exist_ok=True)
+            
+            # Use PyTube to download
+            import pytube
+            youtube = pytube.YouTube(youtube_url)
+            
+            # Get video title and metadata for better processing
+            video_title = youtube.title
+            author = youtube.author
+            
+            logging.info(f"Found video: '{video_title}' by {author}")
+            
+            # Download audio stream in mp4 format (most compatible)
+            # Sort by bitrate to get the best quality audio
+            audio_stream = youtube.streams.filter(only_audio=True).order_by('abr').desc().first()
+            
+            if not audio_stream:
+                # If no audio-only stream, try getting the lowest resolution video stream
+                audio_stream = youtube.streams.filter(progressive=True).order_by('resolution').first()
+                
+            if audio_stream:
+                # Download the stream to the output path
+                logging.info(f"Downloading audio stream: {audio_stream.itag}")
+                output_path = audio_stream.download(output_path=output_dir, filename=output_filename)
+                
+                # Add metadata for better entity extraction
+                metadata_txt = os.path.join(output_dir, f"youtube_{timestamp}_metadata.txt")
+                with open(metadata_txt, 'w') as f:
+                    f.write(f"Title: {video_title}\n")
+                    f.write(f"Author: {author}\n")
+                    f.write(f"URL: {youtube_url}\n")
+                    f.write(f"Description: {youtube.description}\n")
+                    f.write(f"Publish Date: {youtube.publish_date}\n")
+                    f.write(f"Views: {youtube.views}\n")
+                    
+                # Convert to audio file if preferred for whisper
+                audio_path = os.path.join(output_dir, f"youtube_{timestamp}.wav")
+                self.extract_audio(output_path, audio_path)
+                
+                # Return the audio path for processing
+                return True, audio_path
+            else:
+                return False, "No suitable audio or video stream found"
+                
+        except Exception as e:
+            logging.error(f"YouTube download error: {str(e)}")
+            return False, f"Error downloading YouTube video: {str(e)}"
+            
+    def get_youtube_transcript(self, youtube_url, output_dir):
+        """Get transcript from YouTube video.
+        First tries to download captions directly, then falls back to downloading and transcribing.
+        
+        Args:
+            youtube_url (str): The YouTube URL
+            output_dir (str): Directory to save temporary files
+            
+        Returns:
+            str: The transcript text
+        """
+        if not self.has_pytube:
+            return "PyTube not available for YouTube processing"
+            
+        try:
+            logging.info(f"Attempting to get transcript for: {youtube_url}")
+            
+            # First try to get captions directly
+            import pytube
+            youtube = pytube.YouTube(youtube_url)
+            
+            # Get video title for metadata
+            video_title = youtube.title
+            author = youtube.author
+            
+            try:
+                # Get English caption track or the first available one
+                caption_track = youtube.captions.get_by_language_code('en')
+                if not caption_track:
+                    # Try to get whatever caption is available
+                    if youtube.captions and len(youtube.captions) > 0:
+                        caption_track = list(youtube.captions.values())[0]
+                
+                if caption_track:
+                    # Get the caption text
+                    transcript = caption_track.generate_srt_captions()
+                    # Clean up SRT formatting to plain text
+                    transcript = re.sub(r'\d+\n\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}\n', '', transcript)
+                    transcript = re.sub(r'<.*?>', '', transcript)  # Remove HTML-like tags
+                    
+                    # Add metadata header
+                    full_transcript = f"""
+                        YouTube Video Transcript
+                        Title: {video_title}
+                        Author: {author}
+                        URL: {youtube_url}
+                        
+                        {transcript}
+                    """
+                    
+                    logging.info(f"Successfully retrieved captions from YouTube")
+                    return full_transcript
+            except Exception as caption_e:
+                logging.warning(f"Could not get YouTube captions: {str(caption_e)}")
+                
+            # If captions failed, download and transcribe
+            logging.info("Falling back to downloading and transcribing YouTube video")
+            success, audio_path = self.download_youtube_video(youtube_url, output_dir)
+            
+            if success and os.path.exists(audio_path):
+                # Transcribe the downloaded audio
+                transcript = self.transcribe_audio(audio_path)
+                
+                # Add metadata header if we have a good transcript
+                if transcript and len(transcript.strip()) > 50:  # Reasonable length check
+                    full_transcript = f"""
+                        YouTube Video Transcript
+                        Title: {video_title}
+                        Author: {author}
+                        URL: {youtube_url}
+                        
+                        {transcript}
+                    """
+                    return full_transcript
+                else:
+                    # Return the transcript anyway
+                    return transcript
+            else:
+                return f"Failed to download audio from YouTube: {audio_path}"
+                
+        except Exception as e:
+            logging.error(f"YouTube transcript extraction error: {str(e)}")
+            return f"Error extracting YouTube transcript: {str(e)}"
     
     def _check_ffmpeg(self):
         """Check if ffmpeg is available"""

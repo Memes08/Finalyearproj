@@ -1,3 +1,4 @@
+import re
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, FileField, RadioField, URLField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, URL, Optional, ValidationError
