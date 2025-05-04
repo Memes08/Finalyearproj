@@ -21,6 +21,7 @@ dependencies = [
     "werkzeug",
     "pandas",
     "openai-whisper>=20230306",
+    "pytube>=15.0.0",
 ]
 
 [tool.setuptools]

@@ -48,6 +48,7 @@ class NewKnowledgeGraphForm(FlaskForm):
 class DataInputForm(FlaskForm):
     input_type = RadioField('Input Type', choices=[
         ('video', 'Video File'),
+        ('youtube', 'YouTube Video URL'),
         ('csv', 'CSV Upload'),
         ('url', 'GitHub CSV URL')
     ], validators=[DataRequired()])
@@ -55,6 +56,11 @@ class DataInputForm(FlaskForm):
     video_file = FileField('Upload Video', validators=[
         Optional(),
         FileAllowed(['mp4', 'avi', 'mov', 'mkv'], 'Only video files allowed!')
+    ])
+    
+    youtube_url = URLField('YouTube Video URL', validators=[
+        Optional(), 
+        URL(message='Please enter a valid YouTube URL'),
     ])
     
     csv_file = FileField('Upload CSV', validators=[
@@ -73,12 +79,22 @@ class DataInputForm(FlaskForm):
         if self.input_type.data == 'video' and not self.video_file.data:
             self.video_file.errors.append('Please upload a video file.')
             return False
+        elif self.input_type.data == 'youtube' and not self.youtube_url.data:
+            self.youtube_url.errors.append('Please enter a YouTube video URL.')
+            return False
         elif self.input_type.data == 'csv' and not self.csv_file.data:
             self.csv_file.errors.append('Please upload a CSV file.')
             return False
         elif self.input_type.data == 'url' and not self.github_url.data:
             self.github_url.errors.append('Please enter a GitHub CSV URL.')
             return False
+            
+        # Validate YouTube URL format if provided
+        if self.input_type.data == 'youtube' and self.youtube_url.data:
+            youtube_regex = r'^(https?://)?(www\.)?(youtube\.com/watch\?v=|youtu\.be/)([a-zA-Z0-9_-]{11})'
+            if not re.search(youtube_regex, self.youtube_url.data):
+                self.youtube_url.errors.append('Please enter a valid YouTube video URL.')
+                return False
             
         return True
 

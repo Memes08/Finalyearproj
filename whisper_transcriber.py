@@ -7,6 +7,18 @@ import json
 import time
 import shutil
 import random
+import urllib.request
+import uuid
+from pathlib import Path
+
+# Try to import pytube for YouTube support
+try:
+    import pytube
+    PYTUBE_AVAILABLE = True
+    logging.info("PyTube is available for YouTube video processing")
+except ImportError:
+    PYTUBE_AVAILABLE = False
+    logging.warning("PyTube not available. YouTube processing will be limited.")
 
 class WhisperTranscriber:
     def __init__(self, model_size="base"):
