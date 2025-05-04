@@ -1,0 +1,1 @@
+Error extracting YouTube transcript: HTTP Error 400: Bad Request
