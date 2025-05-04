@@ -527,41 +527,42 @@
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
-            // Get the active tab
-            const activeTab = document.querySelector('.nav-link.active');
-            if (activeTab) {
-                console.log("Active tab ID:", activeTab.id);
-                if (activeTab.id === 'video-tab') selectInputType('video');
-                else if (activeTab.id === 'youtube-tab') selectInputType('youtube');
-                else if (activeTab.id === 'youtube-transcript-tab') {
-                    console.log("Setting YouTube transcript input type");
-                    selectInputType('youtube_transcript');
-                    
-                    // Double check that the radio button is properly set
-                    const ytTranscriptRadio = document.getElementById('input_type_youtube_transcript');
-                    if (ytTranscriptRadio) {
-                        ytTranscriptRadio.checked = true;
-                        console.log("YouTube transcript radio checked:", ytTranscriptRadio.checked);
+                // Get the active tab
+                const activeTab = document.querySelector('.nav-link.active');
+                if (activeTab) {
+                    console.log("Active tab ID:", activeTab.id);
+                    if (activeTab.id === 'video-tab') selectInputType('video');
+                    else if (activeTab.id === 'youtube-tab') selectInputType('youtube');
+                    else if (activeTab.id === 'youtube-transcript-tab') {
+                        console.log("Setting YouTube transcript input type");
+                        selectInputType('youtube_transcript');
+                        
+                        // Double check that the radio button is properly set
+                        const ytTranscriptRadio = document.getElementById('input_type_youtube_transcript');
+                        if (ytTranscriptRadio) {
+                            ytTranscriptRadio.checked = true;
+                            console.log("YouTube transcript radio checked:", ytTranscriptRadio.checked);
+                        }
+                        
+                        // Add YouTube transcript data to form if missing
+                        const ytTranscriptData = document.getElementById('youtube_transcript').value;
+                        console.log("YouTube transcript data length:", ytTranscriptData.length);
                     }
-                    
-                    // Add YouTube transcript data to form if missing
-                    const ytTranscriptData = document.getElementById('youtube_transcript').value;
-                    console.log("YouTube transcript data length:", ytTranscriptData.length);
+                    else if (activeTab.id === 'text-tab') selectInputType('text');
+                    else if (activeTab.id === 'url-tab') selectInputType('url');
                 }
-                else if (activeTab.id === 'text-tab') selectInputType('text');
-                else if (activeTab.id === 'url-tab') selectInputType('url');
-            }
-            
-            console.log("Form submitting with input type:", document.getElementById('selected_input_type').value);
-            
-            // Use the current process ID from the session if available, otherwise generate a temporary one
-            const processId = '{{ current_process_id }}' || '{{ graph.id }}_' + Math.random().toString(36).substring(2, 15);
-            
-            // Start progress monitoring after a short delay (to allow form submission)
-            setTimeout(() => {
-                startProgressMonitoring(processId);
-            }, 500);
-        });
+                
+                console.log("Form submitting with input type:", document.getElementById('selected_input_type').value);
+                
+                // Use the current process ID from the session if available, otherwise generate a temporary one
+                const processId = '{{ current_process_id }}' || '{{ graph.id }}_' + Math.random().toString(36).substring(2, 15);
+                
+                // Start progress monitoring after a short delay (to allow form submission)
+                setTimeout(() => {
+                    startProgressMonitoring(processId);
+                }, 500);
+            });
+        }
     });
 </script>
 {% endblock %}
