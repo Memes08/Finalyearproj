@@ -50,6 +50,7 @@ class DataInputForm(FlaskForm):
     input_type = RadioField('Input Type', choices=[
         ('video', 'Video File'),
         ('youtube', 'YouTube Video URL'),
+        ('youtube_transcript', 'YouTube Transcript'),
         ('csv', 'CSV Upload'),
         ('url', 'GitHub CSV URL')
     ], validators=[DataRequired()])
@@ -63,6 +64,10 @@ class DataInputForm(FlaskForm):
         Optional(), 
         URL(message='Please enter a valid YouTube URL'),
     ])
+    
+    youtube_video_id = StringField('YouTube Video ID', validators=[Optional()])
+    youtube_transcript = TextAreaField('YouTube Transcript', validators=[Optional()])
+    youtube_title = StringField('Video Title (Optional)', validators=[Optional()])
     
     csv_file = FileField('Upload CSV', validators=[
         Optional(),
@@ -83,6 +88,9 @@ class DataInputForm(FlaskForm):
         elif self.input_type.data == 'youtube' and not self.youtube_url.data:
             self.youtube_url.errors.append('Please enter a YouTube video URL.')
             return False
+        elif self.input_type.data == 'youtube_transcript' and not self.youtube_transcript.data:
+            self.youtube_transcript.errors = ['Please paste the YouTube transcript.']
+            return False
         elif self.input_type.data == 'csv' and not self.csv_file.data:
             self.csv_file.errors.append('Please upload a CSV file.')
             return False
@@ -96,6 +104,12 @@ class DataInputForm(FlaskForm):
             if not re.search(youtube_regex, self.youtube_url.data):
                 self.youtube_url.errors.append('Please enter a valid YouTube video URL.')
                 return False
+                
+        # Extract video ID from URL if provided
+        if self.input_type.data == 'youtube' and self.youtube_url.data:
+            match = re.search(r'(?:v=|\/)([0-9A-Za-z_-]{11}).*', self.youtube_url.data)
+            if match:
+                self.youtube_video_id.data = match.group(1)
             
         return True
 
