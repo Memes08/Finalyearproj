@@ -252,18 +252,52 @@ def process_data(graph_id):
                         input_source.entity_count = 1  # Just the video entity
                         input_source.relationship_count = len(triples)
                         
-                        # Update progress - 80%
+                        # Save preview triples for later user approval
+                        preview_path = os.path.join(input_dir, 'preview_triples.json')
+                        with open(preview_path, 'w') as f:
+                            json.dump(triples, f)
+                        
+                        # Save the filename for the summary page
+                        filename_path = os.path.join(input_dir, 'filename.txt')
+                        with open(filename_path, 'w') as f:
+                            f.write(filename)
+                        
+                        # Create a basic transcription file
+                        transcription_path = os.path.join(input_dir, 'transcription.txt')
+                        with open(transcription_path, 'w') as f:
+                            f.write(f"Fallback mode: Transcription not available for '{filename}'.\n\nBasic metadata extracted from filename.")
+                        
+                        # Save metadata for summary page
+                        summary_metadata = {
+                            "detected_domain": graph.domain,
+                            "content_type": "Video (using fallback processing)",
+                            "improvement_tips": [
+                                "Install whisper for better transcription",
+                                "Use more descriptive filenames for better auto-detection"
+                            ]
+                        }
+                        metadata_path = os.path.join(input_dir, 'summary_metadata.json')
+                        with open(metadata_path, 'w') as f:
+                            json.dump(summary_metadata, f)
+                            
+                        # Update progress - ready for approval
                         session[progress_key] = {
-                            'status': 'Importing to graph database...',
+                            'status': 'Ready for approval...',
                             'percent': 80,
-                            'step': 'database'
+                            'step': 'approval'
                         }
                         session.modified = True
                         
-                        # Insert into Neo4j
-                        neo4j_manager.import_triples(triples, graph.id)
+                        # Update input source with file info but mark as not processed yet
+                        input_source.filename = filename
+                        input_source.processed = False
                         
-                        # Continue to the normal completion code
+                        # Save input source
+                        db.session.add(input_source)
+                        db.session.commit()
+                        
+                        # Redirect to the summary approval page like the main flow
+                        return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
                     except Exception as e:
                         logging.error(f"Error in fallback video processing: {e}")
                         session[progress_key] = {
