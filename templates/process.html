@@ -189,17 +189,17 @@
                                     <div class="text-center">
                                         <div class="mb-4">
                                             <i class="fab fa-github fa-3x text-info mb-3"></i>
-                                            <h5 class="fw-bold">GitHub Raw File URL</h5>
+                                            <h5 class="fw-bold">Raw CSV or Text File URL</h5>
                                             <p class="text-muted">
-                                                Provide a raw GitHub URL to a text or CSV file for analysis.<br>
-                                                <span class="badge bg-success">NEW</span> Text files (.txt, .md) are now supported!<br>
-                                                Example format: https://raw.githubusercontent.com/username/repo/main/data.txt
+                                                Provide a URL to a raw CSV or text file for analysis.<br>
+                                                <span class="badge bg-success">NEW</span> Both text files (.txt, .md) and CSV files are supported!<br>
+                                                Example: https://raw.githubusercontent.com/username/repo/main/data.csv
                                             </p>
                                         </div>
                                         
                                         <div class="w-75 mx-auto">
                                             {{ form.github_url(class="form-control form-control-lg" + (" is-invalid" if form.github_url.errors else ""), 
-                                                placeholder="https://raw.githubusercontent.com/username/repo/main/data.txt") }}
+                                                placeholder="https://raw.githubusercontent.com/username/repo/main/data.csv") }}
                                             {% if form.github_url.errors %}
                                                 <div class="text-danger mt-2">
                                                     {% for error in form.github_url.errors %}
@@ -308,7 +308,9 @@
                         
                         <!-- Submit Button -->
                         <div class="d-grid">
-                            {{ form.submit(class="btn btn-primary btn-lg py-3") }}
+                            <button type="submit" id="process-data-btn" class="btn btn-primary btn-lg py-3">
+                                <i class="fas fa-project-diagram me-2"></i>Process Data
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -520,8 +522,17 @@
             });
         }
         
-        // Set initial selection
-        selectInputType('video');
+        // Set initial selection based on active tab
+        const initialActiveTab = document.querySelector('.nav-link.active');
+        if (initialActiveTab) {
+            if (initialActiveTab.id === 'video-tab') selectInputType('video');
+            else if (initialActiveTab.id === 'youtube-tab') selectInputType('youtube');
+            else if (initialActiveTab.id === 'text-tab') selectInputType('text');
+            else if (initialActiveTab.id === 'url-tab') selectInputType('url');
+            else selectInputType('video'); // Default
+        } else {
+            selectInputType('video'); // Default fallback
+        }
         
         // Before form submission, ensure the correct input type is set and start progress monitoring
         const form = document.querySelector('form');
