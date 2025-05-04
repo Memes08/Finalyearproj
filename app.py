@@ -25,18 +25,14 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-# Configure database with fallbacks
+# Configure database
 database_url = os.environ.get("DATABASE_URL")
 if database_url and database_url.startswith("postgres://"):
     # Handle Heroku-style PostgreSQL URLs
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
-# SQLite fallback for development if PostgreSQL is not available
-sqlite_url = "sqlite:///knowledge_graph.db"
-
-# Try PostgreSQL first, then SQLite
-app.config["SQLALCHEMY_DATABASE_URI"] = database_url or sqlite_url
-logging.info(f"Using database URL: {database_url or sqlite_url}")
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+logging.info(f"Using database URL: {database_url}")
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
