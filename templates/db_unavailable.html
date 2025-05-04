@@ -1,35 +1,47 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Database Unavailable - Knowledge Graph Builder{% endblock %}
+{% block title %}{{ error_title|default('Database Unavailable') }}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body p-5 text-center">
-                    <div class="mb-4">
-                        <i class="fas fa-database fa-4x text-danger mb-3"></i>
-                        <h2 class="mb-3">Database Connection Error</h2>
-                        <div class="alert alert-warning">
-                            <p class="mb-0">We're currently experiencing issues connecting to our database.</p>
-                        </div>
-                    </div>
-                    
-                    <p class="lead mb-4">
-                        The Knowledge Graph Builder requires a working database connection to function properly.
-                        Please try again later or contact support if the problem persists.
-                    </p>
-                    
-                    <div class="d-flex flex-column gap-3">
-                        <a href="{{ url_for('index') }}" class="btn btn-primary">
-                            <i class="fas fa-home me-2"></i> Return to Home
-                        </a>
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>{{ error_title|default('Database Connection Error') }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading">{{ error_message|default("We're having trouble connecting to our database") }}</h5>
                         
-                        <a href="javascript:location.reload()" class="btn btn-outline-secondary">
-                            <i class="fas fa-sync-alt me-2"></i> Refresh Page
-                        </a>
+                        {% if not error_message %}
+                        <p>We're experiencing technical difficulties with our database connection. This might be due to:</p>
+                        <ul>
+                            <li>Temporary database maintenance</li>
+                            <li>Connection issues</li>
+                            <li>Service outage</li>
+                        </ul>
+                        {% endif %}
                     </div>
+                    
+                    <p>While the service is unavailable, you can still:</p>
+                    <ul>
+                        <li>Browse our homepage</li>
+                        <li>Read documentation</li>
+                        <li>Try again later</li>
+                    </ul>
+                    
+                    <div class="mt-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>Return to Homepage
+                        </a>
+                        <button onclick="window.location.reload()" class="btn btn-secondary ms-2">
+                            <i class="fas fa-sync-alt me-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">If this problem persists, please contact support.</small>
                 </div>
             </div>
         </div>

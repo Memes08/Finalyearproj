@@ -1,9 +1,10 @@
 import os
 import logging
 
-from flask import Flask
+from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.exc import OperationalError, SQLAlchemyError
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_login import LoginManager
 
@@ -68,6 +69,42 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
+# Database availability flag
+app.config['HAS_DATABASE'] = False
+
+# Global error handlers
+@app.errorhandler(OperationalError)
+def handle_db_operational_error(e):
+    logging.error(f"Database operational error: {e}")
+    flash("Database connection error. Please try again later.", "danger")
+    return render_template('db_unavailable.html'), 503
+
+@app.errorhandler(SQLAlchemyError)
+def handle_db_error(e):
+    logging.error(f"Database error: {e}")
+    flash("Database error occurred. Please try again later.", "danger")
+    return render_template('db_unavailable.html'), 503
+
+@app.errorhandler(500)
+def handle_server_error(e):
+    logging.error(f"Internal server error: {e}")
+    return render_template('db_unavailable.html', 
+                          error_title="Server Error", 
+                          error_message="An unexpected error occurred. Our team has been notified."), 500
+
+@app.errorhandler(404)
+def handle_not_found(e):
+    return render_template('db_unavailable.html', 
+                          error_title="Page Not Found", 
+                          error_message="The requested page does not exist."), 404
+
+@app.errorhandler(Exception)
+def handle_unhandled_exception(e):
+    logging.error(f"Unhandled exception: {e}")
+    return render_template('db_unavailable.html', 
+                          error_title="Unexpected Error", 
+                          error_message="Something went wrong. Please try again later."), 500
+
 try:
     with app.app_context():
         # Import models to ensure they're registered with SQLAlchemy
@@ -75,6 +112,9 @@ try:
         
         # Create all database tables
         db.create_all()
+        
+        # Set database availability flag
+        app.config['HAS_DATABASE'] = True
         
         # Import routes after models to avoid circular imports
         import routes
