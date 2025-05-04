@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Database Unavailable - Knowledge Graph Builder{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-database fa-4x text-danger mb-3"></i>
+                        <h2 class="mb-3">Database Connection Error</h2>
+                        <div class="alert alert-warning">
+                            <p class="mb-0">We're currently experiencing issues connecting to our database.</p>
+                        </div>
+                    </div>
+                    
+                    <p class="lead mb-4">
+                        The Knowledge Graph Builder requires a working database connection to function properly.
+                        Please try again later or contact support if the problem persists.
+                    </p>
+                    
+                    <div class="d-flex flex-column gap-3">
+                        <a href="{{ url_for('index') }}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i> Return to Home
+                        </a>
+                        
+                        <a href="javascript:location.reload()" class="btn btn-outline-secondary">
+                            <i class="fas fa-sync-alt me-2"></i> Refresh Page
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
