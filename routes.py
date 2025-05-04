@@ -806,6 +806,98 @@ def process_data(graph_id):
                     # Redirect to the summary approval page
                     return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
                 
+            elif form.input_type.data == 'youtube_transcript':
+                # Process YouTube transcript directly
+                youtube_transcript = form.youtube_transcript.data
+                youtube_title = form.youtube_title.data or "YouTube Video Transcript"
+                
+                # Update progress
+                session[progress_key] = {
+                    'status': 'Processing YouTube transcript...',
+                    'percent': 20,
+                    'step': 'processing'
+                }
+                session.modified = True
+                
+                # Store the input details
+                input_source.source_type = 'youtube_transcript'
+                input_source.filename = f"{youtube_title.strip().replace(' ', '_')}_transcript.txt"
+                
+                # Save transcript to file for the summary page
+                transcription_path = os.path.join(input_dir, 'transcription.txt')
+                with open(transcription_path, 'w') as f:
+                    f.write(youtube_transcript)
+                
+                # Use the processor to extract entities and relationships
+                processor = KnowledgeGraphProcessor(neo4j_manager)
+                
+                # Update progress
+                session[progress_key] = {
+                    'status': 'Extracting knowledge graph from transcript...',
+                    'percent': 50,
+                    'step': 'extraction'
+                }
+                session.modified = True
+                
+                # Process the transcript
+                triples = processor.extract_triples_from_text(youtube_transcript, domain=graph.domain)
+                
+                # If we got empty results, try a fallback approach
+                if not triples or len(triples) < 3:
+                    logging.warning("Minimal triples detected, using fallback extraction")
+                    
+                    # Try extracting with patterns
+                    triples = processor.extract_entities_with_patterns(youtube_transcript, domain=graph.domain)
+                    
+                    # If still empty, create some basic triples
+                    if not triples or len(triples) < 3:
+                        video_id = str(uuid.uuid4())[:8]
+                        triples = [
+                            (f"youtube_transcript_{video_id}", "title", youtube_title),
+                            (f"youtube_transcript_{video_id}", "type", "Video"),
+                            (f"youtube_transcript_{video_id}", "source", "YouTube Transcript"),
+                            (f"youtube_transcript_{video_id}", "processed_date", datetime.now().strftime('%Y-%m-%d')),
+                            (f"youtube_transcript_{video_id}", "knowledge_graph", f"{graph.name}")
+                        ]
+                
+                # Save preview triples for later user approval
+                preview_path = os.path.join(input_dir, 'preview_triples.json')
+                with open(preview_path, 'w') as f:
+                    json.dump(triples, f)
+                
+                # Save metadata for summary page
+                summary_metadata = {
+                    "detected_domain": graph.domain,
+                    "content_type": "YouTube Video Transcript",
+                    "entity_count": len(set([t[0] for t in triples] + [t[2] for t in triples if not isinstance(t[2], (int, float))])),
+                    "relation_count": len(triples),
+                    "processing_method": "Manual Transcript Processing",
+                    "title": youtube_title
+                }
+                metadata_path = os.path.join(input_dir, 'summary_metadata.json')
+                with open(metadata_path, 'w') as f:
+                    json.dump(summary_metadata, f)
+                
+                # Update progress - ready for approval
+                session[progress_key] = {
+                    'status': 'Ready for approval...',
+                    'percent': 90,
+                    'step': 'approval'
+                }
+                session.modified = True
+                
+                # Update input source details
+                input_source.entity_count = summary_metadata["entity_count"]
+                input_source.relationship_count = summary_metadata["relation_count"]
+                input_source.processed = False
+                
+                # Save input source
+                db.session.add(input_source)
+                db.session.commit()
+                
+                # Redirect to the summary approval page like the main flow
+                return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
+                
             elif form.input_type.data == 'csv':
                 # Update progress - 15%
                 session[progress_key] = {
