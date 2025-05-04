@@ -301,34 +301,92 @@ def process_data(graph_id):
                     audio_path = os.path.join(input_dir, 'audio.wav')
                     transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
                     
-                    # Update progress - 60%
+                    # Update progress - showing summary for approval
                     session[progress_key] = {
-                        'status': 'Extracting entities and relationships...',
+                        'status': 'Generating summary for approval...',
                         'percent': 60,
-                        'step': 'extraction'
+                        'step': 'summary'
                     }
                     session.modified = True
                     
-                    # Save output as CSV for Neo4j
-                    csv_path = os.path.join(input_dir, 'transcription_triples.csv')
-                    triples = kg_processor.extract_triples_from_text(transcription, domain=graph.domain)
-                    kg_processor.save_triples_to_csv(triples, csv_path)
+                    # Save the transcription for the summary page
+                    transcription_path = os.path.join(input_dir, 'transcription.txt')
+                    with open(transcription_path, 'w') as f:
+                        f.write(transcription)
                     
-                    # Update input source details
+                    # Generate preview triples for user approval
+                    preview_triples = kg_processor.extract_triples_from_text(transcription, domain=graph.domain)
+                    
+                    # If no meaningful triples were found, use at least the basic metadata
+                    if len(preview_triples) < 3:
+                        # Generate some basic triples about the video
+                        base_filename = os.path.splitext(filename)[0]
+                        # Replace underscores and dashes with spaces
+                        title = base_filename.replace('_', ' ').replace('-', ' ')
+                        preview_triples = [
+                            (f"video_{process_id[:8]}", "title", title),
+                            (f"video_{process_id[:8]}", "type", "Video"),
+                            (f"video_{process_id[:8]}", "filename", filename),
+                            (f"video_{process_id[:8]}", "upload_date", datetime.now().strftime('%Y-%m-%d')),
+                            (f"video_{process_id[:8]}", "knowledge_graph", f"{graph.name}")
+                        ]
+                    
+                    # Save preview triples for later use
+                    preview_path = os.path.join(input_dir, 'preview_triples.json')
+                    with open(preview_path, 'w') as f:
+                        json.dump(preview_triples, f)
+                    
+                    # Auto-detect domain from content if possible
+                    filename_lower = filename.lower()
+                    detected_domain = graph.domain
+                    
+                    # Try to determine content type from filename
+                    if any(term in filename_lower for term in ["murder", "crime", "case", "detective", "police", "forensic", "investigation"]):
+                        content_type = "Crime investigation or murder case study"
+                        improvement_tips = [
+                            "Add specific location information in the file name",
+                            "Include dates in the file name for better timeline extraction",
+                            "Consider pre-processing the video to add named entities in description"
+                        ]
+                    elif any(term in filename_lower for term in ["veda", "vedic", "upanishad", "sanskrit", "hindu"]):
+                        content_type = "Vedic or ancient text analysis"
+                        improvement_tips = [
+                            "Specify which Veda is being discussed in the filename",
+                            "Add Sanskrit terms in description for better entity extraction"
+                        ]
+                    elif any(term in filename_lower for term in ["movie", "film", "cinema", "trailer"]):
+                        content_type = "Movie or film content"
+                        improvement_tips = [
+                            "Include release year in the filename",
+                            "Add director and main actors to filename or description"
+                        ]
+                    else:
+                        content_type = "General video content"
+                        improvement_tips = [
+                            "Use more descriptive filenames for better auto-detection",
+                            "Include key entities in the filename for improved extraction"
+                        ]
+                    
+                    # Save metadata for summary page
+                    summary_metadata = {
+                        "detected_domain": detected_domain,
+                        "content_type": content_type,
+                        "improvement_tips": improvement_tips
+                    }
+                    metadata_path = os.path.join(input_dir, 'summary_metadata.json')
+                    with open(metadata_path, 'w') as f:
+                        json.dump(summary_metadata, f)
+                    
+                    # Update input source with file info but mark as not processed yet
                     input_source.filename = filename
-                    input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples]))
-                    input_source.relationship_count = len(triples)
+                    input_source.processed = False
                     
-                    # Update progress - 80%
-                    session[progress_key] = {
-                        'status': 'Importing to graph database...',
-                        'percent': 80,
-                        'step': 'database'
-                    }
-                    session.modified = True
+                    # Save input source to get its ID
+                    db.session.add(input_source)
+                    db.session.commit()
                     
-                    # Insert into Neo4j
-                    neo4j_manager.import_triples(triples, graph.id)
+                    # Redirect to the summary approval page
+                    return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
                 
             elif form.input_type.data == 'csv':
                 # Update progress - 15%
