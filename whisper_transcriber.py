@@ -39,8 +39,15 @@ class WhisperTranscriber:
         if self.has_whisper:
             try:
                 import whisper
+                logging.info(f"Loading Whisper model: {self.model_size}...")
                 self.model = whisper.load_model(self.model_size)
-                logging.info(f"Loaded Whisper model: {self.model_size}")
+                
+                # Verify model was loaded successfully
+                if self.model is not None:
+                    logging.info(f"Loaded Whisper model: {self.model_size}")
+                else:
+                    logging.error("Failed to load Whisper model: model is None")
+                    self.has_whisper = False
             except Exception as e:
                 logging.error(f"Error loading Whisper model: {e}")
                 self.has_whisper = False
@@ -49,18 +56,54 @@ class WhisperTranscriber:
         """Extract audio from video file"""
         if self.has_ffmpeg:
             try:
+                logging.info(f"Extracting audio from {video_path} to {audio_path}")
+                
+                # Check if video file exists and is readable
+                if not os.path.isfile(video_path):
+                    logging.error(f"Video file not found: {video_path}")
+                    return False
+                    
+                # Check if we have write permissions for audio output
+                audio_dir = os.path.dirname(audio_path)
+                if audio_dir and not os.path.exists(audio_dir):
+                    os.makedirs(audio_dir, exist_ok=True)
+                
+                # Use simpler ffmpeg command with more timeout
                 cmd = [
                     "ffmpeg", "-i", video_path, 
                     "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", 
                     "-y", audio_path
                 ]
-                subprocess.run(cmd, check=True, capture_output=True)
-                return True
+                
+                # Run with a timeout to prevent hanging
+                result = subprocess.run(
+                    cmd, 
+                    capture_output=True, 
+                    text=True,
+                    timeout=60  # 60 seconds timeout
+                )
+                
+                # Check if the command was successful
+                if result.returncode != 0:
+                    logging.error(f"FFmpeg error: {result.stderr}")
+                    return False
+                
+                # Verify audio file was created
+                if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
+                    logging.info(f"Successfully extracted audio to {audio_path}")
+                    return True
+                else:
+                    logging.error("Audio extraction failed - output file is empty or missing")
+                    return False
+                    
+            except subprocess.TimeoutExpired:
+                logging.error("FFmpeg timed out during audio extraction")
+                return False
             except subprocess.CalledProcessError as e:
-                logging.error(f"FFmpeg error: {e.stderr.decode() if e.stderr else str(e)}")
+                logging.error(f"FFmpeg error: {e.stderr if hasattr(e, 'stderr') else str(e)}")
                 return False
             except Exception as e:
-                logging.error(f"Error extracting audio: {e}")
+                logging.error(f"Error extracting audio: {str(e)}")
                 return False
         else:
             logging.warning("FFmpeg not available for audio extraction")
@@ -148,22 +191,58 @@ class WhisperTranscriber:
     
     def transcribe_video(self, video_path, audio_path=None):
         """Transcribe video file using Whisper or fallback"""
-        if not os.path.exists(video_path):
-            raise FileNotFoundError(f"Video file not found: {video_path}")
-        
-        # Generate audio path if not provided
-        if audio_path is None:
-            audio_path = os.path.splitext(video_path)[0] + ".wav"
-        
-        # Try to extract audio if ffmpeg is available
-        audio_extracted = self.extract_audio(video_path, audio_path)
-        
-        if audio_extracted and os.path.exists(audio_path):
-            # If audio extraction worked, try to transcribe it
-            return self.transcribe_audio(audio_path)
-        else:
-            # If we couldn't extract the audio, use video metadata
-            return self._extract_video_metadata(video_path)
+        try:
+            # Check if file exists
+            if not os.path.exists(video_path):
+                logging.error(f"Video file not found: {video_path}")
+                raise FileNotFoundError(f"Video file not found: {video_path}")
+            
+            # Get file size for logging
+            file_size_mb = os.path.getsize(video_path) / (1024 * 1024)
+            logging.info(f"Processing video: {os.path.basename(video_path)} ({file_size_mb:.2f} MB)")
+            
+            # Generate audio path if not provided
+            if audio_path is None:
+                audio_path = os.path.splitext(video_path)[0] + ".wav"
+            
+            # Try to extract audio if ffmpeg is available
+            logging.info("Starting audio extraction...")
+            audio_extracted = self.extract_audio(video_path, audio_path)
+            
+            if audio_extracted and os.path.exists(audio_path):
+                # Log successful extraction
+                audio_size_mb = os.path.getsize(audio_path) / (1024 * 1024)
+                logging.info(f"Audio extraction successful: {os.path.basename(audio_path)} ({audio_size_mb:.2f} MB)")
+                
+                # If audio extraction worked, try to transcribe it
+                return self.transcribe_audio(audio_path)
+            else:
+                # Log failure and use fallback
+                logging.warning("Audio extraction failed or audio file not found. Using metadata fallback.")
+                return self._extract_video_metadata(video_path)
+                
+        except FileNotFoundError as e:
+            # Specific error for missing files
+            logging.error(f"File not found error: {str(e)}")
+            raise
+            
+        except Exception as e:
+            # Catch any other errors
+            logging.error(f"Unexpected error in video transcription: {str(e)}")
+            # Still try to extract basic metadata if possible
+            try:
+                return self._extract_video_metadata(video_path)
+            except:
+                # Last resort fallback
+                return f"""
+                    Video Processing Error
+                    
+                    An error occurred during video processing: {str(e)}
+                    
+                    Unable to extract content from video file: {os.path.basename(video_path) if video_path else "unknown"}
+                    
+                    Please try a different video format or check that the file is not corrupt.
+                """
     
     def _extract_video_metadata(self, video_path):
         """Extract basic metadata from video file as a fallback"""

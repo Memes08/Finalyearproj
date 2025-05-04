@@ -335,9 +335,17 @@ def process_data(graph_id):
                     }
                     session.modified = True
                     
-                    # Transcribe video
+                    # Transcribe video with error handling
                     audio_path = os.path.join(input_dir, 'audio.wav')
-                    transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
+                    try:
+                        logging.info(f"Starting video transcription for {filename}")
+                        transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
+                        logging.info(f"Successfully completed transcription of {filename}")
+                    except Exception as e:
+                        logging.error(f"Error during video transcription: {str(e)}")
+                        # Fall back to metadata extraction
+                        transcription = whisper_transcriber._extract_video_metadata(video_path)
+                        logging.info("Used fallback metadata extraction for transcription")
                     
                     # Update progress - showing summary for approval
                     session[progress_key] = {
