@@ -166,25 +166,56 @@
     }
     
     document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM Content Loaded"); // Debug logging
+        
+        // Get form elements
         const inputTypeRadios = document.querySelectorAll('input[name="input_type"]');
         const videoFormGroup = document.getElementById('video-form-group');
         const csvFormGroup = document.getElementById('csv-form-group');
         const urlFormGroup = document.getElementById('url-form-group');
         
-        function updateFormGroups() {
-            const selectedValue = document.querySelector('input[name="input_type"]:checked')?.value;
-            
-            videoFormGroup.style.display = selectedValue === 'video' ? 'block' : 'none';
-            csvFormGroup.style.display = selectedValue === 'csv' ? 'block' : 'none';
-            urlFormGroup.style.display = selectedValue === 'url' ? 'block' : 'none';
+        console.log("Form groups found:", 
+            "video:", videoFormGroup !== null, 
+            "csv:", csvFormGroup !== null, 
+            "url:", urlFormGroup !== null
+        );
+        
+        // Force-check the first radio button to initialize form
+        if (inputTypeRadios && inputTypeRadios.length > 0) {
+            inputTypeRadios[0].checked = true;
         }
         
+        function updateFormGroups() {
+            const selectedRadio = document.querySelector('input[name="input_type"]:checked');
+            const selectedValue = selectedRadio ? selectedRadio.value : null;
+            
+            console.log("Selected input type:", selectedValue);
+            
+            // Show/hide form groups based on selection
+            if (videoFormGroup) videoFormGroup.style.display = selectedValue === 'video' ? 'block' : 'none';
+            if (csvFormGroup) csvFormGroup.style.display = selectedValue === 'csv' ? 'block' : 'none';
+            if (urlFormGroup) urlFormGroup.style.display = selectedValue === 'url' ? 'block' : 'none';
+        }
+        
+        // Add change event listeners
         inputTypeRadios.forEach(radio => {
-            radio.addEventListener('change', updateFormGroups);
+            radio.addEventListener('change', function() {
+                console.log("Radio changed to:", this.value);
+                updateFormGroups();
+            });
         });
         
         // Initial setup
         updateFormGroups();
+        
+        // Fix for URL input field
+        if (urlFormGroup) {
+            const githubUrlInput = document.getElementById('{{ form.github_url.id }}');
+            if (githubUrlInput) {
+                console.log("GitHub URL input found");
+                githubUrlInput.style.width = '100%';
+            }
+        }
     });
 </script>
 {% endblock %}
