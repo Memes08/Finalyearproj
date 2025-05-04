@@ -15,6 +15,48 @@ except ImportError:
         # Simple fallback implementation to remove dangerous characters
         return ''.join(c for c in filename if c.isalnum() or c in '._-')
     logging.warning("Werkzeug not installed. Using simplified secure_filename.")
+    
+# Utility function to save files in chunks to prevent timeouts
+def save_file_chunked(file_storage, destination_path, chunk_size=4*1024*1024, progress_callback=None):
+    """
+    Save a file in chunks to prevent timeouts with large files
+    
+    Args:
+        file_storage: The FileStorage object from the form
+        destination_path: Where to save the file
+        chunk_size: Size of chunks in bytes (default 4MB)
+        progress_callback: Optional callback function to report progress
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        logging.info(f"Starting chunked save to: {destination_path}")
+        bytes_written = 0
+        
+        with open(destination_path, 'wb') as f:
+            # Reset file pointer to beginning
+            file_storage.stream.seek(0)
+            
+            # Read and write in chunks
+            chunk = file_storage.read(chunk_size)
+            while chunk:
+                f.write(chunk)
+                bytes_written += len(chunk)
+                
+                # Report progress if callback provided
+                if progress_callback:
+                    progress_callback(bytes_written)
+                    
+                # Get next chunk
+                chunk = file_storage.read(chunk_size)
+                
+        logging.info(f"Successfully saved file: {os.path.basename(destination_path)} ({bytes_written/1024/1024:.2f}MB)")
+        return True
+        
+    except Exception as e:
+        logging.error(f"Error in chunked file save: {str(e)}")
+        return False
 
 # Import Flask modules
 try:
