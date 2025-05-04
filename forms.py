@@ -49,7 +49,6 @@ class NewKnowledgeGraphForm(FlaskForm):
 class DataInputForm(FlaskForm):
     input_type = RadioField('Input Type', choices=[
         ('video', 'Video File'),
-        ('youtube', 'YouTube Video URL'),
         ('youtube_transcript', 'YouTube Transcript'),
         ('text', 'Text File Upload'),
         ('url', 'GitHub Raw File URL')
@@ -87,9 +86,6 @@ class DataInputForm(FlaskForm):
         if self.input_type.data == 'video' and not self.video_file.data:
             self.video_file.errors.append('Please upload a video file.')
             return False
-        elif self.input_type.data == 'youtube' and not self.youtube_url.data:
-            self.youtube_url.errors.append('Please enter a YouTube video URL.')
-            return False
         elif self.input_type.data == 'youtube_transcript' and not self.youtube_transcript.data:
             self.youtube_transcript.errors = ['Please paste the YouTube transcript.']
             return False
@@ -99,19 +95,6 @@ class DataInputForm(FlaskForm):
         elif self.input_type.data == 'url' and not self.github_url.data:
             self.github_url.errors.append('Please enter a GitHub raw file URL.')
             return False
-            
-        # Validate YouTube URL format if provided
-        if self.input_type.data == 'youtube' and self.youtube_url.data:
-            youtube_regex = r'^(https?://)?(www\.)?(youtube\.com/watch\?v=|youtu\.be/)([a-zA-Z0-9_-]{11})'
-            if not re.search(youtube_regex, self.youtube_url.data):
-                self.youtube_url.errors.append('Please enter a valid YouTube video URL.')
-                return False
-                
-        # Extract video ID from URL if provided
-        if self.input_type.data == 'youtube' and self.youtube_url.data:
-            match = re.search(r'(?:v=|\/)([0-9A-Za-z_-]{11}).*', self.youtube_url.data)
-            if match:
-                self.youtube_video_id.data = match.group(1)
             
         return True
 
