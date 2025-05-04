@@ -238,59 +238,150 @@ class WhisperTranscriber:
         """
     
     def transcribe_video(self, video_path, audio_path=None):
-        """Transcribe video file using Whisper or fallback"""
+        """Transcribe video file using Whisper or fallback with enhanced error handling"""
+        start_time = time.time()
+        logging.info(f"Starting video transcription process for {os.path.basename(video_path) if video_path else 'unknown'}")
+        
+        # Use multiple layers of fallback
         try:
-            # Check if file exists
+            # Validate input file thoroughly
             if not os.path.exists(video_path):
                 logging.error(f"Video file not found: {video_path}")
                 raise FileNotFoundError(f"Video file not found: {video_path}")
             
-            # Get file size for logging
-            file_size_mb = os.path.getsize(video_path) / (1024 * 1024)
-            logging.info(f"Processing video: {os.path.basename(video_path)} ({file_size_mb:.2f} MB)")
+            # Check file permissions
+            if not os.access(video_path, os.R_OK):
+                logging.error(f"No read permission for video file: {video_path}")
+                raise PermissionError(f"Cannot read video file: {video_path}")
+            
+            # Validate file size
+            try:
+                file_size_mb = os.path.getsize(video_path) / (1024 * 1024)
+                if file_size_mb < 0.01:  # Less than 10KB
+                    logging.warning(f"Video file suspiciously small: {file_size_mb:.2f} MB, may be corrupt")
+                logging.info(f"Processing video: {os.path.basename(video_path)} ({file_size_mb:.2f} MB)")
+            except Exception as size_e:
+                logging.error(f"Error checking file size: {str(size_e)}")
+                file_size_mb = "unknown"
             
             # Generate audio path if not provided
             if audio_path is None:
-                audio_path = os.path.splitext(video_path)[0] + ".wav"
+                video_dir = os.path.dirname(video_path)
+                video_name = os.path.splitext(os.path.basename(video_path))[0]
+                audio_path = os.path.join(video_dir, f"{video_name}_{int(time.time())}.wav")
             
-            # Try to extract audio if ffmpeg is available
-            logging.info("Starting audio extraction...")
+            # Try different approaches to extract audio
+            logging.info(f"Starting audio extraction to {audio_path}...")
+            
+            # First attempt - standard extraction
             audio_extracted = self.extract_audio(video_path, audio_path)
             
-            if audio_extracted and os.path.exists(audio_path):
-                # Log successful extraction
+            if not audio_extracted or not os.path.exists(audio_path) or os.path.getsize(audio_path) == 0:
+                logging.warning("Initial audio extraction failed, trying simpler format...")
+                
+                # Try with simpler settings if first attempt failed
+                simplified_audio_path = audio_path + ".simple.wav"
+                try:
+                    cmd = [
+                        "ffmpeg", "-y", "-i", video_path, 
+                        "-vn",  # No video
+                        "-ar", "16000",  # 16kHz sample rate
+                        "-ac", "1",  # Mono
+                        "-c:a", "pcm_s16le",  # Simple PCM format
+                        simplified_audio_path
+                    ]
+                    result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+                    
+                    if os.path.exists(simplified_audio_path) and os.path.getsize(simplified_audio_path) > 0:
+                        audio_path = simplified_audio_path
+                        audio_extracted = True
+                        logging.info("Successfully extracted audio with simplified settings")
+                    else:
+                        logging.error(f"Simplified audio extraction also failed: {result.stderr}")
+                except Exception as e:
+                    logging.error(f"Error in simplified audio extraction: {str(e)}")
+            
+            # If any audio extraction was successful, try to transcribe
+            if audio_extracted and os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
                 audio_size_mb = os.path.getsize(audio_path) / (1024 * 1024)
                 logging.info(f"Audio extraction successful: {os.path.basename(audio_path)} ({audio_size_mb:.2f} MB)")
                 
-                # If audio extraction worked, try to transcribe it
-                return self.transcribe_audio(audio_path)
-            else:
-                # Log failure and use fallback
-                logging.warning("Audio extraction failed or audio file not found. Using metadata fallback.")
-                return self._extract_video_metadata(video_path)
+                try:
+                    # Try to transcribe the audio
+                    transcription = self.transcribe_audio(audio_path)
+                    if transcription and len(transcription.strip()) > 0:
+                        elapsed = time.time() - start_time
+                        logging.info(f"Video transcription complete in {elapsed:.2f} seconds")
+                        return transcription
+                    else:
+                        logging.warning("Transcription returned empty result, falling back to metadata")
+                except Exception as e:
+                    logging.error(f"Error in audio transcription: {str(e)}")
+            
+            # If we get here, audio extraction or transcription failed, use metadata fallback
+            logging.warning("Audio extraction or transcription failed. Using metadata fallback.")
+            return self._extract_video_metadata(video_path)
                 
         except FileNotFoundError as e:
             # Specific error for missing files
             logging.error(f"File not found error: {str(e)}")
-            raise
+            # Return a more specific error message
+            return f"""
+                Error: Video File Not Found
+                
+                The system could not locate the video file: {os.path.basename(video_path) if video_path else "unknown"}
+                
+                Please check that the file was uploaded correctly and try again.
+            """
             
         except Exception as e:
             # Catch any other errors
             logging.error(f"Unexpected error in video transcription: {str(e)}")
-            # Still try to extract basic metadata if possible
+            
+            # Try multiple fallbacks with detailed error handling
             try:
-                return self._extract_video_metadata(video_path)
-            except:
-                # Last resort fallback
+                # First try to extract basic metadata if possible
+                logging.info("Attempting metadata extraction as fallback...")
+                metadata = self._extract_video_metadata(video_path)
+                if metadata and len(metadata.strip()) > 0:
+                    return metadata
+            except Exception as metadata_e:
+                logging.error(f"Metadata extraction fallback failed: {str(metadata_e)}")
+            
+            try:
+                # Second fallback - generate a template from filename
+                logging.info("Attempting filename-based fallback...")
+                filename = os.path.basename(video_path)
+                base_filename = os.path.splitext(filename)[0]
+                # Replace underscores and dashes with spaces for readability
+                title = base_filename.replace('_', ' ').replace('-', ' ')
+                
+                # Create a template with some basic information
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 return f"""
-                    Video Processing Error
+                    Video Processing Error - Using Filename Fallback
                     
-                    An error occurred during video processing: {str(e)}
+                    Timestamp: {timestamp}
+                    Filename: {filename}
+                    Suspected Title: {title}
                     
-                    Unable to extract content from video file: {os.path.basename(video_path) if video_path else "unknown"}
+                    [All transcription methods failed. This is a minimal fallback using only the filename.]
                     
-                    Please try a different video format or check that the file is not corrupt.
+                    Note: Try uploading in a different video format or with a more descriptive filename.
                 """
+            except Exception as template_e:
+                logging.error(f"Even filename template fallback failed: {str(template_e)}")
+            
+            # Final fallback when absolutely everything fails
+            return f"""
+                Video Processing Error
+                
+                An error occurred during video processing: {str(e)}
+                
+                Unable to extract content from video file: {os.path.basename(video_path) if video_path else "unknown"}
+                
+                Please try a different video format or check that the file is not corrupt.
+            """
     
     def _extract_video_metadata(self, video_path):
         """Extract basic metadata from video file as a fallback"""
