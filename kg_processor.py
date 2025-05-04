@@ -299,10 +299,10 @@ class KnowledgeGraphProcessor:
             return False
             
     def process_youtube_content(self, transcript_text, url=None, domain="custom"):
-        """Process YouTube transcript content using Groq AI
+        """Process YouTube transcript content using Groq AI - works with both full transcripts and metadata only
         
         Args:
-            transcript_text (str): The transcript text from YouTube video
+            transcript_text (str): The transcript text from YouTube video (or metadata if transcript unavailable)
             url (str, optional): The YouTube URL for additional context
             domain (str, optional): The knowledge domain. Defaults to "custom".
             
@@ -317,30 +317,59 @@ class KnowledgeGraphProcessor:
             # Clean up the transcript text
             cleaned_text = re.sub(r'\s+', ' ', transcript_text).strip()
             
+            # Determine if we only have metadata (no full transcript)
+            is_metadata_only = "[No transcript available - using video metadata only]" in transcript_text
+            if is_metadata_only:
+                logging.info("Only video metadata available, using Groq AI for enhanced analysis")
+            
             # Get domain-specific configuration for better prompt engineering
             domain_config = self._get_domain_prompt(domain)
             entity_types = ', '.join(domain_config.get("entity_types", []))
             
             # Create a prompt for Groq to process the YouTube content
-            prompt = f"""
-            You are an expert knowledge graph builder analyzing a YouTube video transcript.
-            
-            Here is the transcript from a YouTube video{' at ' + url if url else ''}:
-            
-            {cleaned_text[:8000]}  # Limit length to avoid token limits
-            
-            Please perform the following tasks:
-            1. Summarize the key points of this video in a well-structured format
-            2. Extract the main entities mentioned (focus on {entity_types})
-            3. Identify important relationships between these entities
-            4. Add any contextual information that would be valuable for a knowledge graph
-            
-            Format your response as a well-structured document that provides:
-            - Video title (inferred from content)
-            - Video summary
-            - Key entities and relationships
-            - Any additional context
-            """
+            # Adjust prompt based on whether we have full transcript or just metadata
+            if is_metadata_only:
+                prompt = f"""
+                You are an expert knowledge graph builder analyzing limited YouTube video metadata.
+                
+                I only have minimal metadata from a YouTube video{' at ' + url if url else ''}:
+                
+                {cleaned_text}
+                
+                Even with this limited information, please:
+                1. Generate a plausible knowledge graph structure based on the video title and any available metadata
+                2. Infer likely entities that would be present in this video (focus on {entity_types})
+                3. Suggest potential relationships between these entities based on domain knowledge
+                4. Add contextual information that would be valuable for the knowledge graph
+                
+                Use your knowledge of the {domain} domain to make educated inferences.
+                
+                Format your response as a structured document with:
+                - Inferred video content summary
+                - Likely key entities
+                - Probable relationships
+                - Additional context
+                """
+            else:
+                prompt = f"""
+                You are an expert knowledge graph builder analyzing a YouTube video transcript.
+                
+                Here is the transcript from a YouTube video{' at ' + url if url else ''}:
+                
+                {cleaned_text[:8000]}  # Limit length to avoid token limits
+                
+                Please perform the following tasks:
+                1. Summarize the key points of this video in a well-structured format
+                2. Extract the main entities mentioned (focus on {entity_types})
+                3. Identify important relationships between these entities
+                4. Add any contextual information that would be valuable for a knowledge graph
+                
+                Format your response as a well-structured document that provides:
+                - Video title (inferred from content)
+                - Video summary
+                - Key entities and relationships
+                - Any additional context
+                """
             
             # Call Groq API
             response = self.llm_client.chat.completions.create(
@@ -355,17 +384,21 @@ class KnowledgeGraphProcessor:
             # Get the enhanced content from Groq
             enhanced_content = response.choices[0].message.content
             
-            # Combine with original transcript for comprehensive processing
+            # Create appropriate prefix based on whether this is metadata-only or full transcript
+            source_type = "VIDEO METADATA (Limited Information)" if is_metadata_only else "ORIGINAL TRANSCRIPT"
+            
+            # Combine with original content for comprehensive processing
             combined_text = f"""
             ENHANCED YOUTUBE CONTENT (AI-processed)
             URL: {url if url else 'Unknown'}
             Domain: {domain}
+            Processing Method: {'Metadata-Only Analysis' if is_metadata_only else 'Full Transcript Analysis'}
             ----------------------------------------
             
             {enhanced_content}
             
             ----------------------------------------
-            ORIGINAL TRANSCRIPT:
+            {source_type}:
             {cleaned_text[:3000]}  # Include part of original for context
             """
             
@@ -756,20 +789,33 @@ class KnowledgeGraphProcessor:
         # Check if this is YouTube content and we have LLM access
         is_youtube = False
         youtube_url = None
-        if "YouTube" in text or "youtube.com" in text or "youtu.be" in text:
+        if "YouTube" in text or "youtube.com" in text or "youtu.be" in text or "[No transcript available - using video metadata only]" in text:
             is_youtube = True
             logging.info("Detected YouTube content, checking for URL...")
             
             # Try to extract URL
-            url_match = re.search(r'URL: (https://(?:www\.)?(?:youtube\.com|youtu\.be)/[^\s]+)', text)
+            url_match = re.search(r'(?:URL:|https://(?:www\.)?(?:youtube\.com|youtu\.be)/[^\s]+)', text)
             if url_match:
-                youtube_url = url_match.group(1)
+                # If it's just 'URL:' then look for the url on the same line
+                if url_match.group(0) == 'URL:':
+                    line_with_url = text[url_match.start():].split('\n')[0]
+                    url_match2 = re.search(r'(https://(?:www\.)?(?:youtube\.com|youtu\.be)/[^\s]+)', line_with_url)
+                    if url_match2:
+                        youtube_url = url_match2.group(1)
+                else:
+                    youtube_url = url_match.group(0)
                 logging.info(f"Found YouTube URL: {youtube_url}")
             
             # Process with Groq if available
             if self.has_llm:
                 logging.info("Processing YouTube content with Groq AI...")
-                text = self.process_youtube_content(text, youtube_url, domain)
+                enhanced_text = self.process_youtube_content(text, youtube_url, domain)
+                # Use enhanced text if we got something back, otherwise keep original
+                if enhanced_text and len(enhanced_text) > len(text):
+                    text = enhanced_text
+                    logging.info("Successfully enhanced YouTube content with Groq AI")
+                else:
+                    logging.warning("Groq AI enhancement failed or returned minimal content, using original text")
         
         # Regular extraction process for normal text
         # Start with regex pattern extraction
