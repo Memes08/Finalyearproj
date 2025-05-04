@@ -828,8 +828,11 @@ def process_data(graph_id):
                 with open(transcription_path, 'w') as f:
                     f.write(youtube_transcript)
                 
-                # Use the processor to extract entities and relationships
-                processor = KnowledgeGraphProcessor(neo4j_manager)
+                # Use the processor to extract entities and relationships with Groq AI
+                processor = KnowledgeGraphProcessor(
+                    neo4j_manager=neo4j_manager,
+                    groq_api_key=app.config['GROQ_API_KEY']
+                )
                 
                 # Update progress
                 session[progress_key] = {
