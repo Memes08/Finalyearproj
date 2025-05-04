@@ -7,14 +7,16 @@
     .d3-tooltip {
         position: absolute;
         text-align: center;
-        padding: 8px;
+        padding: 10px;
         font: 12px sans-serif;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.9);
         color: #fff;
         border: 0px;
-        border-radius: 4px;
+        border-radius: 6px;
         pointer-events: none;
-        max-width: 200px;
+        max-width: 240px;
+        z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
     
     .graph-legend {
@@ -22,12 +24,28 @@
         padding: 10px;
         border: 1px solid #333;
         border-radius: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    .legend-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #eee;
     }
     
     .legend-item {
         display: flex;
         align-items: center;
         margin-bottom: 5px;
+        padding: 3px;
+        border-radius: 3px;
+        transition: background-color 0.2s;
+    }
+    
+    .legend-item:hover {
+        background-color: rgba(255,255,255,0.1);
+        cursor: pointer;
     }
     
     .legend-color {
@@ -35,6 +53,47 @@
         height: 15px;
         border-radius: 50%;
         margin-right: 8px;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .node {
+        cursor: pointer;
+        transition: opacity 0.3s;
+    }
+    
+    .link {
+        transition: opacity 0.3s, stroke-width 0.3s;
+    }
+    
+    .node-details {
+        background-color: rgba(30, 30, 30, 0.7);
+        border-radius: 6px;
+        padding: 10px;
+        margin-top: 10px;
+        border-left: 3px solid #1f77b4;
+    }
+    
+    .filter-section {
+        position: sticky;
+        top: 10px;
+    }
+    
+    /* Custom scrollbar for the legend */
+    .graph-legend::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .graph-legend::-webkit-scrollbar-track {
+        background: #222;
+    }
+    
+    .graph-legend::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 3px;
+    }
+    
+    .graph-legend::-webkit-scrollbar-thumb:hover {
+        background: #777;
     }
 </style>
 {% endblock %}
@@ -43,7 +102,8 @@
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-md-3">
-            <div class="card mb-4">
+            <!-- Graph Info Card -->
+            <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-dark d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Graph Info</h5>
                     <span class="badge bg-info">{{ graph.domain }}</span>
@@ -115,13 +175,53 @@
                 </div>
             </div>
             
-            <div class="card">
+            <!-- Controls and Filters Card -->
+            <div class="card mb-4 shadow-sm filter-section">
                 <div class="card-header bg-dark">
-                    <h5 class="mb-0">Controls</h5>
+                    <h5 class="mb-0">Graph Controls</h5>
                 </div>
                 <div class="card-body">
+                    <!-- Search box -->
                     <div class="mb-3">
-                        <label class="form-label">Zoom</label>
+                        <label class="form-label">Search Nodes</label>
+                        <div class="input-group">
+                            <input type="text" id="node-search" class="form-control" placeholder="Search by name...">
+                            <button class="btn btn-outline-secondary" type="button" id="search-button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr>
+                    
+                    <!-- Filter options -->
+                    <div class="mb-3">
+                        <label class="form-label">Filter by Category</label>
+                        <select id="category-filter" class="form-select mb-2">
+                            <option value="all">All Categories</option>
+                        </select>
+                        
+                        <label class="form-label">Filter by Relationship</label>
+                        <select id="relationship-filter" class="form-select">
+                            <option value="all">All Relationships</option>
+                        </select>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Layout controls -->
+                    <div class="mb-3">
+                        <label class="form-label">Graph Layout</label>
+                        <select id="layout-select" class="form-select">
+                            <option value="force">Force-Directed</option>
+                            <option value="radial">Radial</option>
+                            <option value="grid">Grid</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Zoom controls -->
+                    <div class="mb-3">
+                        <label class="form-label">Zoom Controls</label>
                         <div class="d-flex">
                             <button id="zoom-in" class="btn btn-sm btn-outline-secondary me-2">
                                 <i class="fas fa-search-plus"></i>
@@ -135,34 +235,84 @@
                         </div>
                     </div>
                     
+                    <!-- Display options -->
                     <div class="mb-3">
-                        <label class="form-label">Layout</label>
-                        <select id="layout-select" class="form-select">
-                            <option value="force">Force-Directed</option>
-                            <option value="radial">Radial</option>
-                            <option value="grid">Grid</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="show-labels">
-                        <label class="form-check-label" for="show-labels">Show All Labels</label>
+                        <label class="form-label">Display Options</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="show-labels">
+                            <label class="form-check-label" for="show-labels">Show All Labels</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="show-relationship-labels">
+                            <label class="form-check-label" for="show-relationship-labels">Show Relationship Labels</label>
+                        </div>
                     </div>
                     
                     <hr>
                     
-                    <div id="graph-info" class="small">
-                        <p class="mb-1"><strong>Nodes:</strong> <span id="node-count">-</span></p>
-                        <p class="mb-1"><strong>Relationships:</strong> <span id="relationship-count">-</span></p>
+                    <!-- Reset button -->
+                    <div class="mb-3">
+                        <button id="reset-filters" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-undo me-2"></i> Reset All Filters
+                        </button>
                     </div>
+                    
+                    <!-- Graph statistics -->
+                    <div id="graph-info" class="p-2 border border-secondary rounded bg-dark">
+                        <small>
+                            <div><strong>Total Nodes:</strong> <span id="total-node-count">-</span></div>
+                            <div><strong>Total Relationships:</strong> <span id="total-relationship-count">-</span></div>
+                            <div><strong>Visible Nodes:</strong> <span id="visible-node-count">-</span></div>
+                            <div><strong>Visible Relationships:</strong> <span id="visible-relationship-count">-</span></div>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Node Detail Card (initially hidden) -->
+            <div id="node-detail-card" class="card mb-4 shadow-sm d-none">
+                <div class="card-header bg-dark">
+                    <h5 class="mb-0">Node Details</h5>
+                </div>
+                <div class="card-body">
+                    <h6 id="selected-node-label" class="border-bottom pb-2">-</h6>
+                    
+                    <div class="small mb-3">
+                        <strong>Category:</strong> <span id="selected-node-category">-</span>
+                    </div>
+                    
+                    <div id="node-connections" class="mb-3">
+                        <h6>Connections:</h6>
+                        
+                        <div id="incoming-connections" class="mb-2">
+                            <small class="text-muted d-block mb-1">Incoming:</small>
+                            <ul class="list-group list-group-flush small" id="incoming-connections-list">
+                            </ul>
+                        </div>
+                        
+                        <div id="outgoing-connections">
+                            <small class="text-muted d-block mb-1">Outgoing:</small>
+                            <ul class="list-group list-group-flush small" id="outgoing-connections-list">
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button id="focus-selected-node" class="btn btn-sm btn-outline-info w-100 mb-2">
+                        <i class="fas fa-crosshairs me-1"></i> Focus on This Node
+                    </button>
                 </div>
             </div>
         </div>
         
+        <!-- Main Visualization Area -->
         <div class="col-md-9">
-            <div class="card">
-                <div class="card-header bg-dark">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Knowledge Graph Visualization</h5>
+                    <div>
+                        <span class="badge bg-secondary me-2" id="graph-filter-badge" style="display: none;">Filtered View</span>
+                        <span class="badge bg-info" id="graph-node-badge">Ready</span>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div id="graph-visualization" data-graph-id="{{ graph.id }}" class="w-100" style="height: 700px;"></div>
@@ -179,9 +329,10 @@
     document.addEventListener('DOMContentLoaded', function() {
         const graphContainer = document.getElementById('graph-visualization');
         const graphId = graphContainer.getAttribute('data-graph-id');
+        let graphViz;
         
         // Initialize visualization
-        const graphViz = new KnowledgeGraphVisualizer('graph-visualization', {
+        graphViz = new KnowledgeGraphVisualizer('graph-visualization', {
             nodeRadius: 15,
             linkDistance: 150,
             chargeStrength: -400
@@ -190,9 +341,81 @@
         // Load graph data
         graphViz.loadData(graphId);
         
-        // Add control handlers
+        // Node search functionality
+        document.getElementById('search-button').addEventListener('click', function() {
+            const searchTerm = document.getElementById('node-search').value.trim();
+            document.dispatchEvent(new CustomEvent('graphSearchEvent', {
+                detail: { searchTerm: searchTerm }
+            }));
+            
+            if (searchTerm) {
+                document.getElementById('graph-filter-badge').style.display = 'inline-block';
+                document.getElementById('graph-filter-badge').textContent = 'Search Results';
+            } else {
+                document.getElementById('graph-filter-badge').style.display = 'none';
+            }
+        });
+        
+        // Search on Enter key
+        document.getElementById('node-search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('search-button').click();
+            }
+        });
+        
+        // Reset filters
+        document.getElementById('reset-filters').addEventListener('click', function() {
+            document.getElementById('node-search').value = '';
+            document.getElementById('category-filter').value = 'all';
+            document.getElementById('relationship-filter').value = 'all';
+            document.getElementById('graph-filter-badge').style.display = 'none';
+            
+            document.dispatchEvent(new CustomEvent('graphResetEvent'));
+        });
+        
+        // Handle layout changes
+        document.getElementById('layout-select').addEventListener('change', function() {
+            const layoutType = this.value;
+            document.dispatchEvent(new CustomEvent('graphLayoutEvent', {
+                detail: { layout: layoutType }
+            }));
+        });
+        
+        // Category filter
+        document.getElementById('category-filter').addEventListener('change', function() {
+            const category = this.value;
+            document.dispatchEvent(new CustomEvent('graphCategoryFilterEvent', {
+                detail: { category: category }
+            }));
+            
+            if (category !== 'all') {
+                document.getElementById('graph-filter-badge').style.display = 'inline-block';
+                document.getElementById('graph-filter-badge').textContent = `Category: ${category}`;
+            } else {
+                document.getElementById('graph-filter-badge').style.display = 'none';
+            }
+        });
+        
+        // Relationship filter
+        document.getElementById('relationship-filter').addEventListener('change', function() {
+            const relationship = this.value;
+            document.dispatchEvent(new CustomEvent('graphRelationshipFilterEvent', {
+                detail: { relationship: relationship }
+            }));
+            
+            if (relationship !== 'all') {
+                document.getElementById('graph-filter-badge').style.display = 'inline-block';
+                document.getElementById('graph-filter-badge').textContent = `Relationship: ${relationship}`;
+            } else {
+                document.getElementById('graph-filter-badge').style.display = 'none';
+            }
+        });
+        
+        // Zoom controls
         document.getElementById('zoom-in').addEventListener('click', function() {
             const svgElement = document.querySelector('#graph-visualization svg');
+            if (!svgElement) return;
+            
             const currentZoom = d3.zoomTransform(svgElement);
             
             d3.select(svgElement)
@@ -204,6 +427,8 @@
         
         document.getElementById('zoom-out').addEventListener('click', function() {
             const svgElement = document.querySelector('#graph-visualization svg');
+            if (!svgElement) return;
+            
             const currentZoom = d3.zoomTransform(svgElement);
             
             d3.select(svgElement)
@@ -215,18 +440,12 @@
         
         document.getElementById('zoom-reset').addEventListener('click', function() {
             const svgElement = document.querySelector('#graph-visualization svg');
+            if (!svgElement) return;
             
             d3.select(svgElement)
                 .transition()
                 .duration(300)
                 .call(d3.zoom().transform, d3.zoomIdentity);
-        });
-        
-        // Handle layout changes
-        document.getElementById('layout-select').addEventListener('change', function() {
-            // This would normally change the layout algorithm
-            // For simplicity, we'll just restart the simulation
-            graphViz.simulation.alpha(1).restart();
         });
         
         // Toggle node labels
@@ -238,30 +457,104 @@
                 .style('font-size', showLabels ? '12px' : '10px');
         });
         
-        // Update graph info when data is loaded
-        const observer = new MutationObserver(function(mutations) {
-            for(let mutation of mutations) {
-                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                    updateGraphInfo();
-                }
-            }
+        // Toggle relationship labels
+        document.getElementById('show-relationship-labels').addEventListener('change', function() {
+            const showLabels = this.checked;
+            
+            d3.selectAll('.link-label')
+                .style('opacity', showLabels ? 1 : 0);
         });
         
-        observer.observe(graphContainer, { childList: true, subtree: true });
-        
-        function updateGraphInfo() {
-            // Count nodes and relationships in visualization
-            const nodeCount = document.querySelectorAll('.node').length;
-            const relationshipCount = document.querySelectorAll('.link').length;
+        // Handle node selection
+        document.addEventListener('nodeSelected', function(e) {
+            const node = e.detail.node;
+            const connections = e.detail.connections;
             
-            document.getElementById('node-count').textContent = nodeCount;
-            document.getElementById('relationship-count').textContent = relationshipCount;
-        }
+            // Update node detail card
+            document.getElementById('node-detail-card').classList.remove('d-none');
+            document.getElementById('selected-node-label').textContent = node.label;
+            document.getElementById('selected-node-category').textContent = node.category;
+            
+            // Update incoming connections
+            const incomingList = document.getElementById('incoming-connections-list');
+            incomingList.innerHTML = '';
+            
+            if (connections.incoming.length === 0) {
+                incomingList.innerHTML = '<li class="list-group-item bg-dark text-muted">No incoming connections</li>';
+            } else {
+                connections.incoming.forEach(conn => {
+                    const item = document.createElement('li');
+                    item.className = 'list-group-item bg-dark';
+                    item.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>${conn.node.label}</span>
+                            <span class="badge bg-secondary">${conn.relationship}</span>
+                        </div>
+                    `;
+                    incomingList.appendChild(item);
+                });
+            }
+            
+            // Update outgoing connections
+            const outgoingList = document.getElementById('outgoing-connections-list');
+            outgoingList.innerHTML = '';
+            
+            if (connections.outgoing.length === 0) {
+                outgoingList.innerHTML = '<li class="list-group-item bg-dark text-muted">No outgoing connections</li>';
+            } else {
+                connections.outgoing.forEach(conn => {
+                    const item = document.createElement('li');
+                    item.className = 'list-group-item bg-dark';
+                    item.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>${conn.node.label}</span>
+                            <span class="badge bg-secondary">${conn.relationship}</span>
+                        </div>
+                    `;
+                    outgoingList.appendChild(item);
+                });
+            }
+            
+            // Update node badge
+            document.getElementById('graph-node-badge').textContent = 'Node Selected';
+            document.getElementById('graph-filter-badge').style.display = 'inline-block';
+            document.getElementById('graph-filter-badge').textContent = 'Filtered View';
+            
+            // Focus button
+            document.getElementById('focus-selected-node').onclick = function() {
+                graphViz.centerOnNode(node);
+            };
+        });
+        
+        // Handle node deselection
+        document.addEventListener('nodeDeselected', function() {
+            document.getElementById('node-detail-card').classList.add('d-none');
+            document.getElementById('graph-node-badge').textContent = 'Ready';
+            document.getElementById('graph-filter-badge').style.display = 'none';
+        });
+        
+        // Update graph info when stats are updated
+        document.addEventListener('graphStatsUpdated', function(e) {
+            document.getElementById('total-node-count').textContent = e.detail.nodeCount;
+            document.getElementById('total-relationship-count').textContent = e.detail.relationshipCount;
+            document.getElementById('visible-node-count').textContent = e.detail.nodeCount;
+            document.getElementById('visible-relationship-count').textContent = e.detail.relationshipCount;
+        });
         
         // Handle window resize
         window.addEventListener('resize', function() {
-            graphViz.resize();
+            if (graphViz) graphViz.resize();
         });
+        
+        // Observer for visible node/relationship counts
+        const observer = new MutationObserver(function() {
+            document.getElementById('visible-node-count').textContent = 
+                document.querySelectorAll('.node').length;
+            document.getElementById('visible-relationship-count').textContent = 
+                document.querySelectorAll('.link').length;
+        });
+        
+        observer.observe(graphContainer, { childList: true, subtree: true });
     });
 </script>
 {% endblock %}
