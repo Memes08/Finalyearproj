@@ -2,6 +2,7 @@ import os
 import uuid
 import logging
 import csv
+import re
 from datetime import datetime
 import urllib.request
 import json
@@ -374,6 +375,12 @@ def process_data(graph_id):
                             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                             base_filename = os.path.splitext(filename)[0]
                             title = base_filename.replace('_', ' ').replace('-', ' ')
+                            # Extract words with 3+ chars for basic entities
+                            words = []
+                            for word in re.findall(r"\b\w{3,}\b", title):
+                                words.append(word.capitalize())
+                                
+                            # Build the transcription safely
                             transcription = f"""
                                 Basic Video Information (All Processing Failed)
                                 Timestamp: {timestamp}
@@ -384,7 +391,7 @@ def process_data(graph_id):
                                 The system encountered errors during processing.
                                 
                                 Basic entities detected from filename: 
-                                {', '.join([word.capitalize() for word in re.findall(r'\b\w{3,}\b', title)])}
+                                {', '.join(words)}
                             """
                             logging.warning("Using minimal fallback transcription from filename only")
                     
