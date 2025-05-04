@@ -466,6 +466,10 @@
             selectInputType('video');
         });
         
+        document.getElementById('youtube-tab').addEventListener('click', function() {
+            selectInputType('youtube');
+        });
+        
         document.getElementById('csv-tab').addEventListener('click', function() {
             selectInputType('csv');
         });
@@ -483,6 +487,7 @@
             const activeTab = document.querySelector('.nav-link.active');
             if (activeTab) {
                 if (activeTab.id === 'video-tab') selectInputType('video');
+                else if (activeTab.id === 'youtube-tab') selectInputType('youtube');
                 else if (activeTab.id === 'csv-tab') selectInputType('csv');
                 else if (activeTab.id === 'url-tab') selectInputType('url');
             }
