@@ -37,6 +37,7 @@ class NewKnowledgeGraphForm(FlaskForm):
         ('book', 'Books'),
         ('music', 'Music'),
         ('academic', 'Academic'),
+        ('vedas', 'Vedas & Ancient Texts'),
         ('business', 'Business'),
         ('custom', 'Custom')
     ], validators=[DataRequired()])
