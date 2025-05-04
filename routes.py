@@ -205,19 +205,51 @@ def process_data(graph_id):
                 neo4j_manager.import_triples(triples, graph.id)
                 
             elif form.input_type.data == 'csv':
-                # Check if pandas is available
-                if not app.config.get('HAS_PANDAS', False):
-                    flash('CSV processing requires pandas, which is currently unavailable.', 'warning')
-                    return render_template('process.html', form=form, graph=graph)
-                
                 # Save CSV file
                 csv_file = form.csv_file.data
                 filename = secure_filename(csv_file.filename)
                 csv_path = os.path.join(input_dir, filename)
                 csv_file.save(csv_path)
                 
-                # Process CSV file
-                triples = kg_processor.process_csv(csv_path, domain=graph.domain)
+                # Process CSV file - with fallback for missing pandas
+                try:
+                    # First try using the standard kg_processor
+                    triples = kg_processor.process_csv(csv_path, domain=graph.domain)
+                except Exception as e:
+                    logging.warning(f"Error processing CSV with kg_processor: {e}")
+                    logging.info("Attempting to process CSV with basic fallback processor")
+                    
+                    # Basic fallback CSV processor
+                    try:
+                        triples = []
+                        with open(csv_path, 'r', encoding='utf-8') as f:
+                            # Try to read as CSV
+                            import csv
+                            reader = csv.reader(f)
+                            headers = next(reader)  # Get headers
+                            
+                            # Process each row - create simple subject-predicate-object triples
+                            for row in reader:
+                                if len(row) < 2:
+                                    continue  # Skip rows with insufficient columns
+                                
+                                # Create basic entity identifier
+                                entity_id = row[0]
+                                
+                                # Create relationship triples from each column
+                                for i, value in enumerate(row[1:], 1):
+                                    if value and i < len(headers):
+                                        predicate = headers[i]
+                                        triples.append((entity_id, predicate, value))
+                        
+                        if not triples:
+                            raise ValueError("No valid triples could be extracted from CSV")
+                        
+                        logging.info(f"Successfully extracted {len(triples)} triples using fallback processor")
+                    except Exception as inner_e:
+                        logging.error(f"Fallback CSV processing failed: {inner_e}")
+                        flash(f"Error processing CSV data: {str(inner_e)}", 'danger')
+                        return render_template('process.html', form=form, graph=graph)
                 
                 # Update input source details
                 input_source.filename = filename
@@ -228,18 +260,15 @@ def process_data(graph_id):
                 neo4j_manager.import_triples(triples, graph.id)
                 
             elif form.input_type.data == 'url':
-                # Check if pandas is available
-                if not app.config.get('HAS_PANDAS', False):
-                    flash('URL processing requires pandas, which is currently unavailable.', 'warning')
-                    return render_template('process.html', form=form, graph=graph)
-                
                 # Download CSV from URL
                 url = form.github_url.data
                 if url:
                     try:
                         filename = url.split('/')[-1]
                         csv_path = os.path.join(input_dir, filename)
+                        logging.info(f"Downloading CSV from URL: {url} to {csv_path}")
                         urllib.request.urlretrieve(url, csv_path)
+                        logging.info(f"Successfully downloaded CSV file from URL")
                     except Exception as e:
                         logging.error(f"Error downloading CSV from URL: {e}")
                         flash(f"Error downloading CSV: {str(e)}", 'danger')
@@ -248,8 +277,45 @@ def process_data(graph_id):
                     flash("No GitHub URL provided", 'danger')
                     return render_template('process.html', form=form, graph=graph)
                 
-                # Process CSV file
-                triples = kg_processor.process_csv(csv_path, domain=graph.domain)
+                # Process CSV file - with fallback for missing pandas
+                try:
+                    # First try using the standard kg_processor
+                    triples = kg_processor.process_csv(csv_path, domain=graph.domain)
+                except Exception as e:
+                    logging.warning(f"Error processing CSV with kg_processor: {e}")
+                    logging.info("Attempting to process CSV with basic fallback processor")
+                    
+                    # Basic fallback CSV processor
+                    try:
+                        triples = []
+                        with open(csv_path, 'r', encoding='utf-8') as f:
+                            # Try to read as CSV
+                            import csv
+                            reader = csv.reader(f)
+                            headers = next(reader)  # Get headers
+                            
+                            # Process each row - create simple subject-predicate-object triples
+                            for row in reader:
+                                if len(row) < 2:
+                                    continue  # Skip rows with insufficient columns
+                                
+                                # Create basic entity identifier
+                                entity_id = row[0]
+                                
+                                # Create relationship triples from each column
+                                for i, value in enumerate(row[1:], 1):
+                                    if value and i < len(headers):
+                                        predicate = headers[i]
+                                        triples.append((entity_id, predicate, value))
+                        
+                        if not triples:
+                            raise ValueError("No valid triples could be extracted from CSV")
+                        
+                        logging.info(f"Successfully extracted {len(triples)} triples using fallback processor")
+                    except Exception as inner_e:
+                        logging.error(f"Fallback CSV processing failed: {inner_e}")
+                        flash(f"Error processing CSV data: {str(inner_e)}", 'danger')
+                        return render_template('process.html', form=form, graph=graph)
                 
                 # Update input source details
                 input_source.url = url
