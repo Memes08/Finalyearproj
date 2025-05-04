@@ -38,6 +38,23 @@ except ImportError:
     app.config['HAS_PANDAS'] = False
     logging.warning("Pandas not installed. CSV processing will be limited.")
 
+# Check for video processing capabilities
+try:
+    import torch
+    app.config['HAS_WHISPER'] = True
+except ImportError:
+    app.config['HAS_WHISPER'] = False
+    logging.warning("PyTorch/Whisper not installed. Video transcription will be unavailable.")
+
+# Check if LLM integration is available
+try:
+    import groq
+    from langchain import LLMChain
+    app.config['HAS_LLM'] = True
+except ImportError:
+    app.config['HAS_LLM'] = False
+    logging.warning("GROQ/LangChain not installed. LLM processing is unavailable.")
+
 # Initialize Neo4j manager
 neo4j_manager = Neo4jGraphManager(
     uri=app.config['NEO4J_URI'],
@@ -166,9 +183,13 @@ def process_data(graph_id):
         try:
             if form.input_type.data == 'video':
                 # Check if video processing is available
-                if not app.config.get('HAS_VIDEO_PROCESSING', False):
-                    flash('Video processing is currently unavailable. Please install the required packages.', 'warning')
-                    return render_template('process.html', form=form, graph=graph)
+                if not app.config.get('HAS_WHISPER', False):
+                    flash('Video processing requires PyTorch and Whisper, which are not installed. Please try using CSV or GitHub URL input instead.', 'warning')
+                    return render_template('process.html', form=form, graph=graph, feature_status={
+                        'csv': app.config.get('HAS_PANDAS', False),
+                        'video': app.config.get('HAS_WHISPER', False),
+                        'llm': app.config.get('HAS_LLM', False)
+                    })
                 
                 # Save video file
                 video_file = form.video_file.data
@@ -197,7 +218,11 @@ def process_data(graph_id):
                 # Check if pandas is available
                 if not app.config.get('HAS_PANDAS', False):
                     flash('CSV processing requires pandas, which is currently unavailable.', 'warning')
-                    return render_template('process.html', form=form, graph=graph)
+                    return render_template('process.html', form=form, graph=graph, feature_status={
+                        'csv': app.config.get('HAS_PANDAS', False),
+                        'video': app.config.get('HAS_WHISPER', False),
+                        'llm': app.config.get('HAS_LLM', False)
+                    })
                 
                 # Save CSV file
                 csv_file = form.csv_file.data
@@ -220,7 +245,11 @@ def process_data(graph_id):
                 # Check if pandas is available
                 if not app.config.get('HAS_PANDAS', False):
                     flash('URL processing requires pandas, which is currently unavailable.', 'warning')
-                    return render_template('process.html', form=form, graph=graph)
+                    return render_template('process.html', form=form, graph=graph, feature_status={
+                        'csv': app.config.get('HAS_PANDAS', False),
+                        'video': app.config.get('HAS_WHISPER', False),
+                        'llm': app.config.get('HAS_LLM', False)
+                    })
                 
                 # Download CSV from URL
                 url = form.github_url.data
@@ -232,10 +261,18 @@ def process_data(graph_id):
                     except Exception as e:
                         logging.error(f"Error downloading CSV from URL: {e}")
                         flash(f"Error downloading CSV: {str(e)}", 'danger')
-                        return render_template('process.html', form=form, graph=graph)
+                        return render_template('process.html', form=form, graph=graph, feature_status={
+                            'csv': app.config.get('HAS_PANDAS', False),
+                            'video': app.config.get('HAS_WHISPER', False),
+                            'llm': app.config.get('HAS_LLM', False)
+                        })
                 else:
                     flash("No GitHub URL provided", 'danger')
-                    return render_template('process.html', form=form, graph=graph)
+                    return render_template('process.html', form=form, graph=graph, feature_status={
+                        'csv': app.config.get('HAS_PANDAS', False),
+                        'video': app.config.get('HAS_WHISPER', False),
+                        'llm': app.config.get('HAS_LLM', False)
+                    })
                 
                 # Process CSV file
                 triples = kg_processor.process_csv(csv_path, domain=graph.domain)
@@ -263,7 +300,11 @@ def process_data(graph_id):
             flash(f'Error processing data: {str(e)}', 'danger')
             logging.error(f"Error processing data: {e}", exc_info=True)
     
-    return render_template('process.html', form=form, graph=graph)
+    return render_template('process.html', form=form, graph=graph, feature_status={
+        'csv': app.config.get('HAS_PANDAS', False),
+        'video': app.config.get('HAS_WHISPER', False),
+        'llm': app.config.get('HAS_LLM', False)
+    })
 
 
 @app.route('/graph/<int:graph_id>/visualize')
