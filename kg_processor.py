@@ -197,6 +197,52 @@ class KnowledgeGraphProcessor:
             "Concept": [
                 r'\b(Dharma|Karma|Moksha|Samsara|Yoga|Atman|Brahman|Yajna)\b',
                 r'\b(Mantra|Rishi|Muni|Sanskrit|Puja|Varnashrama|Ashrama)\b'
+            ],
+            # Crime case related entities
+            "Victim": [
+                r'\bvictim(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)\b',
+                r'\b([A-Z][a-z]+ [A-Z][a-z]+) was (?:killed|murdered|found dead)\b',
+                r'\bbody of ([A-Z][a-z]+ [A-Z][a-z]+)\b',
+                r'\bmurder of ([A-Z][a-z]+ [A-Z][a-z]+)\b',
+                r'\b([A-Z][a-z]+ [A-Z][a-z]+)(?:,| was)? \d{1,2}(?: years old)?\b'
+            ],
+            "Suspect": [
+                r'\bsuspect(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)\b',
+                r'\b([A-Z][a-z]+ [A-Z][a-z]+) was (?:arrested|charged|accused|detained)\b',
+                r'\b([A-Z][a-z]+ [A-Z][a-z]+) is (?:suspected|accused|charged with)\b',
+                r'\barrested ([A-Z][a-z]+ [A-Z][a-z]+)\b',
+                r'\bkillers? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)\b',
+                r'\b(?:serial killer|murderer) ([A-Z][a-z]+ [A-Z][a-z]+)\b'
+            ],
+            "CrimeType": [
+                r'\b(murder|homicide|killing|manslaughter|assault)\b',
+                r'\b(first|second)-degree murder\b',
+                r'\b(serial killer|mass murder|massacre)\b',
+                r'\b(stabbing|shooting|strangulation)\b'
+            ],
+            "Evidence": [
+                r'\b(?:evidence|exhibit) ([A-Z]|#\d+)\b',
+                r'\b(DNA|fingerprint|blood|weapon) evidence\b',
+                r'\bfound (?:a|the) ([a-z]+ [a-z]+)\b',
+                r'\b(knife|gun|rope|hammer|poison|weapon)\b'
+            ],
+            "LawEnforcement": [
+                r'\b(?:detective|officer|investigator|sheriff) ([A-Z][a-z]+ [A-Z][a-z]+)\b',
+                r'\b([A-Z][a-z]+ [A-Z][a-z]+) (?:Police|Sheriff\'s) Department\b',
+                r'\b(FBI|CIA|ATF|Police|Sheriff|Detective)\b'
+            ],
+            "CrimeScene": [
+                r'\b(crime scene|murder scene|death scene)\b',
+                r'\bscene of the (crime|murder)\b',
+                r'\bbody was (?:found|discovered) (?:at|in) ([A-Z][a-z]+(?: [A-Z][a-z]+)?)\b',
+                r'\b([A-Z][a-z]+ County|[A-Z][a-z]+ State)\b'
+            ],
+            "Location": [
+                r'\bin ([A-Z][a-z]+(?: [A-Z][a-z]+)?)\b',
+                r'\bat ([A-Z][a-z]+(?: [A-Z][a-z]+)?)\b',
+                r'\b([A-Z][a-z]+ County)\b',
+                r'\b([A-Z][a-z]+ [A-Z][a-z]+ Prison)\b',
+                r'\b([A-Z][a-z]+, [A-Z]{2})\b'  # City, State
             ]
         }
         
@@ -303,6 +349,22 @@ class KnowledgeGraphProcessor:
                     ("FOCUS_ON", "theme", "Main theme or focus of a text")
                 ]
             },
+            "crime": {
+                "entity_types": ["Person", "Victim", "Suspect", "CrimeType", "Evidence", "LawEnforcement", "CrimeScene", "Location", "Date", "Year"],
+                "relations": [
+                    ("VICTIM_OF", None, "Person who was the victim of a crime"),
+                    ("SUSPECTED_OF", None, "Person suspected of committing a crime"),
+                    ("INVESTIGATED_BY", None, "Crime investigated by law enforcement"),
+                    ("OCCURRED_AT", None, "Location where crime occurred"),
+                    ("FOUND_AT", None, "Evidence found at location"),
+                    ("OCCURRED_ON", None, "Date when crime occurred"),
+                    ("AFFILIATED_WITH", None, "Connections between people involved in case"),
+                    ("DISCOVERED_BY", None, "Person who discovered victim or evidence"),
+                    ("CONVICTED_OF", None, "Person convicted of specific crime"),
+                    ("SENTENCED_TO", None, "Punishment received for crime"),
+                    ("EVIDENCE_OF", None, "Evidence related to specific crime")
+                ]
+            },
             "academic": {
                 "entity_types": ["Person", "Institution", "Genre"],
                 "relations": [
@@ -333,6 +395,21 @@ class KnowledgeGraphProcessor:
         
         return domain_configs.get(domain, domain_configs["custom"])
     
+    def _detect_crime_case_domain(self, text):
+        """Detect if text appears to be about a crime case"""
+        crime_terms = [
+            "murder", "homicide", "killer", "victim", "detective", "investigation",
+            "crime scene", "evidence", "autopsy", "serial killer", "police", "suspect",
+            "arrested", "charged", "trial", "convicted", "sentence", "prosecution",
+            "case file", "criminal", "forensic", "death", "body", "weapon"
+        ]
+        
+        # Count how many crime-related terms appear in the text
+        count = sum(1 for term in crime_terms if term.lower() in text.lower())
+        
+        # If there are several crime terms, it's likely about a crime case
+        return count >= 3
+
     def extract_entities_with_patterns(self, text, domain="custom"):
         """Extract entities using regex patterns and rules"""
         entities = {}
@@ -382,6 +459,14 @@ class KnowledgeGraphProcessor:
             detected_domain = "movie"
         elif any(term in filename_lower for term in ["academ", "lecture", "course", "education", "study", "research"]):
             detected_domain = "academic"
+        elif any(term in filename_lower for term in ["crime", "murder", "case", "investigation", "detective", "killer", "criminal", "police", "fbi", "homicide"]):
+            detected_domain = "crime"
+            logging.info(f"Detected crime case content from filename: {filename}")
+        
+        # Also check the content of the text for crime-related terms
+        if not detected_domain and self._detect_crime_case_domain(text):
+            detected_domain = "crime"
+            logging.info("Detected crime case content from transcript text")
         
         # Create a primary video entity
         video_entity = f"video_{hash(filename) % 1000}"
@@ -398,7 +483,82 @@ class KnowledgeGraphProcessor:
             logging.info(f"Auto-detected domain '{domain}' from filename")
         
         # Special domain-specific extractions
-        if domain == "vedas" or "veda" in filename_lower:
+        if domain == "crime" or self._detect_crime_case_domain(text):
+            # Crime case domain - extract crime-related entities
+            # Let's extract key crime elements
+            logging.info("Processing crime case content")
+            
+            # Extract case name/number if available
+            case_match = re.search(r'Case(?: Number| File)?: ([^\n]+)', text)
+            case_id = case_match.group(1).strip() if case_match else f"Case_{random.randint(1000, 9999)}"
+            
+            # Extract victim if available
+            victim_match = re.search(r'victim(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)', text, re.IGNORECASE)
+            victim = victim_match.group(1) if victim_match else None
+            
+            # Extract suspect if available
+            suspect_match = re.search(r'suspect(?:s)? (?:is |was |named |called )?([A-Z][a-z]+ [A-Z][a-z]+)', text, re.IGNORECASE)
+            suspect = suspect_match.group(1) if suspect_match else None
+            
+            # Extract crime type if available
+            crime_type_match = re.search(r'(murder|homicide|killing|manslaughter|assault|stabbing|shooting)', text, re.IGNORECASE)
+            crime_type = crime_type_match.group(1).capitalize() if crime_type_match else "Crime"
+            
+            # Create the case entity
+            triples.append((video_entity, "DOCUMENTS", case_id))
+            triples.append((case_id, "IS_A", "Criminal_Case"))
+            
+            # Add core entities and relationships if available
+            if victim:
+                triples.append((case_id, "HAS_VICTIM", victim))
+                triples.append((victim, "IS_A", "Victim"))
+                triples.append((victim, "VICTIM_OF", crime_type))
+            
+            if suspect:
+                triples.append((case_id, "HAS_SUSPECT", suspect))
+                triples.append((suspect, "IS_A", "Suspect"))
+                triples.append((suspect, "SUSPECTED_OF", crime_type))
+                
+                # Connect suspect to victim if both are available
+                if victim:
+                    triples.append((suspect, "TARGETED", victim))
+            
+            # Extract location/scene if available
+            location = None  # Initialize location variable
+            location_match = re.search(r'in ([A-Z][a-z]+(?: [A-Z][a-z]+)?)', text)
+            if location_match:
+                location = location_match.group(1)
+                triples.append((case_id, "OCCURRED_AT", location))
+                triples.append((location, "IS_A", "Crime_Scene"))
+                
+                if victim:
+                    triples.append((victim, "FOUND_AT", location))
+            
+            # Extract date if available
+            date_match = re.search(r'on (January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2},? \d{4}', text)
+            if date_match:
+                date = date_match.group(0).replace('on ', '')
+                triples.append((case_id, "OCCURRED_ON", date))
+            
+            # Extract evidence if available
+            evidence_match = re.search(r'(evidence|DNA|fingerprint|blood|weapon|knife|gun)', text, re.IGNORECASE)
+            if evidence_match:
+                evidence = evidence_match.group(1).capitalize()
+                triples.append((case_id, "HAS_EVIDENCE", evidence))
+                triples.append((evidence, "IS_A", "Evidence"))
+                
+                # Only connect to location if we have a valid location
+                if location is not None:
+                    triples.append((evidence, "FOUND_AT", location))
+            
+            # Extract law enforcement if available
+            le_match = re.search(r'(?:detective|officer|investigator|sheriff) ([A-Z][a-z]+ [A-Z][a-z]+)', text, re.IGNORECASE)
+            if le_match:
+                detective = le_match.group(1)
+                triples.append((case_id, "INVESTIGATED_BY", detective))
+                triples.append((detective, "IS_A", "Law_Enforcement"))
+            
+        elif domain == "vedas" or "veda" in filename_lower:
             # Special handling for Vedas domain
             triples.extend([
                 (video_entity, "COVERS_TOPIC", "Vedas"),

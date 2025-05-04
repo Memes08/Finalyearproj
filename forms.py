@@ -39,6 +39,7 @@ class NewKnowledgeGraphForm(FlaskForm):
         ('academic', 'Academic'),
         ('vedas', 'Vedas & Ancient Texts'),
         ('business', 'Business'),
+        ('crime', 'Crime Cases'),
         ('custom', 'Custom')
     ], validators=[DataRequired()])
     submit = SubmitField('Create Knowledge Graph')
