@@ -1,157 +1,141 @@
-{% extends "base.html" %}
-
-{% block title %}Knowledge Graph Builder - Home{% endblock %}
-
-{% block content %}
-<div class="px-4 py-5 my-5 text-center">
-    <h1 class="display-5 fw-bold text-info mb-4">Knowledge Graph Builder</h1>
-    <div class="col-lg-8 mx-auto">
-        <p class="lead mb-4">
-            Transform your raw data into dynamic, interactive knowledge graphs. 
-            Extract meaningful relationships from videos, CSV files, and more with AI-powered analysis.
-        </p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-            {% if current_user.is_authenticated %}
-                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-4 gap-3">
-                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                </a>
-                <a href="{{ url_for('new_graph') }}" class="btn btn-outline-secondary btn-lg px-4">
-                    <i class="fas fa-plus-circle me-2"></i> Create New Graph
-                </a>
-            {% else %}
-                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 gap-3">
-                    <i class="fas fa-user-plus me-2"></i> Get Started
-                </a>
-                <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">
-                    <i class="fas fa-sign-in-alt me-2"></i> Login
-                </a>
-            {% endif %}
-        </div>
-    </div>
-</div>
-
-<div class="container my-5">
-    <div class="row g-4 py-5">
-        <div class="col-md-4">
-            <div class="feature-card text-center">
-                <div class="mb-3">
-                    <i class="fas fa-file-upload fa-3x text-info"></i>
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Builder</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="bg-dark text-white py-3 mb-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-project-diagram me-2"></i> Knowledge Graph Builder
+                    </h1>
                 </div>
-                <h3>Multiple Input Sources</h3>
-                <p>Upload video files, CSV data, or link GitHub CSV URLs to build your knowledge graph.</p>
+                <div>
+                    <a href="/login" class="btn btn-outline-light btn-sm me-2">
+                        <i class="fas fa-sign-in-alt me-1"></i> Login
+                    </a>
+                    <a href="/register" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-user-plus me-1"></i> Register
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="feature-card text-center">
-                <div class="mb-3">
-                    <i class="fas fa-brain fa-3x text-info"></i>
-                </div>
-                <h3>AI-Powered Analysis</h3>
-                <p>Extract meaningful relationships from your data with advanced natural language processing.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="feature-card text-center">
-                <div class="mb-3">
-                    <i class="fas fa-project-diagram fa-3x text-info"></i>
-                </div>
-                <h3>Interactive Visualization</h3>
-                <p>Explore your knowledge graph with interactive visualizations and natural language queries.</p>
-            </div>
-        </div>
-    </div>
-</div>
+    </header>
 
-<div class="container my-5">
-    <div class="p-5 bg-dark rounded-3">
+    <main class="container mb-5">
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        
+        <!-- Hero section -->
+        <div class="p-5 mb-4 bg-dark rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold text-white">Build Intelligent Knowledge Graphs</h1>
+                <p class="col-md-8 fs-4 text-light">
+                    Transform videos, CSVs, and text into structured knowledge graphs. 
+                    Visualize connections, discover insights, and query your data with natural language.
+                </p>
+                <a href="/register" class="btn btn-primary btn-lg mt-3">
+                    <i class="fas fa-rocket me-2"></i>Get Started
+                </a>
+            </div>
+        </div>
+        
+        <!-- Features -->
+        <div class="row g-4 py-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center py-4">
+                        <i class="fas fa-file-import fa-3x mb-3 text-primary"></i>
+                        <h3 class="card-title">Multiple Input Formats</h3>
+                        <p class="card-text">Support for video files, YouTube links, CSVs, GitHub files, and text files.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center py-4">
+                        <i class="fas fa-database fa-3x mb-3 text-primary"></i>
+                        <h3 class="card-title">Neo4j Integration</h3>
+                        <p class="card-text">Store your knowledge graphs in the industry-leading graph database.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center py-4">
+                        <i class="fas fa-project-diagram fa-3x mb-3 text-primary"></i>
+                        <h3 class="card-title">Interactive Visualization</h3>
+                        <p class="card-text">Explore relationships and navigate through your knowledge graph with ease.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- How it works -->
+        <h2 class="text-center my-5">How It Works</h2>
         <div class="row">
-            <div class="col-lg-7">
-                <h2 class="mb-4">How It Works</h2>
-                <ol class="list-group list-group-numbered mb-4">
-                    <li class="list-group-item d-flex bg-dark text-white border-secondary">
-                        <div class="ms-2">
-                            <div class="fw-bold">Create a Knowledge Graph</div>
-                            Start by creating a new knowledge graph and specifying its domain.
+            <div class="col-lg-8 mx-auto">
+                <div class="list-group">
+                    <div class="list-group-item list-group-item-action d-flex gap-3 py-3">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <span class="text-white">1</span>
                         </div>
-                    </li>
-                    <li class="list-group-item d-flex bg-dark text-white border-secondary">
-                        <div class="ms-2">
-                            <div class="fw-bold">Add Your Data</div>
-                            Upload video files, CSV data, or link to GitHub repositories.
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h6 class="mb-0">Upload Your Data</h6>
+                                <p class="mb-0 opacity-75">Import videos, CSVs, or text files containing your information.</p>
+                            </div>
                         </div>
-                    </li>
-                    <li class="list-group-item d-flex bg-dark text-white border-secondary">
-                        <div class="ms-2">
-                            <div class="fw-bold">AI Processing</div>
-                            Our AI extracts entities and relationships from your data.
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex bg-dark text-white border-secondary">
-                        <div class="ms-2">
-                            <div class="fw-bold">Explore & Query</div>
-                            Visualize your knowledge graph and ask questions in natural language.
-                        </div>
-                    </li>
-                </ol>
-                <div class="mt-4">
-                    {% if current_user.is_authenticated %}
-                        <a href="{{ url_for('new_graph') }}" class="btn btn-info">
-                            <i class="fas fa-plus-circle me-2"></i> Create Your First Graph
-                        </a>
-                    {% else %}
-                        <a href="{{ url_for('register') }}" class="btn btn-info">
-                            <i class="fas fa-user-plus me-2"></i> Sign Up Now
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-lg-5 mt-4 mt-lg-0">
-                <div class="bg-dark p-3 rounded border border-secondary">
-                    <div class="code-sample bg-black p-3 rounded">
-                        <pre class="text-info mb-0"><code># Sample extracted triples
-(Inception) -[HAS_DIRECTOR]-> (Christopher Nolan)
-(Inception) -[HAS_ACTOR]-> (Leonardo DiCaprio)
-(Inception) -[IN_GENRE]-> (Sci-Fi)
-(Inception) -[RELEASED_ON]-> (2010)
-(Inception) -[HAS_IMDB_RATING]-> (8.8)</code></pre>
                     </div>
-                    <div class="mt-3 text-center">
-                        <div style="width:100%; height:200px; border:1px solid #666; border-radius:4px; position:relative; overflow:hidden; background:#111;">
-                            <svg viewBox="0 0 400 200" width="100%" height="100%">
-                                <defs>
-                                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-                                        <path d="M0,0 L0,6 L9,3 z" fill="#aaa" />
-                                    </marker>
-                                </defs>
-                                
-                                <!-- Center node -->
-                                <circle cx="200" cy="100" r="25" fill="#0dcaf0" />
-                                <text x="200" y="105" text-anchor="middle" fill="white" font-size="12">Inception</text>
-                                
-                                <!-- Connected nodes -->
-                                <circle cx="100" cy="50" r="20" fill="#6f42c1" />
-                                <text x="100" y="55" text-anchor="middle" fill="white" font-size="10">Director</text>
-                                
-                                <circle cx="100" cy="150" r="20" fill="#6f42c1" />
-                                <text x="100" y="155" text-anchor="middle" fill="white" font-size="10">Actor</text>
-                                
-                                <circle cx="300" cy="50" r="20" fill="#6f42c1" />
-                                <text x="300" y="55" text-anchor="middle" fill="white" font-size="10">Genre</text>
-                                
-                                <circle cx="300" cy="150" r="20" fill="#6f42c1" />
-                                <text x="300" y="155" text-anchor="middle" fill="white" font-size="10">Rating</text>
-                                
-                                <!-- Relationship lines -->
-                                <line x1="177" y1="90" x2="123" y2="60" stroke="#aaa" stroke-width="2" marker-end="url(#arrow)" />
-                                <line x1="177" y1="110" x2="123" y2="140" stroke="#aaa" stroke-width="2" marker-end="url(#arrow)" />
-                                <line x1="223" y1="90" x2="277" y2="60" stroke="#aaa" stroke-width="2" marker-end="url(#arrow)" />
-                                <line x1="223" y1="110" x2="277" y2="140" stroke="#aaa" stroke-width="2" marker-end="url(#arrow)" />
-                            </svg>
+                    <div class="list-group-item list-group-item-action d-flex gap-3 py-3">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <span class="text-white">2</span>
+                        </div>
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h6 class="mb-0">AI Processing</h6>
+                                <p class="mb-0 opacity-75">Our algorithms extract entities and relationships from your data.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group-item list-group-item-action d-flex gap-3 py-3">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <span class="text-white">3</span>
+                        </div>
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h6 class="mb-0">Explore Your Knowledge Graph</h6>
+                                <p class="mb-0 opacity-75">Visualize connections, run queries, and gain insights from your data.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
+    </main>
+
+    <footer class="bg-dark text-white-50 py-3 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">
+                &copy; 2025 Knowledge Graph Builder | Build intelligent knowledge graphs from various sources
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

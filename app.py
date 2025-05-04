@@ -25,13 +25,18 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-# Configure database
+# Configure database with fallbacks
 database_url = os.environ.get("DATABASE_URL")
 if database_url and database_url.startswith("postgres://"):
     # Handle Heroku-style PostgreSQL URLs
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = database_url or "sqlite:///knowledge_graph.db"
+# SQLite fallback for development if PostgreSQL is not available
+sqlite_url = "sqlite:///knowledge_graph.db"
+
+# Try PostgreSQL first, then SQLite
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url or sqlite_url
+logging.info(f"Using database URL: {database_url or sqlite_url}")
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
@@ -71,6 +76,13 @@ login_manager.login_message_category = 'info'
 
 # Database availability flag
 app.config['HAS_DATABASE'] = False
+
+# Add custom jinja filters
+@app.template_filter('now')
+def _jinja2_filter_now(format_string):
+    """Filter to return current time formatted according to format_string"""
+    import datetime
+    return datetime.datetime.now().strftime(format_string)
 
 # Global error handlers
 @app.errorhandler(OperationalError)
