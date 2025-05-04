@@ -15,3 +15,5 @@ Requires-Dist: werkzeug
 Requires-Dist: pandas
 Requires-Dist: openai-whisper>=20230306
 Requires-Dist: pytube>=15.0.0
+Requires-Dist: openai>=0.8.0
+Requires-Dist: groq>=0.11.0

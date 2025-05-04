@@ -295,6 +295,85 @@ class KnowledgeGraphProcessor:
             logging.error(f"Error initializing Groq LLM: {e}")
             self.has_llm = False
             return False
+            
+    def process_youtube_content(self, transcript_text, url=None, domain="custom"):
+        """Process YouTube transcript content using Groq AI
+        
+        Args:
+            transcript_text (str): The transcript text from YouTube video
+            url (str, optional): The YouTube URL for additional context
+            domain (str, optional): The knowledge domain. Defaults to "custom".
+            
+        Returns:
+            str: Enhanced and processed transcript text
+        """
+        if not self.has_llm:
+            logging.warning("Groq AI not available. Using original transcript.")
+            return transcript_text
+            
+        try:
+            # Clean up the transcript text
+            cleaned_text = re.sub(r'\s+', ' ', transcript_text).strip()
+            
+            # Get domain-specific configuration for better prompt engineering
+            domain_config = self._get_domain_prompt(domain)
+            entity_types = ', '.join(domain_config.get("entity_types", []))
+            
+            # Create a prompt for Groq to process the YouTube content
+            prompt = f"""
+            You are an expert knowledge graph builder analyzing a YouTube video transcript.
+            
+            Here is the transcript from a YouTube video{' at ' + url if url else ''}:
+            
+            {cleaned_text[:8000]}  # Limit length to avoid token limits
+            
+            Please perform the following tasks:
+            1. Summarize the key points of this video in a well-structured format
+            2. Extract the main entities mentioned (focus on {entity_types})
+            3. Identify important relationships between these entities
+            4. Add any contextual information that would be valuable for a knowledge graph
+            
+            Format your response as a well-structured document that provides:
+            - Video title (inferred from content)
+            - Video summary
+            - Key entities and relationships
+            - Any additional context
+            """
+            
+            # Call Groq API
+            response = self.llm_client.chat.completions.create(
+                model="grok-2-1212",  # Using Groq's large context model
+                messages=[
+                    {"role": "system", "content": f"You are an expert in analyzing content for the {domain} domain."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=2000
+            )
+            
+            # Get the enhanced content from Groq
+            enhanced_content = response.choices[0].message.content
+            
+            # Combine with original transcript for comprehensive processing
+            combined_text = f"""
+            ENHANCED YOUTUBE CONTENT (AI-processed)
+            URL: {url if url else 'Unknown'}
+            Domain: {domain}
+            ----------------------------------------
+            
+            {enhanced_content}
+            
+            ----------------------------------------
+            ORIGINAL TRANSCRIPT:
+            {cleaned_text[:3000]}  # Include part of original for context
+            """
+            
+            logging.info("Successfully enhanced YouTube content with Groq AI")
+            return combined_text
+            
+        except Exception as e:
+            logging.error(f"Error processing YouTube content with Groq: {e}")
+            # Return original if processing fails
+            return transcript_text
     
     def _generate_unique_id(self, entity_type, label):
         """Generate a unique ID for an entity based on its type and label"""
@@ -671,6 +750,24 @@ class KnowledgeGraphProcessor:
             is_fallback = True
             logging.info("Detected fallback transcription from WhisperTranscriber, using special extraction")
             return self._extract_from_fallback_transcription(text, domain)
+            
+        # Check if this is YouTube content and we have LLM access
+        is_youtube = False
+        youtube_url = None
+        if "YouTube" in text or "youtube.com" in text or "youtu.be" in text:
+            is_youtube = True
+            logging.info("Detected YouTube content, checking for URL...")
+            
+            # Try to extract URL
+            url_match = re.search(r'URL: (https://(?:www\.)?(?:youtube\.com|youtu\.be)/[^\s]+)', text)
+            if url_match:
+                youtube_url = url_match.group(1)
+                logging.info(f"Found YouTube URL: {youtube_url}")
+            
+            # Process with Groq if available
+            if self.has_llm:
+                logging.info("Processing YouTube content with Groq AI...")
+                text = self.process_youtube_content(text, youtube_url, domain)
         
         # Regular extraction process for normal text
         # Start with regex pattern extraction
