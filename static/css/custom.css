@@ -1,0 +1,193 @@
+/* Custom styles for Knowledge Graph Application */
+
+/* General styling */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
+
+.footer {
+    margin-top: auto;
+    padding: 1rem 0;
+}
+
+/* Card styling */
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Form styling */
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem var(--bs-info-rgb, 0.25);
+}
+
+/* Knowledge graph cards */
+.graph-card {
+    height: 100%;
+}
+
+.graph-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.graph-card .card-footer {
+    margin-top: auto;
+}
+
+/* Graph visualization */
+#graph-visualization {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    position: relative;
+}
+
+.graph-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.node {
+    cursor: pointer;
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+.link {
+    stroke-opacity: 0.6;
+}
+
+.node-label {
+    pointer-events: none;
+    font-family: sans-serif;
+}
+
+.link-label {
+    pointer-events: none;
+    font-family: sans-serif;
+}
+
+.d3-tooltip {
+    position: absolute;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 1000;
+    font-size: 12px;
+    max-width: 300px;
+}
+
+.graph-legend {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+}
+
+.legend-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 12px;
+    height: 2px;
+    margin-right: 8px;
+}
+
+/* Loading indicators */
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Input form styling */
+.input-selection-group .form-check {
+    padding: 1rem;
+    border: 1px solid #333;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.input-selection-group .form-check:hover {
+    background-color: rgba(var(--bs-info-rgb), 0.1);
+}
+
+.input-selection-group .form-check-input:checked + .form-check-label {
+    font-weight: bold;
+}
+
+/* Query results */
+.query-result {
+    background-color: #1a1a1a;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    white-space: pre-wrap;
+    font-family: monospace;
+    margin-top: 1rem;
+}
+
+/* Dashboard stats */
+.stat-card {
+    text-align: center;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Profile page */
+.profile-header {
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #333;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: var(--bs-info);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.profile-avatar-text {
+    font-size: 3rem;
+    color: #fff;
+}

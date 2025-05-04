@@ -1,0 +1,19 @@
+movieId,released,title,actors,director,genres,imdbRating
+1,1995-11-22,Toy Story,Jim Varney|Tim Allen|Tom Hanks|Don Rickles,John Lasseter,Adventure|Animation|Children|Comedy|Fantasy,8.3
+2,1995-12-15,Jumanji,Robin Williams|Bradley Pierce|Kirsten Dunst|Jonathan Hyde,Joe Johnston,Adventure|Children|Fantasy,6.9
+3,1995-12-22,Grumpier Old Men,Walter Matthau|Ann-Margret|Jack Lemmon|Sophia Loren,Howard Deutch,Comedy|Romance,6.6
+4,1995-12-22,Waiting to Exhale,Whitney Houston|Lela Rochon|Angela Bassett|Loretta Devine,Forest Whitaker,Romance|Drama|Comedy,5.6
+5,1995-12-08,Father of the Bride Part II,Steve Martin|Kimberly Williams-Paisley|Diane Keaton|Martin Short,Charles Shyer,Comedy,5.9
+6,1995-12-15,Heat,Al Pacino|Robert De Niro|Val Kilmer|Jon Voight,Michael Mann,Action|Crime|Thriller,8.2
+7,1995-12-15,Sabrina,Julia Ormond|Harrison Ford|Nancy Marchand|Greg Kinnear,Sydney Pollack,Comedy|Romance,6.2
+8,1995-12-22,Tom and Huck,Jonathan Taylor Thomas|Brad Renfro|Eric Schweig|Charles Rocket,Peter Hewitt,Children|Adventure,5.6
+9,1995-12-22,Sudden Death,Jean-Claude Van Damme|Powers Boothe|Raymond J. Barry|Whittni Wright,Peter Hyams,Action,5.7
+10,1995-11-17,GoldenEye,Pierce Brosnan|Famke Janssen|Sean Bean|Izabella Scorupco,Martin Campbell,Adventure|Action|Thriller,7.2
+11,1995-11-17,"American President, The",Martin Sheen|Michael J. Fox|Michael Douglas|Annette Bening,Rob Reiner,Comedy|Romance|Drama,6.8
+12,1995-12-22,Dracula: Dead and Loving It,Peter MacNicol|Leslie Nielsen|Steven Weber|Amy Yasbeck,Mel Brooks,Comedy|Horror,5.8
+13,1995-12-22,Balto,Kevin Bacon|Bob Hoskins|Jim Cummings|Bridget Fonda,Simon Wells,Children|Adventure|Animation,7.1
+14,1996-01-05,Nixon,Ed Harris|Anthony Hopkins|Powers Boothe|Joan Allen,Oliver Stone,Drama,7.1
+15,1995-12-22,Cutthroat Island,Geena Davis|Frank Langella|Matthew Modine|Maury Chaykin,Renny Harlin,Romance|Adventure|Action,5.6
+16,1995-11-22,Casino,Robert De Niro|Joe Pesci|Sharon Stone|James Woods,Martin Scorsese,Drama|Crime,8.2
+17,1996-01-26,Sense and Sensibility,James Fleet|Kate Winslet|Tom Wilkinson|Harriet Walter,Ang Lee,Drama|Romance,7.7
+18,1995-12-25,Four Rooms,Amanda De Cadenet|Valeria Golino|Madonna|Sammi Davis,Allison Anders|Robert Rodriguez|Quentin Tarantino| Alexandre Rockwell,Comedy,6.7

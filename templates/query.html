@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Query Graph - Knowledge Graph Builder{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Graph Info</h5>
+                    <span class="badge bg-info">{{ graph.domain }}</span>
+                </div>
+                <div class="card-body">
+                    <h4>{{ graph.name }}</h4>
+                    <p class="text-muted">
+                        {% if graph.description %}
+                            {{ graph.description }}
+                        {% else %}
+                            No description provided.
+                        {% endif %}
+                    </p>
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('visualization', graph_id=graph.id) }}" class="btn btn-outline-info">
+                            <i class="fas fa-project-diagram me-2"></i> View Visualization
+                        </a>
+                        <a href="{{ url_for('process_data', graph_id=graph.id) }}" class="btn btn-outline-info">
+                            <i class="fas fa-file-upload me-2"></i> Add More Data
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-dark">
+                    <h5 class="mb-0">Query Examples</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group example-queries">
+                        {% if graph.domain == 'movie' %}
+                            <button class="list-group-item list-group-item-action query-example">
+                                What movies did Christopher Nolan direct?
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                Which actors starred in Inception?
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                What sci-fi movies have an IMDB rating above 8?
+                            </button>
+                        {% elif graph.domain == 'book' %}
+                            <button class="list-group-item list-group-item-action query-example">
+                                What books were written by J.K. Rowling?
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                Which fantasy novels were published after 2010?
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                Who published The Great Gatsby?
+                            </button>
+                        {% elif graph.domain == 'music' %}
+                            <button class="list-group-item list-group-item-action query-example">
+                                What songs did Taylor Swift perform?
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                Which albums include the song Bohemian Rhapsody?
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                What rock songs were released in the 1970s?
+                            </button>
+                        {% else %}
+                            <button class="list-group-item list-group-item-action query-example">
+                                Show me all relationships for [entity name]
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                What is the connection between [entity1] and [entity2]?
+                            </button>
+                            <button class="list-group-item list-group-item-action query-example">
+                                List all entities of type [entity type]
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-dark">
+                    <h5 class="mb-0">Query Your Knowledge Graph</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('query_graph', graph_id=graph.id) }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.query(class="form-control" + (" is-invalid" if form.query.errors else ""), rows=3, placeholder="Ask a question about your knowledge graph...") }}
+                            {% if form.query.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.query.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Ask questions in natural language about entities and relationships in your knowledge graph.
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            {% if result %}
+                <div class="card">
+                    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Query Results</h5>
+                        <button class="btn btn-sm btn-outline-info" id="copy-result" title="Copy to clipboard">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="query-result" id="result-text">{{ result }}</div>
+                    </div>
+                </div>
+            {% elif request.method == 'POST' %}
+                <div class="alert alert-info">
+                    <h5 class="alert-heading">No Results Found</h5>
+                    <p>Your query didn't return any results. Try rephrasing your question or check if your knowledge graph contains relevant data.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle example query clicks
+        const exampleQueries = document.querySelectorAll('.query-example');
+        const queryInput = document.getElementById('{{ form.query.id }}');
+        
+        exampleQueries.forEach(button => {
+            button.addEventListener('click', function() {
+                queryInput.value = this.textContent.trim();
+                queryInput.focus();
+            });
+        });
+        
+        // Copy results to clipboard
+        const copyButton = document.getElementById('copy-result');
+        if (copyButton) {
+            copyButton.addEventListener('click', function() {
+                const resultText = document.getElementById('result-text').textContent;
+                navigator.clipboard.writeText(resultText).then(function() {
+                    // Change button to show copied
+                    copyButton.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                    }, 2000);
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

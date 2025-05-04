@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Create New Knowledge Graph - Knowledge Graph Builder{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-dark">
+                    <h4 class="mb-0">Create New Knowledge Graph</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('new_graph') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.name.id }}" class="form-label">Graph Name</label>
+                            {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else ""), placeholder="Enter a name for your graph") }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.description.id }}" class="form-label">Description (Optional)</label>
+                            {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=3, placeholder="Describe what this knowledge graph is about") }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.domain.id }}" class="form-label">Domain</label>
+                            {{ form.domain(class="form-select" + (" is-invalid" if form.domain.errors else "")) }}
+                            {% if form.domain.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.domain.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Select the domain that best fits your data. This helps customize entity extraction.</div>
+                        </div>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header bg-dark">
+                                <h5 class="mb-0">Domain Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="domain-info" id="domain-movie">
+                                    <h6>Movie Domain</h6>
+                                    <p>Extracts relationships such as:</p>
+                                    <ul>
+                                        <li>Movie titles and their directors</li>
+                                        <li>Movie titles and actors</li>
+                                        <li>Movie genres</li>
+                                        <li>Release dates and ratings</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="domain-info d-none" id="domain-book">
+                                    <h6>Book Domain</h6>
+                                    <p>Extracts relationships such as:</p>
+                                    <ul>
+                                        <li>Book titles and their authors</li>
+                                        <li>Publishers and publication dates</li>
+                                        <li>Book genres</li>
+                                        <li>Author information</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="domain-info d-none" id="domain-music">
+                                    <h6>Music Domain</h6>
+                                    <p>Extracts relationships such as:</p>
+                                    <ul>
+                                        <li>Song titles and artists</li>
+                                        <li>Producers and genres</li>
+                                        <li>Release dates</li>
+                                        <li>Album information</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="domain-info d-none" id="domain-academic">
+                                    <h6>Academic Domain</h6>
+                                    <p>Extracts relationships such as:</p>
+                                    <ul>
+                                        <li>Paper titles and authors</li>
+                                        <li>Journals and conferences</li>
+                                        <li>Research fields</li>
+                                        <li>Citations and publication dates</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="domain-info d-none" id="domain-business">
+                                    <h6>Business Domain</h6>
+                                    <p>Extracts relationships such as:</p>
+                                    <ul>
+                                        <li>Companies and their CEOs</li>
+                                        <li>Industry sectors</li>
+                                        <li>Founding dates</li>
+                                        <li>Headquarters locations</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="domain-info d-none" id="domain-custom">
+                                    <h6>Custom Domain</h6>
+                                    <p>A general-purpose extraction that identifies any logical entity-relationship-entity triples in the data.</p>
+                                    <p>This is suitable when your data doesn't fit neatly into any of the predefined domains.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const domainSelect = document.getElementById('{{ form.domain.id }}');
+        const domainInfos = document.querySelectorAll('.domain-info');
+        
+        function updateDomainInfo() {
+            // Hide all domain info sections
+            domainInfos.forEach(el => el.classList.add('d-none'));
+            
+            // Show the selected domain info
+            const selectedDomain = domainSelect.value;
+            const infoElement = document.getElementById(`domain-${selectedDomain}`);
+            if (infoElement) {
+                infoElement.classList.remove('d-none');
+            }
+        }
+        
+        // Initial update
+        updateDomainInfo();
+        
+        // Update on change
+        domainSelect.addEventListener('change', updateDomainInfo);
+    });
+</script>
+{% endblock %}
