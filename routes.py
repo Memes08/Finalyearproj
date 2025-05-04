@@ -153,10 +153,21 @@ def process_data(graph_id):
         return redirect(url_for('dashboard'))
     
     form = DataInputForm()
+    
+    # Check if we're getting a custom selected_input_type field from our form
+    selected_input_type = request.form.get('selected_input_type')
+    if selected_input_type and selected_input_type in ['video', 'csv', 'url']:
+        form.input_type.data = selected_input_type
+    
     if form.validate_on_submit():
         # Create a unique directory for this input
         input_dir = os.path.join(app.config['UPLOAD_FOLDER'], str(uuid.uuid4()))
         os.makedirs(input_dir, exist_ok=True)
+        
+        # Log the form data to debug
+        logging.info(f"Form data - input_type: {form.input_type.data}")
+        if form.input_type.data == 'url':
+            logging.info(f"GitHub URL: {form.github_url.data}")
         
         input_source = InputSource(
             source_type=form.input_type.data,

@@ -52,6 +52,7 @@
                             {{ form.input_type(id="input_type_video", value="video") }}
                             {{ form.input_type(id="input_type_csv", value="csv") }}
                             {{ form.input_type(id="input_type_url", value="url") }}
+                            <input type="hidden" id="selected_input_type" name="selected_input_type" value="video">
                         </div>
                         
                         <!-- Tab content -->
@@ -205,12 +206,44 @@
         const radioButton = document.getElementById(`input_type_${type}`);
         if (radioButton) {
             radioButton.checked = true;
+            
+            // Set the selected_input_type hidden field
+            document.getElementById('selected_input_type').value = type;
+            
+            console.log("Selected input type changed to:", type);
         }
     }
     
     // Initialize the first tab on page load
     document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners to tab buttons
+        document.getElementById('video-tab').addEventListener('click', function() {
+            selectInputType('video');
+        });
+        
+        document.getElementById('csv-tab').addEventListener('click', function() {
+            selectInputType('csv');
+        });
+        
+        document.getElementById('url-tab').addEventListener('click', function() {
+            selectInputType('url');
+        });
+        
+        // Set initial selection
         selectInputType('video');
+        
+        // Before form submission, ensure the correct input type is set
+        document.querySelector('form').addEventListener('submit', function(e) {
+            // Get the active tab
+            const activeTab = document.querySelector('.nav-link.active');
+            if (activeTab) {
+                if (activeTab.id === 'video-tab') selectInputType('video');
+                else if (activeTab.id === 'csv-tab') selectInputType('csv');
+                else if (activeTab.id === 'url-tab') selectInputType('url');
+            }
+            
+            console.log("Form submitting with input type:", document.getElementById('selected_input_type').value);
+        });
     });
 </script>
 {% endblock %}
