@@ -157,6 +157,8 @@ class KnowledgeGraphProcessor:
         self.neo4j_manager = neo4j_manager
         self.groq_api_key = groq_api_key
         self.llm = None
+        self.has_llm = False
+        self.llm_client = None
         
         # Entity type recognition patterns
         self.entity_patterns = {
