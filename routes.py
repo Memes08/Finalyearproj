@@ -140,31 +140,50 @@ else:
 
 @app.route('/')
 def index():
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+    except Exception as e:
+        logging.error(f"Error in index route: {e}")
+        # If we can't check authentication, just show the index page
     return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
-    
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            user.last_login = datetime.utcnow()
-            db.session.commit()
-            
-            next_page = request.args.get('next')
-            flash('Login successful!', 'success')
-            return redirect(next_page or url_for('dashboard'))
-        else:
-            flash('Login failed. Please check your email and password.', 'danger')
-    
-    return render_template('login.html', form=form)
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+        
+        form = LoginForm()
+        if form.validate_on_submit():
+            try:
+                user = User.query.filter_by(email=form.email.data).first()
+                if user and user.check_password(form.password.data):
+                    login_user(user)
+                    try:
+                        user.last_login = datetime.utcnow()
+                        db.session.commit()
+                    except Exception as e:
+                        # Log error but proceed with login
+                        logging.error(f"Could not update last_login time: {e}")
+                        db.session.rollback()
+                    
+                    next_page = request.args.get('next')
+                    flash('Login successful!', 'success')
+                    return redirect(next_page or url_for('dashboard'))
+                else:
+                    flash('Login failed. Please check your email and password.', 'danger')
+            except Exception as e:
+                logging.error(f"Database error during login: {e}")
+                flash('Login unavailable due to database issues. Please try again later.', 'danger')
+                return render_template('db_unavailable.html')
+        
+        return render_template('login.html', form=form)
+    except Exception as e:
+        logging.error(f"Unexpected error in login route: {e}")
+        flash('System currently unavailable. Please try again later.', 'danger')
+        return render_template('db_unavailable.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -200,40 +219,61 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    knowledge_graphs = KnowledgeGraph.query.filter_by(user_id=current_user.id).all()
-    return render_template('dashboard.html', knowledge_graphs=knowledge_graphs)
+    try:
+        knowledge_graphs = KnowledgeGraph.query.filter_by(user_id=current_user.id).all()
+        return render_template('dashboard.html', knowledge_graphs=knowledge_graphs)
+    except Exception as e:
+        logging.error(f"Error accessing knowledge graphs in dashboard: {e}")
+        flash("Unable to load knowledge graphs due to database connection issues", "danger")
+        return render_template('db_unavailable.html')
 
 
 @app.route('/graph/new', methods=['GET', 'POST'])
 @login_required
 def new_graph():
     form = NewKnowledgeGraphForm()
-    if form.validate_on_submit():
-        graph = KnowledgeGraph(
-            name=form.name.data,
-            description=form.description.data,
-            domain=form.domain.data,
-            user_id=current_user.id
-        )
+    try:
+        if form.validate_on_submit():
+            try:
+                graph = KnowledgeGraph(
+                    name=form.name.data,
+                    description=form.description.data,
+                    domain=form.domain.data,
+                    user_id=current_user.id
+                )
+                
+                db.session.add(graph)
+                db.session.commit()
+                
+                flash(f'Knowledge graph "{form.name.data}" created successfully!', 'success')
+                return redirect(url_for('process_data', graph_id=graph.id))
+            except Exception as e:
+                db.session.rollback()
+                logging.error(f"Database error creating new graph: {e}")
+                flash("Unable to create knowledge graph due to database issues.", "danger")
+                return render_template('db_unavailable.html')
         
-        db.session.add(graph)
-        db.session.commit()
-        
-        flash(f'Knowledge graph "{form.name.data}" created successfully!', 'success')
-        return redirect(url_for('process_data', graph_id=graph.id))
-    
-    return render_template('new_graph.html', form=form)
+        return render_template('new_graph.html', form=form)
+    except Exception as e:
+        logging.error(f"Error in new_graph route: {e}")
+        flash("System error encountered. Please try again later.", "danger")
+        return render_template('db_unavailable.html')
 
 
 @app.route('/graph/<int:graph_id>/process', methods=['GET', 'POST'])
 @login_required
 def process_data(graph_id):
-    graph = KnowledgeGraph.query.get_or_404(graph_id)
-    
-    # Check if graph belongs to current user
-    if graph.user_id != current_user.id:
-        flash('Access denied. You do not own this knowledge graph.', 'danger')
-        return redirect(url_for('dashboard'))
+    try:
+        graph = KnowledgeGraph.query.get_or_404(graph_id)
+        
+        # Check if graph belongs to current user
+        if graph.user_id != current_user.id:
+            flash('Access denied. You do not own this knowledge graph.', 'danger')
+            return redirect(url_for('dashboard'))
+    except Exception as e:
+        logging.error(f"Database error accessing graph {graph_id}: {e}")
+        flash("Unable to access knowledge graph due to database connection issues.", "danger")
+        return render_template('db_unavailable.html')
     
     form = DataInputForm()
     
