@@ -221,16 +221,16 @@
                                     <div class="text-center">
                                         <div class="mb-4">
                                             <i class="fab fa-github fa-3x text-info mb-3"></i>
-                                            <h5 class="fw-bold">GitHub Raw CSV URL</h5>
+                                            <h5 class="fw-bold">GitHub Raw File URL</h5>
                                             <p class="text-muted">
-                                                Provide a raw GitHub URL to a CSV file for analysis.<br>
-                                                Example format: https://raw.githubusercontent.com/username/repo/main/data.csv
+                                                Provide a raw GitHub URL to a text or CSV file for analysis.<br>
+                                                Example format: https://raw.githubusercontent.com/username/repo/main/data.txt
                                             </p>
                                         </div>
                                         
                                         <div class="w-75 mx-auto">
                                             {{ form.github_url(class="form-control form-control-lg" + (" is-invalid" if form.github_url.errors else ""), 
-                                                placeholder="https://raw.githubusercontent.com/username/repo/main/data.csv") }}
+                                                placeholder="https://raw.githubusercontent.com/username/repo/main/data.txt") }}
                                             {% if form.github_url.errors %}
                                                 <div class="text-danger mt-2">
                                                     {% for error in form.github_url.errors %}

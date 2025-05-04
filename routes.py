@@ -1206,67 +1206,208 @@ def process_data(graph_id):
                 neo4j_manager.import_triples(triples, graph.id)
                 
             elif form.input_type.data == 'url':
-                # Download CSV from URL
+                # Download file from URL (either CSV or text)
                 url = form.github_url.data
                 if url:
                     try:
                         filename = url.split('/')[-1]
-                        csv_path = os.path.join(input_dir, filename)
-                        logging.info(f"Downloading CSV from URL: {url} to {csv_path}")
-                        urllib.request.urlretrieve(url, csv_path)
-                        logging.info(f"Successfully downloaded CSV file from URL")
+                        file_path = os.path.join(input_dir, filename)
+                        logging.info(f"Downloading file from URL: {url} to {file_path}")
+                        urllib.request.urlretrieve(url, file_path)
+                        logging.info(f"Successfully downloaded file from URL")
                     except Exception as e:
-                        logging.error(f"Error downloading CSV from URL: {e}")
-                        flash(f"Error downloading CSV: {str(e)}", 'danger')
+                        logging.error(f"Error downloading file from URL: {e}")
+                        flash(f"Error downloading file: {str(e)}", 'danger')
                         return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
                 else:
                     flash("No GitHub URL provided", 'danger')
                     return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
                 
-                # Process CSV file - with fallback for missing pandas
-                try:
-                    # First try using the standard kg_processor
-                    triples = kg_processor.process_csv(csv_path, domain=graph.domain)
-                except Exception as e:
-                    logging.warning(f"Error processing CSV with kg_processor: {e}")
-                    logging.info("Attempting to process CSV with basic fallback processor")
-                    
-                    # Basic fallback CSV processor
+                # Detect if it's a text file or CSV based on extension
+                is_text_file = filename.lower().endswith(('.txt', '.md', '.text'))
+                is_csv_file = filename.lower().endswith('.csv')
+                
+                # Update progress - detection
+                session[progress_key] = {
+                    'status': f"Detected {'text' if is_text_file else 'CSV'} file format...",
+                    'percent': 20,
+                    'step': 'analysis'
+                }
+                session.modified = True
+                
+                if is_text_file:
+                    # Process as text file
                     try:
-                        triples = []
-                        with open(csv_path, 'r', encoding='utf-8') as f:
-                            # Try to read as CSV
-                            import csv
-                            reader = csv.reader(f)
-                            headers = next(reader)  # Get headers
+                        # Read the content
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            text_content = f.read()
+                        
+                        # Update progress - 50%
+                        session[progress_key] = {
+                            'status': 'Extracting entities and relationships from text...',
+                            'percent': 50,
+                            'step': 'extraction'
+                        }
+                        session.modified = True
+                        
+                        # Extract triples from text
+                        triples = kg_processor.extract_triples_from_text(text_content, domain=graph.domain)
+                        
+                        # If we didn't get enough triples, try alternative extraction methods
+                        if not triples or len(triples) < 3:
+                            session[progress_key] = {
+                                'status': 'Using alternative extraction method...',
+                                'percent': 45,
+                                'step': 'fallback'
+                            }
+                            session.modified = True
                             
-                            # Process each row - create simple subject-predicate-object triples
-                            for row in reader:
-                                if len(row) < 2:
-                                    continue  # Skip rows with insufficient columns
+                            # Try with entity patterns
+                            pattern_entities = kg_processor.extract_entities_with_patterns(text_content, domain=graph.domain)
+                            if pattern_entities:
+                                logging.info(f"Extracted entities with pattern matching")
                                 
-                                # Create basic entity identifier
-                                entity_id = row[0]
+                                # Save as CSV for reference
+                                csv_path = os.path.join(input_dir, 'extracted_entities.csv')
+                                with open(csv_path, 'w', encoding='utf-8') as f:
+                                    writer = csv.writer(f)
+                                    writer.writerow(['Entity', 'Type'])
+                                    for entity_type, entities in pattern_entities.items():
+                                        for entity in entities:
+                                            writer.writerow([entity['text'], entity['type']])
+                        
+                        # Save preview triples for user approval
+                        preview_path = os.path.join(input_dir, 'preview_triples.json')
+                        with open(preview_path, 'w') as f:
+                            json.dump(triples, f)
+                        
+                        # Save the text content for reference
+                        transcription_path = os.path.join(input_dir, 'transcription.txt')
+                        with open(transcription_path, 'w') as f:
+                            f.write(text_content)
+                        
+                        # Save metadata for summary page
+                        summary_metadata = {
+                            "detected_domain": graph.domain,
+                            "content_type": "Text Content (from URL)",
+                            "entity_count": len(set([t[0] for t in triples] + [t[2] for t in triples if not isinstance(t[2], (int, float))])),
+                            "relation_count": len(triples),
+                            "processing_method": "URL Text Processing"
+                        }
+                        metadata_path = os.path.join(input_dir, 'summary_metadata.json')
+                        with open(metadata_path, 'w') as f:
+                            json.dump(summary_metadata, f)
+                        
+                        # Update progress - ready for approval
+                        session[progress_key] = {
+                            'status': 'Ready for approval...',
+                            'percent': 90,
+                            'step': 'approval'
+                        }
+                        session.modified = True
+                        
+                        # Update input source details
+                        input_source.url = url
+                        input_source.filename = filename
+                        input_source.entity_count = summary_metadata["entity_count"]
+                        input_source.relationship_count = summary_metadata["relation_count"]
+                        input_source.processed = False
+                        
+                        # Save input source
+                        db.session.add(input_source)
+                        db.session.commit()
+                        
+                        # Redirect to the summary approval page
+                        return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
+                    
+                    except Exception as e:
+                        logging.error(f"Error processing text file from URL: {e}")
+                        flash(f"Error processing text file: {str(e)}", 'danger')
+                        return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
+                
+                elif is_csv_file:
+                    # Process as CSV file - with fallback for missing pandas
+                    try:
+                        # Update progress - 50%
+                        session[progress_key] = {
+                            'status': 'Extracting entities and relationships from CSV...',
+                            'percent': 50,
+                            'step': 'extraction'
+                        }
+                        session.modified = True
+                        
+                        # First try using the standard kg_processor
+                        triples = kg_processor.process_csv(file_path, domain=graph.domain)
+                    except Exception as e:
+                        logging.warning(f"Error processing CSV with kg_processor: {e}")
+                        logging.info("Attempting to process CSV with basic fallback processor")
+                        
+                        # Update progress - fallback
+                        session[progress_key] = {
+                            'status': 'Using fallback CSV processor...',
+                            'percent': 45,
+                            'step': 'fallback'
+                        }
+                        session.modified = True
+                        
+                        # Basic fallback CSV processor
+                        try:
+                            triples = []
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                # Try to read as CSV
+                                import csv
+                                reader = csv.reader(f)
+                                headers = next(reader)  # Get headers
                                 
-                                # Create relationship triples from each column
-                                for i, value in enumerate(row[1:], 1):
-                                    if value and i < len(headers):
-                                        predicate = headers[i]
-                                        triples.append((entity_id, predicate, value))
+                                # Process each row - create simple subject-predicate-object triples
+                                for row in reader:
+                                    if len(row) < 2:
+                                        continue  # Skip rows with insufficient columns
+                                    
+                                    # Create basic entity identifier
+                                    entity_id = row[0]
+                                    
+                                    # Create relationship triples from each column
+                                    for i, value in enumerate(row[1:], 1):
+                                        if value and i < len(headers):
+                                            predicate = headers[i]
+                                            triples.append((entity_id, predicate, value))
+                            
+                            if not triples:
+                                raise ValueError("No valid triples could be extracted from CSV")
+                            
+                            logging.info(f"Successfully extracted {len(triples)} triples using fallback processor")
+                        except Exception as inner_e:
+                            logging.error(f"Fallback CSV processing failed: {inner_e}")
+                            flash(f"Error processing CSV data: {str(inner_e)}", 'danger')
+                            return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
+                
+                else:
+                    # Unknown file type, try to process as text
+                    try:
+                        # Read the content
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            text_content = f.read()
                         
-                        if not triples:
-                            raise ValueError("No valid triples could be extracted from CSV")
+                        # Update progress - 40%
+                        session[progress_key] = {
+                            'status': 'Unrecognized file format, trying as text...',
+                            'percent': 40,
+                            'step': 'analysis'
+                        }
+                        session.modified = True
                         
-                        logging.info(f"Successfully extracted {len(triples)} triples using fallback processor")
-                    except Exception as inner_e:
-                        logging.error(f"Fallback CSV processing failed: {inner_e}")
-                        flash(f"Error processing CSV data: {str(inner_e)}", 'danger')
+                        # Extract triples from text
+                        triples = kg_processor.extract_triples_from_text(text_content, domain=graph.domain)
+                    except Exception as e:
+                        logging.error(f"Error processing unknown file type: {e}")
+                        flash(f"Could not process file. Please check the format and try again.", 'danger')
                         return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
                 
                 # Update input source details
                 input_source.url = url
                 input_source.filename = filename
-                input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples]))
+                input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples if not isinstance(t[2], (int, float))]))
                 input_source.relationship_count = len(triples)
                 
                 # Insert into Neo4j
