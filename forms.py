@@ -51,8 +51,8 @@ class DataInputForm(FlaskForm):
         ('video', 'Video File'),
         ('youtube', 'YouTube Video URL'),
         ('youtube_transcript', 'YouTube Transcript'),
-        ('csv', 'CSV Upload'),
-        ('url', 'GitHub CSV URL')
+        ('text', 'Text File Upload'),
+        ('url', 'GitHub Raw File URL')
     ], validators=[DataRequired()])
     
     video_file = FileField('Upload Video', validators=[
@@ -69,12 +69,14 @@ class DataInputForm(FlaskForm):
     youtube_transcript = TextAreaField('YouTube Transcript', validators=[Optional()])
     youtube_title = StringField('Video Title (Optional)', validators=[Optional()])
     
-    csv_file = FileField('Upload CSV', validators=[
+    text_file = FileField('Upload Text File', validators=[
         Optional(),
-        FileAllowed(['csv'], 'Only CSV files allowed!')
+        FileAllowed(['txt', 'md', 'text'], 'Only text files allowed!')
     ])
     
-    github_url = URLField('GitHub Raw CSV URL', validators=[Optional(), URL()])
+    text_content = TextAreaField('Or paste text directly:', validators=[Optional()])
+    
+    github_url = URLField('GitHub Raw File URL', validators=[Optional(), URL()])
     
     submit = SubmitField('Process Data')
     
@@ -91,11 +93,11 @@ class DataInputForm(FlaskForm):
         elif self.input_type.data == 'youtube_transcript' and not self.youtube_transcript.data:
             self.youtube_transcript.errors = ['Please paste the YouTube transcript.']
             return False
-        elif self.input_type.data == 'csv' and not self.csv_file.data:
-            self.csv_file.errors.append('Please upload a CSV file.')
+        elif self.input_type.data == 'text' and not (self.text_file.data or self.text_content.data):
+            self.text_file.errors.append('Please either upload a text file or paste text directly.')
             return False
         elif self.input_type.data == 'url' and not self.github_url.data:
-            self.github_url.errors.append('Please enter a GitHub CSV URL.')
+            self.github_url.errors.append('Please enter a GitHub raw file URL.')
             return False
             
         # Validate YouTube URL format if provided

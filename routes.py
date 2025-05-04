@@ -936,6 +936,162 @@ def process_data(graph_id):
                 # Redirect to the summary approval page like the main flow
                 return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
                 
+            elif form.input_type.data == 'text':
+                # Update progress - 15%
+                session[progress_key] = {
+                    'status': 'Processing text input...',
+                    'percent': 15,
+                    'step': 'upload'
+                }
+                session.modified = True
+                
+                # Process text content - either from file or direct input
+                text_content = None
+                filename = None
+                
+                if form.text_file.data:
+                    # Process the uploaded text file
+                    text_file = form.text_file.data
+                    filename = secure_filename(text_file.filename)
+                    text_path = os.path.join(input_dir, filename)
+                    
+                    # Store the filename in the input source
+                    input_source.filename = filename
+                    
+                    # Save the file using chunked method
+                    save_success = save_file_chunked(text_file, text_path)
+                    
+                    if not save_success:
+                        flash('Error saving text file. Please try again.', 'danger')
+                        return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
+                    
+                    # Read the content
+                    try:
+                        with open(text_path, 'r', encoding='utf-8') as f:
+                            text_content = f.read()
+                    except Exception as e:
+                        logging.error(f"Error reading text file: {str(e)}")
+                        flash('Error reading text file. Please check the file encoding.', 'danger')
+                        return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
+                
+                elif form.text_content.data:
+                    # Use directly provided text content
+                    text_content = form.text_content.data
+                    filename = "direct_input.txt"
+                    
+                    # Store a reference in the input source
+                    input_source.filename = filename
+                    
+                    # Save to a file for reference
+                    text_path = os.path.join(input_dir, filename)
+                    try:
+                        with open(text_path, 'w', encoding='utf-8') as f:
+                            f.write(text_content)
+                    except Exception as e:
+                        logging.error(f"Error saving direct text input: {str(e)}")
+                        flash('Error saving text input. Please try again.', 'danger')
+                        return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
+                
+                if not text_content:
+                    flash('No text content provided. Please upload a file or paste text directly.', 'danger')
+                    return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
+                
+                # Update progress - 30%
+                session[progress_key] = {
+                    'status': 'Analyzing text content...',
+                    'percent': 30,
+                    'step': 'analysis'
+                }
+                session.modified = True
+                
+                # Process text file and convert to CSV
+                try:
+                    # Update progress - 50%
+                    session[progress_key] = {
+                        'status': 'Extracting entities and relationships...',
+                        'percent': 50,
+                        'step': 'extraction'
+                    }
+                    session.modified = True
+                    
+                    # First, extract triples directly from the text
+                    triples = kg_processor.extract_triples_from_text(text_content, domain=graph.domain)
+                    
+                    # If we didn't get enough triples, try alternative extraction methods
+                    if not triples or len(triples) < 3:
+                        # Update progress - fallback
+                        session[progress_key] = {
+                            'status': 'Using alternative extraction method...',
+                            'percent': 45,
+                            'step': 'fallback'
+                        }
+                        session.modified = True
+                        
+                        # Try with entity patterns
+                        pattern_entities = kg_processor.extract_entities_with_patterns(text_content, domain=graph.domain)
+                        if pattern_entities:
+                            # If we got some entities, create simple relationships between them
+                            logging.info(f"Extracted entities with pattern matching")
+                            
+                            # Save as CSV for reference
+                            csv_path = os.path.join(input_dir, 'extracted_entities.csv')
+                            with open(csv_path, 'w', encoding='utf-8') as f:
+                                writer = csv.writer(f)
+                                writer.writerow(['Entity', 'Type'])
+                                for entity_type, entities in pattern_entities.items():
+                                    for entity in entities:
+                                        writer.writerow([entity['text'], entity['type']])
+                    
+                    # Save the triples to a CSV file for reference
+                    csv_path = os.path.join(input_dir, 'extracted_triples.csv')
+                    with open(csv_path, 'w', encoding='utf-8') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(['Subject', 'Predicate', 'Object'])
+                        for triple in triples:
+                            writer.writerow(triple)
+                    
+                    # Save a preview of the triples for the summary page
+                    preview_path = os.path.join(input_dir, 'preview_triples.json')
+                    with open(preview_path, 'w') as f:
+                        json.dump(triples, f)
+                    
+                    # Save metadata for summary page
+                    summary_metadata = {
+                        "detected_domain": graph.domain,
+                        "content_type": "Text Content",
+                        "entity_count": len(set([t[0] for t in triples] + [t[2] for t in triples if not isinstance(t[2], (int, float))])),
+                        "relation_count": len(triples),
+                        "processing_method": "Direct Text Processing"
+                    }
+                    metadata_path = os.path.join(input_dir, 'summary_metadata.json')
+                    with open(metadata_path, 'w') as f:
+                        json.dump(summary_metadata, f)
+                    
+                    # Update progress - ready for approval
+                    session[progress_key] = {
+                        'status': 'Ready for approval...',
+                        'percent': 90,
+                        'step': 'approval'
+                    }
+                    session.modified = True
+                    
+                    # Update input source details
+                    input_source.entity_count = summary_metadata["entity_count"]
+                    input_source.relationship_count = summary_metadata["relation_count"]
+                    input_source.processed = False
+                    
+                    # Save input source
+                    db.session.add(input_source)
+                    db.session.commit()
+                    
+                    # Redirect to the summary approval page
+                    return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
+                    
+                except Exception as e:
+                    logging.error(f"Error processing text content: {e}")
+                    flash('Error processing text content. Please check the format.', 'danger')
+                    return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
+                
             elif form.input_type.data == 'csv':
                 # Update progress - 15%
                 session[progress_key] = {
