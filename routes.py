@@ -263,6 +263,7 @@ def new_graph():
 @app.route('/graph/<int:graph_id>/process', methods=['GET', 'POST'])
 @login_required
 def process_data(graph_id):
+    logging.info(f"Processing data for graph ID: {graph_id}")
     try:
         graph = KnowledgeGraph.query.get_or_404(graph_id)
         
@@ -280,9 +281,17 @@ def process_data(graph_id):
     # Check if we're getting a custom selected_input_type field from our form
     selected_input_type = request.form.get('selected_input_type')
     if selected_input_type and selected_input_type in ['video', 'youtube', 'youtube_transcript', 'text', 'url']:
+        logging.info(f"Selected input type from form: {selected_input_type}")
         form.input_type.data = selected_input_type
     
+    # Log raw form data before validation
+    if request.method == 'POST':
+        logging.info(f"Form submitted with method POST")
+        form_data = {key: value for key, value in request.form.items()}
+        logging.info(f"Raw form data: {form_data}")
+    
     if form.validate_on_submit():
+        logging.info(f"Form validated successfully")
         # Create a unique directory for this input
         process_id = str(uuid.uuid4())
         input_dir = os.path.join(app.config['UPLOAD_FOLDER'], process_id)
