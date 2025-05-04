@@ -25,10 +25,16 @@ app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///knowledge_graph.db")
+database_url = os.environ.get("DATABASE_URL")
+if database_url and database_url.startswith("postgres://"):
+    # Handle Heroku-style PostgreSQL URLs
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url or "sqlite:///knowledge_graph.db"
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
+    "connect_args": {"connect_timeout": 15}  # Add a timeout to prevent long connection attempts
 }
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -62,12 +68,21 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
-with app.app_context():
-    # Import models to ensure they're registered with SQLAlchemy
-    import models
+try:
+    with app.app_context():
+        # Import models to ensure they're registered with SQLAlchemy
+        import models
+        
+        # Create all database tables
+        db.create_all()
+        
+        # Import routes after models to avoid circular imports
+        import routes
+        
+        logging.info("Database successfully initialized")
+except Exception as e:
+    logging.error(f"Error initializing database: {e}")
+    logging.warning("Application will continue without database support. Some features may be unavailable.")
     
-    # Create all database tables
-    db.create_all()
-    
-    # Import routes after models to avoid circular imports
+    # Continue by importing routes anyway
     import routes

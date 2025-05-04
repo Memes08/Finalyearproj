@@ -68,11 +68,58 @@ except ImportError:
     HAS_FLASK = False
 
 from app import app, db
-from models import User, KnowledgeGraph, InputSource
+
+# Flag to track database availability
+HAS_DATABASE = True
+
+try:
+    from models import User, KnowledgeGraph, InputSource
+except Exception as e:
+    logging.error(f"Failed to import database models: {e}")
+    HAS_DATABASE = False
+
 from forms import LoginForm, RegistrationForm, NewKnowledgeGraphForm, DataInputForm, QueryForm
-from neo4j_manager import Neo4jGraphManager
-from kg_processor import KnowledgeGraphProcessor
-from whisper_transcriber import WhisperTranscriber
+
+# Neo4j initialization
+HAS_NEO4J = False
+try:
+    from neo4j_manager import Neo4jGraphManager
+    
+    # Initialize Neo4j manager
+    neo4j_manager = Neo4jGraphManager(
+        uri=app.config['NEO4J_URI'],
+        username=app.config['NEO4J_USERNAME'],
+        password=app.config['NEO4J_PASSWORD']
+    )
+    HAS_NEO4J = True
+except Exception as e:
+    logging.error(f"Failed to initialize Neo4j: {e}")
+    neo4j_manager = None
+
+# KG Processor initialization
+try:
+    from kg_processor import KnowledgeGraphProcessor
+    
+    # Initialize knowledge graph processor
+    kg_processor = KnowledgeGraphProcessor(
+        neo4j_manager=neo4j_manager,
+        groq_api_key=app.config['GROQ_API_KEY']
+    )
+except Exception as e:
+    logging.error(f"Failed to initialize Knowledge Graph Processor: {e}")
+    kg_processor = None
+
+# Whisper transcriber initialization
+try:
+    from whisper_transcriber import WhisperTranscriber
+    
+    # Initialize Whisper transcriber
+    whisper_transcriber = WhisperTranscriber()
+    HAS_WHISPER = True
+except Exception as e:
+    logging.error(f"Failed to initialize Whisper Transcriber: {e}")
+    whisper_transcriber = None
+    HAS_WHISPER = False
 
 # Import pandas safely
 try:
@@ -82,25 +129,13 @@ except ImportError:
     app.config['HAS_PANDAS'] = False
     logging.warning("Pandas not installed. CSV processing will be limited.")
 
-# Initialize Neo4j manager
-neo4j_manager = Neo4jGraphManager(
-    uri=app.config['NEO4J_URI'],
-    username=app.config['NEO4J_USERNAME'],
-    password=app.config['NEO4J_PASSWORD']
-)
-
-# Initialize knowledge graph processor
-kg_processor = KnowledgeGraphProcessor(
-    neo4j_manager=neo4j_manager,
-    groq_api_key=app.config['GROQ_API_KEY']
-)
-
-# Initialize Whisper transcriber
-whisper_transcriber = WhisperTranscriber()
-
 # Set video processing flag based on Whisper availability
-app.config['HAS_VIDEO_PROCESSING'] = whisper_transcriber.has_whisper
-logging.info(f"Video processing with Whisper is {'available' if app.config['HAS_VIDEO_PROCESSING'] else 'unavailable'}")
+if HAS_WHISPER and whisper_transcriber:
+    app.config['HAS_VIDEO_PROCESSING'] = getattr(whisper_transcriber, 'has_whisper', False)
+    logging.info(f"Video processing with Whisper is {'available' if app.config['HAS_VIDEO_PROCESSING'] else 'unavailable'}")
+else:
+    app.config['HAS_VIDEO_PROCESSING'] = False
+    logging.warning("Whisper transcriber not available for video processing")
 
 
 @app.route('/')

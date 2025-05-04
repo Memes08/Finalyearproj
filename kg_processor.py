@@ -344,11 +344,24 @@ class KnowledgeGraphProcessor:
                 
                 Use your knowledge of the {domain} domain to make educated inferences.
                 
-                Format your response as a structured document with:
-                - Inferred video content summary
-                - Likely key entities
-                - Probable relationships
-                - Additional context
+                Format your response in the following EXACT structure:
+                
+                # INFERRED VIDEO CONTENT
+                [Provide a brief summary of what you think the video is about]
+                
+                # KEY ENTITIES
+                - Entity Name 1 [Entity Type] - brief description
+                - Entity Name 2 [Entity Type] - brief description
+                - Entity Name 3 [Entity Type] - brief description
+                [Add 5-10 entities with proper entity types like Person, Movie, Genre, etc.]
+                
+                # RELATIONSHIPS
+                - Entity Name 1 RELATIONSHIP_TYPE Entity Name 2
+                - Entity Name 3 RELATIONSHIP_TYPE Entity Name 1
+                [Add at least 5 relationships between the entities]
+                
+                # ADDITIONAL CONTEXT
+                [Any additional information that would help build the knowledge graph]
                 """
             else:
                 prompt = f"""
@@ -364,11 +377,25 @@ class KnowledgeGraphProcessor:
                 3. Identify important relationships between these entities
                 4. Add any contextual information that would be valuable for a knowledge graph
                 
-                Format your response as a well-structured document that provides:
-                - Video title (inferred from content)
-                - Video summary
-                - Key entities and relationships
-                - Any additional context
+                Format your response in the following EXACT structure:
+                
+                # VIDEO TITLE AND SUMMARY
+                [Inferred title]
+                [Summary of video content]
+                
+                # KEY ENTITIES
+                - Entity Name 1 [Entity Type] - brief description
+                - Entity Name 2 [Entity Type] - brief description
+                - Entity Name 3 [Entity Type] - brief description
+                [Add 5-10 entities with proper entity types like Person, Movie, Genre, etc.]
+                
+                # RELATIONSHIPS
+                - Entity Name 1 RELATIONSHIP_TYPE Entity Name 2
+                - Entity Name 3 RELATIONSHIP_TYPE Entity Name 1
+                [Add at least 5 relationships between the entities]
+                
+                # ADDITIONAL CONTEXT
+                [Any additional information that would help build the knowledge graph]
                 """
             
             # Call Groq API
@@ -387,20 +414,43 @@ class KnowledgeGraphProcessor:
             # Create appropriate prefix based on whether this is metadata-only or full transcript
             source_type = "VIDEO METADATA (Limited Information)" if is_metadata_only else "ORIGINAL TRANSCRIPT"
             
-            # Combine with original content for comprehensive processing
-            combined_text = f"""
-            ENHANCED YOUTUBE CONTENT (AI-processed)
-            URL: {url if url else 'Unknown'}
-            Domain: {domain}
-            Processing Method: {'Metadata-Only Analysis' if is_metadata_only else 'Full Transcript Analysis'}
-            ----------------------------------------
-            
-            {enhanced_content}
-            
-            ----------------------------------------
-            {source_type}:
-            {cleaned_text[:3000]}  # Include part of original for context
-            """
+            # For metadata-only processing, let's add explicit triples format to help with extraction
+            if is_metadata_only:
+                # Try to extract structured triples directly from the AI response
+                structured_content = self._extract_structured_triples_from_ai_response(enhanced_content, domain)
+                if structured_content:
+                    combined_text = structured_content
+                    logging.info("Successfully converted AI response to structured triples format")
+                else:
+                    # Fallback - combine with original content for comprehensive processing
+                    combined_text = f"""
+                    ENHANCED YOUTUBE CONTENT (AI-processed)
+                    URL: {url if url else 'Unknown'}
+                    Domain: {domain}
+                    Processing Method: Metadata-Only Analysis
+                    ----------------------------------------
+                    
+                    {enhanced_content}
+                    
+                    ----------------------------------------
+                    {source_type}:
+                    {cleaned_text[:3000]}
+                    """
+            else:
+                # Regular full transcript processing
+                combined_text = f"""
+                ENHANCED YOUTUBE CONTENT (AI-processed)
+                URL: {url if url else 'Unknown'}
+                Domain: {domain}
+                Processing Method: Full Transcript Analysis
+                ----------------------------------------
+                
+                {enhanced_content}
+                
+                ----------------------------------------
+                {source_type}:
+                {cleaned_text[:3000]}  # Include part of original for context
+                """
             
             logging.info("Successfully enhanced YouTube content with Groq AI")
             return combined_text
@@ -521,6 +571,209 @@ class KnowledgeGraphProcessor:
         }
         
         return domain_configs.get(domain, domain_configs["custom"])
+    
+    def _extract_structured_triples_from_ai_response(self, ai_response, domain):
+        """Extract explicit structured triples from AI response for better knowledge graph creation
+        
+        This function parses the AI response and formats it explicitly as triples for easier extraction.
+        """
+        try:
+            # Get domain-specific entity types and relations
+            domain_config = self._get_domain_prompt(domain)
+            entity_types = domain_config.get("entity_types", [])
+            relation_configs = domain_config.get("relations", [])
+            
+            # Extract potential entities from the AI response
+            potential_entities = {}
+            
+            # Extract relationships between entities
+            structured_triples = []
+            
+            # Try to identify entities in the AI response by looking for headings or lists
+            sections = ai_response.split("\n\n")
+            entities_section = None
+            relationships_section = None
+            
+            # Look for entity and relationship sections
+            for section in sections:
+                if any(heading in section.lower() for heading in ["entities", "key entities", "main entities", "likely entities"]):
+                    entities_section = section
+                elif any(heading in section.lower() for heading in ["relationships", "relations", "connections"]):
+                    relationships_section = section
+            
+            # Process entities and relationships to create explicit triples
+            if entities_section and relationships_section:
+                # Parse entities from the section
+                entities = self._parse_entities_from_section(entities_section, entity_types)
+                
+                # Parse relationships and create triples
+                triples = self._parse_relationships_from_section(relationships_section, entities)
+                
+                if triples:
+                    # Format the response as structured triple data
+                    formatted_triples = "\n".join([f"{subj} | {rel} | {obj}" for subj, rel, obj in triples])
+                    
+                    structured_content = f"""
+                    STRUCTURED KNOWLEDGE GRAPH DATA (AI-Generated)
+                    Domain: {domain}
+                    ----------------------------------------
+                    
+                    ENTITY_LIST:
+                    {", ".join(entities.keys())}
+                    
+                    TRIPLE_DATA:
+                    {formatted_triples}
+                    
+                    ----------------------------------------
+                    """
+                    
+                    return structured_content
+            
+            return None
+            
+        except Exception as e:
+            logging.error(f"Error extracting structured triples from AI response: {e}")
+            return None
+    
+    def _parse_entities_from_section(self, section, entity_types):
+        """Parse entities from a section of text"""
+        entities = {}
+        lines = section.split("\n")
+        
+        for line in lines:
+            # Skip headers and empty lines
+            if "entities" in line.lower() or not line.strip():
+                continue
+                
+            # Look for entity type markers like [Movie], [Person], etc.
+            entity_found = False
+            for entity_type in entity_types:
+                # Initialize entity_name as None for this iteration
+                entity_name = None
+                
+                # Check for type marker format [EntityType]
+                type_marker = f"[{entity_type}]"
+                if type_marker in line:
+                    # Extract the entity name - anything before the type marker
+                    parts = line.split(type_marker)
+                    if len(parts) > 0:
+                        entity_name = parts[0].strip().strip(":-").strip()
+                        
+                        # If we have a list item marker like "- ", remove it
+                        if entity_name and entity_name.startswith("- "):
+                            entity_name = entity_name[2:].strip()
+                        
+                # Check for type marker format (EntityType)
+                elif f"({entity_type})" in line:
+                    # Extract the entity name - anything before the type marker
+                    parts = line.split(f"({entity_type})")
+                    if len(parts) > 0:
+                        entity_name = parts[0].strip().strip(":-").strip()
+                        
+                        # If we have a list item marker like "- ", remove it
+                        if entity_name and entity_name.startswith("- "):
+                            entity_name = entity_name[2:].strip()
+                
+                # Store entity if it has a valid name (outside the if-elif blocks)
+                if entity_name and len(entity_name) > 1:
+                    entities[entity_name] = entity_type
+                    entity_found = True
+                    break
+                        
+            # If no entity with explicit type marker was found, try to infer from context
+            if not entity_found and "- " in line:
+                # Extract potential entity name from list item
+                entity_parts = line.split("- ")
+                if len(entity_parts) > 1:
+                    potential_entity = entity_parts[1].strip().strip(":")
+                    
+                    # Try to infer entity type from context
+                    inferred_type = None
+                    lower_line = line.lower()
+                    
+                    if any(term in lower_line for term in ["direct", "film", "movie", "cinema"]):
+                        inferred_type = "Movie"
+                    elif any(term in lower_line for term in ["person", "actor", "actress", "director", "star"]):
+                        inferred_type = "Person"
+                    elif any(term in lower_line for term in ["genre", "category", "type"]):
+                        inferred_type = "Genre"
+                        
+                    # Add entity if we could infer its type
+                    if inferred_type and potential_entity and len(potential_entity) > 1:
+                        entities[potential_entity] = inferred_type
+        
+        return entities
+    
+    def _parse_relationships_from_section(self, section, entities):
+        """Parse relationships from a section of text and create triples"""
+        triples = []
+        lines = section.split("\n")
+        
+        for line in lines:
+            # Skip headers and empty lines
+            if "relationship" in line.lower() or not line.strip():
+                continue
+                
+            # Check for common relationship patterns like "X directed Y" or "X stars in Y"
+            for entity1 in entities:
+                if entity1 in line:
+                    entity1_type = entities[entity1]
+                    
+                    # Look for relationships with other entities
+                    for entity2 in entities:
+                        if entity1 != entity2 and entity2 in line:
+                            entity2_type = entities[entity2]
+                            
+                            # Determine relationship type based on context
+                            rel_type = self._infer_relation_from_text(line, entity1_type, entity2_type)
+                            if rel_type:
+                                triples.append((entity1, rel_type, entity2))
+        
+        # If we couldn't extract relationships, make some basic ones based on entity types
+        if not triples and len(entities) >= 2:
+            entities_list = list(entities.items())
+            
+            # Create basic relationships between entities of compatible types
+            for i in range(len(entities_list)):
+                entity1, entity1_type = entities_list[i]
+                for j in range(i+1, len(entities_list)):
+                    entity2, entity2_type = entities_list[j]
+                    
+                    # Try to infer relation based on entity types
+                    rel_type = self._infer_relation(entity1_type, entity2_type, "custom")
+                    if rel_type:
+                        triples.append((entity1, rel_type, entity2))
+        
+        return triples
+    
+    def _infer_relation_from_text(self, text, entity1_type, entity2_type):
+        """Infer relationship type from text and entity types"""
+        text_lower = text.lower()
+        
+        if entity1_type == "Person" and entity2_type == "Movie":
+            if any(term in text_lower for term in ["direct", "directed", "director"]):
+                return "DIRECTED"
+            elif any(term in text_lower for term in ["act", "acted", "actor", "star", "starred", "appears", "cast"]):
+                return "ACTED_IN"
+            elif any(term in text_lower for term in ["write", "wrote", "written", "screenplay"]):
+                return "WROTE"
+                
+        elif entity1_type == "Movie" and entity2_type == "Person":
+            if any(term in text_lower for term in ["direct", "directed", "director"]):
+                return "DIRECTED_BY"
+            elif any(term in text_lower for term in ["act", "acted", "actor", "star", "starred", "appears", "cast"]):
+                return "HAS_ACTOR"
+            elif any(term in text_lower for term in ["write", "wrote", "written", "screenplay"]):
+                return "WRITTEN_BY"
+                
+        elif entity1_type == "Movie" and entity2_type == "Genre":
+            return "BELONGS_TO"
+            
+        elif entity1_type == "Genre" and entity2_type == "Movie":
+            return "CONTAINS"
+            
+        # Default relations for other entity type combinations
+        return "RELATED_TO"
     
     def _detect_crime_case_domain(self, text):
         """Detect if text appears to be about a crime case"""
