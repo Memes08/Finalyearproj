@@ -56,11 +56,11 @@
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link w-100 py-3" id="csv-tab" data-bs-toggle="pill" 
-                                            data-bs-target="#csv-content" type="button" role="tab" 
-                                            aria-controls="csv-content" aria-selected="false"
-                                            onclick="selectInputType('csv')">
-                                        <i class="fas fa-file-csv me-2"></i> CSV Upload
+                                    <button class="nav-link w-100 py-3" id="text-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#text-content" type="button" role="tab" 
+                                            aria-controls="text-content" aria-selected="false"
+                                            onclick="selectInputType('text')">
+                                        <i class="fas fa-file-alt me-2"></i> Text Upload
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
@@ -79,7 +79,7 @@
                             {{ form.input_type(id="input_type_video", value="video") }}
                             {{ form.input_type(id="input_type_youtube", value="youtube") }}
                             {{ form.input_type(id="input_type_youtube_transcript", value="youtube_transcript") }}
-                            {{ form.input_type(id="input_type_csv", value="csv") }}
+                            {{ form.input_type(id="input_type_text", value="text") }}
                             {{ form.input_type(id="input_type_url", value="url") }}
                             <input type="hidden" id="selected_input_type" name="selected_input_type" value="video">
                         </div>
@@ -178,29 +178,36 @@
                                     </div>
                                 </div>
                                 
-                                <!-- CSV Tab -->
-                                <div class="tab-pane fade" id="csv-content" role="tabpanel" aria-labelledby="csv-tab">
+                                <!-- Text Tab -->
+                                <div class="tab-pane fade" id="text-content" role="tabpanel" aria-labelledby="text-tab">
                                     <div class="text-center">
                                         <div class="mb-4">
-                                            <i class="fas fa-file-csv fa-3x text-success mb-3"></i>
-                                            <h5 class="fw-bold">Upload CSV File</h5>
+                                            <i class="fas fa-file-alt fa-3x text-success mb-3"></i>
+                                            <h5 class="fw-bold">Upload Text File or Enter Text</h5>
                                             <p class="text-muted">
-                                                Upload a CSV file containing structured data.<br>
-                                                Your file should have proper headers and entity relationships.
+                                                Upload a text file or paste text directly to be analyzed.<br>
+                                                The system will extract entities and relationships from your text.
                                             </p>
                                         </div>
                                         
                                         <div class="mb-3 w-75 mx-auto">
-                                            <div class="input-group">
-                                                {{ form.csv_file(class="form-control" + (" is-invalid" if form.csv_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
-                                                <label class="input-group-text btn btn-success" for="{{ form.csv_file.id }}">
+                                            <div class="input-group mb-3">
+                                                {{ form.text_file(class="form-control" + (" is-invalid" if form.text_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
+                                                <label class="input-group-text btn btn-success" for="{{ form.text_file.id }}">
                                                     <i class="fas fa-upload me-2"></i> Select File
                                                 </label>
-                                                <span class="form-control csv-file-label">No file selected</span>
+                                                <span class="form-control text-file-label">No file selected</span>
                                             </div>
-                                            {% if form.csv_file.errors %}
+                                            
+                                            <div class="text-center mb-2">-- OR --</div>
+                                            
+                                            <div class="form-group">
+                                                {{ form.text_content(class="form-control" + (" is-invalid" if form.text_content.errors else ""), rows="8", placeholder="Paste your text content here...") }}
+                                            </div>
+                                            
+                                            {% if form.text_file.errors %}
                                                 <div class="text-danger mt-2">
-                                                    {% for error in form.csv_file.errors %}
+                                                    {% for error in form.text_file.errors %}
                                                         {{ error }}
                                                     {% endfor %}
                                                 </div>
@@ -345,7 +352,13 @@
     // Function to update file label when file is selected
     function updateFileLabel(input) {
         if (input.files && input.files[0]) {
-            const fileType = input.id === '{{ form.video_file.id }}' ? 'video' : 'csv';
+            let fileType = 'video';
+            if (input.id === '{{ form.text_file.id }}') {
+                fileType = 'text';
+            } else if (input.id !== '{{ form.video_file.id }}') {
+                fileType = 'csv'; // Keep CSV for backward compatibility
+            }
+            
             const label = document.querySelector(`.${fileType}-file-label`);
             if (label) {
                 label.textContent = input.files[0].name;
@@ -511,8 +524,12 @@
             selectInputType('youtube');
         });
         
-        document.getElementById('csv-tab').addEventListener('click', function() {
-            selectInputType('csv');
+        document.getElementById('youtube-transcript-tab').addEventListener('click', function() {
+            selectInputType('youtube_transcript');
+        });
+        
+        document.getElementById('text-tab').addEventListener('click', function() {
+            selectInputType('text');
         });
         
         document.getElementById('url-tab').addEventListener('click', function() {
@@ -529,7 +546,8 @@
             if (activeTab) {
                 if (activeTab.id === 'video-tab') selectInputType('video');
                 else if (activeTab.id === 'youtube-tab') selectInputType('youtube');
-                else if (activeTab.id === 'csv-tab') selectInputType('csv');
+                else if (activeTab.id === 'youtube-transcript-tab') selectInputType('youtube_transcript');
+                else if (activeTab.id === 'text-tab') selectInputType('text');
                 else if (activeTab.id === 'url-tab') selectInputType('url');
             }
             
