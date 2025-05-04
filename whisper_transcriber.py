@@ -71,8 +71,45 @@ class WhisperTranscriber:
         if self.has_whisper and self.model:
             try:
                 import whisper
-                result = self.model.transcribe(audio_path)
-                return result["text"]
+                # Add logging to trace execution
+                logging.info(f"Starting Whisper transcription of {audio_path}")
+                start_time = time.time()
+                
+                # Use decode_options to improve transcription quality
+                decode_options = {
+                    "fp16": False,  # Use slower but more accurate processing
+                    "language": "en", # Set English as default language
+                    "without_timestamps": False, # Include timestamps
+                }
+                
+                # Transcribe with enhanced options
+                result = self.model.transcribe(
+                    audio_path, 
+                    verbose=True,
+                    **decode_options
+                )
+                
+                # Log completion time
+                elapsed = time.time() - start_time
+                logging.info(f"Whisper transcription completed in {elapsed:.2f} seconds")
+                
+                # Return enhanced transcription with timestamps if available
+                if "segments" in result and len(result["segments"]) > 0:
+                    # Format transcript with timestamps for better readability
+                    transcript = ""
+                    for segment in result["segments"]:
+                        start = segment.get("start", 0)
+                        end = segment.get("end", 0)
+                        text = segment.get("text", "").strip()
+                        if text:
+                            start_fmt = time.strftime('%H:%M:%S', time.gmtime(start))
+                            end_fmt = time.strftime('%H:%M:%S', time.gmtime(end))
+                            transcript += f"[{start_fmt} - {end_fmt}] {text}\n\n"
+                    return transcript
+                else:
+                    # Fall back to simple text if no segments
+                    return result["text"]
+                    
             except Exception as e:
                 logging.error(f"Whisper transcription error: {e}")
                 return self._fallback_transcribe_audio(audio_path)

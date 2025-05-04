@@ -1,0 +1,10 @@
+flask
+flask-login
+flask-sqlalchemy
+flask-wtf
+email-validator
+gunicorn
+psycopg2-binary
+werkzeug
+pandas
+openai-whisper>=20230306

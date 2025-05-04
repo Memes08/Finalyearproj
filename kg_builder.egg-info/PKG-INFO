@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: kg-builder
+Version: 0.1.0
+Summary: Knowledge Graph Builder
+Author: Developer
+Requires-Python: >=3.7
+Requires-Dist: flask
+Requires-Dist: flask-login
+Requires-Dist: flask-sqlalchemy
+Requires-Dist: flask-wtf
+Requires-Dist: email-validator
+Requires-Dist: gunicorn
+Requires-Dist: psycopg2-binary
+Requires-Dist: werkzeug
+Requires-Dist: pandas
+Requires-Dist: openai-whisper>=20230306

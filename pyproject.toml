@@ -19,7 +19,8 @@ dependencies = [
     "gunicorn",
     "psycopg2-binary",
     "werkzeug",
-    "pandas"
+    "pandas",
+    "openai-whisper>=20230306",
 ]
 
 [tool.setuptools]
