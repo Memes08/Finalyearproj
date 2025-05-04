@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Video Summary - Knowledge Graph Builder{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('process_data', graph_id=graph.id) }}" class="text-decoration-none">Process Data</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Video Summary</li>
+                </ol>
+            </nav>
+            
+            <!-- Page Header -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="mb-0">Video Content Summary</h2>
+                <span class="badge bg-info fs-5 px-3 py-2">{{ graph.name }} ({{ graph.domain }})</span>
+            </div>
+            
+            <!-- Summary Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-dark text-white py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-film me-2"></i>
+                        <h5 class="mb-0">{{ filename }}</h5>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <h5 class="mb-3 text-secondary">Video Transcription Summary</h5>
+                    
+                    <div class="p-4 border rounded bg-light mb-4" style="max-height: 400px; overflow-y: auto;">
+                        <pre class="mb-0" style="white-space: pre-wrap;">{{ transcription }}</pre>
+                    </div>
+                    
+                    <h5 class="mb-3 text-secondary">Entities & Relationships to Extract</h5>
+                    
+                    <!-- Preview of knowledge graph extraction -->
+                    <div class="table-responsive mb-4">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Source Entity</th>
+                                    <th>Relationship</th>
+                                    <th>Target Entity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for source, relation, target in preview_triples %}
+                                <tr>
+                                    <td><span class="badge bg-primary">{{ source }}</span></td>
+                                    <td><span class="badge bg-secondary">{{ relation }}</span></td>
+                                    <td><span class="badge bg-info">{{ target }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Action buttons -->
+                    <div class="d-flex justify-content-between">
+                        <form action="{{ url_for('reject_summary', graph_id=graph.id, process_id=process_id) }}" method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="fas fa-times me-2"></i> Reject & Try Again
+                            </button>
+                        </form>
+                        
+                        <form action="{{ url_for('approve_summary', graph_id=graph.id, process_id=process_id) }}" method="post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check me-2"></i> Approve & Create Knowledge Graph
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Suggestions Card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        <h5 class="mb-0">AI Suggestions</h5>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <p class="mb-3">
+                        <strong>Detected Domain:</strong> 
+                        <span class="badge bg-primary">{{ detected_domain|capitalize }}</span>
+                    </p>
+                    
+                    <p class="mb-3">
+                        <strong>Content Type:</strong> 
+                        {{ content_type }}
+                    </p>
+                    
+                    <p class="mb-0">
+                        <strong>Suggested Improvements:</strong><br>
+                        {% if improvement_tips %}
+                            <ul class="mb-0 mt-2">
+                                {% for tip in improvement_tips %}
+                                <li>{{ tip }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">No suggestions available for this content.</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
