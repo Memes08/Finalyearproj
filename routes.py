@@ -335,17 +335,58 @@ def process_data(graph_id):
                     }
                     session.modified = True
                     
-                    # Transcribe video with error handling
+                    # Transcribe video with comprehensive error handling
                     audio_path = os.path.join(input_dir, 'audio.wav')
                     try:
                         logging.info(f"Starting video transcription for {filename}")
+                        
+                        # Update progress for user
+                        session[progress_key] = {
+                            'status': 'Extracting audio from video...',
+                            'percent': 35,
+                            'step': 'audio_extraction'
+                        }
+                        session.modified = True
+                        
+                        # First try with the enhanced error handling in whisper_transcriber
                         transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
                         logging.info(f"Successfully completed transcription of {filename}")
+                        
                     except Exception as e:
                         logging.error(f"Error during video transcription: {str(e)}")
-                        # Fall back to metadata extraction
-                        transcription = whisper_transcriber._extract_video_metadata(video_path)
-                        logging.info("Used fallback metadata extraction for transcription")
+                        
+                        # Update progress to show fallback
+                        session[progress_key] = {
+                            'status': 'Transcription error, using fallback extraction...',
+                            'percent': 40,
+                            'step': 'fallback'
+                        }
+                        session.modified = True
+                        
+                        # Try basic metadata extraction directly
+                        try:
+                            logging.info("Attempting metadata extraction as fallback")
+                            transcription = whisper_transcriber._extract_video_metadata(video_path)
+                            logging.info("Used fallback metadata extraction for transcription")
+                        except Exception as inner_e:
+                            logging.error(f"Even fallback extraction failed: {str(inner_e)}")
+                            # Most basic fallback
+                            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                            base_filename = os.path.splitext(filename)[0]
+                            title = base_filename.replace('_', ' ').replace('-', ' ')
+                            transcription = f"""
+                                Basic Video Information (All Processing Failed)
+                                Timestamp: {timestamp}
+                                File: {filename}
+                                Suspected Title: {title}
+                                
+                                Unable to extract detailed content from this video.
+                                The system encountered errors during processing.
+                                
+                                Basic entities detected from filename: 
+                                {', '.join([word.capitalize() for word in re.findall(r'\b\w{3,}\b', title)])}
+                            """
+                            logging.warning("Using minimal fallback transcription from filename only")
                     
                     # Update progress - showing summary for approval
                     session[progress_key] = {

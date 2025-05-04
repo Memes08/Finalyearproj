@@ -114,49 +114,97 @@ class WhisperTranscriber:
         if self.has_whisper and self.model:
             try:
                 import whisper
-                # Add logging to trace execution
-                logging.info(f"Starting Whisper transcription of {audio_path}")
+                
+                # Verify audio file
+                if not os.path.exists(audio_path):
+                    logging.error(f"Audio file not found: {audio_path}")
+                    return self._fallback_transcribe_audio(audio_path)
+                    
+                file_size = os.path.getsize(audio_path)
+                if file_size == 0:
+                    logging.error(f"Audio file is empty: {audio_path}")
+                    return self._fallback_transcribe_audio(audio_path)
+                
+                logging.info(f"Starting Whisper transcription of {audio_path} (size: {file_size/1024:.2f} KB)")
                 start_time = time.time()
                 
-                # Use decode_options to improve transcription quality
-                decode_options = {
-                    "fp16": False,  # Use slower but more accurate processing
-                    "language": "en", # Set English as default language
-                    "without_timestamps": False, # Include timestamps
-                }
-                
-                # Transcribe with enhanced options
-                result = self.model.transcribe(
-                    audio_path, 
-                    verbose=True,
-                    **decode_options
-                )
-                
-                # Log completion time
-                elapsed = time.time() - start_time
-                logging.info(f"Whisper transcription completed in {elapsed:.2f} seconds")
-                
-                # Return enhanced transcription with timestamps if available
-                if "segments" in result and len(result["segments"]) > 0:
-                    # Format transcript with timestamps for better readability
-                    transcript = ""
-                    for segment in result["segments"]:
-                        start = segment.get("start", 0)
-                        end = segment.get("end", 0)
-                        text = segment.get("text", "").strip()
-                        if text:
-                            start_fmt = time.strftime('%H:%M:%S', time.gmtime(start))
-                            end_fmt = time.strftime('%H:%M:%S', time.gmtime(end))
-                            transcript += f"[{start_fmt} - {end_fmt}] {text}\n\n"
-                    return transcript
-                else:
-                    # Fall back to simple text if no segments
-                    return result["text"]
+                # Load the audio file directly using custom code to prevent Whisper internal crashes
+                try:
+                    # First try direct transcription with simpler options
+                    logging.info("Attempting transcription with safer options...")
+                    decode_options = {
+                        "fp16": False,
+                        "language": "en",
+                        "without_timestamps": True,  # Disable timestamps to reduce complexity
+                    }
+                    
+                    # Use a try-except within the main try block to catch audio loading errors
+                    try:
+                        result = self.model.transcribe(
+                            audio_path, 
+                            verbose=False,  # Reduce log spam
+                            **decode_options
+                        )
+                        
+                        # Log completion time
+                        elapsed = time.time() - start_time
+                        logging.info(f"Whisper transcription completed in {elapsed:.2f} seconds")
+                        
+                        # Basic text output - don't try to process timestamps which might cause errors
+                        transcript = result["text"]
+                        return transcript
+                        
+                    except Exception as inner_e:
+                        logging.error(f"Error in Whisper transcription: {str(inner_e)}")
+                        raise  # Re-raise to the outer handler
+                        
+                except Exception as load_error:
+                    logging.error(f"Audio loading/processing error: {str(load_error)}")
+                    # Try one more time with a different approach - extract raw audio features
+                    try:
+                        import numpy as np
+                        
+                        logging.info("Trying subprocess to convert audio to a simpler format...")
+                        
+                        # Convert to a simpler format first
+                        temp_audio = audio_path + ".converted.wav"
+                        cmd = [
+                            "ffmpeg", "-y", "-i", audio_path, 
+                            "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", 
+                            "-f", "wav", temp_audio
+                        ]
+                        subprocess.run(cmd, check=True, capture_output=True, timeout=30)
+                        
+                        if os.path.exists(temp_audio) and os.path.getsize(temp_audio) > 0:
+                            logging.info(f"Successfully converted audio to simpler format. Trying transcription again...")
+                            
+                            # Try once more with the converted file
+                            result = self.model.transcribe(
+                                temp_audio,
+                                verbose=False, 
+                                fp16=False,
+                                language="en"
+                            )
+                            
+                            # Cleanup temp file
+                            try:
+                                os.remove(temp_audio)
+                            except:
+                                pass
+                                
+                            return result["text"]
+                        else:
+                            raise Exception("Failed to convert audio to simpler format")
+                            
+                    except Exception as final_e:
+                        logging.error(f"Final transcription attempt failed: {str(final_e)}")
+                        raise  # Let the outer handler deal with it
                     
             except Exception as e:
-                logging.error(f"Whisper transcription error: {e}")
+                logging.error(f"All Whisper transcription methods failed: {str(e)}")
                 return self._fallback_transcribe_audio(audio_path)
         else:
+            logging.warning("Whisper not available for transcription. Using fallback.")
             return self._fallback_transcribe_audio(audio_path)
     
     def _fallback_transcribe_audio(self, audio_path):
