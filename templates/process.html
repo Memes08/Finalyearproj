@@ -132,7 +132,7 @@
                                                 placeholder="Video Title (Optional)") }}
                                             
                                             <!-- Transcript textarea -->
-                                            {{ form.youtube_transcript(class="form-control form-control-lg" + (" is-invalid" if form.youtube_transcript.errors else ""), 
+                                            {{ form.youtube_transcript(id="youtube_transcript", class="form-control form-control-lg" + (" is-invalid" if form.youtube_transcript.errors else ""), 
                                                 placeholder="Paste the YouTube transcript here...", rows="10") }}
                                                 
                                             {% if form.youtube_transcript.errors %}
@@ -513,9 +513,24 @@
             // Get the active tab
             const activeTab = document.querySelector('.nav-link.active');
             if (activeTab) {
+                console.log("Active tab ID:", activeTab.id);
                 if (activeTab.id === 'video-tab') selectInputType('video');
                 else if (activeTab.id === 'youtube-tab') selectInputType('youtube');
-                else if (activeTab.id === 'youtube-transcript-tab') selectInputType('youtube_transcript');
+                else if (activeTab.id === 'youtube-transcript-tab') {
+                    console.log("Setting YouTube transcript input type");
+                    selectInputType('youtube_transcript');
+                    
+                    // Double check that the radio button is properly set
+                    const ytTranscriptRadio = document.getElementById('input_type_youtube_transcript');
+                    if (ytTranscriptRadio) {
+                        ytTranscriptRadio.checked = true;
+                        console.log("YouTube transcript radio checked:", ytTranscriptRadio.checked);
+                    }
+                    
+                    // Add YouTube transcript data to form if missing
+                    const ytTranscriptData = document.getElementById('youtube_transcript').value;
+                    console.log("YouTube transcript data length:", ytTranscriptData.length);
+                }
                 else if (activeTab.id === 'text-tab') selectInputType('text');
                 else if (activeTab.id === 'url-tab') selectInputType('url');
             }
