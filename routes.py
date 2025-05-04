@@ -55,6 +55,10 @@ kg_processor = KnowledgeGraphProcessor(
 # Initialize Whisper transcriber
 whisper_transcriber = WhisperTranscriber()
 
+# Set video processing flag based on Whisper availability
+app.config['HAS_VIDEO_PROCESSING'] = whisper_transcriber.has_whisper
+logging.info(f"Video processing with Whisper is {'available' if app.config['HAS_VIDEO_PROCESSING'] else 'unavailable'}")
+
 
 @app.route('/')
 def index():
