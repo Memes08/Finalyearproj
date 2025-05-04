@@ -217,6 +217,8 @@ def process_data(graph_id):
         logging.info(f"Form data - input_type: {form.input_type.data}")
         if form.input_type.data == 'url':
             logging.info(f"GitHub URL: {form.github_url.data}")
+        elif form.input_type.data == 'youtube':
+            logging.info(f"YouTube URL: {form.youtube_url.data}")
         
         # Create progress tracking entry with a consistent ID format
         # This must match the format used in the JavaScript to fetch progress correctly
@@ -238,7 +240,137 @@ def process_data(graph_id):
         )
         
         try:
-            if form.input_type.data == 'video':
+            if form.input_type.data == 'youtube':
+                # Process YouTube URL
+                youtube_url = form.youtube_url.data
+                
+                # Update progress
+                session[progress_key] = {
+                    'status': 'Processing YouTube video link...',
+                    'percent': 15,
+                    'step': 'download'
+                }
+                session.modified = True
+                
+                # Store the URL in the input source
+                input_source.url = youtube_url
+                
+                # Create Whisper transcriber for processing
+                whisper_transcriber = WhisperTranscriber()
+                
+                if not whisper_transcriber.has_pytube:
+                    flash('YouTube processing is not available. PyTube is not installed.', 'danger')
+                    return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
+                
+                # Update progress
+                session[progress_key] = {
+                    'status': 'Fetching YouTube video transcript...',
+                    'percent': 30,
+                    'step': 'transcription'
+                }
+                session.modified = True
+                
+                try:
+                    # Get transcript from YouTube (will try captions first, then download and transcribe)
+                    youtube_transcript = whisper_transcriber.get_youtube_transcript(youtube_url, input_dir)
+                    
+                    # Update progress
+                    session[progress_key] = {
+                        'status': 'Transcript obtained, processing knowledge graph...',
+                        'percent': 60,
+                        'step': 'processing'
+                    }
+                    session.modified = True
+                    
+                    # Save transcript to file for the summary page
+                    transcription_path = os.path.join(input_dir, 'transcription.txt')
+                    with open(transcription_path, 'w') as f:
+                        f.write(youtube_transcript)
+                    
+                    # Use the processor to extract entities and relationships
+                    processor = KnowledgeGraphProcessor(neo4j_manager)
+                    triples = processor.extract_triples_from_text(youtube_transcript, domain=graph.domain)
+                    
+                    # If we got empty results, try a fallback approach
+                    if not triples or len(triples) < 3:
+                        logging.warning("Minimal triples detected, using fallback extraction")
+                        
+                        # Try extracting with patterns
+                        triples = processor.extract_entities_with_patterns(youtube_transcript, domain=graph.domain)
+                        
+                        # If still empty, create some basic triples from the URL
+                        if not triples or len(triples) < 3:
+                            # Extract video ID from URL
+                            video_id = None
+                            if 'youtube.com/watch?v=' in youtube_url:
+                                video_id = youtube_url.split('youtube.com/watch?v=')[1].split('&')[0]
+                            elif 'youtu.be/' in youtube_url:
+                                video_id = youtube_url.split('youtu.be/')[1].split('?')[0]
+                            
+                            if video_id:
+                                triples = [
+                                    (f"youtube_{video_id}", "type", "Video"),
+                                    (f"youtube_{video_id}", "source", "YouTube"),
+                                    (f"youtube_{video_id}", "url", youtube_url),
+                                    (f"youtube_{video_id}", "youtube_id", video_id),
+                                    (f"youtube_{video_id}", "processed_date", datetime.now().strftime('%Y-%m-%d')),
+                                    (f"youtube_{video_id}", "knowledge_graph", f"{graph.name}")
+                                ]
+                    
+                    # Save preview triples for later user approval
+                    preview_path = os.path.join(input_dir, 'preview_triples.json')
+                    with open(preview_path, 'w') as f:
+                        json.dump(triples, f)
+                    
+                    # Save the URL for the summary page
+                    url_path = os.path.join(input_dir, 'youtube_url.txt')
+                    with open(url_path, 'w') as f:
+                        f.write(youtube_url)
+                    
+                    # Save metadata for summary page
+                    summary_metadata = {
+                        "detected_domain": graph.domain,
+                        "content_type": "YouTube Video",
+                        "entity_count": len(set([t[0] for t in triples] + [t[2] for t in triples if not isinstance(t[2], (int, float))])),
+                        "relation_count": len(triples),
+                        "processing_method": "YouTube API + Whisper Transcription"
+                    }
+                    metadata_path = os.path.join(input_dir, 'summary_metadata.json')
+                    with open(metadata_path, 'w') as f:
+                        json.dump(summary_metadata, f)
+                    
+                    # Update progress - ready for approval
+                    session[progress_key] = {
+                        'status': 'Ready for approval...',
+                        'percent': 90,
+                        'step': 'approval'
+                    }
+                    session.modified = True
+                    
+                    # Update input source details
+                    input_source.entity_count = summary_metadata["entity_count"]
+                    input_source.relationship_count = summary_metadata["relation_count"]
+                    input_source.processed = False
+                    
+                    # Save input source
+                    db.session.add(input_source)
+                    db.session.commit()
+                    
+                    # Redirect to the summary approval page like the main flow
+                    return redirect(url_for('video_summary', graph_id=graph.id, process_id=process_id))
+                
+                except Exception as e:
+                    logging.error(f"Error processing YouTube video: {str(e)}")
+                    session[progress_key] = {
+                        'status': f'Error processing YouTube video: {str(e)}',
+                        'percent': 0,
+                        'step': 'error'
+                    }
+                    session.modified = True
+                    flash(f'Error processing YouTube video: {str(e)}', 'danger')
+                    return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
+                
+            elif form.input_type.data == 'video':
                 # Check if video processing is available
                 if not app.config.get('HAS_VIDEO_PROCESSING', False):
                     # Instead of rejecting the upload, provide a fallback
