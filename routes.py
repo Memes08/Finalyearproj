@@ -17,7 +17,7 @@ except ImportError:
 
 # Import Flask modules
 try:
-    from flask import render_template, redirect, url_for, flash, request, jsonify, send_file, session
+    from flask import render_template, redirect, url_for, flash, request, jsonify, send_file, session, abort
     from flask_login import login_user, logout_user, current_user, login_required
     HAS_FLASK = True
 except ImportError:
@@ -590,6 +590,198 @@ def process_data(graph_id):
     current_process_id = session.get('current_process_id', '')
     return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
 
+
+@app.route('/graph/<int:graph_id>/video-summary/<string:process_id>', methods=['GET'])
+@login_required
+def video_summary(graph_id, process_id):
+    """Show video transcription summary and allow user to approve/reject"""
+    graph = KnowledgeGraph.query.get_or_404(graph_id)
+    
+    # Security check - ensure graph belongs to current user
+    if graph.user_id != current_user.id:
+        flash('You do not have permission to access this graph', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    # Use the process_id to get the working directory
+    input_dir = os.path.join('uploads', str(current_user.id), 'graphs', str(graph_id), process_id)
+    
+    # Check if directory exists
+    if not os.path.exists(input_dir):
+        flash('Process data not found', 'danger')
+        return redirect(url_for('process_data', graph_id=graph_id))
+    
+    # Get the transcription
+    transcription_path = os.path.join(input_dir, 'transcription.txt')
+    if os.path.exists(transcription_path):
+        with open(transcription_path, 'r') as f:
+            transcription = f.read()
+    else:
+        transcription = "Transcription not available"
+    
+    # Get the preview triples
+    preview_path = os.path.join(input_dir, 'preview_triples.json')
+    if os.path.exists(preview_path):
+        with open(preview_path, 'r') as f:
+            preview_triples = json.load(f)
+    else:
+        preview_triples = []
+    
+    # Get the metadata
+    metadata_path = os.path.join(input_dir, 'summary_metadata.json')
+    if os.path.exists(metadata_path):
+        with open(metadata_path, 'r') as f:
+            metadata = json.load(f)
+    else:
+        metadata = {
+            "detected_domain": graph.domain,
+            "content_type": "Unknown content type",
+            "improvement_tips": ["Add more descriptive filenames"]
+        }
+    
+    # Get the filename
+    filename_path = os.path.join(input_dir, 'filename.txt')
+    if os.path.exists(filename_path):
+        with open(filename_path, 'r') as f:
+            filename = f.read()
+    else:
+        filename = "Unknown file"
+    
+    # Prepare data for display
+    entity_types = {}
+    relationship_types = {}
+    
+    # Count entity and relationship types
+    for triple in preview_triples:
+        # Subject entity
+        entity_type = triple[0].split('_')[0] if '_' in triple[0] else 'Unknown'
+        entity_types[entity_type] = entity_types.get(entity_type, 0) + 1
+        
+        # Object entity (if not a literal)
+        if not triple[2].startswith('"') and not triple[2].isdigit():
+            entity_type = triple[2].split('_')[0] if '_' in triple[2] else 'Unknown'
+            entity_types[entity_type] = entity_types.get(entity_type, 0) + 1
+        
+        # Relationship type
+        rel_type = triple[1]
+        relationship_types[rel_type] = relationship_types.get(rel_type, 0) + 1
+    
+    return render_template(
+        'video_summary.html', 
+        graph=graph,
+        process_id=process_id,
+        transcription=transcription,
+        preview_triples=preview_triples,
+        entity_types=entity_types,
+        relationship_types=relationship_types,
+        metadata=metadata,
+        filename=filename,
+        total_entities=len(set([t[0] for t in preview_triples] + [t[2] for t in preview_triples if not t[2].startswith('"') and not t[2].isdigit()])),
+        total_relationships=len(preview_triples)
+    )
+
+@app.route('/graph/<int:graph_id>/approve-video/<string:process_id>', methods=['POST'])
+@login_required
+def approve_video(graph_id, process_id):
+    """Approve video processing and create knowledge graph"""
+    graph = KnowledgeGraph.query.get_or_404(graph_id)
+    
+    # Security check - ensure graph belongs to current user
+    if graph.user_id != current_user.id:
+        flash('You do not have permission to access this graph', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    # Get the processing directory
+    input_dir = os.path.join('uploads', str(current_user.id), 'graphs', str(graph_id), process_id)
+    
+    # Check if directory exists
+    if not os.path.exists(input_dir):
+        flash('Process data not found', 'danger')
+        return redirect(url_for('process_data', graph_id=graph_id))
+    
+    # Load the preview triples
+    preview_path = os.path.join(input_dir, 'preview_triples.json')
+    if not os.path.exists(preview_path):
+        flash('Preview data not found', 'danger')
+        return redirect(url_for('video_summary', graph_id=graph_id, process_id=process_id))
+    
+    with open(preview_path, 'r') as f:
+        triples = json.load(f)
+    
+    # Initialize the progress key - match the format from process_data
+    process_key = f"{graph_id}_{process_id}"
+    progress_key = f"progress_{process_key}"
+    
+    # Update progress - 80%
+    session[progress_key] = {
+        'status': 'Importing approved data to graph database...',
+        'percent': 80,
+        'step': 'database'
+    }
+    session.modified = True
+    
+    # Get input source
+    input_source = InputSource.query.filter_by(
+        graph_id=graph_id, 
+        source_type='video'
+    ).order_by(InputSource.created_at.desc()).first()
+    
+    if input_source:
+        # Update input source details
+        input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples if not t[2].startswith('"') and not t[2].isdigit()]))
+        input_source.relationship_count = len(triples)
+        input_source.processed = True
+        db.session.commit()
+    
+    # Save as CSV for Neo4j
+    csv_path = os.path.join(input_dir, 'approved_triples.csv')
+    kg_processor.save_triples_to_csv(triples, csv_path)
+    
+    # Insert into Neo4j
+    neo4j_manager.import_triples(triples, graph.id)
+    
+    # Update progress - 100%
+    session[progress_key] = {
+        'status': 'Processing complete!',
+        'percent': 100,
+        'step': 'complete'
+    }
+    session.modified = True
+    
+    flash('Video data has been approved and added to your knowledge graph', 'success')
+    return redirect(url_for('visualization', graph_id=graph_id))
+
+@app.route('/graph/<int:graph_id>/reject-video/<string:process_id>', methods=['POST'])
+@login_required
+def reject_video(graph_id, process_id):
+    """Reject video processing and return to data input"""
+    graph = KnowledgeGraph.query.get_or_404(graph_id)
+    
+    # Security check - ensure graph belongs to current user
+    if graph.user_id != current_user.id:
+        flash('You do not have permission to access this graph', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    # Get the processing directory
+    input_dir = os.path.join('uploads', str(current_user.id), 'graphs', str(graph_id), process_id)
+    
+    # Delete the input source record
+    input_source = InputSource.query.filter_by(
+        graph_id=graph_id, 
+        source_type='video'
+    ).order_by(InputSource.created_at.desc()).first()
+    
+    if input_source:
+        db.session.delete(input_source)
+        db.session.commit()
+    
+    # Reset progress - match the format from process_data
+    process_key = f"{graph_id}_{process_id}"
+    progress_key = f"progress_{process_key}"
+    if progress_key in session:
+        session.pop(progress_key)
+    
+    flash('Video processing has been rejected. Please try with a different input source or settings.', 'info')
+    return redirect(url_for('process_data', graph_id=graph_id))
 
 @app.route('/graph/<int:graph_id>/visualize')
 @login_required
