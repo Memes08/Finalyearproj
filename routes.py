@@ -889,8 +889,12 @@ def process_data(graph_id):
                 
             elif form.input_type.data == 'youtube_transcript':
                 # Process YouTube transcript directly
+                logging.info("Processing YouTube transcript input type")
                 youtube_transcript = form.youtube_transcript.data
                 youtube_title = form.youtube_title.data or "YouTube Video Transcript"
+                
+                logging.info(f"YouTube transcript length: {len(youtube_transcript) if youtube_transcript else 0} characters")
+                logging.info(f"YouTube title: {youtube_title}")
                 
                 # Update progress
                 session[progress_key] = {
@@ -924,7 +928,13 @@ def process_data(graph_id):
                 session.modified = True
                 
                 # Process the transcript
-                triples = processor.extract_triples_from_text(youtube_transcript, domain=graph.domain)
+                try:
+                    logging.info(f"Processing transcript with domain: {graph.domain}")
+                    triples = processor.extract_triples_from_text(youtube_transcript, domain=graph.domain)
+                    logging.info(f"Extracted {len(triples)} triples from text")
+                except Exception as e:
+                    logging.error(f"Error extracting triples from text: {str(e)}")
+                    triples = []
                 
                 # If we got empty results, try a fallback approach
                 if not triples or len(triples) < 3:
