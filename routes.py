@@ -294,6 +294,12 @@ def process_data(graph_id):
         logging.info(f"YouTube transcript data: {bool(request.form.get('youtube_transcript', ''))}")
         logging.info(f"Selected input type: {request.form.get('selected_input_type', 'not set')}")
         logging.info(f"Input type radio: {request.form.get('input_type', 'not set')}")
+        logging.info(f"GitHub URL data: {request.form.get('github_url', 'not set')}")
+        
+        # Log file data if any
+        for key, file in request.files.items():
+            if file.filename:
+                logging.info(f"File uploaded: {key} = {file.filename}")
     
     # Check form validation
     is_valid = form.validate_on_submit()

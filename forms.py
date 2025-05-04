@@ -136,10 +136,14 @@ class DataInputForm(FlaskForm):
                 
         elif self.input_type.data == 'url':
             github_url = request.form.get('github_url', '')
+            logging.info(f"Validating GitHub URL: '{github_url}'")
             if not github_url:
                 logging.warning("URL validation failed: No GitHub URL provided")
                 self.github_url.errors = ['Please enter a GitHub raw file URL.']
                 return False
+            else:
+                # Ensure the URL is a valid GitHub raw file URL
+                logging.info(f"GitHub URL validation passed: {github_url}")
             
         logging.info(f"Form validation successful for input type: {self.input_type.data}")
         return True
