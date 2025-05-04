@@ -239,7 +239,7 @@ def process_data(graph_id):
     
     # Check if we're getting a custom selected_input_type field from our form
     selected_input_type = request.form.get('selected_input_type')
-    if selected_input_type and selected_input_type in ['video', 'youtube', 'youtube_transcript', 'csv', 'url']:
+    if selected_input_type and selected_input_type in ['video', 'youtube', 'youtube_transcript', 'text', 'url']:
         form.input_type.data = selected_input_type
     
     if form.validate_on_submit():
@@ -254,6 +254,12 @@ def process_data(graph_id):
             logging.info(f"GitHub URL: {form.github_url.data}")
         elif form.input_type.data == 'youtube':
             logging.info(f"YouTube URL: {form.youtube_url.data}")
+        elif form.input_type.data == 'text':
+            if form.text_file.data:
+                logging.info(f"Text file upload: {form.text_file.data.filename}")
+            elif form.text_content.data:
+                text_preview = form.text_content.data[:50] + "..." if len(form.text_content.data) > 50 else form.text_content.data
+                logging.info(f"Direct text input (preview): {text_preview}")
         
         # Create progress tracking entry with a consistent ID format
         # This must match the format used in the JavaScript to fetch progress correctly
