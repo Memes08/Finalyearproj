@@ -1267,8 +1267,18 @@ def process_data(graph_id):
                     }
                     session.modified = True
                     
-                    # First try using the standard kg_processor
-                    triples = kg_processor.process_csv(csv_path, domain=graph.domain)
+                    # Get the Groq API key from environment variables or app config
+                    groq_api_key = os.environ.get('XAI_API_KEY', app.config.get('GROQ_API_KEY'))
+                    logging.info(f"Using Groq API - key available: {bool(groq_api_key)}")
+                    
+                    # Initialize the processor with Groq
+                    processor = KnowledgeGraphProcessor(
+                        neo4j_manager=neo4j_manager,
+                        groq_api_key=groq_api_key
+                    )
+                    
+                    # Process the CSV file
+                    triples = processor.process_csv(csv_path, domain=graph.domain)
                 except Exception as e:
                     logging.warning(f"Error processing CSV with kg_processor: {e}")
                     logging.info("Attempting to process CSV with basic fallback processor")
@@ -1366,8 +1376,18 @@ def process_data(graph_id):
                         }
                         session.modified = True
                         
+                        # Get the Groq API key from environment variables or app config
+                        groq_api_key = os.environ.get('XAI_API_KEY', app.config.get('GROQ_API_KEY'))
+                        logging.info(f"Using Groq API - key available: {bool(groq_api_key)}")
+                        
+                        # Initialize the processor with Groq
+                        processor = KnowledgeGraphProcessor(
+                            neo4j_manager=neo4j_manager,
+                            groq_api_key=groq_api_key
+                        )
+                        
                         # Extract triples from text
-                        triples = kg_processor.extract_triples_from_text(text_content, domain=graph.domain)
+                        triples = processor.extract_triples_from_text(text_content, domain=graph.domain)
                         
                         # If we didn't get enough triples, try alternative extraction methods
                         if not triples or len(triples) < 3:
@@ -1378,8 +1398,8 @@ def process_data(graph_id):
                             }
                             session.modified = True
                             
-                            # Try with entity patterns
-                            pattern_entities = kg_processor.extract_entities_with_patterns(text_content, domain=graph.domain)
+                            # Try with entity patterns using the initialized processor
+                            pattern_entities = processor.extract_entities_with_patterns(text_content, domain=graph.domain)
                             if pattern_entities:
                                 logging.info(f"Extracted entities with pattern matching")
                                 
@@ -1452,8 +1472,18 @@ def process_data(graph_id):
                         }
                         session.modified = True
                         
-                        # First try using the standard kg_processor
-                        triples = kg_processor.process_csv(file_path, domain=graph.domain)
+                        # Get the Groq API key from environment variables or app config
+                        groq_api_key = os.environ.get('XAI_API_KEY', app.config.get('GROQ_API_KEY'))
+                        logging.info(f"Using Groq API - key available: {bool(groq_api_key)}")
+                        
+                        # Initialize the processor with Groq
+                        processor = KnowledgeGraphProcessor(
+                            neo4j_manager=neo4j_manager,
+                            groq_api_key=groq_api_key
+                        )
+                        
+                        # Process the CSV file
+                        triples = processor.process_csv(file_path, domain=graph.domain)
                     except Exception as e:
                         logging.warning(f"Error processing CSV with kg_processor: {e}")
                         logging.info("Attempting to process CSV with basic fallback processor")
@@ -1513,8 +1543,18 @@ def process_data(graph_id):
                         }
                         session.modified = True
                         
+                        # Get the Groq API key from environment variables or app config
+                        groq_api_key = os.environ.get('XAI_API_KEY', app.config.get('GROQ_API_KEY'))
+                        logging.info(f"Using Groq API - key available: {bool(groq_api_key)}")
+                        
+                        # Initialize the processor with Groq
+                        processor = KnowledgeGraphProcessor(
+                            neo4j_manager=neo4j_manager,
+                            groq_api_key=groq_api_key
+                        )
+                        
                         # Extract triples from text
-                        triples = kg_processor.extract_triples_from_text(text_content, domain=graph.domain)
+                        triples = processor.extract_triples_from_text(text_content, domain=graph.domain)
                     except Exception as e:
                         logging.error(f"Error processing unknown file type: {e}")
                         flash(f"Could not process file. Please check the format and try again.", 'danger')
