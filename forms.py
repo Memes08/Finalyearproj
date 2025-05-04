@@ -52,7 +52,7 @@ class DataInputForm(FlaskForm):
         ('youtube_transcript', 'YouTube Transcript'),
         ('text', 'Text File Upload'),
         ('url', 'GitHub Raw File URL')
-    ], validators=[DataRequired()])
+    ], default='url', validators=[DataRequired()])
     
     video_file = FileField('Upload Video', validators=[
         Optional(),

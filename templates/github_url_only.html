@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Process GitHub URL - Knowledge Graph Builder{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Process GitHub URL</li>
+                </ol>
+            </nav>
+            
+            <!-- Page Header -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="mb-0">Add CSV Data to Graph</h2>
+                <span class="badge bg-info fs-5 px-3 py-2">{{ graph.name }} ({{ graph.domain }})</span>
+            </div>
+            
+            <!-- Main Content Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('process_data', graph_id=graph.id) }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Hidden input type field -->
+                        <input type="hidden" name="input_type" value="url">
+                        <input type="hidden" name="selected_input_type" value="url">
+                        
+                        <!-- GitHub URL Input -->
+                        <div class="mb-5">
+                            <h5 class="mb-3 text-secondary">Enter GitHub CSV URL</h5>
+                            
+                            <div class="p-4 border rounded bg-light">
+                                <div class="text-center">
+                                    <div class="mb-4">
+                                        <i class="fab fa-github fa-3x text-info mb-3"></i>
+                                        <h5 class="fw-bold">Raw CSV File URL</h5>
+                                        <p class="text-muted">
+                                            Provide a URL to a raw CSV file for analysis.<br>
+                                            Example: <span class="text-primary">https://raw.githubusercontent.com/tomasonjo/blog-datasets/main/movies/movies_small.csv</span>
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="w-75 mx-auto">
+                                        <input type="text" id="github_url" name="github_url" class="form-control form-control-lg"
+                                            placeholder="https://raw.githubusercontent.com/tomasonjo/blog-datasets/main/movies/movies_small.csv"
+                                            value="https://raw.githubusercontent.com/tomasonjo/blog-datasets/main/movies/movies_small.csv">
+                                        {% if form.github_url.errors %}
+                                            <div class="text-danger mt-2">
+                                                {% for error in form.github_url.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Processing Information -->
+                        <div class="mb-5">
+                            <h5 class="mb-3 text-secondary">Processing Details</h5>
+                            
+                            <div class="p-4 border rounded bg-dark text-light">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="me-3">
+                                        <i class="fas fa-project-diagram fa-2x text-info"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-1">Knowledge Graph Processing</h5>
+                                        <p class="mb-0">
+                                            Data will be analyzed to extract entities and relationships for the "{{ graph.domain }}" domain.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex ps-5 mb-2">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <div>The extracted relationships will be added to your knowledge graph.</div>
+                                </div>
+                                
+                                <div class="d-flex ps-5">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <div>You can visualize and query the graph after processing is complete.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Indicator (hidden by default) -->
+                        <div id="progressContainer" class="mb-5 d-none">
+                            <h5 class="mb-3 text-secondary">Processing Progress</h5>
+                            
+                            <div class="p-4 border rounded bg-light">
+                                <!-- Progress bar with color coding based on status -->
+                                <div class="progress mb-3" style="height: 25px;">
+                                    <div id="progressBar" 
+                                         class="progress-bar progress-bar-striped progress-bar-animated" 
+                                         role="progressbar" 
+                                         aria-valuenow="0" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100" 
+                                         style="width: 0%"></div>
+                                </div>
+                                
+                                <!-- Status text -->
+                                <div class="d-flex align-items-center">
+                                    <div id="progressSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div id="progressStatus" class="fw-bold">Initializing...</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" id="process-csv-btn" class="btn btn-primary btn-lg py-3">
+                                <i class="fas fa-project-diagram me-2"></i>Process GitHub CSV
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to update progress tracking
+    function updateProgressTracking() {
+        // Hide submit button and form inputs
+        document.getElementById('process-csv-btn').style.display = 'none';
+        document.getElementById('github_url').readOnly = true;
+        
+        // Show progress container
+        document.getElementById('progressContainer').classList.remove('d-none');
+    }
+    
+    // Set up the form submission
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // When the form is submitted, show the progress indicator
+                setTimeout(updateProgressTracking, 500);
+            });
+        }
+    });
+</script>
+{% endblock %}
