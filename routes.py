@@ -313,16 +313,38 @@ def process_data(graph_id):
         
         # Log the form data to debug
         logging.info(f"Form data - input_type: {form.input_type.data}")
+        
         if form.input_type.data == 'url':
             logging.info(f"GitHub URL: {form.github_url.data}")
+            
         elif form.input_type.data == 'youtube':
             logging.info(f"YouTube URL: {form.youtube_url.data}")
+            
+        elif form.input_type.data == 'youtube_transcript':
+            transcript_text = form.youtube_transcript.data
+            logging.info(f"YouTube transcript data length: {len(transcript_text) if transcript_text else 0}")
+            
+            # Save the transcript to a file
+            transcript_path = os.path.join(input_dir, 'youtube_transcript.txt')
+            with open(transcript_path, 'w', encoding='utf-8') as f:
+                f.write(transcript_text)
+            logging.info(f"Saved YouTube transcript to {transcript_path}")
+            
         elif form.input_type.data == 'text':
             if form.text_file.data:
-                logging.info(f"Text file upload: {form.text_file.data.filename}")
+                filename = secure_filename(form.text_file.data.filename)
+                file_path = os.path.join(input_dir, filename)
+                form.text_file.data.save(file_path)
+                logging.info(f"Text file saved to: {file_path}")
             elif form.text_content.data:
                 text_preview = form.text_content.data[:50] + "..." if len(form.text_content.data) > 50 else form.text_content.data
                 logging.info(f"Direct text input (preview): {text_preview}")
+                
+                # Save direct text input to a file
+                text_path = os.path.join(input_dir, 'text_input.txt')
+                with open(text_path, 'w', encoding='utf-8') as f:
+                    f.write(form.text_content.data)
+                logging.info(f"Saved direct text input to {text_path}")
         
         # Create progress tracking entry with a consistent ID format
         # This must match the format used in the JavaScript to fetch progress correctly
@@ -938,9 +960,13 @@ def process_data(graph_id):
                     f.write(youtube_transcript)
                 
                 # Use the processor to extract entities and relationships with Groq AI
+                # Get the Groq API key from environment variables or app config
+                groq_api_key = os.environ.get('XAI_API_KEY', app.config.get('GROQ_API_KEY'))
+                logging.info(f"Using Groq API - key available: {bool(groq_api_key)}")
+                
                 processor = KnowledgeGraphProcessor(
                     neo4j_manager=neo4j_manager,
-                    groq_api_key=app.config['GROQ_API_KEY']
+                    groq_api_key=groq_api_key
                 )
                 
                 # Update progress
@@ -1094,8 +1120,18 @@ def process_data(graph_id):
                     }
                     session.modified = True
                     
+                    # Get the Groq API key from environment variables or app config
+                    groq_api_key = os.environ.get('XAI_API_KEY', app.config.get('GROQ_API_KEY'))
+                    logging.info(f"Using Groq API - key available: {bool(groq_api_key)}")
+                    
+                    # Initialize the processor with Groq
+                    processor = KnowledgeGraphProcessor(
+                        neo4j_manager=neo4j_manager,
+                        groq_api_key=groq_api_key
+                    )
+                    
                     # First, extract triples directly from the text
-                    triples = kg_processor.extract_triples_from_text(text_content, domain=graph.domain)
+                    triples = processor.extract_triples_from_text(text_content, domain=graph.domain)
                     
                     # If we didn't get enough triples, try alternative extraction methods
                     if not triples or len(triples) < 3:
@@ -1108,7 +1144,7 @@ def process_data(graph_id):
                         session.modified = True
                         
                         # Try with entity patterns
-                        pattern_entities = kg_processor.extract_entities_with_patterns(text_content, domain=graph.domain)
+                        pattern_entities = processor.extract_entities_with_patterns(text_content, domain=graph.domain)
                         if pattern_entities:
                             # If we got some entities, create simple relationships between them
                             logging.info(f"Extracted entities with pattern matching")

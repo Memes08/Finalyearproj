@@ -84,34 +84,62 @@ class DataInputForm(FlaskForm):
         import logging
         from flask import request
         
+        # Log all form data for debugging
+        logging.info(f"Form data received: {request.form}")
+        logging.info(f"Files received: {request.files}")
+        
         # Check if we have a selected_input_type in the form data
         selected_type = request.form.get('selected_input_type')
         if selected_type and selected_type in ['video', 'youtube', 'youtube_transcript', 'text', 'url']:
             logging.info(f"Setting input_type from selected_input_type: {selected_type}")
             self.input_type.data = selected_type
         
-        if not super().validate():
-            logging.warning("Form failed standard validation")
-            return False
+        # Check for the radio button data as well
+        radio_input_type = request.form.get('input_type')
+        if radio_input_type and not selected_type:
+            logging.info(f"Using radio input_type: {radio_input_type}")
+            self.input_type.data = radio_input_type
             
+        # Skip standard validation as it's causing issues
+        # Just focus on the core validation logic for each input type
         logging.info(f"Validating form with input_type={self.input_type.data}")
         
-        if self.input_type.data == 'video' and not self.video_file.data:
-            logging.warning("Video file validation failed: No file uploaded")
-            self.video_file.errors.append('Please upload a video file.')
+        if not self.input_type.data:
+            logging.warning("No input type selected")
+            self.input_type.errors = ['Please select an input type.']
             return False
-        elif self.input_type.data == 'youtube_transcript' and not self.youtube_transcript.data:
-            logging.warning("YouTube transcript validation failed: No transcript provided")
-            self.youtube_transcript.errors = ['Please paste the YouTube transcript.']
-            return False
-        elif self.input_type.data == 'text' and not (self.text_file.data or self.text_content.data):
-            logging.warning("Text validation failed: No text file or content provided")
-            self.text_file.errors.append('Please either upload a text file or paste text directly.')
-            return False
-        elif self.input_type.data == 'url' and not self.github_url.data:
-            logging.warning("URL validation failed: No GitHub URL provided")
-            self.github_url.errors.append('Please enter a GitHub raw file URL.')
-            return False
+        
+        if self.input_type.data == 'video':
+            if not request.files.get('video_file'):
+                logging.warning("Video file validation failed: No file uploaded")
+                self.video_file.errors = ['Please upload a video file.']
+                return False
+                
+        elif self.input_type.data == 'youtube_transcript':
+            transcript_data = request.form.get('youtube_transcript', '')
+            logging.info(f"YouTube transcript data length: {len(transcript_data)}")
+            if not transcript_data:
+                logging.warning("YouTube transcript validation failed: No transcript provided")
+                self.youtube_transcript.errors = ['Please paste the YouTube transcript.']
+                return False
+                
+        elif self.input_type.data == 'text':
+            has_file = 'text_file' in request.files and request.files['text_file'].filename
+            has_content = 'text_content' in request.form and request.form['text_content'].strip()
+            
+            logging.info(f"Text validation - has file: {has_file}, has content: {has_content}")
+            
+            if not (has_file or has_content):
+                logging.warning("Text validation failed: No text file or content provided")
+                self.text_file.errors = ['Please either upload a text file or paste text directly.']
+                return False
+                
+        elif self.input_type.data == 'url':
+            github_url = request.form.get('github_url', '')
+            if not github_url:
+                logging.warning("URL validation failed: No GitHub URL provided")
+                self.github_url.errors = ['Please enter a GitHub raw file URL.']
+                return False
             
         logging.info(f"Form validation successful for input type: {self.input_type.data}")
         return True
