@@ -249,11 +249,37 @@ def process_data(graph_id):
                     }
                     session.modified = True
                     
-                    # Save video file
+                    # Save video file with chunked method to prevent timeouts
                     video_file = form.video_file.data
                     filename = secure_filename(video_file.filename)
                     video_path = os.path.join(input_dir, filename)
-                    video_file.save(video_path)
+                    
+                    # Create a progress callback to update session
+                    def update_progress(bytes_written):
+                        mb_written = bytes_written / (1024 * 1024)
+                        session[progress_key]['status'] = f'Saving video file ({mb_written:.1f}MB)...'
+                        session.modified = True
+                    
+                    # Use chunked file save to prevent timeouts
+                    save_success = save_file_chunked(
+                        video_file, 
+                        video_path,
+                        progress_callback=update_progress
+                    )
+                    
+                    if not save_success:
+                        logging.warning("Chunked file save failed, attempting simple save")
+                        try:
+                            video_file.stream.seek(0)  # Reset file pointer
+                            video_file.save(video_path)
+                            save_success = os.path.exists(video_path) and os.path.getsize(video_path) > 0
+                        except Exception as e:
+                            logging.error(f"Simple file save also failed: {str(e)}")
+                            save_success = False
+                    
+                    if not save_success:
+                        flash('Error saving video file. Please try a smaller file or different format.', 'danger')
+                        return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
                     
                     # Update progress
                     session[progress_key] = {
@@ -364,11 +390,37 @@ def process_data(graph_id):
                     }
                     session.modified = True
                     
-                    # Save video file
+                    # Save video file with chunked method to prevent timeouts
                     video_file = form.video_file.data
                     filename = secure_filename(video_file.filename)
                     video_path = os.path.join(input_dir, filename)
-                    video_file.save(video_path)
+                    
+                    # Create a progress callback to update session
+                    def update_progress(bytes_written):
+                        mb_written = bytes_written / (1024 * 1024)
+                        session[progress_key]['status'] = f'Saving video file ({mb_written:.1f}MB)...'
+                        session.modified = True
+                    
+                    # Use chunked file save to prevent timeouts
+                    save_success = save_file_chunked(
+                        video_file, 
+                        video_path,
+                        progress_callback=update_progress
+                    )
+                    
+                    if not save_success:
+                        logging.warning("Chunked file save failed, attempting simple save")
+                        try:
+                            video_file.stream.seek(0)  # Reset file pointer
+                            video_file.save(video_path)
+                            save_success = os.path.exists(video_path) and os.path.getsize(video_path) > 0
+                        except Exception as e:
+                            logging.error(f"Simple file save also failed: {str(e)}")
+                            save_success = False
+                    
+                    if not save_success:
+                        flash('Error saving video file. Please try a smaller file or different format.', 'danger')
+                        return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
                     
                     # Update progress - 30%
                     session[progress_key] = {
@@ -533,11 +585,37 @@ def process_data(graph_id):
                 }
                 session.modified = True
                 
-                # Save CSV file
+                # Save CSV file with chunked method to prevent timeouts
                 csv_file = form.csv_file.data
                 filename = secure_filename(csv_file.filename)
                 csv_path = os.path.join(input_dir, filename)
-                csv_file.save(csv_path)
+                
+                # Create a progress callback to update session
+                def update_progress(bytes_written):
+                    mb_written = bytes_written / (1024 * 1024)
+                    session[progress_key]['status'] = f'Saving CSV file ({mb_written:.1f}MB)...'
+                    session.modified = True
+                
+                # Use chunked file save to prevent timeouts
+                save_success = save_file_chunked(
+                    csv_file, 
+                    csv_path,
+                    progress_callback=update_progress
+                )
+                
+                if not save_success:
+                    logging.warning("Chunked file save failed, attempting simple save")
+                    try:
+                        csv_file.stream.seek(0)  # Reset file pointer
+                        csv_file.save(csv_path)
+                        save_success = os.path.exists(csv_path) and os.path.getsize(csv_path) > 0
+                    except Exception as e:
+                        logging.error(f"Simple file save also failed: {str(e)}")
+                        save_success = False
+                
+                if not save_success:
+                    flash('Error saving CSV file. Please try a smaller file or different format.', 'danger')
+                    return render_template('process.html', form=form, graph=graph, current_process_id=session.get('current_process_id'))
                 
                 # Update progress - 30%
                 session[progress_key] = {
