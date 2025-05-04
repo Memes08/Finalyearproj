@@ -3,49 +3,60 @@
 {% block title %}Process Data - Knowledge Graph Builder{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <nav aria-label="breadcrumb">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}" class="text-decoration-none">Dashboard</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Process Data</li>
                 </ol>
             </nav>
             
-            <div class="card mb-4">
-                <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Add Data to "{{ graph.name }}"</h4>
-                    <span class="badge bg-info">{{ graph.domain }}</span>
-                </div>
-                <div class="card-body">
+            <!-- Page Header -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="mb-0">Add Data to Graph</h2>
+                <span class="badge bg-info fs-5 px-3 py-2">{{ graph.name }} ({{ graph.domain }})</span>
+            </div>
+            
+            <!-- Main Content Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
                     <form method="POST" action="{{ url_for('process_data', graph_id=graph.id) }}" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
                         
-                        <!-- Input Selection Tabs -->
-                        <ul class="nav nav-tabs mb-4" id="inputTypeTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-content" 
-                                        type="button" role="tab" aria-controls="video-content" aria-selected="true"
-                                        onclick="selectInputType('video')">
-                                    <i class="fas fa-film me-2"></i> Video
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="csv-tab" data-bs-toggle="tab" data-bs-target="#csv-content" 
-                                        type="button" role="tab" aria-controls="csv-content" aria-selected="false"
-                                        onclick="selectInputType('csv')">
-                                    <i class="fas fa-file-csv me-2"></i> CSV Upload
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-content" 
-                                        type="button" role="tab" aria-controls="url-content" aria-selected="false"
-                                        onclick="selectInputType('url')">
-                                    <i class="fab fa-github me-2"></i> GitHub URL
-                                </button>
-                            </li>
-                        </ul>
+                        <!-- Source Selection Pills -->
+                        <div class="mb-5">
+                            <h5 class="mb-3 text-secondary">1. Select Data Source</h5>
+                            
+                            <ul class="nav nav-pills nav-justified gap-2" id="inputTypeTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active w-100 py-3" id="video-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#video-content" type="button" role="tab" 
+                                            aria-controls="video-content" aria-selected="true"
+                                            onclick="selectInputType('video')">
+                                        <i class="fas fa-film me-2"></i> Video File
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link w-100 py-3" id="csv-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#csv-content" type="button" role="tab" 
+                                            aria-controls="csv-content" aria-selected="false"
+                                            onclick="selectInputType('csv')">
+                                        <i class="fas fa-file-csv me-2"></i> CSV Upload
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link w-100 py-3" id="url-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#url-content" type="button" role="tab" 
+                                            aria-controls="url-content" aria-selected="false"
+                                            onclick="selectInputType('url')">
+                                        <i class="fab fa-github me-2"></i> GitHub URL
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                         
                         <!-- Hidden radio buttons for form submission -->
                         <div style="display: none;">
@@ -55,22 +66,28 @@
                             <input type="hidden" id="selected_input_type" name="selected_input_type" value="video">
                         </div>
                         
-                        <!-- Tab content -->
-                        <div class="tab-content" id="inputTypeContent">
-                            <!-- Video Tab -->
-                            <div class="tab-pane fade show active" id="video-content" role="tabpanel" aria-labelledby="video-tab">
-                                <div class="card border-0 mb-4">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Upload Video File</h5>
-                                        <p class="text-muted mb-3">
-                                            Upload a video file to be transcribed and analyzed. Supports MP4, AVI, MOV, and MKV formats.
-                                        </p>
+                        <!-- Source Content Section -->
+                        <div class="mb-5">
+                            <h5 class="mb-3 text-secondary">2. Provide Input Data</h5>
+                            
+                            <div class="tab-content p-4 border rounded bg-light" id="inputTypeContent">
+                                <!-- Video Tab -->
+                                <div class="tab-pane fade show active" id="video-content" role="tabpanel" aria-labelledby="video-tab">
+                                    <div class="text-center">
+                                        <div class="mb-4">
+                                            <i class="fas fa-film fa-3x text-primary mb-3"></i>
+                                            <h5 class="fw-bold">Upload Video File</h5>
+                                            <p class="text-muted">
+                                                Upload a video to be transcribed and analyzed.<br>
+                                                Supports MP4, AVI, MOV, and MKV formats.
+                                            </p>
+                                        </div>
                                         
-                                        <div class="mb-3">
+                                        <div class="mb-3 w-75 mx-auto">
                                             <div class="input-group">
                                                 {{ form.video_file(class="form-control" + (" is-invalid" if form.video_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
-                                                <label class="input-group-text btn btn-outline-secondary" for="{{ form.video_file.id }}">
-                                                    <i class="fas fa-upload me-2"></i> Choose File
+                                                <label class="input-group-text btn btn-primary" for="{{ form.video_file.id }}">
+                                                    <i class="fas fa-upload me-2"></i> Select File
                                                 </label>
                                                 <span class="form-control video-file-label">No file selected</span>
                                             </div>
@@ -82,29 +99,26 @@
                                                 </div>
                                             {% endif %}
                                         </div>
-                                        
-                                        <div class="alert alert-info">
-                                            <i class="fas fa-info-circle me-2"></i>
-                                            The video will be transcribed and relationships will be extracted from the transcription.
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <!-- CSV Tab -->
-                            <div class="tab-pane fade" id="csv-content" role="tabpanel" aria-labelledby="csv-tab">
-                                <div class="card border-0 mb-4">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Upload CSV File</h5>
-                                        <p class="text-muted mb-3">
-                                            Upload a CSV file containing structured data for relationship extraction.
-                                        </p>
+                                
+                                <!-- CSV Tab -->
+                                <div class="tab-pane fade" id="csv-content" role="tabpanel" aria-labelledby="csv-tab">
+                                    <div class="text-center">
+                                        <div class="mb-4">
+                                            <i class="fas fa-file-csv fa-3x text-success mb-3"></i>
+                                            <h5 class="fw-bold">Upload CSV File</h5>
+                                            <p class="text-muted">
+                                                Upload a CSV file containing structured data.<br>
+                                                Your file should have proper headers and entity relationships.
+                                            </p>
+                                        </div>
                                         
-                                        <div class="mb-3">
+                                        <div class="mb-3 w-75 mx-auto">
                                             <div class="input-group">
                                                 {{ form.csv_file(class="form-control" + (" is-invalid" if form.csv_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
-                                                <label class="input-group-text btn btn-outline-secondary" for="{{ form.csv_file.id }}">
-                                                    <i class="fas fa-upload me-2"></i> Choose File
+                                                <label class="input-group-text btn btn-success" for="{{ form.csv_file.id }}">
+                                                    <i class="fas fa-upload me-2"></i> Select File
                                                 </label>
                                                 <span class="form-control csv-file-label">No file selected</span>
                                             </div>
@@ -116,27 +130,24 @@
                                                 </div>
                                             {% endif %}
                                         </div>
-                                        
-                                        <div class="alert alert-info">
-                                            <i class="fas fa-info-circle me-2"></i>
-                                            Your CSV should contain structured data with column headers.
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <!-- URL Tab -->
-                            <div class="tab-pane fade" id="url-content" role="tabpanel" aria-labelledby="url-tab">
-                                <div class="card border-0 mb-4">
-                                    <div class="card-body">
-                                        <h5 class="card-title">GitHub Raw CSV URL</h5>
-                                        <p class="text-muted mb-3">
-                                            Provide a raw GitHub URL to a CSV file for analysis.
-                                        </p>
+                                
+                                <!-- URL Tab -->
+                                <div class="tab-pane fade" id="url-content" role="tabpanel" aria-labelledby="url-tab">
+                                    <div class="text-center">
+                                        <div class="mb-4">
+                                            <i class="fab fa-github fa-3x text-info mb-3"></i>
+                                            <h5 class="fw-bold">GitHub Raw CSV URL</h5>
+                                            <p class="text-muted">
+                                                Provide a raw GitHub URL to a CSV file for analysis.<br>
+                                                Example format: https://raw.githubusercontent.com/username/repo/main/data.csv
+                                            </p>
+                                        </div>
                                         
-                                        <div class="mb-3">
-                                            <label for="{{ form.github_url.id }}" class="form-label">URL</label>
-                                            {{ form.github_url(class="form-control" + (" is-invalid" if form.github_url.errors else ""), placeholder="https://raw.githubusercontent.com/username/repo/main/data.csv") }}
+                                        <div class="w-75 mx-auto">
+                                            {{ form.github_url(class="form-control form-control-lg" + (" is-invalid" if form.github_url.errors else ""), 
+                                                placeholder="https://raw.githubusercontent.com/username/repo/main/data.csv") }}
                                             {% if form.github_url.errors %}
                                                 <div class="text-danger mt-2">
                                                     {% for error in form.github_url.errors %}
@@ -145,41 +156,43 @@
                                                 </div>
                                             {% endif %}
                                         </div>
-                                        
-                                        <div class="alert alert-info">
-                                            <i class="fas fa-info-circle me-2"></i>
-                                            Use the "Raw" URL of a CSV file from GitHub.<br>
-                                            Example: <code>https://raw.githubusercontent.com/username/repo/main/data.csv</code>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Processing Information Box -->
-                        <div class="card bg-dark mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Processing Information</h5>
-                                <p class="card-text">
-                                    <i class="fas fa-info-circle me-2 text-info"></i>
-                                    Data will be processed to extract entities and relationships based on the "{{ graph.domain }}" domain.
-                                </p>
-                                <ul class="list-group list-group-flush bg-dark">
-                                    <li class="list-group-item bg-dark">
-                                        <i class="fas fa-check-circle me-2 text-success"></i>
-                                        The extracted relationships will be added to your knowledge graph.
-                                    </li>
-                                    <li class="list-group-item bg-dark">
-                                        <i class="fas fa-check-circle me-2 text-success"></i>
-                                        You can visualize and query the graph after processing is complete.
-                                    </li>
-                                </ul>
+                        <!-- Processing Information -->
+                        <div class="mb-5">
+                            <h5 class="mb-3 text-secondary">3. Review Processing Details</h5>
+                            
+                            <div class="p-4 border rounded bg-dark text-light">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="me-3">
+                                        <i class="fas fa-project-diagram fa-2x text-info"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-1">Knowledge Graph Processing</h5>
+                                        <p class="mb-0">
+                                            Data will be analyzed to extract entities and relationships for the "{{ graph.domain }}" domain.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex ps-5 mb-2">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <div>The extracted relationships will be added to your knowledge graph.</div>
+                                </div>
+                                
+                                <div class="d-flex ps-5">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <div>You can visualize and query the graph after processing is complete.</div>
+                                </div>
                             </div>
                         </div>
                         
                         <!-- Submit Button -->
-                        <div class="d-grid gap-2">
-                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg py-3") }}
                         </div>
                     </form>
                 </div>
@@ -214,7 +227,7 @@
         }
     }
     
-    // Initialize the first tab on page load
+    // Initialize the form on page load
     document.addEventListener('DOMContentLoaded', function() {
         // Add event listeners to tab buttons
         document.getElementById('video-tab').addEventListener('click', function() {
