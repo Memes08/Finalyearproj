@@ -22,110 +22,146 @@
                     <form method="POST" action="{{ url_for('process_data', graph_id=graph.id) }}" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
                         
-                        <div class="mb-4 input-selection-group">
-                            <label class="form-label">Select Input Type</label>
-                            
-                            <div class="form-check">
-                                {{ form.input_type(type="radio", id="input_type_video", value="video", class="form-check-input") }}
-                                <label class="form-check-label" for="input_type_video">
-                                    <i class="fas fa-film me-2"></i> Video File
-                                    <small class="d-block text-muted mt-1">
-                                        Upload a video file to be transcribed and analyzed. Supports MP4, AVI, MOV, and MKV formats.
-                                    </small>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check">
-                                {{ form.input_type(type="radio", id="input_type_csv", value="csv", class="form-check-input") }}
-                                <label class="form-check-label" for="input_type_csv">
+                        <!-- Input Selection Tabs -->
+                        <ul class="nav nav-tabs mb-4" id="inputTypeTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-content" 
+                                        type="button" role="tab" aria-controls="video-content" aria-selected="true"
+                                        onclick="selectInputType('video')">
+                                    <i class="fas fa-film me-2"></i> Video
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="csv-tab" data-bs-toggle="tab" data-bs-target="#csv-content" 
+                                        type="button" role="tab" aria-controls="csv-content" aria-selected="false"
+                                        onclick="selectInputType('csv')">
                                     <i class="fas fa-file-csv me-2"></i> CSV Upload
-                                    <small class="d-block text-muted mt-1">
-                                        Upload a CSV file containing structured data for relationship extraction.
-                                    </small>
-                                </label>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-content" 
+                                        type="button" role="tab" aria-controls="url-content" aria-selected="false"
+                                        onclick="selectInputType('url')">
+                                    <i class="fab fa-github me-2"></i> GitHub URL
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <!-- Hidden radio buttons for form submission -->
+                        <div style="display: none;">
+                            {{ form.input_type(id="input_type_video", value="video") }}
+                            {{ form.input_type(id="input_type_csv", value="csv") }}
+                            {{ form.input_type(id="input_type_url", value="url") }}
+                        </div>
+                        
+                        <!-- Tab content -->
+                        <div class="tab-content" id="inputTypeContent">
+                            <!-- Video Tab -->
+                            <div class="tab-pane fade show active" id="video-content" role="tabpanel" aria-labelledby="video-tab">
+                                <div class="card border-0 mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Upload Video File</h5>
+                                        <p class="text-muted mb-3">
+                                            Upload a video file to be transcribed and analyzed. Supports MP4, AVI, MOV, and MKV formats.
+                                        </p>
+                                        
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                {{ form.video_file(class="form-control" + (" is-invalid" if form.video_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
+                                                <label class="input-group-text btn btn-outline-secondary" for="{{ form.video_file.id }}">
+                                                    <i class="fas fa-upload me-2"></i> Choose File
+                                                </label>
+                                                <span class="form-control video-file-label">No file selected</span>
+                                            </div>
+                                            {% if form.video_file.errors %}
+                                                <div class="text-danger mt-2">
+                                                    {% for error in form.video_file.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            The video will be transcribed and relationships will be extracted from the transcription.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
-                            <div class="form-check">
-                                {{ form.input_type(type="radio", id="input_type_url", value="url", class="form-check-input") }}
-                                <label class="form-check-label" for="input_type_url">
-                                    <i class="fab fa-github me-2"></i> GitHub CSV URL
-                                    <small class="d-block text-muted mt-1">
-                                        Provide a raw GitHub URL to a CSV file for analysis.
-                                    </small>
-                                </label>
+                            <!-- CSV Tab -->
+                            <div class="tab-pane fade" id="csv-content" role="tabpanel" aria-labelledby="csv-tab">
+                                <div class="card border-0 mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Upload CSV File</h5>
+                                        <p class="text-muted mb-3">
+                                            Upload a CSV file containing structured data for relationship extraction.
+                                        </p>
+                                        
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                {{ form.csv_file(class="form-control" + (" is-invalid" if form.csv_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
+                                                <label class="input-group-text btn btn-outline-secondary" for="{{ form.csv_file.id }}">
+                                                    <i class="fas fa-upload me-2"></i> Choose File
+                                                </label>
+                                                <span class="form-control csv-file-label">No file selected</span>
+                                            </div>
+                                            {% if form.csv_file.errors %}
+                                                <div class="text-danger mt-2">
+                                                    {% for error in form.csv_file.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Your CSV should contain structured data with column headers.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
-                            {% if form.input_type.errors %}
-                                <div class="text-danger mt-2">
-                                    {% for error in form.input_type.errors %}
-                                        {{ error }}
-                                    {% endfor %}
+                            <!-- URL Tab -->
+                            <div class="tab-pane fade" id="url-content" role="tabpanel" aria-labelledby="url-tab">
+                                <div class="card border-0 mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">GitHub Raw CSV URL</h5>
+                                        <p class="text-muted mb-3">
+                                            Provide a raw GitHub URL to a CSV file for analysis.
+                                        </p>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.github_url.id }}" class="form-label">URL</label>
+                                            {{ form.github_url(class="form-control" + (" is-invalid" if form.github_url.errors else ""), placeholder="https://raw.githubusercontent.com/username/repo/main/data.csv") }}
+                                            {% if form.github_url.errors %}
+                                                <div class="text-danger mt-2">
+                                                    {% for error in form.github_url.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Use the "Raw" URL of a CSV file from GitHub.<br>
+                                            Example: <code>https://raw.githubusercontent.com/username/repo/main/data.csv</code>
+                                        </div>
+                                    </div>
                                 </div>
-                            {% endif %}
-                        </div>
-                        
-                        <div id="video-form-group" class="mb-4" style="display: none;">
-                            <label class="form-label" for="{{ form.video_file.id }}">Upload Video File</label>
-                            <div class="input-group">
-                                {{ form.video_file(class="form-control" + (" is-invalid" if form.video_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
-                                <label class="input-group-text" for="{{ form.video_file.id }}">Browse</label>
-                                <span class="form-control video-file-label">No file selected</span>
-                            </div>
-                            {% if form.video_file.errors %}
-                                <div class="text-danger mt-2">
-                                    {% for error in form.video_file.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i> 
-                                The video will be transcribed using Whisper and relationships will be extracted from the transcription.
-                            </div>
-                        </div>
-                        
-                        <div id="csv-form-group" class="mb-4" style="display: none;">
-                            <label class="form-label" for="{{ form.csv_file.id }}">Upload CSV File</label>
-                            <div class="input-group">
-                                {{ form.csv_file(class="form-control" + (" is-invalid" if form.csv_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
-                                <label class="input-group-text" for="{{ form.csv_file.id }}">Browse</label>
-                                <span class="form-control csv-file-label">No file selected</span>
-                            </div>
-                            {% if form.csv_file.errors %}
-                                <div class="text-danger mt-2">
-                                    {% for error in form.csv_file.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Your CSV should contain structured data with column headers.
                             </div>
                         </div>
                         
-                        <div id="url-form-group" class="mb-4" style="display: none;">
-                            <label class="form-label" for="{{ form.github_url.id }}">GitHub Raw CSV URL</label>
-                            {{ form.github_url(class="form-control" + (" is-invalid" if form.github_url.errors else ""), placeholder="https://raw.githubusercontent.com/username/repo/main/data.csv") }}
-                            {% if form.github_url.errors %}
-                                <div class="text-danger mt-2">
-                                    {% for error in form.github_url.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Use the "Raw" URL of a CSV file from GitHub. Example: https://raw.githubusercontent.com/username/repo/main/data.csv
-                            </div>
-                        </div>
-                        
+                        <!-- Processing Information Box -->
                         <div class="card bg-dark mb-4">
                             <div class="card-body">
                                 <h5 class="card-title">Processing Information</h5>
                                 <p class="card-text">
                                     <i class="fas fa-info-circle me-2 text-info"></i>
-                                    Data will be processed using AI to extract entities and relationships based on the "{{ graph.domain }}" domain.
+                                    Data will be processed to extract entities and relationships based on the "{{ graph.domain }}" domain.
                                 </p>
                                 <ul class="list-group list-group-flush bg-dark">
                                     <li class="list-group-item bg-dark">
@@ -136,16 +172,13 @@
                                         <i class="fas fa-check-circle me-2 text-success"></i>
                                         You can visualize and query the graph after processing is complete.
                                     </li>
-                                    <li class="list-group-item bg-dark">
-                                        <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
-                                        Processing may take some time, especially for video files.
-                                    </li>
                                 </ul>
                             </div>
                         </div>
                         
+                        <!-- Submit Button -->
                         <div class="d-grid gap-2">
-                            {{ form.submit(class="btn btn-primary") }}
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
                         </div>
                     </form>
                 </div>
@@ -155,6 +188,7 @@
 </div>
 
 <script>
+    // Function to update file label when file is selected
     function updateFileLabel(input) {
         if (input.files && input.files[0]) {
             const fileType = input.id === '{{ form.video_file.id }}' ? 'video' : 'csv';
@@ -165,57 +199,18 @@
         }
     }
     
+    // Function to select the right input type radio button
+    function selectInputType(type) {
+        // Check the appropriate radio button (hidden)
+        const radioButton = document.getElementById(`input_type_${type}`);
+        if (radioButton) {
+            radioButton.checked = true;
+        }
+    }
+    
+    // Initialize the first tab on page load
     document.addEventListener('DOMContentLoaded', function() {
-        console.log("DOM Content Loaded"); // Debug logging
-        
-        // Get form elements
-        const inputTypeRadios = document.querySelectorAll('input[name="input_type"]');
-        const videoFormGroup = document.getElementById('video-form-group');
-        const csvFormGroup = document.getElementById('csv-form-group');
-        const urlFormGroup = document.getElementById('url-form-group');
-        
-        console.log("Form groups found:", 
-            "video:", videoFormGroup !== null, 
-            "csv:", csvFormGroup !== null, 
-            "url:", urlFormGroup !== null
-        );
-        
-        // Force-check the first radio button to initialize form
-        if (inputTypeRadios && inputTypeRadios.length > 0) {
-            inputTypeRadios[0].checked = true;
-        }
-        
-        function updateFormGroups() {
-            const selectedRadio = document.querySelector('input[name="input_type"]:checked');
-            const selectedValue = selectedRadio ? selectedRadio.value : null;
-            
-            console.log("Selected input type:", selectedValue);
-            
-            // Show/hide form groups based on selection
-            if (videoFormGroup) videoFormGroup.style.display = selectedValue === 'video' ? 'block' : 'none';
-            if (csvFormGroup) csvFormGroup.style.display = selectedValue === 'csv' ? 'block' : 'none';
-            if (urlFormGroup) urlFormGroup.style.display = selectedValue === 'url' ? 'block' : 'none';
-        }
-        
-        // Add change event listeners
-        inputTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                console.log("Radio changed to:", this.value);
-                updateFormGroups();
-            });
-        });
-        
-        // Initial setup
-        updateFormGroups();
-        
-        // Fix for URL input field
-        if (urlFormGroup) {
-            const githubUrlInput = document.getElementById('{{ form.github_url.id }}');
-            if (githubUrlInput) {
-                console.log("GitHub URL input found");
-                githubUrlInput.style.width = '100%';
-            }
-        }
+        selectInputType('video');
     });
 </script>
 {% endblock %}
