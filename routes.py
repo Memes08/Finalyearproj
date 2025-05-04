@@ -171,14 +171,19 @@ def process_data(graph_id):
         if form.input_type.data == 'url':
             logging.info(f"GitHub URL: {form.github_url.data}")
         
-        # Create progress tracking entry
-        progress_key = f"progress_{graph.id}_{process_id}"
+        # Create progress tracking entry with a consistent ID format
+        # This must match the format used in the JavaScript to fetch progress correctly
+        process_key = f"{graph.id}_{process_id}"
+        progress_key = f"progress_{process_key}"
         session[progress_key] = {
             'status': 'Starting data processing...',
             'percent': 5,
             'step': 'init'
         }
         session.modified = True
+        
+        # Store the process key for use in templates
+        session['current_process_id'] = process_key
         
         input_source = InputSource(
             source_type=form.input_type.data,
@@ -451,7 +456,9 @@ def process_data(graph_id):
             flash(f'Error processing data: {str(e)}', 'danger')
             logging.error(f"Error processing data: {e}", exc_info=True)
     
-    return render_template('process.html', form=form, graph=graph)
+    # Pass the current process ID if available to the template
+    current_process_id = session.get('current_process_id', '')
+    return render_template('process.html', form=form, graph=graph, current_process_id=current_process_id)
 
 
 @app.route('/graph/<int:graph_id>/visualize')
@@ -474,12 +481,30 @@ def visualization(graph_id):
 @login_required
 def get_processing_progress(process_id):
     """Get the current progress of a data processing job"""
+    # The process_id should be in the format "{graph_id}_{uuid}"
+    # This matches the format stored in session['current_process_id']
+    
+    # Define consistent progress key
     progress_key = f"progress_{process_id}"
-    progress_data = session.get(progress_key, {
-        'status': 'Waiting to start...',
-        'percent': 0,
-        'step': 'waiting'
-    })
+    
+    # Check if we have the current process ID in the session
+    current_id = session.get('current_process_id')
+    
+    # If the requested ID matches the current process ID, use that progress
+    if current_id and process_id == current_id:
+        progress_data = session.get(progress_key, {
+            'status': 'Processing data...',
+            'percent': 30,
+            'step': 'processing'
+        })
+    else:
+        # Default to waiting if no match or no current process
+        progress_data = session.get(progress_key, {
+            'status': 'Waiting to start...',
+            'percent': 0,
+            'step': 'waiting'
+        })
+    
     return jsonify(progress_data)
 
 @app.route('/graph/<int:graph_id>/query', methods=['GET', 'POST'])
