@@ -51,7 +51,7 @@ app.config['NEO4J_USERNAME'] = os.environ.get("NEO4J_USERNAME")
 app.config['NEO4J_PASSWORD'] = os.environ.get("NEO4J_PASSWORD")
 
 # GROQ API key for LLM services
-app.config['GROQ_API_KEY'] = os.environ.get("GROQ_API_KEY")
+app.config['GROQ_API_KEY'] = os.environ.get("XAI_API_KEY")
 
 # Initialize database
 db.init_app(app)

@@ -274,13 +274,26 @@ class KnowledgeGraphProcessor:
                 logging.warning(f"Failed to initialize LLM: {e}")
         
     def _initialize_llm(self):
-        # Placeholder for LLM initialization
+        """Initialize the Groq LLM client for enhanced text processing"""
         try:
-            # If LangChain is available, we would initialize the LLM here
-            logging.info("LLM would be initialized here if dependencies were available.")
-            return True
+            if self.groq_api_key:
+                from openai import OpenAI
+                
+                # Create client using Groq's API (xAI) with OpenAI's client
+                self.llm_client = OpenAI(
+                    base_url="https://api.x.ai/v1", 
+                    api_key=self.groq_api_key
+                )
+                logging.info("Successfully initialized Groq LLM client")
+                self.has_llm = True
+                return True
+            else:
+                logging.warning("Groq API key not provided. LLM processing is unavailable.")
+                self.has_llm = False
+                return False
         except Exception as e:
-            logging.error(f"Error initializing LLM: {e}")
+            logging.error(f"Error initializing Groq LLM: {e}")
+            self.has_llm = False
             return False
     
     def _generate_unique_id(self, entity_type, label):
