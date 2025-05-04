@@ -190,6 +190,70 @@
                             </div>
                         </div>
                         
+                        <!-- Progress Indicator (hidden by default) -->
+                        <div id="progressContainer" class="mb-5 d-none">
+                            <h5 class="mb-3 text-secondary">Processing Progress</h5>
+                            
+                            <div class="p-4 border rounded bg-light">
+                                <!-- Progress bar with color coding based on status -->
+                                <div class="progress mb-3" style="height: 25px;">
+                                    <div id="progressBar" 
+                                         class="progress-bar progress-bar-striped progress-bar-animated" 
+                                         role="progressbar" 
+                                         aria-valuenow="0" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100" 
+                                         style="width: 0%"></div>
+                                </div>
+                                
+                                <!-- Status text -->
+                                <div class="d-flex align-items-center">
+                                    <div id="progressSpinner" class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div id="progressStatus" class="fw-bold">Initializing...</div>
+                                </div>
+                                
+                                <!-- Step indicators -->
+                                <div class="mt-4">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-2">
+                                            <div id="step-init" class="step-indicator d-flex align-items-center">
+                                                <div class="step-bullet bg-secondary rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 24px; height: 24px;">
+                                                    <i class="fas fa-circle text-white small"></i>
+                                                </div>
+                                                <div class="step-label">Initialize</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <div id="step-upload" class="step-indicator d-flex align-items-center">
+                                                <div class="step-bullet bg-secondary rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 24px; height: 24px;">
+                                                    <i class="fas fa-circle text-white small"></i>
+                                                </div>
+                                                <div class="step-label">Upload</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <div id="step-extraction" class="step-indicator d-flex align-items-center">
+                                                <div class="step-bullet bg-secondary rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 24px; height: 24px;">
+                                                    <i class="fas fa-circle text-white small"></i>
+                                                </div>
+                                                <div class="step-label">Extract</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <div id="step-database" class="step-indicator d-flex align-items-center">
+                                                <div class="step-bullet bg-secondary rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 24px; height: 24px;">
+                                                    <i class="fas fa-circle text-white small"></i>
+                                                </div>
+                                                <div class="step-label">Save</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- Submit Button -->
                         <div class="d-grid">
                             {{ form.submit(class="btn btn-primary btn-lg py-3") }}

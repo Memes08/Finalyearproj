@@ -4,6 +4,7 @@ import logging
 import csv
 from datetime import datetime
 import urllib.request
+import json
 
 # Import werkzeug safely
 try:
@@ -16,7 +17,7 @@ except ImportError:
 
 # Import Flask modules
 try:
-    from flask import render_template, redirect, url_for, flash, request, jsonify, send_file
+    from flask import render_template, redirect, url_for, flash, request, jsonify, send_file, session
     from flask_login import login_user, logout_user, current_user, login_required
     HAS_FLASK = True
 except ImportError:
@@ -161,13 +162,23 @@ def process_data(graph_id):
     
     if form.validate_on_submit():
         # Create a unique directory for this input
-        input_dir = os.path.join(app.config['UPLOAD_FOLDER'], str(uuid.uuid4()))
+        process_id = str(uuid.uuid4())
+        input_dir = os.path.join(app.config['UPLOAD_FOLDER'], process_id)
         os.makedirs(input_dir, exist_ok=True)
         
         # Log the form data to debug
         logging.info(f"Form data - input_type: {form.input_type.data}")
         if form.input_type.data == 'url':
             logging.info(f"GitHub URL: {form.github_url.data}")
+        
+        # Create progress tracking entry
+        progress_key = f"progress_{graph.id}_{process_id}"
+        session[progress_key] = {
+            'status': 'Starting data processing...',
+            'percent': 5,
+            'step': 'init'
+        }
+        session.modified = True
         
         input_source = InputSource(
             source_type=form.input_type.data,
@@ -178,8 +189,22 @@ def process_data(graph_id):
             if form.input_type.data == 'video':
                 # Check if video processing is available
                 if not app.config.get('HAS_VIDEO_PROCESSING', False):
+                    session[progress_key] = {
+                        'status': 'Video processing is unavailable.',
+                        'percent': 0,
+                        'step': 'error'
+                    }
+                    session.modified = True
                     flash('Video processing is currently unavailable. Please install the required packages.', 'warning')
                     return render_template('process.html', form=form, graph=graph)
+                
+                # Update progress - 15%
+                session[progress_key] = {
+                    'status': 'Saving video file...',
+                    'percent': 15,
+                    'step': 'upload'
+                }
+                session.modified = True
                 
                 # Save video file
                 video_file = form.video_file.data
@@ -187,9 +212,25 @@ def process_data(graph_id):
                 video_path = os.path.join(input_dir, filename)
                 video_file.save(video_path)
                 
+                # Update progress - 30%
+                session[progress_key] = {
+                    'status': 'Transcribing video to text...',
+                    'percent': 30,
+                    'step': 'transcription'
+                }
+                session.modified = True
+                
                 # Transcribe video
                 audio_path = os.path.join(input_dir, 'audio.wav')
                 transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
+                
+                # Update progress - 60%
+                session[progress_key] = {
+                    'status': 'Extracting entities and relationships...',
+                    'percent': 60,
+                    'step': 'extraction'
+                }
+                session.modified = True
                 
                 # Save output as CSV for Neo4j
                 csv_path = os.path.join(input_dir, 'transcription_triples.csv')
@@ -201,23 +242,63 @@ def process_data(graph_id):
                 input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples]))
                 input_source.relationship_count = len(triples)
                 
+                # Update progress - 80%
+                session[progress_key] = {
+                    'status': 'Importing to graph database...',
+                    'percent': 80,
+                    'step': 'database'
+                }
+                session.modified = True
+                
                 # Insert into Neo4j
                 neo4j_manager.import_triples(triples, graph.id)
                 
             elif form.input_type.data == 'csv':
+                # Update progress - 15%
+                session[progress_key] = {
+                    'status': 'Saving CSV file...',
+                    'percent': 15,
+                    'step': 'upload'
+                }
+                session.modified = True
+                
                 # Save CSV file
                 csv_file = form.csv_file.data
                 filename = secure_filename(csv_file.filename)
                 csv_path = os.path.join(input_dir, filename)
                 csv_file.save(csv_path)
                 
+                # Update progress - 30%
+                session[progress_key] = {
+                    'status': 'Analyzing CSV structure...',
+                    'percent': 30,
+                    'step': 'analysis'
+                }
+                session.modified = True
+                
                 # Process CSV file - with fallback for missing pandas
                 try:
+                    # Update progress - 50%
+                    session[progress_key] = {
+                        'status': 'Extracting entities and relationships...',
+                        'percent': 50,
+                        'step': 'extraction'
+                    }
+                    session.modified = True
+                    
                     # First try using the standard kg_processor
                     triples = kg_processor.process_csv(csv_path, domain=graph.domain)
                 except Exception as e:
                     logging.warning(f"Error processing CSV with kg_processor: {e}")
                     logging.info("Attempting to process CSV with basic fallback processor")
+                    
+                    # Update progress - fallback
+                    session[progress_key] = {
+                        'status': 'Using fallback CSV processor...',
+                        'percent': 45,
+                        'step': 'fallback'
+                    }
+                    session.modified = True
                     
                     # Basic fallback CSV processor
                     try:
@@ -326,17 +407,47 @@ def process_data(graph_id):
                 # Insert into Neo4j
                 neo4j_manager.import_triples(triples, graph.id)
             
+            # Update progress - 90%
+            session[progress_key] = {
+                'status': 'Finalizing and updating records...',
+                'percent': 90,
+                'step': 'finalizing'
+            }
+            session.modified = True
+            
             input_source.processed = True
             db.session.add(input_source)
             db.session.commit()
             
-            flash('Data processed and added to knowledge graph successfully!', 'success')
+            # Update progress - 100%
+            session[progress_key] = {
+                'status': 'Processing complete! Redirecting to visualization...',
+                'percent': 100,
+                'step': 'complete'
+            }
+            session.modified = True
+            
+            flash(f'Data processed and added to knowledge graph successfully! {input_source.entity_count} entities and {input_source.relationship_count} relationships were created.', 'success')
             return redirect(url_for('visualization', graph_id=graph.id))
             
         except NotImplementedError as e:
+            # Update progress - error
+            session[progress_key] = {
+                'status': f'Feature not available: {str(e)}',
+                'percent': 0,
+                'step': 'error'
+            }
+            session.modified = True
             flash(f'Feature not available: {str(e)}', 'warning')
             logging.warning(f"Not implemented: {e}")
         except Exception as e:
+            # Update progress - error
+            session[progress_key] = {
+                'status': f'Error processing data: {str(e)}',
+                'percent': 0,
+                'step': 'error'
+            }
+            session.modified = True
             flash(f'Error processing data: {str(e)}', 'danger')
             logging.error(f"Error processing data: {e}", exc_info=True)
     
@@ -357,6 +468,19 @@ def visualization(graph_id):
     
     return render_template('visualization.html', graph=graph, input_sources=input_sources)
 
+
+# API endpoint to get processing progress
+@app.route('/api/progress/<string:process_id>', methods=['GET'])
+@login_required
+def get_processing_progress(process_id):
+    """Get the current progress of a data processing job"""
+    progress_key = f"progress_{process_id}"
+    progress_data = session.get(progress_key, {
+        'status': 'Waiting to start...',
+        'percent': 0,
+        'step': 'waiting'
+    })
+    return jsonify(progress_data)
 
 @app.route('/graph/<int:graph_id>/query', methods=['GET', 'POST'])
 @login_required
