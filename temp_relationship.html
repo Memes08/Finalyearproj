@@ -1,0 +1,80 @@
+<!-- Text Result View -->
+<div id="text-result-view">
+    <div class="card-body bg-dark py-2 px-3"> <!-- Reduced padding -->
+        <div class="query-result bg-dark rounded" id="result-text">
+            {% if "Found these relationships:" in result %}
+                <div class="d-flex align-items-center mb-3"> <!-- Reduced margin -->
+                    <div class="result-icon me-2"> <!-- Reduced margin -->
+                        <i class="fas fa-network-wired text-info"></i> <!-- Smaller icon -->
+                    </div>
+                    <div>
+                        <h6 class="text-info mb-0">{{ result.split('\n')[0] }}</h6> <!-- Smaller heading -->
+                        <p class="text-light small mb-0">The following connections were discovered</p>
+                    </div>
+                </div>
+                
+                <div class="relationship-results">
+                    <div class="row g-2"> <!-- Grid with small gutters -->
+                        {% for line in result.split('\n')[1:] %}
+                            {% if line.strip() %}
+                                {% if "[" in line and "]" in line %}
+                                    {% set parts = line.replace('- ', '').split('[') %}
+                                    {% set entity1 = parts[0].strip() %}
+                                    {% set remaining = parts[1].split(']') %}
+                                    {% set relation = remaining[0].strip() %}
+                                    {% set entity2 = remaining[1].strip() %}
+                                    
+                                    <div class="col-12">
+                                        <div class="relationship-item mb-2 p-2 border border-info rounded-3 relationship-card animate-in" 
+                                            style="--delay: {{ loop.index * 0.05 }}s"> <!-- Faster animation, smaller padding -->
+                                            <!-- Horizontal relationship display (Compact) -->
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <!-- Entity 1 -->
+                                                <div class="entity-box text-center" style="width: 30%;">
+                                                    {% set entity_type = 'movie' if loop.index % 2 == 0 else 'person' %}
+                                                    {% set entity_icon = 'film' if entity_type == 'movie' else 'user' %}
+                                                    {% set entity_color = '#8a65cc' if entity_type == 'movie' else '#5ac8fa' %}
+                                                    
+                                                    <div class="entity-label py-1 px-2 rounded-pill" style="background-color: {{ entity_color }};">
+                                                        <i class="fas fa-{{ entity_icon }} text-white me-1"></i>
+                                                        <span class="text-white">{{ entity1 }}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Relationship -->
+                                                <div class="relation-container text-center" style="width: 30%;">
+                                                    <div class="relation-badge d-inline-block px-2 py-1 rounded-pill bg-info">
+                                                        <i class="fas fa-link me-1"></i>
+                                                        <span class="text-white small">{{ relation }}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Entity 2 -->
+                                                <div class="entity-box text-center" style="width: 30%;">
+                                                    {% set entity2_type = 'person' if loop.index % 2 == 0 else 'movie' %}
+                                                    {% set entity2_icon = 'user' if entity2_type == 'person' else 'film' %}
+                                                    {% set entity2_color = '#5ac8fa' if entity2_type == 'person' else '#8a65cc' %}
+                                                    
+                                                    <div class="entity-label py-1 px-2 rounded-pill" style="background-color: {{ entity2_color }};">
+                                                        <i class="fas fa-{{ entity2_icon }} text-white me-1"></i>
+                                                        <span class="text-white">{{ entity2 }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="col-12">
+                                        <div class="alert alert-secondary py-1 px-2 mb-2">{{ line }}</div> <!-- Smaller alert -->
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <pre class="text-light mb-0" style="white-space: pre-wrap; font-family: monospace;">{{ result }}</pre>
+            {% endif %}
+        </div>
+    </div>
+</div>
