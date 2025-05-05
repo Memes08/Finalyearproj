@@ -145,24 +145,157 @@
     <div class="row mb-4">
         <div class="col">
             <div class="card shadow-sm bg-dark text-white">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Graph Structure Analysis</h5>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-info active" id="view-metrics">Metrics</button>
+                        <button class="btn btn-sm btn-outline-info" id="view-relationships">Relationships</button>
+                        <button class="btn btn-sm btn-outline-info" id="view-distribution">Distribution</button>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>Structural Balance</h6>
-                            <div class="progress mb-3" style="height: 20px;">
-                                <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 65%">Balanced: 65%</div>
+                    <!-- Metrics View -->
+                    <div id="metrics-view" class="analysis-view">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card bg-dark border-secondary mb-3">
+                                    <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0">Graph Completeness Analysis</h6>
+                                        <span class="badge bg-info">{{ analytics.density }}%</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Structural Balance</h6>
+                                        <div class="progress mb-3" style="height: 25px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 65%">
+                                                <span class="fw-bold">Balanced: 65%</span>
+                                            </div>
+                                        </div>
+                                        <h6>Connection Completeness</h6>
+                                        <div class="progress mb-3" style="height: 25px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 78%">
+                                                <span class="fw-bold">Complete: 78%</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <p class="small text-muted">Higher percentages indicate a more complete knowledge graph</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <h6>Connection Completeness</h6>
-                            <div class="progress mb-3" style="height: 20px;">
-                                <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 78%">Complete: 78%</div>
+                            <div class="col-md-6">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header border-secondary">
+                                        <h6 class="mb-0">Graph Health Score</h6>
+                                    </div>
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                        <div id="health-gauge" class="gauge-container" style="height: 200px; width: 200px;"></div>
+                                        <div class="mt-3 text-center">
+                                            <h4 class="text-info mb-0">73<span class="small">/100</span></h4>
+                                            <p class="small text-muted">Based on density, balance, and connectivity</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <h6>Relationship Distribution</h6>
-                            <canvas id="relationship-chart" height="200"></canvas>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card bg-dark border-secondary">
+                                    <div class="card-header border-secondary">
+                                        <h6 class="mb-0">Graph Growth Metrics</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="growth-chart" style="height: 200px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Relationships View -->
+                    <div id="relationships-view" class="analysis-view d-none">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="alert bg-dark border-info">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-info-circle text-info me-3 fa-2x"></i>
+                                        <div>
+                                            <h6 class="mb-1">Relationship Analysis</h6>
+                                            <p class="mb-0 small">This view shows the distribution and frequency of different relationship types in your knowledge graph.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="relationship-horizontal-chart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header border-secondary">
+                                        <h6 class="mb-0">Top Relationship Paths</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item bg-dark d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <span class="badge bg-primary me-2">Person</span>
+                                                    <i class="fas fa-arrow-right text-info mx-1"></i>
+                                                    <span class="badge bg-primary">Movie</span>
+                                                </div>
+                                                <span class="badge bg-info rounded-pill">43%</span>
+                                            </li>
+                                            <li class="list-group-item bg-dark d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <span class="badge bg-primary me-2">Movie</span>
+                                                    <i class="fas fa-arrow-right text-info mx-1"></i>
+                                                    <span class="badge bg-primary">Genre</span>
+                                                </div>
+                                                <span class="badge bg-info rounded-pill">28%</span>
+                                            </li>
+                                            <li class="list-group-item bg-dark d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <span class="badge bg-primary me-2">Person</span>
+                                                    <i class="fas fa-arrow-right text-info mx-1"></i>
+                                                    <span class="badge bg-primary">Person</span>
+                                                </div>
+                                                <span class="badge bg-info rounded-pill">15%</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header border-secondary">
+                                        <h6 class="mb-0">Relationship Quality</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="relationship-radar" height="230"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Distribution View -->
+                    <div id="distribution-view" class="analysis-view d-none">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <canvas id="relationship-chart" height="300"></canvas>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="card bg-dark border-secondary h-100">
+                                    <div class="card-header border-secondary">
+                                        <h6 class="mb-0">Category Distribution</h6>
+                                    </div>
+                                    <div class="card-body d-flex flex-column justify-content-center">
+                                        <div id="category-distribution" style="height: 250px;"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -194,6 +327,7 @@
 {% block additional_scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const centralityData = {{ analytics.centrality|tojson }};
@@ -209,13 +343,33 @@
         
         // Setup relationship chart
         const relationshipCtx = document.getElementById('relationship-chart');
-        renderRelationshipChart(relationshipCtx);
+        if (relationshipCtx) {
+            renderRelationshipChart(relationshipCtx);
+        }
+        
+        // Setup horizontal relationship chart
+        renderHorizontalRelationshipChart();
+        
+        // Setup gauge chart
+        renderHealthGauge();
+        
+        // Setup growth chart
+        renderGrowthChart();
+        
+        // Setup category distribution chart
+        renderCategoryDistribution();
+        
+        // Setup relationship radar chart
+        renderRelationshipRadar();
         
         // Initialize tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
+        
+        // Setup view switching
+        setupViewSwitching();
         
         // Export report functionality
         document.getElementById('export-analytics').addEventListener('click', function() {
@@ -228,16 +382,503 @@
         });
         
         // Manual run predictive analysis
-        document.querySelector('[data-bs-toggle="tooltip"]').addEventListener('click', function(e) {
-            e.preventDefault();
-            runPredictiveAnalysis();
-        });
+        const tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        if (tooltipElements.length > 0) {
+            tooltipElements[0].addEventListener('click', function(e) {
+                e.preventDefault();
+                runPredictiveAnalysis();
+            });
+        }
         
         // Auto-load predictions on page load
         setTimeout(() => {
             runPredictiveAnalysis();
         }, 500);
     });
+    
+    // Function to handle view switching
+    function setupViewSwitching() {
+        const viewMetricsBtn = document.getElementById('view-metrics');
+        const viewRelationshipsBtn = document.getElementById('view-relationships');
+        const viewDistributionBtn = document.getElementById('view-distribution');
+        
+        const metricsView = document.getElementById('metrics-view');
+        const relationshipsView = document.getElementById('relationships-view');
+        const distributionView = document.getElementById('distribution-view');
+        
+        if (!viewMetricsBtn || !viewRelationshipsBtn || !viewDistributionBtn) return;
+        
+        // Metrics view button
+        viewMetricsBtn.addEventListener('click', function() {
+            metricsView.classList.remove('d-none');
+            relationshipsView.classList.add('d-none');
+            distributionView.classList.add('d-none');
+            
+            viewMetricsBtn.classList.add('active');
+            viewRelationshipsBtn.classList.remove('active');
+            viewDistributionBtn.classList.remove('active');
+        });
+        
+        // Relationships view button
+        viewRelationshipsBtn.addEventListener('click', function() {
+            metricsView.classList.add('d-none');
+            relationshipsView.classList.remove('d-none');
+            distributionView.classList.add('d-none');
+            
+            viewMetricsBtn.classList.remove('active');
+            viewRelationshipsBtn.classList.add('active');
+            viewDistributionBtn.classList.remove('active');
+        });
+        
+        // Distribution view button
+        viewDistributionBtn.addEventListener('click', function() {
+            metricsView.classList.add('d-none');
+            relationshipsView.classList.add('d-none');
+            distributionView.classList.remove('d-none');
+            
+            viewMetricsBtn.classList.remove('active');
+            viewRelationshipsBtn.classList.remove('active');
+            viewDistributionBtn.classList.add('active');
+        });
+    }
+    
+    // Function to render horizontal relationship chart
+    function renderHorizontalRelationshipChart() {
+        const chartElement = document.getElementById('relationship-horizontal-chart');
+        if (!chartElement) return;
+        
+        const options = {
+            series: [{
+                name: 'Count',
+                data: [42, 38, 27, 22, 18, 14, 9]
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                toolbar: {
+                    show: false
+                },
+                background: 'transparent',
+                fontFamily: 'inherit'
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                    barHeight: '60%',
+                    distributed: true,
+                    dataLabels: {
+                        position: 'bottom'
+                    }
+                }
+            },
+            colors: ['#0dcaf0', '#6f42c1', '#fd7e14', '#198754', '#dc3545', '#0d6efd', '#ffc107'],
+            dataLabels: {
+                enabled: true,
+                textAnchor: 'start',
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    colors: ['#fff']
+                },
+                formatter: function(val, opt) {
+                    return val;
+                },
+                offsetX: 0
+            },
+            stroke: {
+                width: 1,
+                colors: ['#fff']
+            },
+            xaxis: {
+                categories: ['ACTED_IN', 'DIRECTED', 'BELONGS_TO', 'WROTE', 'PRODUCED', 'RATED', 'REVIEWED'],
+                labels: {
+                    style: {
+                        colors: '#adb5bd'
+                    }
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#adb5bd'
+                    }
+                }
+            },
+            title: {
+                text: 'Relationship Types by Frequency',
+                align: 'center',
+                margin: 20,
+                style: {
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#f8f9fa'
+                }
+            },
+            tooltip: {
+                theme: 'dark',
+                y: {
+                    formatter: function(val) {
+                        return val + " instances";
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#2c3e50',
+                strokeDashArray: 4,
+                xaxis: {
+                    lines: {
+                        show: true
+                    }
+                },
+                yaxis: {
+                    lines: {
+                        show: false
+                    }
+                }
+            },
+            legend: {
+                show: false
+            }
+        };
+        
+        const chart = new ApexCharts(chartElement, options);
+        chart.render();
+    }
+    
+    // Function to render health gauge
+    function renderHealthGauge() {
+        const chartElement = document.getElementById('health-gauge');
+        if (!chartElement) return;
+        
+        const options = {
+            series: [73],
+            chart: {
+                height: 200,
+                type: 'radialBar',
+                background: 'transparent',
+                fontFamily: 'inherit'
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 135,
+                    hollow: {
+                        margin: 0,
+                        size: '70%',
+                        background: '#212529',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front'
+                    },
+                    track: {
+                        background: '#2c3e50',
+                        strokeWidth: '67%',
+                        margin: 0,
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+                    dataLabels: {
+                        name: {
+                            offsetY: -10,
+                            show: true,
+                            color: '#adb5bd',
+                            fontSize: '13px'
+                        },
+                        value: {
+                            formatter: function(val) {
+                                return val + "/100";
+                            },
+                            color: '#0dcaf0',
+                            fontSize: '28px',
+                            fontWeight: 'bold',
+                            show: true
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    type: 'horizontal',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#0dcaf0'],
+                    inverseColors: false,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 100]
+                }
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            labels: ['Health Score']
+        };
+        
+        const chart = new ApexCharts(chartElement, options);
+        chart.render();
+    }
+    
+    // Function to render growth chart
+    function renderGrowthChart() {
+        const chartElement = document.getElementById('growth-chart');
+        if (!chartElement) return;
+        
+        const options = {
+            series: [{
+                name: 'Nodes',
+                data: [12, 18, 29, 37, 47, 58, 76, 86, 96, 104]
+            }, {
+                name: 'Relationships',
+                data: [8, 14, 24, 33, 45, 61, 83, 96, 113, 127]
+            }],
+            chart: {
+                height: 200,
+                type: 'line',
+                dropShadow: {
+                    enabled: true,
+                    color: '#000',
+                    top: 18,
+                    left: 7,
+                    blur: 10,
+                    opacity: 0.2
+                },
+                toolbar: {
+                    show: false
+                },
+                background: 'transparent',
+                fontFamily: 'inherit'
+            },
+            colors: ['#0dcaf0', '#fd7e14'],
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            grid: {
+                borderColor: '#2c3e50',
+                strokeDashArray: 4,
+                row: {
+                    colors: ['#2c3e50', 'transparent'],
+                    opacity: 0.2
+                }
+            },
+            markers: {
+                size: 5,
+                hover: {
+                    size: 7
+                }
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                title: {
+                    text: 'Timeline',
+                    style: {
+                        color: '#adb5bd'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#adb5bd'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Count',
+                    style: {
+                        color: '#adb5bd'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#adb5bd'
+                    }
+                },
+                min: 0
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                offsetY: -20,
+                labels: {
+                    colors: '#adb5bd'
+                }
+            },
+            tooltip: {
+                theme: 'dark'
+            }
+        };
+        
+        const chart = new ApexCharts(chartElement, options);
+        chart.render();
+    }
+    
+    // Function to render category distribution
+    function renderCategoryDistribution() {
+        const chartElement = document.getElementById('category-distribution');
+        if (!chartElement) return;
+        
+        const options = {
+            series: [44, 28, 15, 8, 5],
+            labels: ['Movie', 'Person', 'Genre', 'Studio', 'Award'],
+            chart: {
+                type: 'donut',
+                height: 250,
+                background: 'transparent',
+                fontFamily: 'inherit'
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '60%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                showAlways: true,
+                                label: 'Total Nodes',
+                                fontSize: '14px',
+                                fontWeight: 'bold',
+                                color: '#f8f9fa',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                }
+                            },
+                            value: {
+                                fontSize: '22px',
+                                fontWeight: 'bold',
+                                color: '#f8f9fa',
+                                offsetY: -10
+                            }
+                        }
+                    }
+                }
+            },
+            colors: ['#0dcaf0', '#fd7e14', '#6f42c1', '#198754', '#dc3545'],
+            legend: {
+                position: 'bottom',
+                labels: {
+                    colors: '#adb5bd'
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        height: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            stroke: {
+                width: 2,
+                colors: ['#2c3e50']
+            },
+            tooltip: {
+                theme: 'dark'
+            }
+        };
+        
+        const chart = new ApexCharts(chartElement, options);
+        chart.render();
+    }
+    
+    // Function to render relationship radar chart
+    function renderRelationshipRadar() {
+        const chartElement = document.getElementById('relationship-radar');
+        if (!chartElement) return;
+        
+        const data = {
+            labels: [
+                'Completeness',
+                'Diversity',
+                'Reciprocity',
+                'Connectivity',
+                'Quality'
+            ],
+            datasets: [{
+                label: 'Current Graph',
+                data: [85, 62, 78, 70, 65],
+                fill: true,
+                backgroundColor: 'rgba(13, 202, 240, 0.2)',
+                borderColor: '#0dcaf0',
+                pointBackgroundColor: '#0dcaf0',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#0dcaf0'
+            }, {
+                label: 'Average',
+                data: [65, 59, 80, 50, 56],
+                fill: true,
+                backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                borderColor: '#ffc107',
+                pointBackgroundColor: '#ffc107',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#ffc107'
+            }]
+        };
+        
+        new Chart(chartElement, {
+            type: 'radar',
+            data: data,
+            options: {
+                elements: {
+                    line: {
+                        tension: 0.1
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(255, 255, 255, 0.2)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)'
+                        },
+                        pointLabels: {
+                            color: '#f8f9fa'
+                        },
+                        ticks: {
+                            color: '#adb5bd',
+                            backdropColor: 'transparent'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#f8f9fa',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     // Render bar chart for node centrality
     function renderCentralityChart(container, data) {
