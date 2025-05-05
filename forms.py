@@ -45,15 +45,9 @@ class NewKnowledgeGraphForm(FlaskForm):
 
 class DataInputForm(FlaskForm):
     input_type = RadioField('Input Type', choices=[
-        ('video', 'Video File'),
         ('csv', 'CSV Upload'),
         ('url', 'GitHub CSV URL')
     ], validators=[DataRequired()])
-    
-    video_file = FileField('Upload Video', validators=[
-        Optional(),
-        FileAllowed(['mp4', 'avi', 'mov', 'mkv'], 'Only video files allowed!')
-    ])
     
     csv_file = FileField('Upload CSV', validators=[
         Optional(),
@@ -68,10 +62,7 @@ class DataInputForm(FlaskForm):
         if not super().validate():
             return False
             
-        if self.input_type.data == 'video' and not self.video_file.data:
-            self.video_file.errors.append('Please upload a video file.')
-            return False
-        elif self.input_type.data == 'csv' and not self.csv_file.data:
+        if self.input_type.data == 'csv' and not self.csv_file.data:
             self.csv_file.errors.append('Please upload a CSV file.')
             return False
         elif self.input_type.data == 'url' and not self.github_url.data:

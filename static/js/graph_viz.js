@@ -59,13 +59,28 @@ class KnowledgeGraphVisualizer {
         // Create main group element for zooming
         this.g = this.svg.append("g");
         
-        // Initialize the force simulation
+        // Initialize the force simulation with optimized parameters
         this.simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().id(d => d.id).distance(this.options.linkDistance))
-            .force("charge", d3.forceManyBody().strength(this.options.chargeStrength))
+            .force("link", d3.forceLink().id(d => d.id)
+                .distance(d => {
+                    // Dynamic link distance based on node degrees
+                    const sourceConnections = this.countNodeConnections(d.source.id || d.source);
+                    const targetConnections = this.countNodeConnections(d.target.id || d.target);
+                    // More connected nodes should be further apart
+                    return this.options.linkDistance * (1 + Math.log(1 + Math.max(sourceConnections, targetConnections) * 0.1));
+                })
+                .strength(0.7)) // More rigid links
+            .force("charge", d3.forceManyBody()
+                .strength(d => this.options.chargeStrength * (1 + Math.log(1 + this.countNodeConnections(d.id) * 0.2)))
+                .distanceMax(500)) // Limit long-range repulsion
             .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-            .force("collision", d3.forceCollide().radius(this.options.nodeRadius * 1.5))
-            .alphaDecay(0.028) // Slower decay for better stabilization
+            .force("collision", d3.forceCollide().radius(d => this.options.nodeRadius * 1.5 + (this.countNodeConnections(d.id) * 0.5)))
+            .force("x", d3.forceX(this.width / 2).strength(0.05)) // Gentle force toward center X
+            .force("y", d3.forceY(this.height / 2).strength(0.05)) // Gentle force toward center Y
+            .alphaDecay(0.02) // Slower decay for better stabilization
+            .alphaTarget(0.1) // Keep some energy in the simulation
+            .alpha(1)
+            .velocityDecay(0.4) // Dampen velocity for smoother motion
             .on("tick", () => this.ticked());
         
         // Create arrow marker for links
