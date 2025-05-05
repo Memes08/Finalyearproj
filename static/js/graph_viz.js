@@ -9,15 +9,28 @@ class KnowledgeGraphVisualizer {
             nodeRadius: 14,
             linkDistance: 180,
             chargeStrength: -500,
-            colors: d3.scaleOrdinal(d3.schemeCategory10)
+            colors: d3.scaleOrdinal(d3.schemeCategory10),
+            maxZoom: 4,
+            minZoom: 0.2,
+            highlightRadius: 28,
+            defaultRadius: 14,
+            nodeOpacity: 0.9,
+            labelFontSize: 12,
+            clusterForce: 0.1,
+            enableClustering: true,
+            enablePhysics: true,
+            stabilizationIterations: 50
         }, options);
         
         // Visualization elements
         this.svg = null;
+        this.zoomHandler = null;
         this.simulation = null;
         this.nodeElements = null;
         this.linkElements = null;
         this.textElements = null;
+        this.linkLabels = null;
+        this.markerElements = null;
         this.allNodes = []; // Store all nodes for filtering
         this.allLinks = []; // Store all links for filtering
         this.nodes = [];    // Currently visible nodes
@@ -25,7 +38,26 @@ class KnowledgeGraphVisualizer {
         this.selectedNode = null; // Track currently selected node
         this.nodeCategories = new Set(); // Store node categories
         this.relationshipTypes = new Set(); // Store relationship types for color coding
-        this.relationshipColorScale = d3.scaleOrdinal(d3.schemeSet2); // Color scale for relationships
+        this.relationshipColorScale = d3.scaleOrdinal(d3.schemeSet3); // Color scale for relationships
+        this.currentLayout = 'force'; // Track current layout mode
+        this.currentTheme = 'dark'; // Track current theme
+        this.nodeThemes = {
+            dark: {
+                fill: d3.scaleOrdinal(d3.schemeSet3),
+                stroke: '#333',
+                text: '#fff'
+            },
+            light: {
+                fill: d3.scaleOrdinal(d3.schemePastel1),
+                stroke: '#ddd',
+                text: '#000'
+            },
+            custom: {
+                fill: d3.scaleOrdinal(['#5E3E9C', '#4A90E2', '#43B88E', '#E2725B', '#E2CC5B', '#B05B85']),
+                stroke: '#444',
+                text: '#eee'
+            }
+        };
         
         // Node visibility tracking
         this.hiddenNodes = new Set();
