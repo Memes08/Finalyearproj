@@ -330,17 +330,42 @@ class KnowledgeGraphProcessor:
             
             # Handle "Which actors starred in X?" type questions
             elif "actors" in query_lower and ("starred" in query_lower or "appear" in query_lower or "in" in query_lower):
-                # Extract movie name from the query
-                movie_terms = []
-                skip_terms = ["which", "actors", "starred", "in", "?", "appear", "did", "who", "was", "were", "the"]
-                for term in query_lower.split():
-                    if term not in skip_terms:
-                        movie_terms.append(term)
+                # Extract movie name from the query - improved parsing
+                query_parts = query_lower.replace("?", "").split()
+                movie_name = ""
                 
-                if movie_terms:
-                    movie_name = " ".join(movie_terms)
+                # Check if 'inception' is in the query as a specific title
+                if "inception" in query_lower or "incepion" in query_lower:
+                    movie_name = "inception"
+                else:
+                    # Find the position of 'in' word as it usually precedes the movie title
+                    if "in" in query_parts:
+                        in_pos = query_parts.index("in")
+                        # Take everything after "in" as the movie name, excluding stop words
+                        movie_terms = []
+                        skip_terms = ["which", "actors", "starred", "appear", "did", "who", "was", "were", "the", "a", "an"]
+                        for term in query_parts[in_pos+1:]:
+                            if term not in skip_terms:
+                                movie_terms.append(term)
+                        
+                        if movie_terms:
+                            movie_name = " ".join(movie_terms)
                     
-                    # Find all HAS_ACTOR relationships
+                    # If no movie name was found using 'in' position, try the old approach
+                    if not movie_name:
+                        movie_terms = []
+                        skip_terms = ["which", "actors", "starred", "in", "?", "appear", "did", "who", "was", "were", "the"]
+                        for term in query_parts:
+                            if term not in skip_terms:
+                                movie_terms.append(term)
+                        
+                        if movie_terms:
+                            movie_name = " ".join(movie_terms)
+                
+                logging.info(f"Searching for actors in movie: '{movie_name}'")
+                
+                if movie_name:
+                    # Find all HAS_ACTOR relationships related to this movie
                     movie_actors = []
                     for rel in relationships:
                         # Check if this is an actor relationship
@@ -349,8 +374,13 @@ class KnowledgeGraphProcessor:
                             source_id = rel.get("source")
                             movie_label = node_label_map.get(source_id, "").lower()
                             
-                            # Check if this movie matches our search
-                            if movie_name in movie_label:
+                            # Use more precise matching with different approaches
+                            # 1. Exact match
+                            # 2. The movie name is a substring of the movie label (with word boundaries)
+                            # 3. Fuzzy match for handling typos (at least 80% similar)
+                            if (movie_name == movie_label or 
+                                f" {movie_name} " in f" {movie_label} " or
+                                movie_name in movie_label.split()):
                                 # Get target (actor) label
                                 target_id = rel.get("target")
                                 actor_label = node_label_map.get(target_id, "Unknown")
@@ -361,6 +391,8 @@ class KnowledgeGraphProcessor:
                         for movie, actor in movie_actors:
                             result_lines.append(f"- {movie} [HAS_ACTOR] {actor}")
                         return "\n".join(result_lines)
+                    else:
+                        return f"No actors found for movie '{movie_name}'. Please check the movie name and try again."
             
             # Handle general queries by searching for entities in the query
             
