@@ -132,12 +132,12 @@
                                 {% for source in input_sources %}
                                     <li class="list-group-item bg-dark d-flex justify-content-between align-items-center">
                                         <div>
-                                            {% if source.source_type == 'video' %}
-                                                <i class="fas fa-film me-2 text-info"></i>
-                                            {% elif source.source_type == 'csv' %}
+                                            {% if source.source_type == 'csv' %}
                                                 <i class="fas fa-file-csv me-2 text-success"></i>
                                             {% elif source.source_type == 'url' %}
                                                 <i class="fab fa-github me-2 text-warning"></i>
+                                            {% else %}
+                                                <i class="fas fa-file me-2 text-light"></i>
                                             {% endif %}
                                             
                                             {% if source.filename %}
