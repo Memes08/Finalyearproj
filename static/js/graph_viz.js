@@ -492,6 +492,22 @@ class KnowledgeGraphVisualizer {
         return connections;
     }
     
+    countNodeConnections(id) {
+        // Count the number of connections for a node
+        if (!id || !this.allLinks) return 0;
+        
+        let count = 0;
+        for (const link of this.allLinks) {
+            const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            
+            if (sourceId === id || targetId === id) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
     filterToNodeAndConnections(node) {
         // Filter graph to show only the selected node and its connections
         const connectedNodeIds = new Set();

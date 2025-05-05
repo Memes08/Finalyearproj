@@ -164,36 +164,7 @@ def process_data(graph_id):
         )
         
         try:
-            if form.input_type.data == 'video':
-                # Check if video processing is available
-                if not app.config.get('HAS_VIDEO_PROCESSING', False):
-                    flash('Video processing is currently unavailable. Please install the required packages.', 'warning')
-                    return render_template('process.html', form=form, graph=graph)
-                
-                # Save video file
-                video_file = form.video_file.data
-                filename = secure_filename(video_file.filename)
-                video_path = os.path.join(input_dir, filename)
-                video_file.save(video_path)
-                
-                # Transcribe video
-                audio_path = os.path.join(input_dir, 'audio.wav')
-                transcription = whisper_transcriber.transcribe_video(video_path, audio_path)
-                
-                # Save output as CSV for Neo4j
-                csv_path = os.path.join(input_dir, 'transcription_triples.csv')
-                triples = kg_processor.extract_triples_from_text(transcription, domain=graph.domain)
-                kg_processor.save_triples_to_csv(triples, csv_path)
-                
-                # Update input source details
-                input_source.filename = filename
-                input_source.entity_count = len(set([t[0] for t in triples] + [t[2] for t in triples]))
-                input_source.relationship_count = len(triples)
-                
-                # Insert into Neo4j
-                neo4j_manager.import_triples(triples, graph.id)
-                
-            elif form.input_type.data == 'csv':
+            if form.input_type.data == 'csv':
                 # Check if pandas is available
                 if not app.config.get('HAS_PANDAS', False):
                     flash('CSV processing requires pandas, which is currently unavailable.', 'warning')
