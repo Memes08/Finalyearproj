@@ -23,7 +23,7 @@
         <div class="col-md-3">
             <div class="card bg-dark text-white shadow-sm h-100">
                 <div class="card-body">
-                    <h2 class="fw-bold text-info">{{ graph_data.node_count }}</h2>
+                    <h2 class="fw-bold text-info">{{ analytics.total_nodes }}</h2>
                     <p class="mb-0">Total Nodes</p>
                 </div>
             </div>
@@ -31,7 +31,7 @@
         <div class="col-md-3">
             <div class="card bg-dark text-white shadow-sm h-100">
                 <div class="card-body">
-                    <h2 class="fw-bold text-info">{{ graph_data.relationship_count }}</h2>
+                    <h2 class="fw-bold text-info">{{ analytics.total_relationships }}</h2>
                     <p class="mb-0">Total Relationships</p>
                 </div>
             </div>
@@ -371,121 +371,72 @@
         // Setup view switching
         setupViewSwitching();
         
-        // Export report functionality with error handling
+        // Export report functionality
         document.getElementById('export-analytics').addEventListener('click', function() {
-            try {
-                // Create analytics data object
-                const analyticsData = {
-                    graphInfo: {
-                        name: "{{ graph.name }}",
-                        description: "{{ graph.description|default('No description') }}",
-                        domain: "{{ graph.domain }}",
-                        created: "{{ graph.created_at.strftime('%Y-%m-%d') }}",
-                        updated: "{{ graph.updated_at.strftime('%Y-%m-%d') }}"
+            // Create analytics data object
+            const analyticsData = {
+                graphInfo: {
+                    name: "{{ graph.name }}",
+                    description: "{{ graph.description }}",
+                    domain: "{{ graph.domain }}",
+                    created: "{{ graph.created_at.strftime('%Y-%m-%d') }}",
+                    updated: "{{ graph.updated_at.strftime('%Y-%m-%d') }}"
+                },
+                metrics: {
+                    nodeCount: {{ graph_data.node_count }},
+                    relationshipCount: {{ graph_data.relationship_count }},
+                    density: {{ "%.4f"|format(graph_data.density) }},
+                    avgConnections: {{ "%.2f"|format(graph_data.avg_degree) }},
+                    avgPathLength: {{ "%.2f"|format(graph_data.avg_path_length or 0) }},
+                    isolatedNodes: {{ graph_data.isolated_nodes }},
+                    clusteringCoefficient: {{ "%.4f"|format(graph_data.clustering_coefficient or 0) }},
+                    mostConnectedNodes: [
+                        {% for node in graph_data.central_nodes[:5] %}
+                            {
+                                id: "{{ node.id }}",
+                                label: "{{ node.label }}",
+                                category: "{{ node.category }}",
+                                centrality: {{ "%.2f"|format(node.centrality) }}
+                            }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    categoryDistribution: {
+                        {% for category, count in graph_data.category_counts.items() %}
+                            "{{ category }}": {{ count }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
                     },
-                    metrics: {
-                        nodeCount: {{ graph_data.node_count }},
-                        relationshipCount: {{ graph_data.relationship_count }},
-                        density: {{ "%.4f"|format(graph_data.density) }},
-                        avgConnections: {{ "%.2f"|format(graph_data.avg_degree) }},
-                        isolatedNodes: {{ graph_data.isolated_nodes }},
-                        communityCount: {{ graph_data.communities|length }},
-                        mostConnectedNodes: [
-                            {% for node in graph_data.central_nodes[:5] %}
-                                {
-                                    id: "{{ node.id }}",
-                                    label: "{{ node.label }}",
-                                    category: "{{ node.category }}",
-                                    centrality: {{ "%.2f"|format(node.centrality) }}
-                                }{% if not loop.last %},{% endif %}
-                            {% endfor %}
-                        ],
-                        categoryDistribution: {
-                            {% for category, count in graph_data.category_counts.items() %}
-                                "{{ category }}": {{ count }}{% if not loop.last %},{% endif %}
-                            {% endfor %}
-                        },
-                        relationshipDistribution: {
-                            {% for rel_type, count in graph_data.relationship_counts.items() %}
-                                "{{ rel_type }}": {{ count }}{% if not loop.last %},{% endif %}
-                            {% endfor %}
-                        }
+                    relationshipDistribution: {
+                        {% for rel_type, count in graph_data.relationship_counts.items() %}
+                            "{{ rel_type }}": {{ count }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
                     }
-                };
-                
-                // Format timestamp for filename
-                const now = new Date();
-                const timestamp = now.toISOString().replace(/[:.]/g, '-').substring(0, 19);
-                
-                // Convert to JSON string with nice formatting
-                const jsonData = JSON.stringify(analyticsData, null, 2);
-                
-                // Create a blob and download link
-                const blob = new Blob([jsonData], { type: 'application/json' });
-                
-                // Try multiple download methods for compatibility
-                try {
-                    // Method 1: Using URL.createObjectURL
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `graph-analytics-${timestamp}.json`;
-                    a.style.display = 'none';
-                    document.body.appendChild(a);
-                    
-                    // Attempt to trigger download with a delay
-                    setTimeout(() => {
-                        try {
-                            a.click();
-                            // Clean up after a delay
-                            setTimeout(() => {
-                                document.body.removeChild(a);
-                                URL.revokeObjectURL(url);
-                            }, 200);
-                        } catch (e) {
-                            console.error("Click error:", e);
-                            fallbackDownload(blob, `graph-analytics-${timestamp}.json`);
-                        }
-                    }, 50);
-                } catch (error) {
-                    console.error("Primary download method failed:", error);
-                    fallbackDownload(blob, `graph-analytics-${timestamp}.json`);
                 }
-            } catch (error) {
-                console.error("Export error:", error);
-                alert("Export failed: " + error.message);
-            }
+            };
+            
+            // Format timestamp for filename
+            const now = new Date();
+            const timestamp = now.toISOString().replace(/:/g, '-').replace(/\..+/, '');
+            
+            // Convert to JSON string with nice formatting
+            const jsonData = JSON.stringify(analyticsData, null, 2);
+            
+            // Create a blob and download link
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            // Create link and trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `graph-analytics-${timestamp}.json`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
         });
-        
-        // Fallback download function for browser compatibility
-        function fallbackDownload(blob, fileName) {
-            try {
-                // Method 2: Using window.navigator.msSaveBlob (for IE/Edge)
-                if (window.navigator && window.navigator.msSaveBlob) {
-                    window.navigator.msSaveBlob(blob, fileName);
-                    return;
-                }
-                
-                // Method 3: Create data URL
-                const reader = new FileReader();
-                reader.onload = function() {
-                    const dataUrl = reader.result;
-                    const link = document.createElement("a");
-                    link.href = dataUrl;
-                    link.download = fileName;
-                    link.style.display = "none";
-                    document.body.appendChild(link);
-                    link.click();
-                    setTimeout(() => {
-                        document.body.removeChild(link);
-                    }, 100);
-                };
-                reader.readAsDataURL(blob);
-            } catch (fallbackError) {
-                console.error("Fallback download failed:", fallbackError);
-                alert("Export failed - your browser may not support the download feature.");
-            }
-        }
         
         // Schedule analysis functionality
         document.getElementById('schedule-analysis').addEventListener('click', function() {
