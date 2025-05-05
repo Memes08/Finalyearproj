@@ -1,0 +1,1795 @@
+entity1,relation,entity2
+1,HAS_RELEASED,1995-11-22
+1,HAS_TITLE,Toy Story
+1,HAS_ACTORS,Jim Varney|Tim Allen|Tom Hanks|Don Rickles
+1,HAS_DIRECTOR,John Lasseter
+1,HAS_GENRES,Adventure|Animation|Children|Comedy|Fantasy
+1,HAS_IMDBRATING,8.3
+2,HAS_RELEASED,1995-12-15
+2,HAS_TITLE,Jumanji
+2,HAS_ACTORS,Robin Williams|Bradley Pierce|Kirsten Dunst|Jonathan Hyde
+2,HAS_DIRECTOR,Joe Johnston
+2,HAS_GENRES,Adventure|Children|Fantasy
+2,HAS_IMDBRATING,6.9
+3,HAS_RELEASED,1995-12-22
+3,HAS_TITLE,Grumpier Old Men
+3,HAS_ACTORS,Walter Matthau|Ann-Margret|Jack Lemmon|Sophia Loren
+3,HAS_DIRECTOR,Howard Deutch
+3,HAS_GENRES,Comedy|Romance
+3,HAS_IMDBRATING,6.6
+4,HAS_RELEASED,1995-12-22
+4,HAS_TITLE,Waiting to Exhale
+4,HAS_ACTORS,Whitney Houston|Lela Rochon|Angela Bassett|Loretta Devine
+4,HAS_DIRECTOR,Forest Whitaker
+4,HAS_GENRES,Romance|Drama|Comedy
+4,HAS_IMDBRATING,5.6
+5,HAS_RELEASED,1995-12-08
+5,HAS_TITLE,Father of the Bride Part II
+5,HAS_ACTORS,Steve Martin|Kimberly Williams-Paisley|Diane Keaton|Martin Short
+5,HAS_DIRECTOR,Charles Shyer
+5,HAS_GENRES,Comedy
+5,HAS_IMDBRATING,5.9
+6,HAS_RELEASED,1995-12-15
+6,HAS_TITLE,Heat
+6,HAS_ACTORS,Al Pacino|Robert De Niro|Val Kilmer|Jon Voight
+6,HAS_DIRECTOR,Michael Mann
+6,HAS_GENRES,Action|Crime|Thriller
+6,HAS_IMDBRATING,8.2
+7,HAS_RELEASED,1995-12-15
+7,HAS_TITLE,Sabrina
+7,HAS_ACTORS,Julia Ormond|Harrison Ford|Nancy Marchand|Greg Kinnear
+7,HAS_DIRECTOR,Sydney Pollack
+7,HAS_GENRES,Comedy|Romance
+7,HAS_IMDBRATING,6.2
+8,HAS_RELEASED,1995-12-22
+8,HAS_TITLE,Tom and Huck
+8,HAS_ACTORS,Jonathan Taylor Thomas|Brad Renfro|Eric Schweig|Charles Rocket
+8,HAS_DIRECTOR,Peter Hewitt
+8,HAS_GENRES,Children|Adventure
+8,HAS_IMDBRATING,5.6
+9,HAS_RELEASED,1995-12-22
+9,HAS_TITLE,Sudden Death
+9,HAS_ACTORS,Jean-Claude Van Damme|Powers Boothe|Raymond J. Barry|Whittni Wright
+9,HAS_DIRECTOR,Peter Hyams
+9,HAS_GENRES,Action
+9,HAS_IMDBRATING,5.7
+10,HAS_RELEASED,1995-11-17
+10,HAS_TITLE,GoldenEye
+10,HAS_ACTORS,Pierce Brosnan|Famke Janssen|Sean Bean|Izabella Scorupco
+10,HAS_DIRECTOR,Martin Campbell
+10,HAS_GENRES,Adventure|Action|Thriller
+10,HAS_IMDBRATING,7.2
+11,HAS_RELEASED,1995-11-17
+11,HAS_TITLE,"American President, The"
+11,HAS_ACTORS,Martin Sheen|Michael J. Fox|Michael Douglas|Annette Bening
+11,HAS_DIRECTOR,Rob Reiner
+11,HAS_GENRES,Comedy|Romance|Drama
+11,HAS_IMDBRATING,6.8
+12,HAS_RELEASED,1995-12-22
+12,HAS_TITLE,Dracula: Dead and Loving It
+12,HAS_ACTORS,Peter MacNicol|Leslie Nielsen|Steven Weber|Amy Yasbeck
+12,HAS_DIRECTOR,Mel Brooks
+12,HAS_GENRES,Comedy|Horror
+12,HAS_IMDBRATING,5.8
+13,HAS_RELEASED,1995-12-22
+13,HAS_TITLE,Balto
+13,HAS_ACTORS,Kevin Bacon|Bob Hoskins|Jim Cummings|Bridget Fonda
+13,HAS_DIRECTOR,Simon Wells
+13,HAS_GENRES,Children|Adventure|Animation
+13,HAS_IMDBRATING,7.1
+14,HAS_RELEASED,1996-01-05
+14,HAS_TITLE,Nixon
+14,HAS_ACTORS,Ed Harris|Anthony Hopkins|Powers Boothe|Joan Allen
+14,HAS_DIRECTOR,Oliver Stone
+14,HAS_GENRES,Drama
+14,HAS_IMDBRATING,7.1
+15,HAS_RELEASED,1995-12-22
+15,HAS_TITLE,Cutthroat Island
+15,HAS_ACTORS,Geena Davis|Frank Langella|Matthew Modine|Maury Chaykin
+15,HAS_DIRECTOR,Renny Harlin
+15,HAS_GENRES,Romance|Adventure|Action
+15,HAS_IMDBRATING,5.6
+16,HAS_RELEASED,1995-11-22
+16,HAS_TITLE,Casino
+16,HAS_ACTORS,Robert De Niro|Joe Pesci|Sharon Stone|James Woods
+16,HAS_DIRECTOR,Martin Scorsese
+16,HAS_GENRES,Drama|Crime
+16,HAS_IMDBRATING,8.2
+17,HAS_RELEASED,1996-01-26
+17,HAS_TITLE,Sense and Sensibility
+17,HAS_ACTORS,James Fleet|Kate Winslet|Tom Wilkinson|Harriet Walter
+17,HAS_DIRECTOR,Ang Lee
+17,HAS_GENRES,Drama|Romance
+17,HAS_IMDBRATING,7.7
+18,HAS_RELEASED,1995-12-25
+18,HAS_TITLE,Four Rooms
+18,HAS_ACTORS,Amanda De Cadenet|Valeria Golino|Madonna|Sammi Davis
+18,HAS_DIRECTOR,Allison Anders|Robert Rodriguez|Quentin Tarantino| Alexandre Rockwell
+18,HAS_GENRES,Comedy
+18,HAS_IMDBRATING,6.7
+19,HAS_RELEASED,1995-11-10
+19,HAS_TITLE,Ace Ventura: When Nature Calls
+19,HAS_ACTORS,Jim Carrey|Ian McNeice|Simon Callow|Maynard Eziashi
+19,HAS_DIRECTOR,Steve Oedekerk
+19,HAS_GENRES,Comedy
+19,HAS_IMDBRATING,6.3
+20,HAS_RELEASED,1995-11-22
+20,HAS_TITLE,Money Train
+20,HAS_ACTORS,Wesley Snipes|Robert Blake|Woody Harrelson|Jennifer Lopez
+20,HAS_DIRECTOR,Joseph Ruben
+20,HAS_GENRES,Crime|Comedy|Thriller|Drama|Action
+20,HAS_IMDBRATING,5.6
+21,HAS_RELEASED,1995-10-20
+21,HAS_TITLE,Get Shorty
+21,HAS_ACTORS,Danny DeVito|Gene Hackman|Rene Russo|John Travolta
+21,HAS_DIRECTOR,Barry Sonnenfeld
+21,HAS_GENRES,Thriller|Crime|Comedy
+21,HAS_IMDBRATING,6.9
+22,HAS_RELEASED,1995-10-27
+22,HAS_TITLE,Copycat
+22,HAS_ACTORS,Sigourney Weaver|Holly Hunter|Dermot Mulroney|William McNamara
+22,HAS_DIRECTOR,Jon Amiel
+22,HAS_GENRES,Drama|Horror|Mystery|Thriller|Crime
+22,HAS_IMDBRATING,6.6
+23,HAS_RELEASED,1995-10-06
+23,HAS_TITLE,Assassins
+23,HAS_ACTORS,Sylvester Stallone|Anatoli Davydov|Antonio Banderas|Julianne Moore
+23,HAS_DIRECTOR,Richard Donner
+23,HAS_GENRES,Action|Crime|Thriller
+23,HAS_IMDBRATING,6.3
+24,HAS_RELEASED,1995-10-27
+24,HAS_TITLE,Powder
+24,HAS_ACTORS,Mary Steenburgen|Jeff Goldblum|Lance Henriksen|Sean Patrick Flanery
+24,HAS_DIRECTOR,Victor Salva
+24,HAS_GENRES,Sci-Fi|Drama
+24,HAS_IMDBRATING,6.5
+25,HAS_RELEASED,1996-02-09
+25,HAS_TITLE,Leaving Las Vegas
+25,HAS_ACTORS,Nicolas Cage|Elisabeth Shue|Julian Sands|Richard Lewis
+25,HAS_DIRECTOR,Mike Figgis
+25,HAS_GENRES,Romance|Drama
+25,HAS_IMDBRATING,7.6
+26,HAS_RELEASED,1996-01-19
+26,HAS_TITLE,Othello
+26,HAS_ACTORS,Irène Jacob|Laurence Fishburne|Kenneth Branagh|Nathaniel Parker
+26,HAS_DIRECTOR,Oliver Parker
+26,HAS_GENRES,Drama
+26,HAS_IMDBRATING,7.0
+27,HAS_RELEASED,1995-10-20
+27,HAS_TITLE,Now and Then
+27,HAS_ACTORS,Melanie Griffith|Thora Birch|Rosie O'Donnell|Christina Ricci
+27,HAS_DIRECTOR,Lesli Linka Glatter
+27,HAS_GENRES,Drama|Children
+27,HAS_IMDBRATING,6.7
+28,HAS_RELEASED,1995-09-27
+28,HAS_TITLE,Persuasion
+28,HAS_ACTORS,Amanda Root|Susan Fleetwood|Ciarán Hinds|Corin Redgrave
+28,HAS_DIRECTOR,Roger Michell
+28,HAS_GENRES,Romance|Drama
+28,HAS_IMDBRATING,7.7
+29,HAS_RELEASED,1995-12-15
+29,HAS_TITLE,"City of Lost Children, The (Cité des enfants perdus, La)"
+29,HAS_ACTORS,Ron Perlman|Judith Vittet|Daniel Emilfork|Dominique Pinon
+29,HAS_DIRECTOR,Jean-Pierre Jeunet|Marc Caro
+29,HAS_GENRES,Adventure|Drama|Fantasy|Mystery|Sci-Fi
+29,HAS_IMDBRATING,7.7
+30,HAS_RELEASED,1995-12-22
+30,HAS_TITLE,Shanghai Triad (Yao a yao yao dao waipo qiao)
+30,HAS_ACTORS,Gong Li|Li Baotian|Wang Xiaoxiao|Xuejian Li
+30,HAS_DIRECTOR,Yimou Zhang
+30,HAS_GENRES,Drama|Crime
+30,HAS_IMDBRATING,7.2
+31,HAS_RELEASED,1995-08-11
+31,HAS_TITLE,Dangerous Minds
+31,HAS_ACTORS,Michelle Pfeiffer|Robin Bartlett|George Dzundza|Courtney B. Vance
+31,HAS_DIRECTOR,John N. Smith
+31,HAS_GENRES,Drama
+31,HAS_IMDBRATING,6.4
+32,HAS_RELEASED,1996-01-05
+32,HAS_TITLE,Twelve Monkeys (a.k.a. 12 Monkeys)
+32,HAS_ACTORS,Bruce Willis|Jon Seda|Michael Chance|Joseph Melito
+32,HAS_DIRECTOR,Terry Gilliam
+32,HAS_GENRES,Mystery|Sci-Fi|Thriller
+32,HAS_IMDBRATING,8.1
+34,HAS_RELEASED,1995-08-04
+34,HAS_TITLE,Babe
+34,HAS_ACTORS,Hugo Weaving|Christine Cavanaugh|Danny Mann|Miriam Margolyes
+34,HAS_DIRECTOR,Chris Noonan
+34,HAS_GENRES,Children|Drama
+34,HAS_IMDBRATING,6.8
+35,HAS_RELEASED,1995-11-10
+35,HAS_TITLE,Carrington
+35,HAS_ACTORS,Steven Waddington|Emma Thompson|Samuel West|Jonathan Pryce
+35,HAS_DIRECTOR,Christopher Hampton
+35,HAS_GENRES,Romance|Drama
+35,HAS_IMDBRATING,6.9
+36,HAS_RELEASED,1996-02-02
+36,HAS_TITLE,Dead Man Walking
+36,HAS_ACTORS,Susan Sarandon|Raymond J. Barry|Robert Prosky|Sean Penn
+36,HAS_DIRECTOR,Tim Robbins
+36,HAS_GENRES,Drama|Crime
+36,HAS_IMDBRATING,7.6
+37,HAS_RELEASED,1995-10-20
+37,HAS_TITLE,Across the Sea of Time
+37,HAS_ACTORS,Victor Steinbach|Peter Reznick|John McDonough|Avi Hoffman
+37,HAS_DIRECTOR,Stephen Low
+37,HAS_GENRES,IMAX|Documentary
+37,HAS_IMDBRATING,6.6
+38,HAS_RELEASED,1995-11-17
+38,HAS_TITLE,It Takes Two
+38,HAS_ACTORS,Kirstie Alley|Steve Guttenberg|Mary-Kate Olsen|Ashley Olsen
+38,HAS_DIRECTOR,Andy Tennant
+38,HAS_GENRES,Comedy|Children
+38,HAS_IMDBRATING,5.7
+39,HAS_RELEASED,1995-07-19
+39,HAS_TITLE,Clueless
+39,HAS_ACTORS,Alicia Silverstone|Paul Rudd|Brittany Murphy|Stacey Dash
+39,HAS_DIRECTOR,Amy Heckerling
+39,HAS_GENRES,Comedy|Romance
+39,HAS_IMDBRATING,6.8
+40,HAS_RELEASED,1995-12-15
+40,HAS_TITLE,"Cry, the Beloved Country"
+40,HAS_ACTORS,James Earl Jones|Vusi Kunene|Richard Harris|Charles S. Dutton
+40,HAS_DIRECTOR,Darrell James Roodt
+40,HAS_GENRES,Drama
+40,HAS_IMDBRATING,6.9
+41,HAS_RELEASED,1995-12-29
+41,HAS_TITLE,Richard III
+41,HAS_ACTORS,Ian McKellen|Jim Broadbent|Annette Bening|Robert Downey Jr.
+41,HAS_DIRECTOR,Richard Loncraine
+41,HAS_GENRES,Drama|War
+41,HAS_IMDBRATING,7.5
+42,HAS_RELEASED,1995-10-06
+42,HAS_TITLE,Dead Presidents
+42,HAS_ACTORS,Larenz Tate|Freddy Rodríguez|Chris Tucker|Keith David
+42,HAS_DIRECTOR,Albert Hughes| Allen Hughes
+42,HAS_GENRES,Drama|Action|Crime
+42,HAS_IMDBRATING,6.8
+43,HAS_RELEASED,1996-02-02
+43,HAS_TITLE,Restoration
+43,HAS_ACTORS,Sam Neill|David Thewlis|Robert Downey Jr.|Polly Walker
+43,HAS_DIRECTOR,Michael Hoffman
+43,HAS_GENRES,Drama
+43,HAS_IMDBRATING,6.7
+44,HAS_RELEASED,1995-08-18
+44,HAS_TITLE,Mortal Kombat
+44,HAS_ACTORS,Christopher Lambert|Linden Ashby|Robin Shou|Cary-Hiroyuki Tagawa
+44,HAS_DIRECTOR,Paul W.S. Anderson
+44,HAS_GENRES,Adventure|Action|Fantasy
+44,HAS_IMDBRATING,5.8
+45,HAS_RELEASED,1995-10-06
+45,HAS_TITLE,To Die For
+45,HAS_ACTORS,Joaquin Phoenix|Matt Dillon|Casey Affleck|Nicole Kidman
+45,HAS_DIRECTOR,Gus Van Sant
+45,HAS_GENRES,Drama|Thriller|Comedy
+45,HAS_IMDBRATING,6.8
+46,HAS_RELEASED,1995-10-06
+46,HAS_TITLE,How to Make an American Quilt
+46,HAS_ACTORS,Anne Bancroft|Winona Ryder|Adam Baldwin|Kate Capshaw
+46,HAS_DIRECTOR,Jocelyn Moorhouse
+46,HAS_GENRES,Romance|Drama
+46,HAS_IMDBRATING,6.2
+47,HAS_RELEASED,1995-09-22
+47,HAS_TITLE,Seven (a.k.a. Se7en)
+47,HAS_ACTORS,Morgan Freeman|Brad Pitt|Andrew Kevin Walker|Daniel Zacapa
+47,HAS_DIRECTOR,David Fincher
+47,HAS_GENRES,Mystery|Thriller
+47,HAS_IMDBRATING,8.6
+48,HAS_RELEASED,1995-06-23
+48,HAS_TITLE,Pocahontas
+48,HAS_ACTORS,Mel Gibson|Irene Bedard|David Ogden Stiers|Judy Kuhn
+48,HAS_DIRECTOR,Eric Goldberg|Mike Gabriel
+48,HAS_GENRES,Drama|Musical|Animation|Children|Romance
+48,HAS_IMDBRATING,6.6
+49,HAS_RELEASED,1995-11-17
+49,HAS_TITLE,When Night Is Falling
+49,HAS_ACTORS,Henry Czerny|Rachael Crawford|David Fox|Pascale Bussières
+49,HAS_DIRECTOR,Patricia Rozema
+49,HAS_GENRES,Drama|Romance
+49,HAS_IMDBRATING,6.8
+50,HAS_RELEASED,1995-09-15
+50,HAS_TITLE,"Usual Suspects, The"
+50,HAS_ACTORS,Gabriel Byrne|Stephen Baldwin|Benicio Del Toro|Kevin Pollak
+50,HAS_DIRECTOR,Bryan Singer
+50,HAS_GENRES,Thriller|Mystery|Crime
+50,HAS_IMDBRATING,8.6
+52,HAS_RELEASED,1995-11-10
+52,HAS_TITLE,Mighty Aphrodite
+52,HAS_ACTORS,Woody Allen|Mira Sorvino|Rene Ceballos|George De La Pena
+52,HAS_DIRECTOR,Woody Allen
+52,HAS_GENRES,Drama|Comedy|Romance
+52,HAS_IMDBRATING,7.1
+53,HAS_RELEASED,1995-10-04
+53,HAS_TITLE,Lamerica
+53,HAS_ACTORS,Enrico Lo Verso|Carmelo Di Mazzarelli|Piro Milkani|Michele Placido
+53,HAS_DIRECTOR,Gianni Amelio
+53,HAS_GENRES,Adventure|Drama
+53,HAS_IMDBRATING,7.6
+54,HAS_RELEASED,1995-09-29
+54,HAS_TITLE,"Big Green, The"
+54,HAS_ACTORS,Olivia d'Abo|Jay O. Sanders|Steve Guttenberg|John Terry
+54,HAS_DIRECTOR,Holly Goldberg Sloan
+54,HAS_GENRES,Children|Comedy
+54,HAS_IMDBRATING,5.4
+55,HAS_RELEASED,1995-12-08
+55,HAS_TITLE,Georgia
+55,HAS_ACTORS,Jennifer Jason Leigh|Max Perlich|Mare Winningham|Ted Levine
+55,HAS_DIRECTOR,Ulu Grosbard
+55,HAS_GENRES,Drama
+55,HAS_IMDBRATING,6.4
+57,HAS_RELEASED,1995-11-03
+57,HAS_TITLE,Home for the Holidays
+57,HAS_ACTORS,Holly Hunter|Charles Durning|Robert Downey Jr.|Anne Bancroft
+57,HAS_DIRECTOR,Jodie Foster
+57,HAS_GENRES,Drama
+57,HAS_IMDBRATING,6.6
+58,HAS_RELEASED,1996-03-22
+58,HAS_TITLE,"Postman, The (Postino, Il)"
+58,HAS_ACTORS,Philippe Noiret|Renato Scarpa|Maria Grazia Cucinotta|Massimo Troisi
+58,HAS_DIRECTOR,Michael Radford
+58,HAS_GENRES,Comedy|Romance|Drama
+58,HAS_IMDBRATING,7.8
+59,HAS_RELEASED,1996-08-16
+59,HAS_TITLE,"Confessional, The (Confessionnal, Le)"
+59,HAS_ACTORS,Patrick Goyette|Jean-Louis Millette|Kristin Scott Thomas|Lothaire Bluteau
+59,HAS_DIRECTOR,Robert Lepage
+59,HAS_GENRES,Drama|Mystery
+59,HAS_IMDBRATING,7.6
+60,HAS_RELEASED,1995-07-14
+60,HAS_TITLE,"Indian in the Cupboard, The"
+60,HAS_ACTORS,Hal Scardino|Litefoot|Lindsay Crouse|Richard Jenkins
+60,HAS_DIRECTOR,Frank Oz
+60,HAS_GENRES,Fantasy|Adventure|Children
+60,HAS_IMDBRATING,5.9
+61,HAS_RELEASED,1996-01-12
+61,HAS_TITLE,Eye for an Eye
+61,HAS_ACTORS,Sally Field|Ed Harris|Olivia Burnette|Alexandra Kyle
+61,HAS_DIRECTOR,John Schlesinger
+61,HAS_GENRES,Drama|Thriller
+61,HAS_IMDBRATING,6.1
+62,HAS_RELEASED,1996-01-19
+62,HAS_TITLE,Mr. Holland's Opus
+62,HAS_ACTORS,Jay Thomas|Glenne Headly|Olympia Dukakis|Richard Dreyfuss
+62,HAS_DIRECTOR,Stephen Herek
+62,HAS_GENRES,Drama
+62,HAS_IMDBRATING,7.3
+63,HAS_RELEASED,1996-01-12
+63,HAS_TITLE,Don't Be a Menace to South Central While Drinking Your Juice in the Hood
+63,HAS_ACTORS,Chris Spencer|Tracey Cherelle Jones|Marlon Wayans|Shawn Wayans
+63,HAS_DIRECTOR,Paris Barclay
+63,HAS_GENRES,Comedy|Crime
+63,HAS_IMDBRATING,6.6
+64,HAS_RELEASED,1996-01-12
+64,HAS_TITLE,Two if by Sea
+64,HAS_ACTORS,Denis Leary|Sandra Bullock|Stephen Dillane|Yaphet Kotto
+64,HAS_DIRECTOR,Bill Bennett
+64,HAS_GENRES,Comedy|Romance
+64,HAS_IMDBRATING,5.2
+65,HAS_RELEASED,1996-01-12
+65,HAS_TITLE,Bio-Dome
+65,HAS_ACTORS,William Atherton|Denise Dowse|Dara Tomanovich|Kevin West
+65,HAS_DIRECTOR,Jason Bloom
+65,HAS_GENRES,Comedy
+65,HAS_IMDBRATING,4.3
+66,HAS_RELEASED,1996-01-12
+66,HAS_TITLE,Lawnmower Man 2: Beyond Cyberspace
+66,HAS_ACTORS,Patrick Bergin|Matt Frewer|Ely Pouget|Austin O'Brien
+66,HAS_DIRECTOR,Farhad Mann
+66,HAS_GENRES,Thriller|Sci-Fi|Action
+66,HAS_IMDBRATING,2.4
+68,HAS_RELEASED,1996-01-19
+68,HAS_TITLE,French Twist (Gazon maudit)
+68,HAS_ACTORS,Ticky Holgado|Alain Chabat|Josiane Balasko|Victoria Abril
+68,HAS_DIRECTOR,Josiane Balasko
+68,HAS_GENRES,Romance|Comedy
+68,HAS_IMDBRATING,6.4
+69,HAS_RELEASED,1995-04-26
+69,HAS_TITLE,Friday
+69,HAS_ACTORS,Tommy 'Tiny' Lister|Nia Long|Chris Tucker|Ice Cube
+69,HAS_DIRECTOR,F. Gary Gray
+69,HAS_GENRES,Comedy
+69,HAS_IMDBRATING,7.3
+70,HAS_RELEASED,1996-01-19
+70,HAS_TITLE,From Dusk Till Dawn
+70,HAS_ACTORS,George Clooney|Quentin Tarantino|Harvey Keitel|Juliette Lewis
+70,HAS_DIRECTOR,Robert Rodriguez
+70,HAS_GENRES,Thriller|Action|Comedy|Horror
+70,HAS_IMDBRATING,7.3
+71,HAS_RELEASED,1995-11-03
+71,HAS_TITLE,Fair Game
+71,HAS_ACTORS,William Baldwin|Christopher McDonald|Steven Berkoff|Cindy Crawford
+71,HAS_DIRECTOR,Andrew Sipes
+71,HAS_GENRES,Action
+71,HAS_IMDBRATING,4.1
+72,HAS_RELEASED,1995-10-06
+72,HAS_TITLE,Kicking and Screaming
+72,HAS_ACTORS,Josh Hamilton|Jonathan Baumbach|Samuel Gould|Catherine Kellner
+72,HAS_DIRECTOR,Noah Baumbach
+72,HAS_GENRES,Drama|Comedy
+72,HAS_IMDBRATING,7.1
+73,HAS_RELEASED,1995-11-03
+73,HAS_TITLE,"Misérables, Les"
+73,HAS_ACTORS,Jean-Paul Belmondo|Michel Boujenah|Alessandra Martines|Salomé Lelouch
+73,HAS_DIRECTOR, Claude Lelouch
+73,HAS_GENRES,War|Drama
+73,HAS_IMDBRATING,7.5
+74,HAS_RELEASED,1996-01-26
+74,HAS_TITLE,Bed of Roses
+74,HAS_ACTORS,Christian Slater|Mary Stuart Masterson|Josh Brolin|Pamela Adlon
+74,HAS_DIRECTOR,Michael Goldenberg
+74,HAS_GENRES,Romance|Drama
+74,HAS_IMDBRATING,6.0
+76,HAS_RELEASED,1996-01-26
+76,HAS_TITLE,Screamers
+76,HAS_ACTORS,Peter Weller|Andrew Lauer|Jennifer Rubin|Roy Dupuis
+76,HAS_DIRECTOR,Christian Duguay
+76,HAS_GENRES,Action|Sci-Fi|Thriller
+76,HAS_IMDBRATING,6.4
+77,HAS_RELEASED,1995-11-16
+77,HAS_TITLE,Nico Icon
+77,HAS_ACTORS,Christian Aaron Boulogne|Christian Päffgen|Tina Aumont|Nico
+77,HAS_DIRECTOR,Susanne Ofteringer
+77,HAS_GENRES,Documentary
+77,HAS_IMDBRATING,7.3
+78,HAS_RELEASED,1995-11-16
+78,HAS_TITLE,"Crossing Guard, The"
+78,HAS_ACTORS,Jack Nicholson|Anjelica Huston|David Morse|Robin Wright
+78,HAS_DIRECTOR,Sean Penn
+78,HAS_GENRES,Action|Crime|Drama|Thriller
+78,HAS_IMDBRATING,6.4
+79,HAS_RELEASED,1996-02-02
+79,HAS_TITLE,"Juror, The"
+79,HAS_ACTORS,Alec Baldwin|Demi Moore|Anne Heche|Joseph Gordon-Levitt
+79,HAS_DIRECTOR,Brian Gibson
+79,HAS_GENRES,Drama|Thriller
+79,HAS_IMDBRATING,5.6
+80,HAS_RELEASED,1995-11-27
+80,HAS_TITLE,"White Balloon, The (Badkonake sefid)"
+80,HAS_ACTORS,Anna Borkowska|Aida Mohammadkhani|Mohsen Kafili|Fereshteh Sadre Orafaiy
+80,HAS_DIRECTOR,Jafar Panahi
+80,HAS_GENRES,Children|Drama
+80,HAS_IMDBRATING,7.8
+81,HAS_RELEASED,1995-12-01
+81,HAS_TITLE,Things to Do in Denver When You're Dead
+81,HAS_ACTORS,Andy Garcia|Bill Nunn|Christopher Lloyd|William Forsythe
+81,HAS_DIRECTOR,Gary Fleder
+81,HAS_GENRES,Crime|Drama|Romance
+81,HAS_IMDBRATING,6.8
+82,HAS_RELEASED,1996-02-02
+82,HAS_TITLE,Antonia's Line (Antonia)
+82,HAS_ACTORS,Veerle van Overloop|Els Dottermans|Dora van der Groen|Willeke van Ammelrooy
+82,HAS_DIRECTOR,Marleen Gorris
+82,HAS_GENRES,Drama|Comedy
+82,HAS_IMDBRATING,7.5
+83,HAS_RELEASED,1996-01-26
+83,HAS_TITLE,Once Upon a Time... When We Were Colored
+83,HAS_ACTORS,Al Freeman Jr.|Leon|Phylicia Rashad|Paula Kelly
+83,HAS_DIRECTOR,Tim Reid
+83,HAS_GENRES,Drama|Romance
+83,HAS_IMDBRATING,7.3
+84,HAS_RELEASED,1996-09-15
+84,HAS_TITLE,Last Summer in the Hamptons
+84,HAS_ACTORS,Victoria Foyt|Jon Robin Baitz|Viveca Lindfors|Savannah Smith Boucher
+84,HAS_DIRECTOR,Henry Jaglom
+84,HAS_GENRES,Drama|Comedy
+84,HAS_IMDBRATING,6.1
+85,HAS_RELEASED,1996-01-26
+85,HAS_TITLE,Angels and Insects
+85,HAS_ACTORS,Patsy Kensit|Kristin Scott Thomas|Mark Rylance|Jeremy Kemp
+85,HAS_DIRECTOR,Philip Haas
+85,HAS_GENRES,Drama|Romance
+85,HAS_IMDBRATING,7.0
+86,HAS_RELEASED,1996-02-02
+86,HAS_TITLE,White Squall
+86,HAS_ACTORS,Jeff Bridges|Scott Wolf|John Savage|Caroline Goodall
+86,HAS_DIRECTOR,Ridley Scott
+86,HAS_GENRES,Action|Drama|Adventure
+86,HAS_IMDBRATING,6.6
+87,HAS_RELEASED,1996-01-12
+87,HAS_TITLE,Dunston Checks In
+87,HAS_ACTORS,Jason Alexander|Faye Dunaway|Rupert Everett|Eric Lloyd
+87,HAS_DIRECTOR,Ken Kwapis
+87,HAS_GENRES,Comedy|Children
+87,HAS_IMDBRATING,5.2
+88,HAS_RELEASED,1996-02-02
+88,HAS_TITLE,Black Sheep
+88,HAS_ACTORS,Chris Farley|Christine Ebersole|Tim Matheson|David Spade
+88,HAS_DIRECTOR,Penelope Spheeris
+88,HAS_GENRES,Comedy
+88,HAS_IMDBRATING,6.2
+89,HAS_RELEASED,1995-11-22
+89,HAS_TITLE,Nick of Time
+89,HAS_ACTORS,Christopher Walken|Courtney Chase|Charles S. Dutton|Johnny Depp
+89,HAS_DIRECTOR,John Badham
+89,HAS_GENRES,Action|Thriller
+89,HAS_IMDBRATING,6.3
+92,HAS_RELEASED,1996-02-23
+92,HAS_TITLE,Mary Reilly
+92,HAS_ACTORS,Julia Roberts|George Cole|Michael Gambon|John Malkovich
+92,HAS_DIRECTOR,Stephen Frears
+92,HAS_GENRES,Horror|Thriller|Drama
+92,HAS_IMDBRATING,5.8
+93,HAS_RELEASED,1995-10-27
+93,HAS_TITLE,Vampire in Brooklyn
+93,HAS_ACTORS,Eddie Murphy|Kadeem Hardison|Angela Bassett|Allen Payne
+93,HAS_DIRECTOR,Wes Craven
+93,HAS_GENRES,Comedy|Horror|Romance
+93,HAS_IMDBRATING,4.5
+94,HAS_RELEASED,1996-02-09
+94,HAS_TITLE,Beautiful Girls
+94,HAS_ACTORS,Annabeth Gish|Matt Dillon|Lauren Holly|Noah Emmerich
+94,HAS_DIRECTOR,Ted Demme
+94,HAS_GENRES,Drama|Romance|Comedy
+94,HAS_IMDBRATING,7.2
+95,HAS_RELEASED,1996-02-09
+95,HAS_TITLE,Broken Arrow
+95,HAS_ACTORS,John Travolta|Christian Slater|Samantha Mathis|Delroy Lindo
+95,HAS_DIRECTOR,John Woo
+95,HAS_GENRES,Adventure|Action|Thriller
+95,HAS_IMDBRATING,6.0
+96,HAS_RELEASED,1996-02-16
+96,HAS_TITLE,In the Bleak Midwinter
+96,HAS_ACTORS,Nicholas Farrell|Richard Briers|Joan Collins|Hetta Charnley
+96,HAS_DIRECTOR,Kenneth Branagh
+96,HAS_GENRES,Comedy|Drama
+96,HAS_IMDBRATING,7.3
+97,HAS_RELEASED,1996-02-23
+97,HAS_TITLE,"Hate (Haine, La)"
+97,HAS_ACTORS,Vincent Cassel|Abdel Ahmed Ghili|Saïd Taghmaoui|Hubert Koundé
+97,HAS_DIRECTOR,Mathieu Kassovitz
+97,HAS_GENRES,Drama|Crime
+97,HAS_IMDBRATING,8.1
+98,HAS_RELEASED,1996-02-09
+98,HAS_TITLE,Shopping
+98,HAS_ACTORS,Fraser James|Sean Pertwee|Jude Law|Sadie Frost
+98,HAS_DIRECTOR,Paul W.S. Anderson
+98,HAS_GENRES,Thriller|Action
+98,HAS_IMDBRATING,5.4
+99,HAS_RELEASED,1996-02-09
+99,HAS_TITLE,Heidi Fleiss: Hollywood Madam
+99,HAS_ACTORS,Heidi Fleiss|Nick Broomfield|Corinne Bohrer|Madam Alex
+99,HAS_DIRECTOR,Nick Broomfield
+99,HAS_GENRES,Documentary
+99,HAS_IMDBRATING,6.6
+100,HAS_RELEASED,1996-02-16
+100,HAS_TITLE,City Hall
+100,HAS_ACTORS,Al Pacino|John Cusack|Bridget Fonda|Danny Aiello
+100,HAS_DIRECTOR,Harold Becker
+100,HAS_GENRES,Thriller|Drama
+100,HAS_IMDBRATING,6.2
+101,HAS_RELEASED,1996-02-21
+101,HAS_TITLE,Bottle Rocket
+101,HAS_ACTORS,Owen Wilson|Luke Wilson|Ned Dowd|Shea Fowler
+101,HAS_DIRECTOR,Wes Anderson
+101,HAS_GENRES,Romance|Crime|Comedy|Adventure
+101,HAS_IMDBRATING,7.1
+102,HAS_RELEASED,1996-02-16
+102,HAS_TITLE,Mr. Wrong
+102,HAS_ACTORS,Dean Stockwell|Joan Cusack|Bill Pullman|Ellen DeGeneres
+102,HAS_DIRECTOR,Nick Castle
+102,HAS_GENRES,Comedy
+102,HAS_IMDBRATING,3.7
+103,HAS_RELEASED,1996-02-23
+103,HAS_TITLE,Unforgettable
+103,HAS_ACTORS,Ray Liotta|Linda Fiorentino|Peter Coyote|Christopher McDonald
+103,HAS_DIRECTOR,John Dahl
+103,HAS_GENRES,Thriller|Sci-Fi|Mystery
+103,HAS_IMDBRATING,6.0
+104,HAS_RELEASED,1996-02-16
+104,HAS_TITLE,Happy Gilmore
+104,HAS_ACTORS,Adam Sandler|Christopher McDonald|Frances Bay|Julie Bowen
+104,HAS_DIRECTOR,Dennis Dugan
+104,HAS_GENRES,Comedy
+104,HAS_IMDBRATING,7.0
+105,HAS_RELEASED,1995-06-02
+105,HAS_TITLE,"Bridges of Madison County, The"
+105,HAS_ACTORS,Clint Eastwood|Meryl Streep|Annie Corley|Victor Slezak
+105,HAS_DIRECTOR,Clint Eastwood
+105,HAS_GENRES,Drama|Romance
+105,HAS_IMDBRATING,7.5
+107,HAS_RELEASED,1996-02-16
+107,HAS_TITLE,Muppet Treasure Island
+107,HAS_ACTORS,Tim Curry|Billy Connolly|Jennifer Saunders|Kevin Bishop
+107,HAS_DIRECTOR,Brian Henson
+107,HAS_GENRES,Children|Comedy|Musical|Adventure
+107,HAS_IMDBRATING,6.9
+108,HAS_RELEASED,1996-05-16
+108,HAS_TITLE,Catwalk
+108,HAS_ACTORS,Christy Turlington|Giorgio Armani|Azzedine Alaïa|Nadja Auermann
+108,HAS_DIRECTOR,Robert Leacock
+108,HAS_GENRES,Documentary
+108,HAS_IMDBRATING,6.4
+110,HAS_RELEASED,1995-05-24
+110,HAS_TITLE,Braveheart
+110,HAS_ACTORS,James Robinson|Sandy Nelson|Sean Lawlor|James Cosmo
+110,HAS_DIRECTOR,Mel Gibson
+110,HAS_GENRES,War|Drama|Action
+110,HAS_IMDBRATING,8.4
+111,HAS_RELEASED,1976-02-08
+111,HAS_TITLE,Taxi Driver
+111,HAS_ACTORS,Diahnne Abbott|Gino Ardito|Frank Adu|Victor Argo
+111,HAS_DIRECTOR,Martin Scorsese
+111,HAS_GENRES,Thriller|Drama|Crime
+111,HAS_IMDBRATING,8.3
+112,HAS_RELEASED,1996-02-23
+112,HAS_TITLE,Rumble in the Bronx (Hont faan kui)
+112,HAS_ACTORS,Bill Tung|Anita Mui|Françoise Yip|Jackie Chan
+112,HAS_DIRECTOR,Stanley Tong
+112,HAS_GENRES,Crime|Comedy|Adventure|Action
+112,HAS_IMDBRATING,6.7
+113,HAS_RELEASED,1996-02-23
+113,HAS_TITLE,Before and After
+113,HAS_ACTORS,Meryl Streep|Julia Weldon|Edward Furlong|Liam Neeson
+113,HAS_DIRECTOR,Barbet Schroeder
+113,HAS_GENRES,Drama|Mystery
+113,HAS_IMDBRATING,6.1
+114,HAS_RELEASED,1996-01-26
+114,HAS_TITLE,Margaret's Museum
+114,HAS_ACTORS,Helena Bonham Carter|Craig Anthony Olejnik|Clive Russell|Kate Nelligan
+114,HAS_DIRECTOR,Mort Ransen
+114,HAS_GENRES,Drama
+114,HAS_IMDBRATING,7.3
+116,HAS_RELEASED,1995-08-31
+116,HAS_TITLE,Anne Frank Remembered
+116,HAS_ACTORS,Kenneth Branagh|Glenn Close|Janny Brandes-Brilslijper
+116,HAS_DIRECTOR,Jon Blair
+116,HAS_GENRES,Documentary
+116,HAS_IMDBRATING,8.2
+117,HAS_RELEASED,1996-02-23
+117,HAS_TITLE,"Young Poisoner's Handbook, The"
+117,HAS_ACTORS,Tobias Arnold|Roger Lloyd Pack|Ruth Sheen|Hugh O'Conor
+117,HAS_DIRECTOR,Benjamin Ross
+117,HAS_GENRES,Drama|Crime
+117,HAS_IMDBRATING,7.1
+118,HAS_RELEASED,1996-03-08
+118,HAS_TITLE,If Lucy Fell
+118,HAS_ACTORS,Ben Stiller|Sarah Jessica Parker|Eric Schaeffer|Elle Macpherson
+118,HAS_DIRECTOR,Eric Schaeffer
+118,HAS_GENRES,Romance|Comedy
+118,HAS_IMDBRATING,4.9
+119,HAS_RELEASED,1995-09-29
+119,HAS_TITLE,"Steal Big, Steal Little"
+119,HAS_ACTORS,Andy Garcia|Rachel Ticotin|Alan Arkin|Joe Pantoliano
+119,HAS_DIRECTOR,Andrew Davis
+119,HAS_GENRES,Comedy
+119,HAS_IMDBRATING,4.8
+121,HAS_RELEASED,1992-12-06
+121,HAS_TITLE,"Boys of St. Vincent, The"
+121,HAS_ACTORS,Philip Dinn|Brian Dooley|Johnny Morina|Henry Czerny
+121,HAS_DIRECTOR,John N. Smith
+121,HAS_GENRES,Drama
+121,HAS_IMDBRATING,7.8
+122,HAS_RELEASED,1992-07-01
+122,HAS_TITLE,Boomerang
+122,HAS_ACTORS,Eddie Murphy|Halle Berry|Robin Givens|David Alan Grier
+122,HAS_DIRECTOR,Reginald Hudlin
+122,HAS_GENRES,Romance|Comedy
+122,HAS_IMDBRATING,5.4
+123,HAS_RELEASED,1996-03-08
+123,HAS_TITLE,Chungking Express (Chung Hing sam lam)
+123,HAS_ACTORS,Tony Leung Chiu-Wai|Brigitte Lin|Takeshi Kaneshiro|Faye Wong
+123,HAS_DIRECTOR, Kar-wai Wong
+123,HAS_GENRES,Mystery|Drama|Romance
+123,HAS_IMDBRATING,8.1
+124,HAS_RELEASED,1996-03-08
+124,HAS_TITLE,"Star Maker, The (Uomo delle stelle, L')"
+124,HAS_ACTORS,Sergio Castellitto|Franco Scaldati|Tiziana Lodato|Leopoldo Trieste
+124,HAS_DIRECTOR,Giuseppe Tornatore
+124,HAS_GENRES,Drama
+124,HAS_IMDBRATING,7.3
+125,HAS_RELEASED,1996-04-12
+125,HAS_TITLE,Flirting With Disaster
+125,HAS_ACTORS,Mary Tyler Moore|Téa Leoni|Patricia Arquette|Ben Stiller
+125,HAS_DIRECTOR,David O. Russell
+125,HAS_GENRES,Comedy
+125,HAS_IMDBRATING,6.8
+126,HAS_RELEASED,1994-10-27
+126,HAS_TITLE,"NeverEnding Story III, The"
+126,HAS_ACTORS,Jack Black|Melody Kay|Carole Finn|Jason James Richter
+126,HAS_DIRECTOR,Peter MacDonald
+126,HAS_GENRES,Fantasy|Children|Adventure
+126,HAS_IMDBRATING,3.1
+129,HAS_RELEASED,1996-02-09
+129,HAS_TITLE,Pie in the Sky
+129,HAS_ACTORS,Josh Charles|Christine Lahti|Anne Heche|John Goodman
+129,HAS_DIRECTOR,Bryan Gordon
+129,HAS_GENRES,Romance|Comedy
+129,HAS_IMDBRATING,5.9
+130,HAS_RELEASED,1995-01-01
+130,HAS_TITLE,Angela
+130,HAS_ACTORS,John Ventimiglia|Anna Levine|Charlotte Eve Blythe|Miranda Rhyne
+130,HAS_DIRECTOR,Rebecca Miller
+130,HAS_GENRES,Drama
+130,HAS_IMDBRATING,6.4
+131,HAS_RELEASED,1995-11-22
+131,HAS_TITLE,Frankie Starlight
+131,HAS_ACTORS,Gabriel Byrne|Niall Toibin|Owen Roe|Corban Walker
+131,HAS_DIRECTOR,Michael Lindsay-Hogg
+131,HAS_GENRES,Drama|Romance
+131,HAS_IMDBRATING,6.7
+132,HAS_RELEASED,1995-10-13
+132,HAS_TITLE,Jade
+132,HAS_ACTORS,David Caruso|Chazz Palminteri|Linda Fiorentino|Richard Crenna
+132,HAS_DIRECTOR,William Friedkin
+132,HAS_GENRES,Thriller
+132,HAS_IMDBRATING,5.1
+135,HAS_RELEASED,1996-03-01
+135,HAS_TITLE,Down Periscope
+135,HAS_ACTORS,Lauren Holly|Kelsey Grammer|Harry Dean Stanton|Rob Schneider
+135,HAS_DIRECTOR,David S. Ward
+135,HAS_GENRES,Comedy
+135,HAS_IMDBRATING,6.0
+137,HAS_RELEASED,1996-03-15
+137,HAS_TITLE,Man of the Year
+137,HAS_ACTORS,Vivian Paxton|Michael Ornstein|Claudette Sutherland|Cal Bartlett
+137,HAS_DIRECTOR,Dirk Shafer
+137,HAS_GENRES,Documentary
+137,HAS_IMDBRATING,6.1
+140,HAS_RELEASED,1996-03-01
+140,HAS_TITLE,Up Close and Personal
+140,HAS_ACTORS,Robert Redford|Michelle Pfeiffer|Stockard Channing|Joe Mantegna
+140,HAS_DIRECTOR,Jon Avnet
+140,HAS_GENRES,Romance|Drama
+140,HAS_IMDBRATING,6.1
+141,HAS_RELEASED,1996-03-08
+141,HAS_TITLE,"Birdcage, The"
+141,HAS_ACTORS,Nathan Lane|Dianne Wiest|Robin Williams|Gene Hackman
+141,HAS_DIRECTOR,Mike Nichols
+141,HAS_GENRES,Comedy
+141,HAS_IMDBRATING,6.9
+144,HAS_RELEASED,1995-08-09
+144,HAS_TITLE,"Brothers McMullen, The"
+144,HAS_ACTORS,Shari Albert|Maxine Bahns|Catharine Bolz|Connie Britton
+144,HAS_DIRECTOR,Edward Burns
+144,HAS_GENRES,Comedy
+144,HAS_IMDBRATING,6.6
+145,HAS_RELEASED,1995-04-07
+145,HAS_TITLE,Bad Boys
+145,HAS_ACTORS,Michael Taliferro|Lisa Boyle|Martin Lawrence|Will Smith
+145,HAS_DIRECTOR,Michael Bay
+145,HAS_GENRES,Thriller|Drama|Crime|Action|Comedy
+145,HAS_IMDBRATING,6.8
+146,HAS_RELEASED,1995-08-25
+146,HAS_TITLE,"Amazing Panda Adventure, The"
+146,HAS_ACTORS,Wang Fei|Stephen Lang|Yi Ding|Ryan Slater
+146,HAS_DIRECTOR,Christopher Cain
+146,HAS_GENRES,Children|Adventure
+146,HAS_IMDBRATING,5.8
+147,HAS_RELEASED,1995-04-21
+147,HAS_TITLE,"Basketball Diaries, The"
+147,HAS_ACTORS,Leonardo DiCaprio|Marilyn Sokol|Lorraine Bracco|James Madio
+147,HAS_DIRECTOR,Scott Kalvert
+147,HAS_GENRES,Drama
+147,HAS_IMDBRATING,7.3
+148,HAS_RELEASED,1995-07-21
+148,HAS_TITLE,"Awfully Big Adventure, An"
+148,HAS_ACTORS,Alan Rickman|Alun Armstrong|Georgina Cates|Hugh Grant
+148,HAS_DIRECTOR,Mike Newell
+148,HAS_GENRES,Drama
+148,HAS_IMDBRATING,6.1
+149,HAS_RELEASED,1995-05-19
+149,HAS_TITLE,Amateur
+149,HAS_ACTORS,Isabelle Huppert|Martin Donovan|Elina Löwensohn|Damian Young
+149,HAS_DIRECTOR,Hal Hartley
+149,HAS_GENRES,Drama|Thriller|Crime
+149,HAS_IMDBRATING,7.0
+150,HAS_RELEASED,1995-06-30
+150,HAS_TITLE,Apollo 13
+150,HAS_ACTORS,Bill Paxton|Kevin Bacon|Tom Hanks|Gary Sinise
+150,HAS_DIRECTOR,Ron Howard
+150,HAS_GENRES,Drama|Adventure|IMAX
+150,HAS_IMDBRATING,7.6
+151,HAS_RELEASED,1995-04-14
+151,HAS_TITLE,Rob Roy
+151,HAS_ACTORS,Liam Neeson|Jessica Lange|John Hurt|Tim Roth
+151,HAS_DIRECTOR,Michael Caton-Jones
+151,HAS_GENRES,Romance|Drama|Action|War
+151,HAS_IMDBRATING,6.9
+152,HAS_RELEASED,1995-10-06
+152,HAS_TITLE,"Addiction, The"
+152,HAS_ACTORS,Lili Taylor|Christopher Walken|Annabella Sciorra|Edie Falco
+152,HAS_DIRECTOR,Abel Ferrara
+152,HAS_GENRES,Horror|Drama
+152,HAS_IMDBRATING,6.4
+153,HAS_RELEASED,1995-06-16
+153,HAS_TITLE,Batman Forever
+153,HAS_ACTORS,Nicole Kidman|Jim Carrey|Tommy Lee Jones|Val Kilmer
+153,HAS_DIRECTOR,Joel Schumacher
+153,HAS_GENRES,Action|Adventure|Comedy|Crime
+153,HAS_IMDBRATING,5.4
+154,HAS_RELEASED,1968-04-10
+154,HAS_TITLE,Beauty of the Day (Belle de jour)
+154,HAS_ACTORS,Catherine Deneuve|Jean Sorel|Michel Piccoli|Geneviève Page
+154,HAS_DIRECTOR,Luis Buñuel
+154,HAS_GENRES,Drama
+154,HAS_IMDBRATING,7.8
+155,HAS_RELEASED,1995-08-25
+155,HAS_TITLE,Beyond Rangoon
+155,HAS_ACTORS,Spalding Gray|Patricia Arquette|Frances McDormand|U Aung Ko
+155,HAS_DIRECTOR,John Boorman
+155,HAS_GENRES,War|Drama|Adventure
+155,HAS_IMDBRATING,6.6
+156,HAS_RELEASED,1995-10-13
+156,HAS_TITLE,Blue in the Face
+156,HAS_ACTORS,Michael J. Fox|Mel Gorham|Roseanne Barr|Lou Reed
+156,HAS_DIRECTOR,Wayne Wang|Paul Auster| Harvey Wang
+156,HAS_GENRES,Drama|Comedy
+156,HAS_IMDBRATING,6.7
+157,HAS_RELEASED,1995-09-22
+157,HAS_TITLE,Canadian Bacon
+157,HAS_ACTORS,John Candy|Alan Alda|Rhea Perlman|Kevin Pollak
+157,HAS_DIRECTOR,Michael Moore
+157,HAS_GENRES,War|Comedy
+157,HAS_IMDBRATING,5.9
+158,HAS_RELEASED,1995-05-26
+158,HAS_TITLE,Casper
+158,HAS_ACTORS,Chauncey Leopardi|Cathy Moriarty|Malachi Pearson|Spencer Vrooman
+158,HAS_DIRECTOR,Brad Silberling
+158,HAS_GENRES,Children|Adventure
+158,HAS_IMDBRATING,6.0
+159,HAS_RELEASED,1995-09-13
+159,HAS_TITLE,Clockers
+159,HAS_ACTORS,Harvey Keitel|Delroy Lindo|John Turturro|Mekhi Phifer
+159,HAS_DIRECTOR,Spike Lee
+159,HAS_GENRES,Drama|Mystery|Crime
+159,HAS_IMDBRATING,6.9
+160,HAS_RELEASED,1995-06-09
+160,HAS_TITLE,Congo
+160,HAS_ACTORS,Tim Curry|Laura Linney|Dylan Walsh|Ernie Hudson
+160,HAS_DIRECTOR,Frank Marshall
+160,HAS_GENRES,Adventure|Action|Sci-Fi|Mystery
+160,HAS_IMDBRATING,5.0
+161,HAS_RELEASED,1995-05-12
+161,HAS_TITLE,Crimson Tide
+161,HAS_ACTORS,Denzel Washington|Gene Hackman|Matt Craven|George Dzundza
+161,HAS_DIRECTOR,Tony Scott
+161,HAS_GENRES,Thriller|Drama|War
+161,HAS_IMDBRATING,7.3
+162,HAS_RELEASED,1995-04-28
+162,HAS_TITLE,Crumb
+162,HAS_ACTORS,Aline Kominsky|Robert Crumb|Maxon Crumb|Charles Crumb
+162,HAS_DIRECTOR,Terry Zwigoff
+162,HAS_GENRES,Documentary
+162,HAS_IMDBRATING,8.0
+163,HAS_RELEASED,1995-08-25
+163,HAS_TITLE,Desperado
+163,HAS_ACTORS,Antonio Banderas|Cheech Marin|Joaquim de Almeida|Salma Hayek
+163,HAS_DIRECTOR,Robert Rodriguez
+163,HAS_GENRES,Romance|Action|Western
+163,HAS_IMDBRATING,7.2
+164,HAS_RELEASED,1995-09-29
+164,HAS_TITLE,Devil in a Blue Dress
+164,HAS_ACTORS,Denzel Washington|Jennifer Beals|Tom Sizemore|Don Cheadle
+164,HAS_DIRECTOR,Carl Franklin
+164,HAS_GENRES,Mystery|Film-Noir|Thriller|Crime
+164,HAS_IMDBRATING,6.7
+165,HAS_RELEASED,1995-05-19
+165,HAS_TITLE,Die Hard: With a Vengeance
+165,HAS_ACTORS,Bruce Willis|Samuel L. Jackson|Jeremy Irons|Graham Greene
+165,HAS_DIRECTOR,John McTiernan
+165,HAS_GENRES,Crime|Thriller|Action
+165,HAS_IMDBRATING,7.6
+166,HAS_RELEASED,1995-10-27
+166,HAS_TITLE,"Doom Generation, The"
+166,HAS_ACTORS,Rose McGowan|Johnathon Schaech|Cress Williams|James Duval
+166,HAS_DIRECTOR,Gregg Araki
+166,HAS_GENRES,Drama|Crime|Comedy
+166,HAS_IMDBRATING,5.9
+167,HAS_RELEASED,1995-10-13
+167,HAS_TITLE,Feast of July
+167,HAS_ACTORS,Embeth Davidtz|James Purefoy|Tom Bell|Gemma Jones
+167,HAS_DIRECTOR,Christopher Menaul
+167,HAS_GENRES,Drama
+167,HAS_IMDBRATING,6.4
+168,HAS_RELEASED,1995-07-07
+168,HAS_TITLE,First Knight
+168,HAS_ACTORS,Sean Connery|Julia Ormond|Richard Gere|Ben Cross
+168,HAS_DIRECTOR, Jerry Zucker
+168,HAS_GENRES,Romance|Action|Drama
+168,HAS_IMDBRATING,5.9
+169,HAS_RELEASED,1995-07-19
+169,HAS_TITLE,Free Willy 2: The Adventure Home
+169,HAS_ACTORS,Francis Capra|Mary Kate Schellhardt|August Schellenberg|Jason James Richter
+169,HAS_DIRECTOR,Dwight H. Little
+169,HAS_GENRES,Adventure|Drama|Children
+169,HAS_IMDBRATING,4.9
+170,HAS_RELEASED,1995-09-15
+170,HAS_TITLE,Hackers
+170,HAS_ACTORS,Jesse Bradford|Jonny Lee Miller|Matthew Lillard|Angelina Jolie
+170,HAS_DIRECTOR,Iain Softley
+170,HAS_GENRES,Action|Adventure|Crime|Thriller
+170,HAS_IMDBRATING,6.2
+171,HAS_RELEASED,1995-08-18
+171,HAS_TITLE,Jeffrey
+171,HAS_ACTORS,Patrick Stewart|Michael T. Weiss|Steven Weber|David Thornton
+171,HAS_DIRECTOR,Christopher Ashley
+171,HAS_GENRES,Comedy|Drama
+171,HAS_IMDBRATING,6.7
+172,HAS_RELEASED,1995-05-26
+172,HAS_TITLE,Johnny Mnemonic
+172,HAS_ACTORS,Takeshi Kitano|Keanu Reeves|Ice-T|Dina Meyer
+172,HAS_DIRECTOR,Robert Longo
+172,HAS_GENRES,Sci-Fi|Action|Thriller
+172,HAS_IMDBRATING,5.5
+173,HAS_RELEASED,1995-06-30
+173,HAS_TITLE,Judge Dredd
+173,HAS_ACTORS,Jürgen Prochnow|Sylvester Stallone|Rob Schneider|Armand Assante
+173,HAS_DIRECTOR,Danny Cannon
+173,HAS_GENRES,Sci-Fi|Crime|Action
+173,HAS_IMDBRATING,5.4
+174,HAS_RELEASED,1995-04-12
+174,HAS_TITLE,Jury Duty
+174,HAS_ACTORS,Pauly Shore|Brian Doyle-Murray|Stanley Tucci|Tia Carrere
+174,HAS_DIRECTOR,John Fortenberry
+174,HAS_GENRES,Comedy
+174,HAS_IMDBRATING,4.0
+175,HAS_RELEASED,1995-09-01
+175,HAS_TITLE,Kids
+175,HAS_ACTORS,Leo Fitzpatrick|Joseph Chan|Sarah Henderson|Justin Pierce
+175,HAS_DIRECTOR,Larry Clark
+175,HAS_GENRES,Drama
+175,HAS_IMDBRATING,7.0
+176,HAS_RELEASED,1995-07-21
+176,HAS_TITLE,Living in Oblivion
+176,HAS_ACTORS,Steve Buscemi|Danielle von Zerneck|Dermot Mulroney|Catherine Keener
+176,HAS_DIRECTOR,Tom DiCillo
+176,HAS_GENRES,Comedy
+176,HAS_IMDBRATING,7.6
+177,HAS_RELEASED,1995-08-25
+177,HAS_TITLE,Lord of Illusions
+177,HAS_ACTORS,Sheila Tousey|Joseph Latimore|Kevin J. O'Connor|Scott Bakula
+177,HAS_DIRECTOR,Clive Barker
+177,HAS_GENRES,Horror
+177,HAS_IMDBRATING,6.0
+178,HAS_RELEASED,1995-06-23
+178,HAS_TITLE,Love & Human Remains
+178,HAS_ACTORS,Thomas Gibson|Ruth Marshall|Cameron Bancroft|Mia Kirshner
+178,HAS_DIRECTOR,Denys Arcand
+178,HAS_GENRES,Drama|Comedy
+178,HAS_IMDBRATING,6.8
+179,HAS_RELEASED,1995-05-26
+179,HAS_TITLE,Mad Love
+179,HAS_ACTORS,Chris O'Donnell|Richard Chaim|Drew Barrymore|Matthew Lillard
+179,HAS_DIRECTOR,Antonia Bird
+179,HAS_GENRES,Romance|Drama
+179,HAS_IMDBRATING,5.2
+180,HAS_RELEASED,1995-10-20
+180,HAS_TITLE,Mallrats
+180,HAS_ACTORS,Shannen Doherty|Jason Lee|Jeremy London|Claire Forlani
+180,HAS_DIRECTOR,Kevin Smith
+180,HAS_GENRES,Comedy|Romance
+180,HAS_IMDBRATING,7.2
+181,HAS_RELEASED,1995-06-30
+181,HAS_TITLE,Mighty Morphin Power Rangers: The Movie
+181,HAS_ACTORS,Karan Ashley|Johnny Yong Bosch|Steve Cardenas|Jason David Frank
+181,HAS_DIRECTOR,Bryan Spicer
+181,HAS_GENRES,Children|Action
+181,HAS_IMDBRATING,5.0
+183,HAS_RELEASED,1995-09-15
+183,HAS_TITLE,Mute Witness
+183,HAS_ACTORS,Fay Ripley|Evan Richards|Oleg Yankovskiy|Marina Zudina
+183,HAS_DIRECTOR,Anthony Waller
+183,HAS_GENRES,Thriller|Horror|Comedy
+183,HAS_IMDBRATING,6.8
+184,HAS_RELEASED,1995-09-01
+184,HAS_TITLE,Nadja
+184,HAS_ACTORS,Elina Löwensohn|Nic Ratner|Karl Geary|Peter Fonda
+184,HAS_DIRECTOR,Michael Almereyda
+184,HAS_GENRES,Drama
+184,HAS_IMDBRATING,6.0
+185,HAS_RELEASED,1995-07-28
+185,HAS_TITLE,"Net, The"
+185,HAS_ACTORS,Sandra Bullock|Diane Baker|Jeremy Northam|Dennis Miller
+185,HAS_DIRECTOR,Irwin Winkler
+185,HAS_GENRES,Action|Crime|Thriller
+185,HAS_IMDBRATING,5.8
+186,HAS_RELEASED,1995-07-12
+186,HAS_TITLE,Nine Months
+186,HAS_ACTORS,Hugh Grant|Joan Cusack|Tom Arnold|Julianne Moore
+186,HAS_DIRECTOR,Chris Columbus
+186,HAS_GENRES,Romance|Comedy
+186,HAS_IMDBRATING,5.4
+187,HAS_RELEASED,1995-06-09
+187,HAS_TITLE,Party Girl
+187,HAS_ACTORS,Guillermo Díaz|Anthony DeSando|Donna Mitchell|Parker Posey
+187,HAS_DIRECTOR,Daisy von Scherler Mayer
+187,HAS_GENRES,Comedy
+187,HAS_IMDBRATING,6.6
+188,HAS_RELEASED,1995-09-01
+188,HAS_TITLE,"Prophecy, The"
+188,HAS_ACTORS,Christopher Walken|Eric Stoltz|Virginia Madsen|Elias Koteas
+188,HAS_DIRECTOR,Gregory Widen
+188,HAS_GENRES,Fantasy|Horror|Mystery
+188,HAS_IMDBRATING,6.6
+189,HAS_RELEASED,1995-11-17
+189,HAS_TITLE,Reckless
+189,HAS_ACTORS,Mary-Louise Parker|Scott Glenn|Tony Goldwyn|Mia Farrow
+189,HAS_DIRECTOR,Norman René
+189,HAS_GENRES,Fantasy|Comedy
+189,HAS_IMDBRATING,5.0
+190,HAS_RELEASED,1995-06-30
+190,HAS_TITLE,Safe
+190,HAS_ACTORS,Julianne Moore|Julie Burgess|Dean Norris|Xander Berkeley
+190,HAS_DIRECTOR,Todd Haynes
+190,HAS_GENRES,Thriller
+190,HAS_IMDBRATING,7.1
+191,HAS_RELEASED,1995-10-13
+191,HAS_TITLE,"Scarlet Letter, The"
+191,HAS_ACTORS,Demi Moore|Robert Duvall|Gary Oldman|Lisa Andoh
+191,HAS_DIRECTOR,Roland Joffé
+191,HAS_GENRES,Drama|Romance
+191,HAS_IMDBRATING,5.1
+193,HAS_RELEASED,1995-09-22
+193,HAS_TITLE,Showgirls
+193,HAS_ACTORS,Glenn Plummer|Kyle MacLachlan|Gina Gershon|Elizabeth Berkley
+193,HAS_DIRECTOR,Paul Verhoeven
+193,HAS_GENRES,Drama
+193,HAS_IMDBRATING,4.6
+194,HAS_RELEASED,1995-06-09
+194,HAS_TITLE,Smoke
+194,HAS_ACTORS,Giancarlo Esposito|Stephen Gevedon|José Zúñiga|Harvey Keitel
+194,HAS_DIRECTOR,Paul Auster|Wayne Wang
+194,HAS_GENRES,Comedy|Drama
+194,HAS_IMDBRATING,7.4
+195,HAS_RELEASED,1995-08-04
+195,HAS_TITLE,Something to Talk About
+195,HAS_ACTORS,Julia Roberts|Robert Duvall|Dennis Quaid|Gena Rowlands
+195,HAS_DIRECTOR,Lasse Hallström
+195,HAS_GENRES,Drama|Romance|Comedy
+195,HAS_IMDBRATING,5.7
+196,HAS_RELEASED,1995-07-07
+196,HAS_TITLE,Species
+196,HAS_ACTORS,Alfred Molina|Michael Madsen|Forest Whitaker|Ben Kingsley
+196,HAS_DIRECTOR,Roger Donaldson
+196,HAS_GENRES,Sci-Fi|Horror
+196,HAS_IMDBRATING,5.8
+198,HAS_RELEASED,1995-10-13
+198,HAS_TITLE,Strange Days
+198,HAS_ACTORS,Ralph Fiennes|Angela Bassett|Juliette Lewis|Tom Sizemore
+198,HAS_DIRECTOR,Kathryn Bigelow
+198,HAS_GENRES,Crime|Action|Thriller|Sci-Fi|Mystery|Drama
+198,HAS_IMDBRATING,7.2
+199,HAS_RELEASED,1964-12-16
+199,HAS_TITLE,"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)"
+199,HAS_ACTORS,Catherine Deneuve|Marc Michel|Anne Vernon|Nino Castelnuovo
+199,HAS_DIRECTOR,Jacques Demy
+199,HAS_GENRES,Drama|Musical|Romance
+199,HAS_IMDBRATING,7.8
+200,HAS_RELEASED,1995-09-08
+200,HAS_TITLE,"Tie That Binds, The"
+200,HAS_ACTORS,Keith Carradine|Daryl Hannah|Vincent Spano|Moira Kelly
+200,HAS_DIRECTOR,Wesley Strick
+200,HAS_GENRES,Thriller
+200,HAS_IMDBRATING,5.0
+201,HAS_RELEASED,1995-10-27
+201,HAS_TITLE,Three Wishes
+201,HAS_ACTORS,Patrick Swayze|Seth Mumy|Mary Elizabeth Mastrantonio|Joseph Mazzello
+201,HAS_DIRECTOR,Martha Coolidge
+201,HAS_GENRES,Drama|Fantasy
+201,HAS_IMDBRATING,6.1
+202,HAS_RELEASED,1995-11-03
+202,HAS_TITLE,Total Eclipse
+202,HAS_ACTORS,David Thewlis|Leonardo DiCaprio|Dominique Blanc|Romane Bohringer
+202,HAS_DIRECTOR,Agnieszka Holland
+202,HAS_GENRES,Drama|Romance
+202,HAS_IMDBRATING,6.5
+203,HAS_RELEASED,1995-09-08
+203,HAS_TITLE,"To Wong Foo, Thanks for Everything! Julie Newmar"
+203,HAS_ACTORS,Wesley Snipes|Stockard Channing|Patrick Swayze|John Leguizamo
+203,HAS_DIRECTOR,Beeban Kidron
+203,HAS_GENRES,Comedy
+203,HAS_IMDBRATING,6.3
+204,HAS_RELEASED,1995-07-14
+204,HAS_TITLE,Under Siege 2: Dark Territory
+204,HAS_ACTORS,Eric Bogosian|Everett McGill|Katherine Heigl|Steven Seagal
+204,HAS_DIRECTOR,Geoff Murphy
+204,HAS_GENRES,Action
+204,HAS_IMDBRATING,5.4
+205,HAS_RELEASED,1995-09-22
+205,HAS_TITLE,Unstrung Heroes
+205,HAS_ACTORS,Andie MacDowell|Michael Richards|John Turturro|Maury Chaykin
+205,HAS_DIRECTOR,Diane Keaton
+205,HAS_GENRES,Drama|Comedy
+205,HAS_IMDBRATING,6.8
+206,HAS_RELEASED,1995-08-11
+206,HAS_TITLE,Unzipped
+206,HAS_ACTORS,Isaac Mizrahi|Roseanne Barr|Sandra Bernhard|Natane Boudreau
+206,HAS_DIRECTOR,Douglas Keeve
+206,HAS_GENRES,Documentary
+206,HAS_IMDBRATING,6.4
+207,HAS_RELEASED,1995-08-11
+207,HAS_TITLE,"Walk in the Clouds, A"
+207,HAS_ACTORS,Keanu Reeves|Giancarlo Giannini|Anthony Quinn|Aitana Sánchez-Gijón
+207,HAS_DIRECTOR,Alfonso Arau
+207,HAS_GENRES,Drama|Romance
+207,HAS_IMDBRATING,6.6
+208,HAS_RELEASED,1995-07-28
+208,HAS_TITLE,Waterworld
+208,HAS_ACTORS,Kevin Costner|R.D. Call|Rick Aviles|Chaim Jeraffi
+208,HAS_DIRECTOR,Kevin Reynolds
+208,HAS_GENRES,Adventure|Sci-Fi|Action
+208,HAS_IMDBRATING,6.1
+209,HAS_RELEASED,1995-12-01
+209,HAS_TITLE,White Man's Burden
+209,HAS_ACTORS,Harry Belafonte|John Travolta|Kelly Lynch|Margaret Avery
+209,HAS_DIRECTOR,Desmond Nakano
+209,HAS_GENRES,Drama
+209,HAS_IMDBRATING,5.2
+211,HAS_RELEASED,1994-10-12
+211,HAS_TITLE,"Browning Version, The"
+211,HAS_ACTORS,Greta Scacchi|Albert Finney|Julian Sands|Matthew Modine
+211,HAS_DIRECTOR,Mike Figgis
+211,HAS_GENRES,Drama
+211,HAS_IMDBRATING,7.3
+213,HAS_RELEASED,1995-04-21
+213,HAS_TITLE,Burnt by the Sun (Utomlyonnye solntsem)
+213,HAS_ACTORS,Nikita Mikhalkov|Ingeborga Dapkunaite|Nadezhda Mikhalkova|Oleg Menshikov
+213,HAS_DIRECTOR,Nikita Mikhalkov
+213,HAS_GENRES,Drama
+213,HAS_IMDBRATING,8.0
+214,HAS_RELEASED,1995-02-24
+214,HAS_TITLE,Before the Rain (Pred dozhdot)
+214,HAS_ACTORS,Katrin Cartlidge|Labina Mitevska|Grégoire Colin|Rade Serbedzija
+214,HAS_DIRECTOR,Milcho Manchevski
+214,HAS_GENRES,Drama|War
+214,HAS_IMDBRATING,8.1
+215,HAS_RELEASED,1995-01-27
+215,HAS_TITLE,Before Sunrise
+215,HAS_ACTORS,Andrea Eckert|Julie Delpy|Ethan Hawke|Hanno Pöschl
+215,HAS_DIRECTOR,Richard Linklater
+215,HAS_GENRES,Romance|Drama
+215,HAS_IMDBRATING,8.1
+216,HAS_RELEASED,1995-02-10
+216,HAS_TITLE,Billy Madison
+216,HAS_ACTORS,Bridgette Wilson|Adam Sandler|Darren McGavin|Bradley Whitford
+216,HAS_DIRECTOR,Tamra Davis
+216,HAS_GENRES,Comedy
+216,HAS_IMDBRATING,6.4
+217,HAS_RELEASED,1995-10-17
+217,HAS_TITLE,"Babysitter, The"
+217,HAS_ACTORS,Alicia Silverstone|J.T. Walsh|Jeremy London|Lee Garlington
+217,HAS_DIRECTOR,Guy Ferland
+217,HAS_GENRES,Drama|Thriller
+217,HAS_IMDBRATING,4.2
+218,HAS_RELEASED,1995-02-03
+218,HAS_TITLE,Boys on the Side
+218,HAS_ACTORS,Whoopi Goldberg|Drew Barrymore|Mary-Louise Parker|Matthew McConaughey
+218,HAS_DIRECTOR,Herbert Ross
+218,HAS_GENRES,Comedy|Drama
+218,HAS_IMDBRATING,6.4
+219,HAS_RELEASED,1995-04-21
+219,HAS_TITLE,"Cure, The"
+219,HAS_ACTORS,Joseph Mazzello|Annabella Sciorra|Brad Renfro|Aeryk Egan
+219,HAS_DIRECTOR,Peter Horton
+219,HAS_GENRES,Drama
+219,HAS_IMDBRATING,7.7
+220,HAS_RELEASED,1995-11-14
+220,HAS_TITLE,Castle Freak
+220,HAS_ACTORS,Jeffrey Combs|Jonathan Fuller|Barbara Crampton|Jessica Dollarhide
+220,HAS_DIRECTOR,Stuart Gordon
+220,HAS_GENRES,Horror
+220,HAS_IMDBRATING,5.9
+222,HAS_RELEASED,1995-04-07
+222,HAS_TITLE,Circle of Friends
+222,HAS_ACTORS,Chris O'Donnell|Saffron Burrows|Minnie Driver|Geraldine O'Rawe
+222,HAS_DIRECTOR,Pat O'Connor
+222,HAS_GENRES,Drama|Romance
+222,HAS_IMDBRATING,6.6
+223,HAS_RELEASED,1994-11-04
+223,HAS_TITLE,Clerks
+223,HAS_ACTORS,Jason Mewes|Brian O'Halloran|Jeff Anderson|Marilyn Ghigliotti
+223,HAS_DIRECTOR,Kevin Smith
+223,HAS_GENRES,Comedy
+223,HAS_IMDBRATING,7.8
+224,HAS_RELEASED,1995-04-07
+224,HAS_TITLE,Don Juan DeMarco
+224,HAS_ACTORS,Johnny Depp|Marlon Brando|Faye Dunaway|Géraldine Pailhas
+224,HAS_DIRECTOR,Jeremy Leven
+224,HAS_GENRES,Drama|Romance|Comedy
+224,HAS_IMDBRATING,6.8
+225,HAS_RELEASED,1994-12-09
+225,HAS_TITLE,Disclosure
+225,HAS_ACTORS,Michael Douglas|Donald Sutherland|Demi Moore|Caroline Goodall
+225,HAS_DIRECTOR,Barry Levinson
+225,HAS_GENRES,Thriller|Drama
+225,HAS_IMDBRATING,6.0
+227,HAS_RELEASED,1994-12-09
+227,HAS_TITLE,Drop Zone
+227,HAS_ACTORS,Wesley Snipes|Gary Busey|Michael Jeter|Yancy Butler
+227,HAS_DIRECTOR,John Badham
+227,HAS_GENRES,Thriller|Action
+227,HAS_IMDBRATING,5.6
+228,HAS_RELEASED,1995-04-28
+228,HAS_TITLE,Destiny Turns on the Radio
+228,HAS_ACTORS,James Le Gros|Dylan McDermott|Nancy Travis|Quentin Tarantino
+228,HAS_DIRECTOR,Jack Baran
+228,HAS_GENRES,Comedy
+228,HAS_IMDBRATING,4.4
+229,HAS_RELEASED,1995-01-27
+229,HAS_TITLE,Death and the Maiden
+229,HAS_ACTORS,Ben Kingsley|Sigourney Weaver|Stuart Wilson|Krystia Mova
+229,HAS_DIRECTOR,Roman Polanski
+229,HAS_GENRES,Thriller|Drama
+229,HAS_IMDBRATING,7.3
+230,HAS_RELEASED,1995-03-24
+230,HAS_TITLE,Dolores Claiborne
+230,HAS_ACTORS,Kathy Bates|Judy Parfitt|Christopher Plummer|Jennifer Jason Leigh
+230,HAS_DIRECTOR,Taylor Hackford
+230,HAS_GENRES,Thriller|Drama
+230,HAS_IMDBRATING,7.4
+231,HAS_RELEASED,1994-12-16
+231,HAS_TITLE,Dumb & Dumber (Dumb and Dumber)
+231,HAS_ACTORS,Jim Carrey|Mike Starr|Jeff Daniels|Lauren Holly
+231,HAS_DIRECTOR, Peter Farrelly
+231,HAS_GENRES,Comedy|Adventure
+231,HAS_IMDBRATING,7.3
+232,HAS_RELEASED,1994-08-03
+232,HAS_TITLE,Eat Drink Man Woman (Yin shi nan nu)
+232,HAS_ACTORS,Sihung Lung|Yu-Wen Wang|Chien-Lien Wu|Kuei-Mei Yang
+232,HAS_DIRECTOR,Ang Lee
+232,HAS_GENRES,Romance|Drama|Comedy
+232,HAS_IMDBRATING,7.8
+233,HAS_RELEASED,1995-03-24
+233,HAS_TITLE,Exotica
+233,HAS_ACTORS,David Hemblen|Calvin Green|Don McKellar|Peter Krantz
+233,HAS_DIRECTOR,Atom Egoyan
+233,HAS_GENRES,Drama
+233,HAS_IMDBRATING,7.2
+234,HAS_RELEASED,1994-10-14
+234,HAS_TITLE,Exit to Eden
+234,HAS_ACTORS,Dana Delany|Dan Aykroyd|Paul Mercurio|Rosie O'Donnell
+234,HAS_DIRECTOR,Garry Marshall
+234,HAS_GENRES,Comedy
+234,HAS_IMDBRATING,4.1
+235,HAS_RELEASED,1994-10-07
+235,HAS_TITLE,Ed Wood
+235,HAS_ACTORS,Sarah Jessica Parker|Martin Landau|Johnny Depp|Patricia Arquette
+235,HAS_DIRECTOR,Tim Burton
+235,HAS_GENRES,Comedy|Drama
+235,HAS_IMDBRATING,7.9
+236,HAS_RELEASED,1995-05-05
+236,HAS_TITLE,French Kiss
+236,HAS_ACTORS,Meg Ryan|Jean Reno|Timothy Hutton|Kevin Kline
+236,HAS_DIRECTOR,Lawrence Kasdan
+236,HAS_GENRES,Romance|Comedy|Action
+236,HAS_IMDBRATING,6.5
+237,HAS_RELEASED,1995-05-19
+237,HAS_TITLE,Forget Paris
+237,HAS_ACTORS,Billy Crystal|Joe Mantegna|Debra Winger|Cynthia Stevenson
+237,HAS_DIRECTOR,Billy Crystal
+237,HAS_GENRES,Comedy|Romance
+237,HAS_IMDBRATING,6.4
+238,HAS_RELEASED,1995-01-13
+238,HAS_TITLE,Far From Home: The Adventures of Yellow Dog
+238,HAS_ACTORS,Jesse Bradford|Mimi Rogers|Tom Bower|Bruce Davison
+238,HAS_DIRECTOR,Phillip Borsos
+238,HAS_GENRES,Adventure|Children
+238,HAS_IMDBRATING,6.4
+239,HAS_RELEASED,1995-04-07
+239,HAS_TITLE,"Goofy Movie, A"
+239,HAS_ACTORS,Bill Farmer|Kellie Martin|Jason Marsden|Jim Cummings
+239,HAS_DIRECTOR,Kevin Lima
+239,HAS_GENRES,Animation|Children|Comedy|Romance
+239,HAS_IMDBRATING,6.8
+240,HAS_RELEASED,1995-03-03
+240,HAS_TITLE,Hideaway
+240,HAS_ACTORS,Jeff Goldblum|Alicia Silverstone|Christine Lahti|Jeremy Sisto
+240,HAS_DIRECTOR,Brett Leonard
+240,HAS_GENRES,Thriller
+240,HAS_IMDBRATING,5.3
+241,HAS_RELEASED,1995-06-02
+241,HAS_TITLE,Fluke
+241,HAS_ACTORS,Samuel L. Jackson|Nancy Travis|Matthew Modine|Eric Stoltz
+241,HAS_DIRECTOR,Carlo Carlei
+241,HAS_GENRES,Children|Drama
+241,HAS_IMDBRATING,6.7
+242,HAS_RELEASED,1995-03-17
+242,HAS_TITLE,Farinelli: il castrato
+242,HAS_ACTORS,Stefano Dionisi|Enrico Lo Verso|Jeroen Krabbé|Elsa Zylberstein
+242,HAS_DIRECTOR,Gérard Corbiau
+242,HAS_GENRES,Drama|Musical
+242,HAS_IMDBRATING,6.9
+243,HAS_RELEASED,1995-05-12
+243,HAS_TITLE,Gordy
+243,HAS_ACTORS,Doug Stone|Deborah Hobart|Kristy Young|James Donadio
+243,HAS_DIRECTOR,Mark Lewis
+243,HAS_GENRES,Comedy|Children|Fantasy
+243,HAS_IMDBRATING,3.9
+244,HAS_RELEASED,1995-12-01
+244,HAS_TITLE,Gumby: The Movie
+244,HAS_ACTORS,Dal McKennon|Manny La Carruba|Gloria Clokey|Art Clokey
+244,HAS_DIRECTOR,Art Clokey
+244,HAS_GENRES,Animation|Children
+244,HAS_IMDBRATING,6.2
+245,HAS_RELEASED,1995-06-02
+245,HAS_TITLE,The Glass Shield
+245,HAS_ACTORS,Monty Bane|Thomas Babson|Richard Anderson|Erich Anderson
+245,HAS_DIRECTOR,Charles Burnett
+245,HAS_GENRES,Crime|Drama
+245,HAS_IMDBRATING,6.6
+246,HAS_RELEASED,1994-10-14
+246,HAS_TITLE,Hoop Dreams
+246,HAS_ACTORS,Dick Vitale|Steve James|Arthur Agee|William Gates
+246,HAS_DIRECTOR,Steve James
+246,HAS_GENRES,Documentary
+246,HAS_IMDBRATING,8.3
+247,HAS_RELEASED,1994-10-14
+247,HAS_TITLE,Heavenly Creatures
+247,HAS_ACTORS,Kate Winslet|Melanie Lynskey|Diana Kent|Sarah Peirse
+247,HAS_DIRECTOR,Peter Jackson
+247,HAS_GENRES,Crime|Drama
+247,HAS_IMDBRATING,7.4
+248,HAS_RELEASED,1995-01-06
+248,HAS_TITLE,Houseguest
+248,HAS_ACTORS,Phil Hartman|Sinbad|Kim Murphy|Kim Greist
+248,HAS_DIRECTOR,Randall Miller
+248,HAS_GENRES,Comedy
+248,HAS_IMDBRATING,5.9
+249,HAS_RELEASED,1995-01-27
+249,HAS_TITLE,Immortal Beloved
+249,HAS_ACTORS,Isabella Rossellini|Jeroen Krabbé|Gary Oldman|Johanna ter Steege
+249,HAS_DIRECTOR,Bernard Rose
+249,HAS_GENRES,Drama|Romance
+249,HAS_IMDBRATING,7.5
+250,HAS_RELEASED,1995-02-17
+250,HAS_TITLE,Heavyweights (Heavy Weights)
+250,HAS_ACTORS,David Goldman|Joseph Wayne Miller|Allen Covert|Cody Burger
+250,HAS_DIRECTOR,Steven Brill
+250,HAS_GENRES,Children|Comedy
+250,HAS_IMDBRATING,6.7
+251,HAS_RELEASED,1995-02-24
+251,HAS_TITLE,"Hunted, The"
+251,HAS_ACTORS,John Lone|Christopher Lambert|Yoshio Harada|Joan Chen
+251,HAS_DIRECTOR,J. F. Lawton|J.F. Lawton
+251,HAS_GENRES,Action
+251,HAS_IMDBRATING,5.9
+252,HAS_RELEASED,1994-12-25
+252,HAS_TITLE,I.Q.
+252,HAS_ACTORS,Tim Robbins|Meg Ryan|Walter Matthau|Lou Jacobi
+252,HAS_DIRECTOR,Fred Schepisi
+252,HAS_GENRES,Comedy|Romance
+252,HAS_IMDBRATING,6.2
+253,HAS_RELEASED,1994-11-11
+253,HAS_TITLE,Interview with the Vampire: The Vampire Chronicles
+253,HAS_ACTORS,Tom Cruise|Brad Pitt|Christian Slater|Virginia McCollam
+253,HAS_DIRECTOR,Neil Jordan
+253,HAS_GENRES,Horror|Drama
+253,HAS_IMDBRATING,7.6
+254,HAS_RELEASED,1995-03-31
+254,HAS_TITLE,Jefferson in Paris
+254,HAS_ACTORS,Greta Scacchi|Gwyneth Paltrow|Thandie Newton|Nick Nolte
+254,HAS_DIRECTOR,James Ivory
+254,HAS_GENRES,Drama
+254,HAS_IMDBRATING,5.7
+255,HAS_RELEASED,1995-02-03
+255,HAS_TITLE,"Jerky Boys, The"
+255,HAS_ACTORS,William Hickey|Alan Arkin|Kamal Ahmed|John G. Brennan
+255,HAS_DIRECTOR,James Melkonian
+255,HAS_GENRES,Comedy
+255,HAS_IMDBRATING,4.5
+256,HAS_RELEASED,1994-11-23
+256,HAS_TITLE,Junior
+256,HAS_ACTORS,Arnold Schwarzenegger|Danny DeVito|Emma Thompson|Frank Langella
+256,HAS_DIRECTOR,Ivan Reitman
+256,HAS_GENRES,Comedy|Sci-Fi
+256,HAS_IMDBRATING,4.5
+257,HAS_RELEASED,1995-02-17
+257,HAS_TITLE,Just Cause
+257,HAS_ACTORS,Sean Connery|Laurence Fishburne|Blair Underwood|Kate Capshaw
+257,HAS_DIRECTOR,Arne Glimcher
+257,HAS_GENRES,Mystery|Thriller
+257,HAS_IMDBRATING,6.4
+258,HAS_RELEASED,1995-08-11
+258,HAS_TITLE,"Kid in King Arthur's Court, A"
+258,HAS_ACTORS,Thomas Ian Nicholas|Paloma Baeza|Joss Ackland|Art Malik
+258,HAS_DIRECTOR,Michael Gottlieb
+258,HAS_GENRES,Adventure|Children|Romance|Comedy|Fantasy
+258,HAS_IMDBRATING,4.8
+259,HAS_RELEASED,1995-04-21
+259,HAS_TITLE,Kiss of Death
+259,HAS_ACTORS,Nicolas Cage|David Caruso|Helen Hunt|Samuel L. Jackson
+259,HAS_DIRECTOR,Barbet Schroeder
+259,HAS_GENRES,Crime|Thriller|Drama
+259,HAS_IMDBRATING,5.9
+260,HAS_RELEASED,1977-05-25
+260,HAS_TITLE,Star Wars: Episode IV - A New Hope
+260,HAS_ACTORS,Peter Cushing|Mark Hamill|Harrison Ford|Carrie Fisher
+260,HAS_DIRECTOR,George Lucas
+260,HAS_GENRES,Sci-Fi|Action|Adventure
+260,HAS_IMDBRATING,8.7
+261,HAS_RELEASED,1994-12-25
+261,HAS_TITLE,Little Women
+261,HAS_ACTORS,Gabriel Byrne|Winona Ryder|Samantha Mathis|Trini Alvarado
+261,HAS_DIRECTOR,Gillian Armstrong
+261,HAS_GENRES,Drama
+261,HAS_IMDBRATING,7.3
+262,HAS_RELEASED,1995-05-19
+262,HAS_TITLE,"Little Princess, A"
+262,HAS_ACTORS,Liesel Matthews|Eleanor Bron|Liam Cunningham|Rusty Schwimmer
+262,HAS_DIRECTOR,Alfonso Cuarón
+262,HAS_GENRES,Drama|Children
+262,HAS_IMDBRATING,7.7
+263,HAS_RELEASED,1995-01-01
+263,HAS_TITLE,Ladybird Ladybird
+263,HAS_ACTORS,Vladimir Vega|Crissy Rock|Mauricio Venegas|Sandie Lavelle
+263,HAS_DIRECTOR,Ken Loach
+263,HAS_GENRES,Drama
+263,HAS_IMDBRATING,7.5
+264,HAS_RELEASED,1994-11-01
+264,HAS_TITLE,"Enfer, L'"
+264,HAS_ACTORS,Emmanuelle Béart|François Cluzet|Nathalie Cardone|André Wilms
+264,HAS_DIRECTOR,Claude Chabrol
+264,HAS_GENRES,Drama
+264,HAS_IMDBRATING,7.2
+265,HAS_RELEASED,1993-05-28
+265,HAS_TITLE,Like Water for Chocolate (Como agua para chocolate)
+265,HAS_ACTORS,Mario Iván Martínez|Regina Torné|Lumi Cavazos|Marco Leonardi
+265,HAS_DIRECTOR,Alfonso Arau
+265,HAS_GENRES,Romance|Drama|Fantasy
+265,HAS_IMDBRATING,7.2
+266,HAS_RELEASED,1995-01-13
+266,HAS_TITLE,Legends of the Fall
+266,HAS_ACTORS,Brad Pitt|Aidan Quinn|Julia Ormond|Anthony Hopkins
+266,HAS_DIRECTOR,Edward Zwick
+266,HAS_GENRES,Drama|Romance|War|Western
+266,HAS_IMDBRATING,7.5
+267,HAS_RELEASED,1995-03-24
+267,HAS_TITLE,Major Payne
+267,HAS_ACTORS,Orlando Brown|Damon Wayans|Joseph Blaire|Michael Ironside
+267,HAS_DIRECTOR,Nick Castle
+267,HAS_GENRES,Comedy
+267,HAS_IMDBRATING,6.1
+268,HAS_RELEASED,1995-05-19
+268,HAS_TITLE,Little Odessa
+268,HAS_ACTORS,Tim Roth|Vanessa Redgrave|Edward Furlong|Moira Kelly
+268,HAS_DIRECTOR,James Gray
+268,HAS_GENRES,Drama|Crime
+268,HAS_IMDBRATING,6.8
+269,HAS_RELEASED,1994-07-15
+269,HAS_TITLE,My Crazy Life (Mi vida loca)
+269,HAS_ACTORS,Marlo Marron|Angel Aviles|Jacob Vargas|Seidy Lopez
+269,HAS_DIRECTOR,Allison Anders
+269,HAS_GENRES,Drama
+269,HAS_IMDBRATING,6.6
+270,HAS_RELEASED,1994-10-21
+270,HAS_TITLE,Love Affair
+270,HAS_ACTORS,Katharine Hepburn|Annette Bening|Warren Beatty|Garry Shandling
+270,HAS_DIRECTOR,Glenn Gordon Caron
+270,HAS_GENRES,Romance|Drama
+270,HAS_IMDBRATING,5.9
+271,HAS_RELEASED,1995-03-17
+271,HAS_TITLE,Losing Isaiah
+271,HAS_ACTORS,Jessica Lange|Cuba Gooding Jr.|David Strathairn|Halle Berry
+271,HAS_DIRECTOR,Stephen Gyllenhaal
+271,HAS_GENRES,Drama
+271,HAS_IMDBRATING,6.4
+272,HAS_RELEASED,1994-12-28
+272,HAS_TITLE,"Madness of King George, The"
+272,HAS_ACTORS,Nigel Hawthorne|Rupert Graves|Amanda Donohoe|Helen Mirren
+272,HAS_DIRECTOR,Nicholas Hytner
+272,HAS_GENRES,Drama|Comedy
+272,HAS_IMDBRATING,7.3
+273,HAS_RELEASED,1994-11-04
+273,HAS_TITLE,Mary Shelley's Frankenstein (Frankenstein)
+273,HAS_ACTORS,Tom Hulce|Helena Bonham Carter|Robert De Niro|Kenneth Branagh
+273,HAS_DIRECTOR,Kenneth Branagh
+273,HAS_GENRES,Horror|Drama|Sci-Fi
+273,HAS_IMDBRATING,6.4
+274,HAS_RELEASED,1995-03-03
+274,HAS_TITLE,Man of the House
+274,HAS_ACTORS,Chevy Chase|George Wendt|Farrah Fawcett|Jonathan Taylor Thomas
+274,HAS_DIRECTOR,James Orr
+274,HAS_GENRES,Comedy
+274,HAS_IMDBRATING,4.9
+275,HAS_RELEASED,1994-12-21
+275,HAS_TITLE,Mixed Nuts
+275,HAS_ACTORS,Anthony LaPaglia|Robert Klein|Madeline Kahn|Steve Martin
+275,HAS_DIRECTOR,Nora Ephron
+275,HAS_GENRES,Comedy
+275,HAS_IMDBRATING,5.3
+276,HAS_RELEASED,1994-08-31
+276,HAS_TITLE,Milk Money
+276,HAS_ACTORS,Malcolm McDowell|Melanie Griffith|Ed Harris|Michael Patrick Carter
+276,HAS_DIRECTOR,Richard Benjamin
+276,HAS_GENRES,Romance|Comedy
+276,HAS_IMDBRATING,5.4
+277,HAS_RELEASED,1994-11-18
+277,HAS_TITLE,Miracle on 34th Street
+277,HAS_ACTORS,Richard Attenborough|J.T. Walsh|Dylan McDermott|Elizabeth Perkins
+277,HAS_DIRECTOR,Les Mayfield
+277,HAS_GENRES,Drama
+277,HAS_IMDBRATING,6.4
+278,HAS_RELEASED,1995-01-27
+278,HAS_TITLE,Miami Rhapsody
+278,HAS_ACTORS,Mia Farrow|Gil Bellows|Sarah Jessica Parker|Antonio Banderas
+278,HAS_DIRECTOR,David Frankel
+278,HAS_GENRES,Comedy
+278,HAS_IMDBRATING,5.3
+279,HAS_RELEASED,1995-05-03
+279,HAS_TITLE,My Family
+279,HAS_ACTORS,Jimmy Smits|Edward James Olmos|Rafael Cortes|Amelia Zapata
+279,HAS_DIRECTOR,Gregory Nava
+279,HAS_GENRES,Drama
+279,HAS_IMDBRATING,7.3
+280,HAS_RELEASED,1995-01-20
+280,HAS_TITLE,Murder in the First
+280,HAS_ACTORS,Christian Slater|Gary Oldman|Kevin Bacon|Embeth Davidtz
+280,HAS_DIRECTOR,Marc Rocco
+280,HAS_GENRES,Drama|Thriller
+280,HAS_IMDBRATING,7.3
+281,HAS_RELEASED,1995-01-13
+281,HAS_TITLE,Nobody's Fool
+281,HAS_ACTORS,Paul Newman|Jessica Tandy|Bruce Willis|Melanie Griffith
+281,HAS_DIRECTOR,Robert Benton
+281,HAS_GENRES,Romance|Comedy|Drama
+281,HAS_IMDBRATING,7.4
+282,HAS_RELEASED,1994-12-23
+282,HAS_TITLE,Nell
+282,HAS_ACTORS,Jodie Foster|Richard Libertini|Liam Neeson|Natasha Richardson
+282,HAS_DIRECTOR,Michael Apted
+282,HAS_GENRES,Drama
+282,HAS_IMDBRATING,6.5
+283,HAS_RELEASED,1995-04-19
+283,HAS_TITLE,New Jersey Drive
+283,HAS_ACTORS,Shar-Ron Corley|Gwen McGee|Gabriel Casseus|Saul Stein
+283,HAS_DIRECTOR,Nick Gomez
+283,HAS_GENRES,Crime|Drama
+283,HAS_IMDBRATING,6.6
+285,HAS_RELEASED,1994-04-22
+285,HAS_TITLE,Beyond Bedlam
+285,HAS_ACTORS,Keith Allen|Elizabeth Hurley|Anita Dobson|Craig Fairbrass
+285,HAS_DIRECTOR,Vadim Jean
+285,HAS_GENRES,Drama|Horror
+285,HAS_IMDBRATING,3.4
+287,HAS_RELEASED,1995-03-03
+287,HAS_TITLE,Nina Takes a Lover
+287,HAS_ACTORS,Laura San Giacomo|Paul Rhys|Michael O'Keefe|Cristi Conaway
+287,HAS_DIRECTOR,Alan Jacobs
+287,HAS_GENRES,Comedy|Romance
+287,HAS_IMDBRATING,5.7
+288,HAS_RELEASED,1994-08-26
+288,HAS_TITLE,Natural Born Killers
+288,HAS_ACTORS,Woody Harrelson|Tom Sizemore|Juliette Lewis|Rodney Dangerfield
+288,HAS_DIRECTOR,Oliver Stone
+288,HAS_GENRES,Thriller|Action|Crime
+288,HAS_IMDBRATING,7.3
+289,HAS_RELEASED,1994-10-07
+289,HAS_TITLE,Only You
+289,HAS_ACTORS,Marisa Tomei|Bonnie Hunt|Robert Downey Jr.|Joaquim de Almeida
+289,HAS_DIRECTOR,Norman Jewison
+289,HAS_GENRES,Comedy|Romance
+289,HAS_IMDBRATING,6.5
+290,HAS_RELEASED,1995-03-03
+290,HAS_TITLE,Once Were Warriors
+290,HAS_ACTORS,Mamaengaroa Kerr-Bell|Temuera Morrison|Julian Arahanga|Rena Owen
+290,HAS_DIRECTOR,Lee Tamahori
+290,HAS_GENRES,Crime|Drama
+290,HAS_IMDBRATING,8.0
+291,HAS_RELEASED,1996-01-16
+291,HAS_TITLE,Poison Ivy II
+291,HAS_ACTORS,Belinda Bauer|Xander Berkeley|Johnathon Schaech|Alyssa Milano
+291,HAS_DIRECTOR,Anne Goursaud
+291,HAS_GENRES,Thriller|Drama
+291,HAS_IMDBRATING,4.4
+292,HAS_RELEASED,1995-03-10
+292,HAS_TITLE,Outbreak
+292,HAS_ACTORS,Dustin Hoffman|Rene Russo|Morgan Freeman|Kevin Spacey
+292,HAS_DIRECTOR,Wolfgang Petersen
+292,HAS_GENRES,Thriller|Drama|Sci-Fi|Action
+292,HAS_IMDBRATING,6.6
+293,HAS_RELEASED,1994-11-18
+293,HAS_TITLE,Léon: The Professional (a.k.a. The Professional) (Léon)
+293,HAS_ACTORS,Jean Reno|Gary Oldman|Natalie Portman|Danny Aiello
+293,HAS_DIRECTOR,Luc Besson
+293,HAS_GENRES,Crime|Drama|Action|Thriller
+293,HAS_IMDBRATING,8.6
+294,HAS_RELEASED,1995-05-12
+294,HAS_TITLE,"Perez Family, The"
+294,HAS_ACTORS,Marisa Tomei|Anjelica Huston|Alfred Molina|Chazz Palminteri
+294,HAS_DIRECTOR,Mira Nair
+294,HAS_GENRES,Comedy|Romance
+294,HAS_IMDBRATING,6.1
+295,HAS_RELEASED,1995-04-28
+295,HAS_TITLE,"Pyromaniac's Love Story, A"
+295,HAS_ACTORS,Sadie Frost|William Baldwin|Erika Eleniak|John Leguizamo
+295,HAS_DIRECTOR,Joshua Brand
+295,HAS_GENRES,Comedy|Romance
+295,HAS_IMDBRATING,5.4
+296,HAS_RELEASED,1994-10-14
+296,HAS_TITLE,Pulp Fiction
+296,HAS_ACTORS,Tim Roth|John Travolta|Laura Lovelace|Samuel L. Jackson
+296,HAS_DIRECTOR,Quentin Tarantino
+296,HAS_GENRES,Drama|Crime|Comedy|Thriller
+296,HAS_IMDBRATING,8.9
+299,HAS_RELEASED,1995-03-24
+299,HAS_TITLE,Priest
+299,HAS_ACTORS,Tom Wilkinson|Robert Carlyle|Cathy Tyson|Linus Roache
+299,HAS_DIRECTOR,Antonia Bird
+299,HAS_GENRES,Drama
+299,HAS_IMDBRATING,7.2
+300,HAS_RELEASED,1994-10-07
+300,HAS_TITLE,Quiz Show
+300,HAS_ACTORS,John Turturro|Paul Scofield|Ralph Fiennes|Rob Morrow
+300,HAS_DIRECTOR,Robert Redford
+300,HAS_GENRES,Drama
+300,HAS_IMDBRATING,7.5
+301,HAS_RELEASED,1995-05-05
+301,HAS_TITLE,Picture Bride (Bijo photo)
+301,HAS_ACTORS,Youki Kudoh|Akira Takayama|Cary-Hiroyuki Tagawa|Tamlyn Tomita
+301,HAS_DIRECTOR,Kayo Hatta
+301,HAS_GENRES,Drama|Romance
+301,HAS_IMDBRATING,6.8
+302,HAS_RELEASED,1994-12-09
+302,HAS_TITLE,"Queen Margot (Reine Margot, La)"
+302,HAS_ACTORS,Jean-Hugues Anglade|Isabelle Adjani|Vincent Perez|Daniel Auteuil
+302,HAS_DIRECTOR,Patrice Chéreau
+302,HAS_GENRES,Drama|Romance
+302,HAS_IMDBRATING,7.5
+303,HAS_RELEASED,1995-02-10
+303,HAS_TITLE,"Quick and the Dead, The"
+303,HAS_ACTORS,Sharon Stone|Russell Crowe|Gene Hackman|Leonardo DiCaprio
+303,HAS_DIRECTOR,Sam Raimi
+303,HAS_GENRES,Western|Thriller|Action
+303,HAS_IMDBRATING,6.4
+304,HAS_RELEASED,1995-03-03
+304,HAS_TITLE,Roommates
+304,HAS_ACTORS,Peter Falk|D.B. Sweeney|Julianne Moore|Ellen Burstyn
+304,HAS_DIRECTOR,Peter Yates
+304,HAS_GENRES,Drama|Comedy
+304,HAS_IMDBRATING,6.5
+305,HAS_RELEASED,1994-12-25
+305,HAS_TITLE,Ready to Wear (Pret-A-Porter)
+305,HAS_ACTORS,Sophia Loren|Jean-Pierre Cassel|Kim Basinger|Marcello Mastroianni
+305,HAS_DIRECTOR,Robert Altman
+305,HAS_GENRES,Comedy
+305,HAS_IMDBRATING,5.0
+306,HAS_RELEASED,1994-11-23
+306,HAS_TITLE,Three Colors: Red (Trois couleurs: Rouge)
+306,HAS_ACTORS,Irène Jacob|Jean-Pierre Lorit|Frédérique Feder|Jean-Louis Trintignant
+306,HAS_DIRECTOR,Krzysztof Kieślowski
+306,HAS_GENRES,Drama
+306,HAS_IMDBRATING,8.1
+307,HAS_RELEASED,1993-09-08
+307,HAS_TITLE,Three Colors: Blue (Trois couleurs: Bleu)
+307,HAS_ACTORS,Juliette Binoche|Florence Pernel|Benoît Régent|Charlotte Véry
+307,HAS_DIRECTOR,Krzysztof Kieślowski
+307,HAS_GENRES,Drama
+307,HAS_IMDBRATING,8.0
+308,HAS_RELEASED,1994-06-10
+308,HAS_TITLE,Three Colors: White (Trzy kolory: Bialy)
+308,HAS_ACTORS,Jerzy Stuhr|Janusz Gajos|Julie Delpy|Zbigniew Zamachowski
+308,HAS_DIRECTOR,Krzysztof Kieślowski
+308,HAS_GENRES,Drama|Comedy
+308,HAS_IMDBRATING,7.7
+309,HAS_RELEASED,1995-06-02
+309,HAS_TITLE,"Red Firecracker, Green Firecracker (Pao Da Shuang Deng)"
+309,HAS_ACTORS,Ning Jing|Wu Gang
+309,HAS_DIRECTOR,He Ping
+309,HAS_GENRES,Drama
+309,HAS_IMDBRATING,6.9
+312,HAS_RELEASED,1995-04-12
+312,HAS_TITLE,Stuart Saves His Family
+312,HAS_ACTORS,Laura San Giacomo|Vincent D'Onofrio|Shirley Knight|Al Franken
+312,HAS_DIRECTOR,Harold Ramis
+312,HAS_GENRES,Comedy
+312,HAS_IMDBRATING,5.3
+313,HAS_RELEASED,1994-11-18
+313,HAS_TITLE,"Swan Princess, The"
+313,HAS_ACTORS,Jack Palance|Howard McGillin|Michelle Nicastro|Liz Callaway
+313,HAS_DIRECTOR,Richard Rich
+313,HAS_GENRES,Children|Animation
+313,HAS_IMDBRATING,6.4
+314,HAS_RELEASED,1995-02-03
+314,HAS_TITLE,"Secret of Roan Inish, The"
+314,HAS_ACTORS,Pat Slowey|Dave Duffy|Declan Hannigan|Jeni Courtney
+314,HAS_DIRECTOR,John Sayles
+314,HAS_GENRES,Mystery|Fantasy|Drama|Children
+314,HAS_IMDBRATING,7.5
+315,HAS_RELEASED,1994-10-07
+315,HAS_TITLE,"Specialist, The"
+315,HAS_ACTORS,Sylvester Stallone|James Woods|Sharon Stone|Rod Steiger
+315,HAS_DIRECTOR,Luis Llosa
+315,HAS_GENRES,Action|Thriller|Drama
+315,HAS_IMDBRATING,5.4
+316,HAS_RELEASED,1994-10-28
+316,HAS_TITLE,Stargate
+316,HAS_ACTORS,Kurt Russell|Jaye Davidson|James Spader|Viveca Lindfors
+316,HAS_DIRECTOR,Roland Emmerich
+316,HAS_GENRES,Adventure|Action|Sci-Fi
+316,HAS_IMDBRATING,7.0
+317,HAS_RELEASED,1994-11-11
+317,HAS_TITLE,"Santa Clause, The"
+317,HAS_ACTORS,Tim Allen|Wendy Crewson|Judge Reinhold|Eric Lloyd
+317,HAS_DIRECTOR,John Pasquin
+317,HAS_GENRES,Comedy|Fantasy|Drama
+317,HAS_IMDBRATING,6.4
+318,HAS_RELEASED,1994-10-14
+318,HAS_TITLE,"Shawshank Redemption, The"
+318,HAS_ACTORS,Tim Robbins|William Sadler|Bob Gunton|Morgan Freeman
+318,HAS_DIRECTOR,Frank Darabont
+318,HAS_GENRES,Drama|Crime
+318,HAS_IMDBRATING,9.3
+319,HAS_RELEASED,1995-02-10
+319,HAS_TITLE,Shallow Grave
+319,HAS_ACTORS,Christopher Eccleston|Ewan McGregor|Ken Stott|Kerry Fox
+319,HAS_DIRECTOR,Danny Boyle
+319,HAS_GENRES,Thriller|Comedy|Drama
+319,HAS_IMDBRATING,7.4
+320,HAS_RELEASED,1994-08-24
+320,HAS_TITLE,Suture
+320,HAS_ACTORS,Dennis Haysbert|Mel Harris|Sab Shimono|Dina Merrill
+320,HAS_DIRECTOR,David Siegel|Scott McGehee
+320,HAS_GENRES,Film-Noir|Thriller
+320,HAS_IMDBRATING,6.7
+321,HAS_RELEASED,1995-01-20
+321,HAS_TITLE,Strawberry and Chocolate (Fresa y chocolate)
+321,HAS_ACTORS,Jorge Perugorría|Francisco Gattorno|Vladimir Cruz|Mirta Ibarra
+321,HAS_DIRECTOR,Juan Carlos Tabío|Tomás Gutiérrez Alea
+321,HAS_GENRES,Drama
+321,HAS_IMDBRATING,7.4
+322,HAS_RELEASED,1995-04-21
+322,HAS_TITLE,Swimming with Sharks
+322,HAS_ACTORS,Kevin Spacey|Frank Whaley|Benicio Del Toro|Michelle Forbes
+322,HAS_DIRECTOR,George Huang
+322,HAS_GENRES,Drama|Comedy
+322,HAS_IMDBRATING,7.1
+324,HAS_RELEASED,1995-03-08
+324,HAS_TITLE,"Sum of Us, The"
+324,HAS_ACTORS,Jack Thompson|Russell Crowe|John Polson|Deborah Kennedy
+324,HAS_DIRECTOR, Kevin Dowling|Geoff Burton
+324,HAS_GENRES,Drama|Comedy
+324,HAS_IMDBRATING,7.4
+325,HAS_RELEASED,1995-09-08
+325,HAS_TITLE,National Lampoon's Senior Trip
+325,HAS_ACTORS,Matt Frewer|Tommy Chong|Valerie Mahaffey|Lawrence Dane
+325,HAS_DIRECTOR,Kelly Makin
+325,HAS_GENRES,Comedy
+325,HAS_IMDBRATING,5.5
+326,HAS_RELEASED,1994-12-16
+326,HAS_TITLE,To Live (Huozhe)
+326,HAS_ACTORS,Jiang Wu|Ge You|Gong Li|Ben Niu
+326,HAS_DIRECTOR,Yimou Zhang
+326,HAS_GENRES,Drama
+326,HAS_IMDBRATING,8.3
+327,HAS_RELEASED,1995-03-31
+327,HAS_TITLE,Tank Girl
+327,HAS_ACTORS,Lori Petty|Don Harvey|Naomi Watts|Ice-T
+327,HAS_DIRECTOR,Rachel Talalay
+327,HAS_GENRES,Comedy|Action|Sci-Fi
+327,HAS_IMDBRATING,5.2
+328,HAS_RELEASED,1995-01-13
+328,HAS_TITLE,Tales from the Crypt Presents: Demon Knight
+328,HAS_ACTORS,John Kassir|Jada Pinkett Smith|William Sadler|Billy Zane
+328,HAS_DIRECTOR,Ernest R. Dickerson
+328,HAS_GENRES,Thriller|Horror
+328,HAS_IMDBRATING,6.7
+329,HAS_RELEASED,1994-11-18
+329,HAS_TITLE,Star Trek: Generations
+329,HAS_ACTORS,Patrick Stewart|Brent Spiner|Jonathan Frakes|LeVar Burton
+329,HAS_DIRECTOR,David Carson
+329,HAS_GENRES,Drama|Sci-Fi|Adventure
+329,HAS_IMDBRATING,6.6
+330,HAS_RELEASED,1995-05-24
+330,HAS_TITLE,Tales from the Hood
+330,HAS_ACTORS,Samuel Monroe Jr.|De'aundre Bonds|Joe Torry|Clarence Williams III
+330,HAS_DIRECTOR,Rusty Cundieff
+330,HAS_GENRES,Action|Crime|Horror
+330,HAS_IMDBRATING,6.1
+331,HAS_RELEASED,1994-12-02
+331,HAS_TITLE,Tom & Viv
+331,HAS_ACTORS,Willem Dafoe|Miranda Richardson|Tim Dutton|Rosemary Harris
+331,HAS_DIRECTOR,Brian Gilbert
+331,HAS_GENRES,Drama
+331,HAS_IMDBRATING,6.5
+332,HAS_RELEASED,1995-04-28
+332,HAS_TITLE,Village of the Damned
+332,HAS_ACTORS,Christopher Reeve|Michael Paré|Kirstie Alley|Linda Kozlowski
+332,HAS_DIRECTOR,John Carpenter
+332,HAS_GENRES,Horror|Sci-Fi
+332,HAS_IMDBRATING,5.6
+333,HAS_RELEASED,1995-03-31
+333,HAS_TITLE,Tommy Boy
+333,HAS_ACTORS,Chris Farley|Bo Derek|David Spade|Brian Dennehy
+333,HAS_DIRECTOR,Peter Segal
+333,HAS_GENRES,Comedy
+333,HAS_IMDBRATING,7.0
