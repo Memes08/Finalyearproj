@@ -316,6 +316,126 @@ def graph_data(graph_id):
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+        
+@app.route('/graph/<int:graph_id>/analytics')
+@login_required
+def graph_analytics(graph_id):
+    """Analytics dashboard for a knowledge graph"""
+    # Fetch the graph
+    graph = KnowledgeGraph.query.get_or_404(graph_id)
+    
+    # Check if graph belongs to current user
+    if graph.user_id != current_user.id:
+        flash('You do not have permission to view this graph.', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    try:
+        # Get graph data for analytics
+        nodes, relationships = neo4j_manager.get_graph_data(graph.id)
+        data = {"nodes": nodes, "relationships": relationships}
+        
+        # Calculate analytics metrics
+        analytics = {
+            'total_nodes': len(nodes),
+            'total_relationships': len(relationships),
+            'density': calculate_graph_density(data),
+            'centrality': calculate_centrality(data),
+            'communities': detect_communities(data),
+            'domain': graph.domain,
+        }
+        
+        return render_template('analytics.html', graph=graph, analytics=analytics)
+    except Exception as e:
+        flash(f'Error generating analytics: {str(e)}', 'danger')
+        return redirect(url_for('visualization', graph_id=graph_id))
+
+@app.route('/graph/<int:graph_id>/predictions')
+@login_required
+def graph_predictions(graph_id):
+    """Get predictions for missing relationships in a knowledge graph"""
+    # Fetch the graph
+    graph = KnowledgeGraph.query.get_or_404(graph_id)
+    
+    # Check if graph belongs to current user
+    if graph.user_id != current_user.id:
+        return jsonify({"error": "Access denied"}), 403
+    
+    try:
+        # Generate predictions
+        limit = request.args.get('limit', 5, type=int)
+        predictions = neo4j_manager.predict_relationships(graph.id, limit=limit)
+        return jsonify({"predictions": predictions})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+def calculate_graph_density(data):
+    """Calculate graph density (ratio of actual connections to potential connections)"""
+    nodes = len(data['nodes'])
+    edges = len(data['relationships'])
+    
+    if nodes <= 1:
+        return 0
+    
+    # Maximum possible edges in a directed graph: n(n-1)
+    max_edges = nodes * (nodes - 1)
+    if max_edges == 0:
+        return 0
+        
+    return round((edges / max_edges) * 100, 2)
+
+def calculate_centrality(data):
+    """Calculate degree centrality for nodes (simplified version)"""
+    # Count connections for each node
+    centrality = {}
+    for node in data['nodes']:
+        centrality[node['id']] = {
+            'id': node['id'],
+            'label': node['label'],
+            'category': node.get('category', 'Unknown'),
+            'in_degree': 0,
+            'out_degree': 0,
+            'total_degree': 0
+        }
+    
+    # Count actual connections
+    for rel in data['relationships']:
+        source_id = rel['source']
+        target_id = rel['target']
+        
+        if source_id in centrality:
+            centrality[source_id]['out_degree'] += 1
+            centrality[source_id]['total_degree'] += 1
+        
+        if target_id in centrality:
+            centrality[target_id]['in_degree'] += 1
+            centrality[target_id]['total_degree'] += 1
+    
+    # Sort by total degree (highest first)
+    sorted_centrality = sorted(
+        centrality.values(), 
+        key=lambda x: x['total_degree'], 
+        reverse=True
+    )
+    
+    # Return top 10 nodes by centrality
+    return sorted_centrality[:10]
+
+def detect_communities(data):
+    """Simplified community detection based on node categories"""
+    communities = {}
+    
+    for node in data['nodes']:
+        category = node.get('category', 'Unknown')
+        if category not in communities:
+            communities[category] = 0
+        communities[category] += 1
+    
+    # Convert to sorted list
+    community_list = [
+        {'name': k, 'count': v} 
+        for k, v in communities.items()
+    ]
+    return sorted(community_list, key=lambda x: x['count'], reverse=True)
 
 
 @app.route('/profile', methods=['GET', 'POST'])

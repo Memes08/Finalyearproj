@@ -407,6 +407,11 @@
                             </ul>
                         </div>
                         
+                        <!-- Analytics Link -->
+                        <a href="{{ url_for('graph_analytics', graph_id=graph.id) }}" class="btn btn-sm btn-outline-warning me-2">
+                            <i class="fas fa-chart-line me-1"></i> Analytics
+                        </a>
+                        
                         <div class="dropdown me-2">
                             <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-download me-1"></i> Export
