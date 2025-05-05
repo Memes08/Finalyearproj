@@ -997,6 +997,259 @@ class KnowledgeGraphVisualizer {
         this.stopSimulation();
     }
     
+    // Progressive Disclosure Methods
+    enableProgressiveDisclosure(enabled) {
+        // Toggle progressive disclosure mode
+        this.options.progressiveDisclosureEnabled = enabled;
+        
+        if (enabled) {
+            // Reset the current view and show only the initial nodes
+            this.initializeProgressiveView();
+        } else {
+            // Show the full graph again
+            this.resetDisclosure();
+        }
+    }
+    
+    initializeProgressiveView() {
+        if (!this.allNodes.length) return;
+        
+        // Store current full graph
+        this.fullNodes = [...this.nodes];
+        this.fullLinks = [...this.links];
+        
+        // Determine nodes to show initially
+        let initialNodes = [];
+        const strategy = this.options.initialNodeSelectionStrategy;
+        
+        if (strategy === 'degree') {
+            // Calculate the degree (number of connections) for each node
+            const nodeDegrees = new Map();
+            this.allNodes.forEach(node => {
+                nodeDegrees.set(node.id, 0);
+            });
+            
+            this.allLinks.forEach(link => {
+                const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+                const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+                
+                nodeDegrees.set(sourceId, (nodeDegrees.get(sourceId) || 0) + 1);
+                nodeDegrees.set(targetId, (nodeDegrees.get(targetId) || 0) + 1);
+            });
+            
+            // Sort nodes by degree (descending)
+            const sortedNodes = [...this.allNodes].sort((a, b) => {
+                return (nodeDegrees.get(b.id) || 0) - (nodeDegrees.get(a.id) || 0);
+            });
+            
+            // Get top N nodes by degree
+            initialNodes = sortedNodes.slice(0, this.options.initialNodeLimit);
+        } else if (strategy === 'random') {
+            // Randomly select the initial nodes
+            const shuffled = [...this.allNodes].sort(() => 0.5 - Math.random());
+            initialNodes = shuffled.slice(0, this.options.initialNodeLimit);
+        } else if (strategy === 'category') {
+            // Get a balanced selection across categories
+            const categoryCounts = {};
+            const nodesPerCategory = this.options.initialNodeLimit / this.nodeCategories.size;
+            
+            // Group nodes by category
+            const nodesByCategory = {};
+            this.allNodes.forEach(node => {
+                if (!nodesByCategory[node.category]) {
+                    nodesByCategory[node.category] = [];
+                }
+                nodesByCategory[node.category].push(node);
+            });
+            
+            // Take an equal number from each category
+            for (const category of this.nodeCategories) {
+                if (nodesByCategory[category]) {
+                    // Sort by degree or select randomly within category
+                    const categoryNodes = nodesByCategory[category].slice(0, Math.ceil(nodesPerCategory));
+                    initialNodes = initialNodes.concat(categoryNodes);
+                }
+            }
+            
+            // If we have too few, supplement with high-degree nodes
+            if (initialNodes.length < this.options.initialNodeLimit) {
+                const remainingCount = this.options.initialNodeLimit - initialNodes.length;
+                const initialNodeIds = new Set(initialNodes.map(n => n.id));
+                
+                // Calculate degrees for remaining nodes
+                const nodeDegrees = {};
+                this.allLinks.forEach(link => {
+                    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+                    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+                    
+                    nodeDegrees[sourceId] = (nodeDegrees[sourceId] || 0) + 1;
+                    nodeDegrees[targetId] = (nodeDegrees[targetId] || 0) + 1;
+                });
+                
+                // Sort remaining nodes by degree
+                const remainingNodes = this.allNodes.filter(n => !initialNodeIds.has(n.id))
+                    .sort((a, b) => (nodeDegrees[b.id] || 0) - (nodeDegrees[a.id] || 0));
+                
+                // Add the highest-degree remaining nodes
+                initialNodes = initialNodes.concat(remainingNodes.slice(0, remainingCount));
+            }
+        }
+        
+        // Get initial links (only those between initial nodes)
+        const initialNodeIds = new Set(initialNodes.map(n => n.id));
+        const initialLinks = this.allLinks.filter(link => {
+            const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            return initialNodeIds.has(sourceId) && initialNodeIds.has(targetId);
+        });
+        
+        // Update visible nodes and links
+        this.updateGraph(initialNodes, initialLinks);
+        
+        // Set current expansion state
+        this.expandedNodeIds = new Set(initialNodeIds);
+        
+        // Restart simulation
+        if (this.simulation) {
+            this.simulation.nodes(this.nodes);
+            this.simulation.force("link").links(this.links);
+            this.simulation.alpha(0.3).restart();
+        }
+    }
+    
+    resetDisclosure() {
+        // Restore full graph
+        this.updateGraph(this.allNodes, this.allLinks);
+        
+        // Restart simulation
+        if (this.simulation) {
+            this.simulation.nodes(this.nodes);
+            this.simulation.force("link").links(this.links);
+            this.simulation.alpha(0.3).restart();
+        }
+        
+        // Reset expansion state
+        this.expandedNodeIds = null;
+        
+        // Reset disclosure setting
+        this.options.progressiveDisclosureEnabled = false;
+    }
+    
+    expandOneLevel() {
+        if (!this.options.progressiveDisclosureEnabled || !this.expandedNodeIds) {
+            // Initialize progressive view if not already done
+            this.options.progressiveDisclosureEnabled = true;
+            this.initializeProgressiveView();
+            return;
+        }
+        
+        // Find nodes connected to already-expanded nodes
+        const candidateNodes = [];
+        
+        this.allLinks.forEach(link => {
+            const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            
+            // If one end is in the expanded set but the other isn't, add the unexpanded node
+            if (this.expandedNodeIds.has(sourceId) && !this.expandedNodeIds.has(targetId)) {
+                const node = this.allNodes.find(n => n.id === targetId);
+                if (node) candidateNodes.push(node);
+            } else if (this.expandedNodeIds.has(targetId) && !this.expandedNodeIds.has(sourceId)) {
+                const node = this.allNodes.find(n => n.id === sourceId);
+                if (node) candidateNodes.push(node);
+            }
+        });
+        
+        // Remove duplicates
+        const uniqueCandidates = candidateNodes.filter((node, index, self) => 
+            index === self.findIndex(n => n.id === node.id));
+        
+        // Sort by degree or other criteria
+        uniqueCandidates.sort((a, b) => {
+            const connectionsA = this.countNodeConnections(a.id);
+            const connectionsB = this.countNodeConnections(b.id);
+            return connectionsB - connectionsA;
+        });
+        
+        // Select nodes to add
+        const nodesToAdd = uniqueCandidates.slice(0, this.options.expansionIncrement);
+        
+        // Add selected nodes to the expanded set
+        nodesToAdd.forEach(node => this.expandedNodeIds.add(node.id));
+        
+        // Create the new combined node set
+        const newNodes = [...this.nodes, ...nodesToAdd];
+        
+        // Get links for the expanded node set
+        const newLinks = this.allLinks.filter(link => {
+            const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            return this.expandedNodeIds.has(sourceId) && this.expandedNodeIds.has(targetId);
+        });
+        
+        // Update the graph
+        this.updateGraph(newNodes, newLinks);
+        
+        // Restart simulation with longer alpha decay to allow for smoother animation
+        if (this.simulation) {
+            this.simulation.nodes(this.nodes);
+            this.simulation.force("link").links(this.links);
+            this.simulation.alpha(0.5).alphaDecay(0.02).restart();
+        }
+        
+        // Update badge to show expansion progress
+        document.getElementById('graph-filter-badge').style.display = 'inline-block';
+        document.getElementById('graph-filter-badge').textContent = 
+            `Progressive View (${this.nodes.length}/${this.allNodes.length} nodes)`;
+    }
+    
+    focusOnKeyNodes() {
+        // Identify high-degree nodes (key nodes in the graph)
+        const nodeDegrees = {};
+        
+        // Calculate the degree of each node
+        this.allLinks.forEach(link => {
+            const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            
+            nodeDegrees[sourceId] = (nodeDegrees[sourceId] || 0) + 1;
+            nodeDegrees[targetId] = (nodeDegrees[targetId] || 0) + 1;
+        });
+        
+        // Find nodes with degree above threshold
+        const keyNodeIds = new Set();
+        this.allNodes.forEach(node => {
+            if ((nodeDegrees[node.id] || 0) >= this.options.highDegreeThreshold) {
+                keyNodeIds.add(node.id);
+            }
+        });
+        
+        // Select the key nodes
+        const keyNodes = this.allNodes.filter(node => keyNodeIds.has(node.id));
+        
+        // Get links between key nodes
+        const keyLinks = this.allLinks.filter(link => {
+            const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            return keyNodeIds.has(sourceId) && keyNodeIds.has(targetId);
+        });
+        
+        // Update the graph
+        this.updateGraph(keyNodes, keyLinks);
+        
+        // Restart simulation
+        if (this.simulation) {
+            this.simulation.nodes(this.nodes);
+            this.simulation.force("link").links(this.links);
+            this.simulation.alpha(0.3).restart();
+        }
+        
+        // Update UI to reflect filtering
+        document.getElementById('graph-filter-badge').style.display = 'inline-block';
+        document.getElementById('graph-filter-badge').textContent = 
+            `Key Nodes (${keyNodes.length} nodes with degree ≥ ${this.options.highDegreeThreshold})`;
+    }
+    
     // Theme management
     applyTheme(themeName) {
         // Apply the selected theme to the graph visualization
