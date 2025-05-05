@@ -129,6 +129,26 @@
 
 {% block content %}
 <div class="container-fluid py-4">
+    <!-- Page Header with Analytics Link -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">{{ graph.name }}</li>
+                        </ol>
+                    </nav>
+                    <h2 class="mb-0">Knowledge Graph Visualization</h2>
+                </div>
+                <a href="{{ url_for('graph_analytics', graph_id=graph.id) }}" class="btn btn-warning btn-lg">
+                    <i class="fas fa-chart-line me-2"></i> Analytics Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-md-3">
             <!-- Graph Info Card -->
