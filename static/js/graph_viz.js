@@ -1345,12 +1345,19 @@ class KnowledgeGraphVisualizer {
         this.exportInProgress = true;
         
         // Show loading spinner or indicator
-        document.getElementById('export-status').textContent = 'Preparing export...';
-        document.getElementById('export-spinner').classList.remove('d-none');
+        const statusEl = document.getElementById('export-status');
+        const spinnerEl = document.getElementById('export-spinner');
+        
+        if (statusEl) statusEl.textContent = 'Preparing export...';
+        if (spinnerEl) spinnerEl.classList.remove('d-none');
         
         try {
             // Clone the SVG for export to avoid modifying the original
             const originalSvg = document.querySelector(`#${this.containerId} svg`);
+            if (!originalSvg) {
+                throw new Error("SVG element not found");
+            }
+            
             const svgClone = originalSvg.cloneNode(true);
             
             // Add dark background for better visibility in export
@@ -1361,92 +1368,212 @@ class KnowledgeGraphVisualizer {
             svgClone.insertBefore(rect, svgClone.firstChild);
             
             // Set fixed dimensions for export
-            svgClone.setAttribute("width", this.width);
-            svgClone.setAttribute("height", this.height);
-            
-            // Create a temporary container and append the clone
-            const container = document.createElement("div");
-            container.appendChild(svgClone);
+            const width = this.width || 1200;  // Default if not set
+            const height = this.height || 800;  // Default if not set
+            svgClone.setAttribute("width", width);
+            svgClone.setAttribute("height", height);
+            svgClone.setAttribute("viewBox", `0 0 ${width} ${height}`);
             
             // Convert to data URL
             const svgData = new XMLSerializer().serializeToString(svgClone);
             const svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
             
+            // Current timestamp for filename
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+            
             if (format === 'svg') {
                 // Direct SVG download
-                this.downloadBlob(svgBlob, `knowledge_graph_${new Date().toISOString().split('T')[0]}.svg`);
+                this.downloadBlob(svgBlob, `knowledge_graph_${timestamp}.svg`);
                 this.exportInProgress = false;
-                document.getElementById('export-status').textContent = 'Export complete';
-                document.getElementById('export-spinner').classList.add('d-none');
+                if (statusEl) statusEl.textContent = 'Export complete';
+                if (spinnerEl) spinnerEl.classList.add('d-none');
                 
                 // Reset status after delay
                 setTimeout(() => {
-                    document.getElementById('export-status').textContent = '';
+                    if (statusEl) statusEl.textContent = '';
                 }, 3000);
             } else {
-                // Convert to PNG
-                const url = URL.createObjectURL(svgBlob);
+                // Convert to PNG using data URL approach first, fallback to canvas if needed
+                const svgUrl = URL.createObjectURL(svgBlob);
+                
+                // Create image from SVG
                 const img = new Image();
                 
                 img.onload = () => {
-                    // Create canvas for conversion
-                    const canvas = document.createElement("canvas");
-                    canvas.width = this.width;
-                    canvas.height = this.height;
-                    const ctx = canvas.getContext("2d");
-                    
-                    // Fill background
-                    ctx.fillStyle = "#121212";
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    
-                    // Draw image
-                    ctx.drawImage(img, 0, 0);
-                    
-                    // Convert to blob and download
-                    canvas.toBlob((blob) => {
-                        this.downloadBlob(blob, `knowledge_graph_${new Date().toISOString().split('T')[0]}.png`);
-                        URL.revokeObjectURL(url);
+                    try {
+                        // Create canvas for conversion
+                        const canvas = document.createElement("canvas");
+                        // Use a scale factor for higher quality
+                        const scale = window.devicePixelRatio || 2;
+                        canvas.width = width * scale;
+                        canvas.height = height * scale;
+                        const ctx = canvas.getContext("2d");
+                        
+                        if (!ctx) {
+                            throw new Error("Could not get canvas context");
+                        }
+                        
+                        // Apply scaling for high resolution
+                        ctx.scale(scale, scale);
+                        
+                        // Fill background
+                        ctx.fillStyle = "#121212";
+                        ctx.fillRect(0, 0, width, height);
+                        
+                        // Draw image
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Convert to blob and download
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                this.downloadBlob(blob, `knowledge_graph_${timestamp}.png`);
+                                if (statusEl) statusEl.textContent = 'Export complete';
+                            } else {
+                                console.error("Failed to create blob from canvas");
+                                if (statusEl) statusEl.textContent = 'Export failed - trying alternative method...';
+                                
+                                // Fallback method: Use data URL
+                                const dataUrl = canvas.toDataURL('image/png');
+                                const dl = document.createElement('a');
+                                dl.href = dataUrl;
+                                dl.download = `knowledge_graph_${timestamp}.png`;
+                                document.body.appendChild(dl);
+                                dl.click();
+                                document.body.removeChild(dl);
+                                
+                                if (statusEl) statusEl.textContent = 'Export complete (alternative method)';
+                            }
+                            
+                            // Clean up
+                            URL.revokeObjectURL(svgUrl);
+                            this.exportInProgress = false;
+                            if (spinnerEl) spinnerEl.classList.add('d-none');
+                            
+                            // Reset status after delay
+                            setTimeout(() => {
+                                if (statusEl) statusEl.textContent = '';
+                            }, 3000);
+                        }, 'image/png', 1.0);
+                    } catch (canvasError) {
+                        console.error("Canvas error:", canvasError);
+                        if (statusEl) statusEl.textContent = 'Export failed - trying SVG fallback...';
+                        
+                        // If canvas fails, use SVG download as fallback
+                        this.downloadBlob(svgBlob, `knowledge_graph_${timestamp}.svg`);
+                        if (statusEl) statusEl.textContent = 'Export complete (SVG fallback)';
+                        
+                        // Clean up
+                        URL.revokeObjectURL(svgUrl);
                         this.exportInProgress = false;
-                        document.getElementById('export-status').textContent = 'Export complete';
-                        document.getElementById('export-spinner').classList.add('d-none');
+                        if (spinnerEl) spinnerEl.classList.add('d-none');
                         
                         // Reset status after delay
                         setTimeout(() => {
-                            document.getElementById('export-status').textContent = '';
+                            if (statusEl) statusEl.textContent = '';
                         }, 3000);
-                    });
+                    }
                 };
                 
-                img.onerror = () => {
-                    console.error("Error loading SVG for export");
-                    document.getElementById('export-status').textContent = 'Export failed';
-                    document.getElementById('export-spinner').classList.add('d-none');
+                img.onerror = (e) => {
+                    console.error("Failed to load SVG as image:", e);
+                    if (statusEl) statusEl.textContent = 'Export failed - trying direct SVG download...';
+                    
+                    // If image loading fails, fallback to SVG download
+                    this.downloadBlob(svgBlob, `knowledge_graph_${timestamp}.svg`);
+                    if (statusEl) statusEl.textContent = 'Export complete (SVG fallback)';
+                    
+                    // Clean up
+                    URL.revokeObjectURL(svgUrl);
                     this.exportInProgress = false;
+                    if (spinnerEl) spinnerEl.classList.add('d-none');
                     
                     // Reset status after delay
                     setTimeout(() => {
-                        document.getElementById('export-status').textContent = '';
+                        if (statusEl) statusEl.textContent = '';
                     }, 3000);
                 };
                 
-                img.src = url;
+                // Set image source to SVG blob URL
+                img.src = svgUrl;
             }
         } catch (error) {
-            console.error("Error exporting graph:", error);
-            document.getElementById('export-status').textContent = 'Export failed';
-            document.getElementById('export-spinner').classList.add('d-none');
+            console.error("Error during export:", error);
+            if (statusEl) statusEl.textContent = 'Export failed';
+            if (spinnerEl) spinnerEl.classList.add('d-none');
             this.exportInProgress = false;
+            
+            // Reset status after delay
+            setTimeout(() => {
+                if (statusEl) statusEl.textContent = '';
+            }, 3000);
         }
     }
     
-    // Helper method to download a blob
+    // Helper method to download a blob with browser compatibility
     downloadBlob(blob, fileName) {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
+        try {
+            // Method 1: Using URL.createObjectURL
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            link.style.display = "none";
+            document.body.appendChild(link);
+            
+            // Trigger download with a slight delay to ensure proper attachment in all browsers
+            setTimeout(() => {
+                try {
+                    link.click();
+                    // Clean up
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                } catch (e) {
+                    console.error("Error in click event:", e);
+                    this.fallbackDownload(blob, fileName);
+                }
+            }, 50);
+        } catch (error) {
+            console.error("Primary download method failed:", error);
+            this.fallbackDownload(blob, fileName);
+        }
+    }
+    
+    // Fallback download method using different techniques
+    fallbackDownload(blob, fileName) {
+        try {
+            // Method 2: Using window.navigator.msSaveBlob (for IE/Edge)
+            if (window.navigator && window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(blob, fileName);
+                return;
+            }
+            
+            // Method 3: Create data URL and trigger download
+            const reader = new FileReader();
+            reader.onload = function() {
+                const dataUrl = reader.result;
+                const link = document.createElement("a");
+                link.href = dataUrl;
+                link.download = fileName;
+                link.style.display = "none";
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                }, 100);
+            };
+            reader.readAsDataURL(blob);
+        } catch (fallbackError) {
+            console.error("Fallback download method failed:", fallbackError);
+            // Show error message to user
+            const statusEl = document.getElementById('export-status');
+            if (statusEl) {
+                statusEl.textContent = 'Browser download failed. Try a different browser.';
+                setTimeout(() => {
+                    statusEl.textContent = '';
+                }, 5000);
+            }
+        }
     }
 }
