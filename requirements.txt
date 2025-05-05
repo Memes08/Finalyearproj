@@ -33,3 +33,11 @@ numpy==2.2.5
 python-dotenv
 tqdm==4.67.1
 requests==2.32.3
+# LLM + Graph
+neo4j==5.28.1
+langchain==0.3.25
+langchain-core==0.3.58
+langchain-community==0.3.23
+langchain-text-splitters==0.3.8
+groq==0.24.0
+openai==1.77.0
