@@ -44,6 +44,7 @@ class KnowledgeGraphVisualizer {
         this.nodes = [];    // Currently visible nodes
         this.links = [];    // Currently visible links
         this.selectedNode = null; // Track currently selected node
+        this.selectedLink = null; // Track currently selected relationship
         this.nodeCategories = new Set(); // Store node categories
         this.relationshipTypes = new Set(); // Store relationship types for color coding
         this.relationshipColorScale = d3.scaleOrdinal(d3.schemeSet3); // Color scale for relationships
@@ -269,7 +270,8 @@ class KnowledgeGraphVisualizer {
                     .attr("data-type", d => d.type)
                     .attr("marker-end", d => `url(#marker-${this.getRelationshipColorKey(d.type)})`)
                     .on("mouseover", (event, d) => this.handleLinkMouseOver(event, d))
-                    .on("mouseout", () => this.handleMouseOut()),
+                    .on("mouseout", () => this.handleMouseOut())
+                    .on("click", (event, d) => this.handleLinkClick(event, d)),
                 update => update
                     .attr("stroke", d => this.getRelationshipColor(d.type)) 
                     .attr("marker-end", d => `url(#marker-${this.getRelationshipColorKey(d.type)})`),
@@ -478,6 +480,51 @@ class KnowledgeGraphVisualizer {
         `)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 28) + "px");
+    }
+    
+    handleLinkClick(event, d) {
+        // Toggle relationship selection
+        if (this.selectedLink === d) {
+            // Deselect current relationship
+            this.selectedLink = null;
+            
+            // Reset highlighting
+            this.resetHighlighting();
+            
+            // Dispatch event for UI updates
+            document.dispatchEvent(new CustomEvent('linkDeselected'));
+        } else {
+            // Select new relationship
+            this.selectedLink = d;
+            
+            // Reset node selection if any
+            this.selectedNode = null;
+            
+            // Get source and target nodes as objects
+            const source = typeof d.source === 'object' ? d.source : 
+                this.nodes.find(node => node.id === d.source);
+            const target = typeof d.target === 'object' ? d.target : 
+                this.nodes.find(node => node.id === d.target);
+            
+            // Highlight just this relationship
+            this.nodeElements.attr("opacity", node => 
+                (node === source || node === target) ? 1 : 0.3);
+            this.linkElements.attr("opacity", link => link === d ? 1 : 0.2);
+            this.textElements.attr("opacity", node => 
+                (node === source || node === target) ? 1 : 0.3);
+            
+            // Show link label
+            this.linkLabelElements.attr("opacity", link => link === d ? 1 : 0);
+            
+            // Dispatch event with relationship details
+            document.dispatchEvent(new CustomEvent('linkSelected', {
+                detail: {
+                    link: d,
+                    source: source,
+                    target: target
+                }
+            }));
+        }
     }
     
     handleMouseOut() {

@@ -1160,9 +1160,116 @@
             };
         });
         
+        // Handle link/relationship selection
+        document.addEventListener('linkSelected', function(e) {
+            const link = e.detail.link;
+            const source = e.detail.source;
+            const target = e.detail.target;
+            
+            // Show relationship panel instead of node panel
+            document.getElementById('relationship-tab').click();
+            
+            // Hide placeholder and show relationship detail card
+            document.getElementById('relationship-details-placeholder').classList.add('d-none');
+            document.getElementById('relationship-detail-card').classList.remove('d-none');
+            
+            // Hide node detail card
+            document.getElementById('node-detail-card').classList.add('d-none');
+            
+            // Update relationship metadata
+            document.getElementById('selected-relationship-id').textContent = link.id || '';
+            document.getElementById('selected-relationship-type').textContent = link.type || 'Unknown';
+            
+            // Set creation date if available
+            const createdDate = link.created_at ? new Date(link.created_at).toLocaleDateString() : 'N/A';
+            document.getElementById('selected-relationship-created-date').textContent = createdDate;
+            
+            // Update the visual representation
+            document.getElementById('relationship-source-node').textContent = source.label;
+            document.getElementById('relationship-source-node').style.backgroundColor = 
+                source.color || getComputedStyle(document.documentElement).getPropertyValue('--bs-dark');
+                
+            document.getElementById('relationship-target-node').textContent = target.label;
+            document.getElementById('relationship-target-node').style.backgroundColor = 
+                target.color || getComputedStyle(document.documentElement).getPropertyValue('--bs-dark');
+                
+            document.getElementById('relationship-label-display').textContent = link.type;
+            
+            // Get relationship properties (exclude internal props)
+            const propertiesTable = document.getElementById('relationship-properties-table');
+            propertiesTable.innerHTML = '';
+            
+            const excludedProps = ['id', 'source', 'target', 'type', 'index', 'weight'];
+            const properties = Object.keys(link)
+                .filter(key => !excludedProps.includes(key) && link[key] !== null && link[key] !== undefined);
+            
+            if (properties.length === 0) {
+                propertiesTable.innerHTML = '<tr><td colspan="2" class="text-center text-muted">No additional properties available</td></tr>';
+            } else {
+                properties.forEach(prop => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="text-info">${prop}</td>
+                        <td>${link[prop]}</td>
+                    `;
+                    propertiesTable.appendChild(row);
+                });
+            }
+            
+            // Generate relationship description based on type
+            let description, additionalInfo;
+            
+            switch(link.type.toLowerCase()) {
+                case 'acted_in':
+                    description = `This relationship indicates that <strong>${source.label}</strong> acted in the movie <strong>${target.label}</strong>.`;
+                    additionalInfo = 'This is a direct relationship showing a performer\'s participation in a film production.';
+                    break;
+                case 'directed':
+                    description = `This relationship indicates that <strong>${source.label}</strong> directed the movie <strong>${target.label}</strong>.`;
+                    additionalInfo = 'This connection represents creative leadership and overall vision for the production.';
+                    break;
+                case 'produced':
+                    description = `This relationship indicates that <strong>${source.label}</strong> produced the film <strong>${target.label}</strong>.`;
+                    additionalInfo = 'This relationship represents financial or organizational backing of the production.';
+                    break;
+                case 'knows':
+                case 'friend_of':
+                    description = `This relationship indicates that <strong>${source.label}</strong> knows or is friends with <strong>${target.label}</strong>.`;
+                    additionalInfo = 'This represents a social or professional connection between the individuals.';
+                    break;
+                case 'created':
+                case 'wrote':
+                    description = `This relationship indicates that <strong>${source.label}</strong> created or wrote <strong>${target.label}</strong>.`;
+                    additionalInfo = 'This represents authorship or creative origination.';
+                    break;
+                case 'part_of':
+                case 'belongs_to':
+                    description = `This relationship indicates that <strong>${source.label}</strong> is part of or belongs to <strong>${target.label}</strong>.`;
+                    additionalInfo = 'This represents membership, inclusion or composition.';
+                    break;
+                default:
+                    description = `This <strong>${link.type}</strong> relationship connects <strong>${source.label}</strong> to <strong>${target.label}</strong>.`;
+                    additionalInfo = 'Select different relationships to explore connections between entities in the graph.';
+            }
+            
+            document.getElementById('relationship-description').innerHTML = description;
+            document.getElementById('relationship-additional-info').textContent = additionalInfo;
+            
+            // Update UI indicators
+            document.getElementById('graph-node-badge').textContent = 'Relationship Selected';
+        });
+        
+        // Handle link/relationship deselection
+        document.addEventListener('linkDeselected', function() {
+            document.getElementById('relationship-detail-card').classList.add('d-none');
+            document.getElementById('relationship-details-placeholder').classList.remove('d-none');
+            document.getElementById('graph-node-badge').textContent = 'Ready';
+        });
+        
         // Handle node deselection
         document.addEventListener('nodeDeselected', function() {
             document.getElementById('node-detail-card').classList.add('d-none');
+            document.getElementById('node-details-placeholder').classList.remove('d-none');
             document.getElementById('graph-node-badge').textContent = 'Ready';
             document.getElementById('graph-filter-badge').style.display = 'none';
         });
