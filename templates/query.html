@@ -279,16 +279,16 @@
                     
                     <!-- Text Result View -->
                     <div id="text-result-view">
-                        <div class="card-body bg-dark">
-                            <div class="query-result bg-dark p-3 rounded" id="result-text" style="white-space: pre-wrap; font-family: 'Courier New', monospace;">
+                        <div class="card-body bg-dark p-0"> <!-- Removed padding -->
+                            <div class="query-result bg-dark p-2 rounded" id="result-text"> <!-- Reduced padding -->
                                 {% if "Found these relationships:" in result %}
-                                    <div class="d-flex align-items-center mb-4">
-                                        <div class="result-icon me-3">
-                                            <i class="fas fa-network-wired fa-2x text-info"></i>
+                                    <div class="d-flex align-items-center mb-2 border-bottom border-info pb-2"> <!-- Added border, reduced margin -->
+                                        <div class="result-icon me-2"> <!-- Reduced margin -->
+                                            <i class="fas fa-network-wired text-info"></i> <!-- Smaller icon -->
                                         </div>
                                         <div>
-                                            <h5 class="text-info mb-1">{{ result.split('\n')[0] }}</h5>
-                                            <p class="text-light small mb-0">The following connections were discovered in your knowledge graph</p>
+                                            <h6 class="text-info mb-0">{{ result.split('\n')[0] }}</h6> <!-- Smaller heading -->
+                                            <small class="text-light">Connections found in your knowledge graph</small>
                                         </div>
                                     </div>
                                     
@@ -302,105 +302,95 @@
                                                     {% set relation = remaining[0].strip() %}
                                                     {% set entity2 = remaining[1].strip() %}
                                                     
-                                                    <div class="relationship-item mb-3 p-3 border border-info rounded relationship-card animate-in" 
-                                                         style="--delay: {{ loop.index * 0.1 }}s">
-                                                        <div class="relationship-visual">
-                                                            <!-- Horizontal relationship display -->
-                                                            <div class="d-flex align-items-center justify-content-between relationship-row animate-fade-in">
-                                                                <!-- Source node -->
-                                                                <div class="node-box me-2" style="min-width: 27%;">
-                                                                    {% set nodeType1 = 'movie' if loop.index % 2 == 0 else 'person' %}
-                                                                    {% set nodeIcon1 = 'film' if nodeType1 == 'movie' else 'user' %}
-                                                                    {% set nodeColor1 = '#8a65cc' if nodeType1 == 'movie' else '#5ac8fa' %}
-                                                                    
-                                                                    <div class="text-center mb-2">
-                                                                        <div class="node-circle mx-auto" style="background: linear-gradient(135deg, {{ nodeColor1 }}DD, {{ nodeColor1 }});">
-                                                                            <i class="fas fa-{{ nodeIcon1 }} text-white"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="node-label text-center py-2 px-2 rounded" style="background-color: {{ nodeColor1 }}; box-shadow: 0 3px 10px rgba(0,0,0,0.2);">
-                                                                        <span class="text-white fw-bold">{{ entity1 }}</span>
-                                                                    </div>
-                                                                </div>
+                                                    <div class="relationship-item mb-2 p-2 border border-info rounded relationship-card animate-in" 
+                                                         style="--delay: {{ loop.index * 0.05 }}s"> <!-- Reduced margin and padding, faster animation -->
+                                                        <!-- Compact relationship display -->
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <!-- Entity 1 box -->
+                                                            <div class="entity-box text-center" style="width: 32%;">
+                                                                {% set nodeType1 = 'movie' if loop.index % 2 == 0 else 'person' %}
+                                                                {% set nodeIcon1 = 'film' if nodeType1 == 'movie' else 'user' %}
+                                                                {% set nodeColor1 = '#8a65cc' if nodeType1 == 'movie' else '#5ac8fa' %}
                                                                 
-                                                                <!-- Relationship -->
-                                                                <div class="relationship-path text-center flex-fill animate-pulse" style="position: relative; margin: 0 10px;">
-                                                                    <div class="path-line" style="position: relative; height: 4px; background: linear-gradient(to right, {{ nodeColor1 }}, #17a2b8);">
-                                                                        <div class="animated-dot" style="position: absolute; top: -3px; left: 0; height: 10px; width: 10px; background-color: {{ nodeColor1 }}; border-radius: 50%;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="relation-badge d-inline-block px-3 py-1 my-2 rounded-pill bg-info text-white fw-bold" style="box-shadow: 0 3px 10px rgba(0,0,0,0.2);">
-                                                                        <i class="fas fa-link me-1"></i>
-                                                                        {{ relation }}
-                                                                    </div>
-                                                                    <div class="path-line" style="position: relative; height: 4px; background: linear-gradient(to right, #17a2b8, {{ nodeColor2 }});">
-                                                                        <div class="animated-dot" style="position: absolute; top: -3px; right: 0; height: 10px; width: 10px; background-color: {{ nodeColor2 }}; border-radius: 50%;">
-                                                                        </div>
-                                                                    </div>
+                                                                <div class="entity-pill py-1 px-2 rounded-pill d-flex align-items-center justify-content-center" 
+                                                                     style="background-color: {{ nodeColor1 }};">
+                                                                    <i class="fas fa-{{ nodeIcon1 }} text-white me-1"></i>
+                                                                    <span class="text-white small text-truncate">{{ entity1 }}</span>
                                                                 </div>
+                                                            </div>
+                                                            
+                                                            <!-- Relationship -->
+                                                            <div class="relation-container text-center" style="width: 32%;">
+                                                                <div class="d-flex align-items-center justify-content-center">
+                                                                    <i class="fas fa-arrow-right text-muted small mx-1"></i>
+                                                                    <div class="relation-badge px-2 py-1 rounded-pill bg-info">
+                                                                        <span class="text-white small">{{ relation }}</span>
+                                                                    </div>
+                                                                    <i class="fas fa-arrow-right text-muted small mx-1"></i>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <!-- Entity 2 box -->
+                                                            <div class="entity-box text-center" style="width: 32%;">
+                                                                {% set nodeType2 = 'person' if loop.index % 2 == 0 else 'movie' %}
+                                                                {% set nodeIcon2 = 'user' if nodeType2 == 'person' else 'film' %}
+                                                                {% set nodeColor2 = '#5ac8fa' if nodeType2 == 'person' else '#8a65cc' %}
                                                                 
-                                                                <!-- Target node -->
-                                                                <div class="node-box ms-2" style="min-width: 27%;">
-                                                                    {% set nodeType2 = 'person' if loop.index % 2 == 0 else 'movie' %}
-                                                                    {% set nodeIcon2 = 'user' if nodeType2 == 'person' else 'film' %}
-                                                                    {% set nodeColor2 = '#5ac8fa' if nodeType2 == 'person' else '#8a65cc' %}
-                                                                    
-                                                                    <div class="text-center mb-2">
-                                                                        <div class="node-circle mx-auto" style="background: linear-gradient(135deg, {{ nodeColor2 }}DD, {{ nodeColor2 }});">
-                                                                            <i class="fas fa-{{ nodeIcon2 }} text-white"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="node-label text-center py-2 px-2 rounded" style="background-color: {{ nodeColor2 }}; box-shadow: 0 3px 10px rgba(0,0,0,0.2);">
-                                                                        <span class="text-white fw-bold">{{ entity2 }}</span>
-                                                                    </div>
+                                                                <div class="entity-pill py-1 px-2 rounded-pill d-flex align-items-center justify-content-center" 
+                                                                     style="background-color: {{ nodeColor2 }};">
+                                                                    <i class="fas fa-{{ nodeIcon2 }} text-white me-1"></i>
+                                                                    <span class="text-white small text-truncate">{{ entity2 }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 {% else %}
-                                                    <div class="p-3 border border-secondary rounded mb-3">
-                                                        {{ line }}
+                                                    <div class="p-2 border border-secondary rounded mb-2 small">
+                                                        <span class="text-light">{{ line }}</span>
                                                     </div>
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
                                     </div>
                                 {% elif result and "IMDB" in result and "sci-fi" in result %}
-                                    <div class="d-flex align-items-center mb-4">
-                                        <div class="result-icon me-3">
-                                            <i class="fas fa-film fa-2x text-info"></i>
+                                    <div class="d-flex align-items-center mb-2 border-bottom border-info pb-2"> <!-- Added border, reduced margin -->
+                                        <div class="result-icon me-2"> <!-- Reduced margin -->
+                                            <i class="fas fa-film text-info"></i> <!-- Smaller icon -->
                                         </div>
                                         <div>
-                                            <h5 class="text-info mb-1">{{ result.split('\n')[0] }}</h5>
-                                            <p class="text-light small mb-0">Filtered movies that match your criteria</p>
+                                            <h6 class="text-info mb-0">{{ result.split('\n')[0] }}</h6> <!-- Smaller heading -->
+                                            <small class="text-light">Filtered movies that match your criteria</small>
                                         </div>
                                     </div>
                                     
-                                    <div class="movie-grid">
+                                    <div class="movie-cards row g-2 mt-2"> <!-- Changed to row with small gutters -->
                                         {% for line in result.split('\n')[1:] %}
                                             {% if line.strip() %}
                                                 {% set movie = line.split('(IMDB:')[0].replace('- ', '').strip() %}
                                                 {% set rating = line.split('(IMDB:')[1].replace(')', '').strip() %}
                                                 
-                                                <div class="movie-card animate-in" style="--delay: {{ loop.index * 0.1 }}s">
-                                                    <div class="card h-100 bg-dark border border-info hover-card">
-                                                        <div class="card-body p-3">
-                                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                                <h6 class="mb-0 text-light">{{ movie }}</h6>
-                                                                <div class="rating-badge">
-                                                                    <span class="badge bg-warning text-dark d-flex align-items-center">
-                                                                        <i class="fas fa-star me-1"></i> {{ rating }}
-                                                                    </span>
+                                                <div class="col-md-6 col-lg-4 animate-in" style="--delay: {{ loop.index * 0.05 }}s"> <!-- Faster animation -->
+                                                    <div class="movie-card mb-0 p-2 border border-info rounded-3 animate-in">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="movie-info">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="fas fa-film text-info me-2"></i>
+                                                                    <span class="text-light">{{ movie }}</span>
                                                                 </div>
                                                             </div>
-                                                            <div class="d-flex align-items-center mt-3">
-                                                                <span class="badge bg-secondary me-2">
-                                                                    <i class="fas fa-film me-1"></i> Sci-Fi
-                                                                </span>
-                                                                <span class="badge bg-secondary">
-                                                                    <i class="fas fa-award me-1"></i> High Rated
+                                                            <div class="rating-badge ms-2">
+                                                                <span class="badge bg-warning text-dark">
+                                                                    <i class="fas fa-star me-1"></i>{{ rating }}
                                                                 </span>
                                                             </div>
+                                                        </div>
+                                                        <div class="movie-genres mt-1 ps-4">
+                                                            <span class="badge bg-secondary me-1">
+                                                                <i class="fas fa-film me-1"></i>Sci-Fi
+                                                            </span>
+                                                            <span class="badge bg-secondary">
+                                                                <i class="fas fa-award me-1"></i>High Rated
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -408,8 +398,8 @@
                                         {% endfor %}
                                     </div>
                                 {% elif result %}
-                                    <div class="mb-3 p-3 border border-info rounded">
-                                        {{ result }}
+                                    <div class="mb-2 p-2 border border-info rounded small">
+                                        <pre class="text-light mb-0" style="white-space: pre-wrap; font-family: monospace;">{{ result }}</pre>
                                     </div>
                                 {% else %}
                                     <!-- No result to display -->
