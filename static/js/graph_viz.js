@@ -24,11 +24,16 @@ class KnowledgeGraphVisualizer {
         this.links = [];    // Currently visible links
         this.selectedNode = null; // Track currently selected node
         this.nodeCategories = new Set(); // Store node categories
+        this.relationshipTypes = new Set(); // Store relationship types for color coding
+        this.relationshipColorScale = d3.scaleOrdinal(d3.schemeSet2); // Color scale for relationships
         
         // Node visibility tracking
         this.hiddenNodes = new Set();
         this.hiddenLinks = new Set();
         this.filterActive = false;
+        
+        // Export configuration
+        this.exportInProgress = false;
         
         // Create tooltip
         this.tooltipDiv = d3.select("body").append("div")
@@ -83,20 +88,49 @@ class KnowledgeGraphVisualizer {
             .velocityDecay(0.35) // Slightly less damping for smoother motion
             .on("tick", () => this.ticked());
         
-        // Create arrow marker for links
-        this.svg.append("defs").selectAll("marker")
-            .data(["end"])
-            .enter().append("marker")
-            .attr("id", d => d)
-            .attr("viewBox", "0 -5 10 10")
-            .attr("refX", 25)
-            .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
-            .attr("fill", "#999");
+        // Create defs for markers
+        const defs = this.svg.append("defs");
+        
+        // Basic relationship colors - we'll dynamically add more based on actual relationships
+        const markerColors = [
+            {id: 'e6194b', color: '#e6194B'},  // Red
+            {id: '3cb44b', color: '#3cb44b'},  // Green
+            {id: '4363d8', color: '#4363d8'},  // Blue
+            {id: 'f58231', color: '#f58231'},  // Orange
+            {id: '911eb4', color: '#911eb4'},  // Purple
+            {id: '42d4f4', color: '#42d4f4'},  // Cyan
+            {id: 'f032e6', color: '#f032e6'},  // Magenta
+            {id: 'bfef45', color: '#bfef45'},  // Lime
+            {id: 'fabed4', color: '#fabed4'},  // Pink
+        ];
+        
+        // Create arrow markers with different colors
+        defs.selectAll('marker')
+            .data(markerColors)
+            .enter().append('marker')
+            .attr('id', d => `marker-${d.id}`)
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refX', 25)
+            .attr('refY', 0)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 6)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M0,-5L10,0L0,5')
+            .attr('fill', d => d.color);
+            
+        // Create a default marker as fallback
+        defs.append('marker')
+            .attr('id', 'end')
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refX', 25)
+            .attr('refY', 0)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 6)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M0,-5L10,0L0,5')
+            .attr('fill', '#999');
         
         // Add legend
         this.legendContainer = d3.select(`#${this.containerId}`)
@@ -141,8 +175,9 @@ class KnowledgeGraphVisualizer {
                 // Populate the category filter dropdown
                 this.updateCategoryFilter(Array.from(this.nodeCategories));
                 
-                // Populate relationship filter
+                // Populate relationship filter and store for coloring
                 const relationshipTypes = [...new Set(this.allLinks.map(l => l.type))];
+                this.relationshipTypes = new Set(relationshipTypes);
                 this.updateRelationshipFilter(relationshipTypes);
                 
                 // Show the whole graph initially
@@ -182,22 +217,24 @@ class KnowledgeGraphVisualizer {
         this.nodes = nodes;
         this.links = links;
         
-        // Create relationships first (so they appear behind nodes)
+        // Create relationships first (so they appear behind nodes) with color coding
         this.linkElements = this.g.selectAll(".link")
             .data(this.links)
             .join(
                 enter => enter.append("line")
-                    .attr("class", "link")
-                    .attr("stroke", "#999")
-                    .attr("stroke-opacity", 0.6)
-                    .attr("stroke-width", 1.5)
+                    .attr("class", d => `link link-type-${d.type.replace(/\s+/g, '-').toLowerCase()}`)
+                    .attr("stroke", d => this.getRelationshipColor(d.type))
+                    .attr("stroke-opacity", 0.7)
+                    .attr("stroke-width", 1.8)
                     .attr("data-source", d => d.source.id || d.source)
                     .attr("data-target", d => d.target.id || d.target)
                     .attr("data-type", d => d.type)
-                    .attr("marker-end", "url(#end)")
+                    .attr("marker-end", d => `url(#marker-${this.getRelationshipColorKey(d.type)})`)
                     .on("mouseover", (event, d) => this.handleLinkMouseOver(event, d))
                     .on("mouseout", () => this.handleMouseOut()),
-                update => update,
+                update => update
+                    .attr("stroke", d => this.getRelationshipColor(d.type)) 
+                    .attr("marker-end", d => `url(#marker-${this.getRelationshipColorKey(d.type)})`),
                 exit => exit.remove()
             );
             
@@ -272,6 +309,49 @@ class KnowledgeGraphVisualizer {
             'Other': '#9966cc'        // Brighter Purple
         };
         return categoryColors[category] || '#9966cc';
+    }
+    
+    // Get color for relationship types
+    getRelationshipColor(relationshipType) {
+        // Color palette for relationship types based on common movie relationships
+        const colorMap = {
+            'ACTED_IN': '#e6194B',     // Red
+            'DIRECTED': '#3cb44b',     // Green
+            'PRODUCED': '#4363d8',     // Blue
+            'WROTE': '#f58231',        // Orange
+            'BELONGS_TO': '#911eb4',   // Purple
+            'RATED': '#42d4f4',        // Cyan
+            'RELEASED_IN': '#f032e6',  // Magenta
+            'REVIEWED': '#bfef45',     // Lime
+            'FOLLOWS': '#fabed4',      // Pink
+            'BASED_ON': '#469990',     // Teal
+            'RELATED_TO': '#dcbeff',   // Lavender
+            'APPEARS_IN': '#9A6324',   // Brown
+            'SIMILAR_TO': '#fffac8',   // Beige
+            'PART_OF': '#800000',      // Maroon
+            'WORKED_WITH': '#aaffc3',  // Mint
+        };
+        
+        // Clean up relationship type
+        const cleanType = relationshipType.replace(/\s+/g, '_').toUpperCase();
+        
+        // Return color if it exists in map, otherwise get a deterministic color from the scheme
+        if (colorMap[cleanType]) {
+            return colorMap[cleanType];
+        } else {
+            // Use deterministic index for consistent coloring
+            const relationshipTypes = Array.from(this.relationshipTypes);
+            const index = relationshipTypes.indexOf(relationshipType) % d3.schemeSet3.length;
+            return d3.schemeSet3[index];
+        }
+    }
+    
+    // Get relationship color key (for arrow markers)
+    getRelationshipColorKey(relationshipType) {
+        // Convert relationship type to a color key for arrow markers
+        const color = this.getRelationshipColor(relationshipType);
+        // Remove # and convert to lowercase
+        return color.replace('#', '').toLowerCase();
     }
     
     truncateLabel(label, maxLength = 10) {
@@ -841,5 +921,116 @@ class KnowledgeGraphVisualizer {
         
         this.simulation.force("center", d3.forceCenter(this.width / 2, this.height / 2));
         this.simulation.restart();
+    }
+    
+    // Export graph functionality
+    exportGraph(format = 'png') {
+        if (this.exportInProgress) return;
+        this.exportInProgress = true;
+        
+        // Show loading spinner or indicator
+        document.getElementById('export-status').textContent = 'Preparing export...';
+        document.getElementById('export-spinner').classList.remove('d-none');
+        
+        try {
+            // Clone the SVG for export to avoid modifying the original
+            const originalSvg = document.querySelector(`#${this.containerId} svg`);
+            const svgClone = originalSvg.cloneNode(true);
+            
+            // Add dark background for better visibility in export
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect.setAttribute("width", "100%");
+            rect.setAttribute("height", "100%");
+            rect.setAttribute("fill", "#121212");
+            svgClone.insertBefore(rect, svgClone.firstChild);
+            
+            // Set fixed dimensions for export
+            svgClone.setAttribute("width", this.width);
+            svgClone.setAttribute("height", this.height);
+            
+            // Create a temporary container and append the clone
+            const container = document.createElement("div");
+            container.appendChild(svgClone);
+            
+            // Convert to data URL
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+            
+            if (format === 'svg') {
+                // Direct SVG download
+                this.downloadBlob(svgBlob, `knowledge_graph_${new Date().toISOString().split('T')[0]}.svg`);
+                this.exportInProgress = false;
+                document.getElementById('export-status').textContent = 'Export complete';
+                document.getElementById('export-spinner').classList.add('d-none');
+                
+                // Reset status after delay
+                setTimeout(() => {
+                    document.getElementById('export-status').textContent = '';
+                }, 3000);
+            } else {
+                // Convert to PNG
+                const url = URL.createObjectURL(svgBlob);
+                const img = new Image();
+                
+                img.onload = () => {
+                    // Create canvas for conversion
+                    const canvas = document.createElement("canvas");
+                    canvas.width = this.width;
+                    canvas.height = this.height;
+                    const ctx = canvas.getContext("2d");
+                    
+                    // Fill background
+                    ctx.fillStyle = "#121212";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw image
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // Convert to blob and download
+                    canvas.toBlob((blob) => {
+                        this.downloadBlob(blob, `knowledge_graph_${new Date().toISOString().split('T')[0]}.png`);
+                        URL.revokeObjectURL(url);
+                        this.exportInProgress = false;
+                        document.getElementById('export-status').textContent = 'Export complete';
+                        document.getElementById('export-spinner').classList.add('d-none');
+                        
+                        // Reset status after delay
+                        setTimeout(() => {
+                            document.getElementById('export-status').textContent = '';
+                        }, 3000);
+                    });
+                };
+                
+                img.onerror = () => {
+                    console.error("Error loading SVG for export");
+                    document.getElementById('export-status').textContent = 'Export failed';
+                    document.getElementById('export-spinner').classList.add('d-none');
+                    this.exportInProgress = false;
+                    
+                    // Reset status after delay
+                    setTimeout(() => {
+                        document.getElementById('export-status').textContent = '';
+                    }, 3000);
+                };
+                
+                img.src = url;
+            }
+        } catch (error) {
+            console.error("Error exporting graph:", error);
+            document.getElementById('export-status').textContent = 'Export failed';
+            document.getElementById('export-spinner').classList.add('d-none');
+            this.exportInProgress = false;
+        }
+    }
+    
+    // Helper method to download a blob
+    downloadBlob(blob, fileName) {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
     }
 }
