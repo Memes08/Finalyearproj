@@ -708,6 +708,12 @@
                     }
                     
                     function initGraph() {
+                        // Only run graph visualization code if there are results to display
+                        {% if not has_result %}
+                            console.log("No results to visualize");
+                            document.getElementById('graph-loading').classList.add('d-none');
+                            return;  // Exit early if no results
+                        {% endif %}
                         // Show loading indicator
                         const loadingIndicator = document.getElementById('graph-loading');
                         loadingIndicator.classList.remove('d-none');

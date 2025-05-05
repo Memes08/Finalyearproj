@@ -284,17 +284,19 @@ def query_graph(graph_id):
     
     form = QueryForm()
     result = None
+    has_result = False  # Add a flag for templates to check
     
     if form.validate_on_submit():
         query_text = form.query.data
         try:
             result = kg_processor.query_knowledge_graph(query_text, graph.id)
+            has_result = result is not None  # Set flag when there's a result
         except NotImplementedError as e:
             flash(f'Feature not available: {str(e)}', 'warning')
         except Exception as e:
             flash(f'Error querying knowledge graph: {str(e)}', 'danger')
     
-    return render_template('query.html', form=form, graph=graph, result=result)
+    return render_template('query.html', form=form, graph=graph, result=result, has_result=has_result)
 
 
 @app.route('/graph/<int:graph_id>/data')
