@@ -383,7 +383,7 @@ def graph_analytics(graph_id):
             'domain': graph.domain,
         }
         
-        return render_template('analytics.html', graph=graph, graph_data=graph_data)
+        return render_template('analytics_new.html', graph=graph, graph_data=graph_data)
     except Exception as e:
         flash(f'Error generating analytics: {str(e)}', 'danger')
         return redirect(url_for('visualization', graph_id=graph_id))
