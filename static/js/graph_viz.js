@@ -64,29 +64,27 @@ class KnowledgeGraphVisualizer {
         // Create main group element for zooming
         this.g = this.svg.append("g");
         
-        // Initialize the force simulation with enhanced parameters for better distribution
+        // Initialize the force simulation with more static parameters
         this.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(d => d.id)
-                .distance(d => {
-                    // Dynamic link distance based on node degrees - increase spacing
-                    const sourceConnections = this.countNodeConnections(d.source.id || d.source);
-                    const targetConnections = this.countNodeConnections(d.target.id || d.target);
-                    // More connected nodes should be further apart, with more spread
-                    return this.options.linkDistance * (1 + Math.log(1 + Math.max(sourceConnections, targetConnections) * 0.15));
-                })
-                .strength(0.6)) // Slightly less rigid links for more natural spacing
+                .distance(80) // Fixed distance for more predictable layout
+                .strength(0.8)) // Stronger links for more stability
             .force("charge", d3.forceManyBody()
-                .strength(d => this.options.chargeStrength * (1 + Math.log(1 + this.countNodeConnections(d.id) * 0.25)))
-                .distanceMax(700)) // Extend long-range repulsion for better spacing
+                .strength(-300) // Fixed charge for more consistent repulsion
+                .distanceMax(300)) // Limited distance for more compact layout
             .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-            .force("collision", d3.forceCollide().radius(d => this.options.nodeRadius * 2.0 + (this.countNodeConnections(d.id) * 0.8)))
-            .force("x", d3.forceX(this.width / 2).strength(0.03)) // Gentler force toward center X
-            .force("y", d3.forceY(this.height / 2).strength(0.03)) // Gentler force toward center Y
-            .alphaDecay(0.015) // Even slower decay for better stabilization
-            .alphaTarget(0.05) // Keep some energy but less than before
+            .force("collision", d3.forceCollide().radius(this.options.nodeRadius * 1.5)) // Simple collision detection
+            .force("x", d3.forceX(this.width / 2).strength(0.1)) // Stronger center pull
+            .force("y", d3.forceY(this.height / 2).strength(0.1)) // Stronger center pull
+            .alphaDecay(0.05) // Faster decay to reach static state quicker
+            .alphaTarget(0) // Target zero (static) state
             .alpha(1)
-            .velocityDecay(0.35) // Slightly less damping for smoother motion
-            .on("tick", () => this.ticked());
+            .velocityDecay(0.5) // Higher damping for less movement
+            .on("tick", () => this.ticked())
+            .on("end", () => this.onSimulationEnd()); // Add handler for when simulation ends
+            
+        // Set a timeout to stop the simulation after a brief period anyway
+        setTimeout(() => this.stopSimulation(), 2000);
         
         // Create defs for markers
         const defs = this.svg.append("defs");
