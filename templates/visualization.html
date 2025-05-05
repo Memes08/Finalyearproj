@@ -309,7 +309,22 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-dark d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Knowledge Graph Visualization</h5>
-                    <div>
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown me-2">
+                            <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-download me-1"></i> Export
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="exportDropdown">
+                                <li><a class="dropdown-item" href="#" id="export-png">PNG Image</a></li>
+                                <li><a class="dropdown-item" href="#" id="export-svg">SVG Vector</a></li>
+                            </ul>
+                        </div>
+                        <div id="export-status-container" class="me-2 d-flex align-items-center">
+                            <div id="export-spinner" class="spinner-border spinner-border-sm text-info me-2 d-none" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span id="export-status" class="small text-light"></span>
+                        </div>
                         <span class="badge bg-secondary me-2" id="graph-filter-badge" style="display: none;">Filtered View</span>
                         <span class="badge bg-info" id="graph-node-badge">Ready</span>
                     </div>
@@ -544,6 +559,21 @@
         // Handle window resize
         window.addEventListener('resize', function() {
             if (graphViz) graphViz.resize();
+        });
+        
+        // Export functionality
+        document.getElementById('export-png').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (graphViz) {
+                graphViz.exportGraph('png');
+            }
+        });
+        
+        document.getElementById('export-svg').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (graphViz) {
+                graphViz.exportGraph('svg');
+            }
         });
         
         // Observer for visible node/relationship counts

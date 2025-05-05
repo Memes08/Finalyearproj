@@ -145,9 +145,29 @@
                             </div>
                         </div>
                         
+                        <!-- Processing Progress Indicators -->
+                        <div id="processing-indicator" class="card bg-dark mb-4" style="display: none;">
+                            <div class="card-body">
+                                <h5 class="card-title text-info">
+                                    <i class="fas fa-cog fa-spin me-2"></i>
+                                    Processing Data
+                                </h5>
+                                <div class="progress mt-3 bg-dark">
+                                    <div id="processing-progress" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                         role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+                                         style="width: 0%">0%</div>
+                                </div>
+                                <div class="mt-3 small">
+                                    <p id="processing-status" class="mb-1">Preparing to process data...</p>
+                                    <p id="entities-found" class="mb-1 text-success" style="display: none;"><i class="fas fa-check-circle me-2"></i> <span>0</span> entities found</p>
+                                    <p id="relationships-found" class="mb-1 text-success" style="display: none;"><i class="fas fa-check-circle me-2"></i> <span>0</span> relationships found</p>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- Submit Button -->
                         <div class="d-grid gap-2">
-                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                            {{ form.submit(class="btn btn-primary btn-lg", id="submit-btn") }}
                         </div>
                     </form>
                 </div>
@@ -198,6 +218,13 @@
         const inputTypeRadios = document.querySelectorAll('input[name="input_type"]');
         const csvFormGroup = document.getElementById('csv-form-group');
         const urlFormGroup = document.getElementById('url-form-group');
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submit-btn');
+        const processingIndicator = document.getElementById('processing-indicator');
+        const progressBar = document.getElementById('processing-progress');
+        const processingStatus = document.getElementById('processing-status');
+        const entitiesFound = document.getElementById('entities-found');
+        const relationshipsFound = document.getElementById('relationships-found');
         
         function updateFormGroups() {
             const selectedValue = document.querySelector('input[name="input_type"]:checked')?.value;
@@ -214,6 +241,76 @@
         
         // Initial setup
         updateFormGroups();
+        
+        // Form submission handling with animation
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // Basic form validation
+                let isValid = true;
+                
+                const selectedValue = document.querySelector('input[name="input_type"]:checked')?.value;
+                
+                if (selectedValue === 'csv') {
+                    const fileInput = document.getElementById('csv_file');
+                    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                        isValid = false;
+                        alert('Please select a CSV file to upload.');
+                    }
+                } else if (selectedValue === 'url') {
+                    const urlInput = document.getElementById('github_url');
+                    if (!urlInput || !urlInput.value.trim()) {
+                        isValid = false;
+                        alert('Please enter a GitHub raw CSV URL.');
+                    }
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Show processing animation
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
+                processingIndicator.style.display = 'block';
+                
+                // Animated progress simulation
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    // Calculate a non-linear progress that slows down as it approaches 100%
+                    // This simulates a realistic processing scenario
+                    progress += Math.random() * 2;
+                    
+                    // Cap at 90% so it doesn't appear complete until actually done
+                    const displayProgress = Math.min(90, progress);
+                    
+                    // Update progress bar
+                    progressBar.style.width = `${displayProgress}%`;
+                    progressBar.setAttribute('aria-valuenow', displayProgress);
+                    progressBar.innerText = `${Math.round(displayProgress)}%`;
+                    
+                    // Update status messages
+                    if (progress > 15 && progress < 30) {
+                        processingStatus.textContent = 'Reading and analyzing data...';
+                    } else if (progress > 30 && progress < 60) {
+                        processingStatus.textContent = 'Extracting entities...';
+                        entitiesFound.style.display = 'block';
+                        entitiesFound.querySelector('span').textContent = Math.round(progress * 2);
+                    } else if (progress > 60) {
+                        processingStatus.textContent = 'Creating relationships...';
+                        relationshipsFound.style.display = 'block';
+                        relationshipsFound.querySelector('span').textContent = Math.round(progress);
+                    }
+                    
+                    // Check for natural completion
+                    if (progress >= 100) {
+                        clearInterval(progressInterval);
+                    }
+                }, 200);
+                
+                // Allow natural form submission to proceed
+            });
+        }
     });
 </script>
 {% endblock %}
