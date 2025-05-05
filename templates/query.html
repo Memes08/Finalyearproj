@@ -44,24 +44,24 @@
                 <div class="card-body bg-dark p-0">
                     {% if graph.domain == 'movie' %}
                         <div class="p-3 border-bottom border-info position-relative example-query-container">
-                            <span class="position-absolute badge bg-primary" style="top: 10px; right: 10px;">Director Query</span>
+                            <span class="position-absolute badge bg-primary" style="top: 10px; right: 10px;">Rating Query</span>
                             <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
-                                <h6 class="text-info mb-2">What movies did Christopher Nolan direct?</h6>
-                                <p class="small text-light mb-0">Finds all movies directed by Christopher Nolan in the knowledge graph</p>
+                                <h6 class="text-info mb-2">What movies have an IMDB rating above 8.5?</h6>
+                                <p class="small text-light mb-0">Finds high-rated movies from your knowledge graph</p>
                             </button>
                         </div>
                         <div class="p-3 border-bottom border-info position-relative example-query-container">
-                            <span class="position-absolute badge bg-success" style="top: 10px; right: 10px;">Actor Query</span>
+                            <span class="position-absolute badge bg-success" style="top: 10px; right: 10px;">Genre Query</span>
                             <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
-                                <h6 class="text-info mb-2">Which actors starred in Inception?</h6>
-                                <p class="small text-light mb-0">Lists all actors who appeared in the movie Inception</p>
+                                <h6 class="text-info mb-2">What are the top-rated sci-fi movies in the database?</h6>
+                                <p class="small text-light mb-0">Finds the best movies in a specific genre</p>
                             </button>
                         </div>
                         <div class="p-3 position-relative example-query-container">
-                            <span class="position-absolute badge bg-warning text-dark" style="top: 10px; right: 10px;">Rating Query</span>
+                            <span class="position-absolute badge bg-warning text-dark" style="top: 10px; right: 10px;">Director Query</span>
                             <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
-                                <h6 class="text-info mb-2">What sci-fi movies have an IMDB rating above 8?</h6>
-                                <p class="small text-light mb-0">Filters movies by genre (sci-fi) and minimum rating (8+)</p>
+                                <h6 class="text-info mb-2">Which director has the highest average movie rating?</h6>
+                                <p class="small text-light mb-0">Analyzes director performance based on ratings</p>
                             </button>
                         </div>
                     {% elif graph.domain == 'book' %}
