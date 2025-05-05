@@ -28,7 +28,6 @@ from models import User, KnowledgeGraph, InputSource
 from forms import LoginForm, RegistrationForm, NewKnowledgeGraphForm, DataInputForm, QueryForm
 from neo4j_manager import Neo4jGraphManager
 from kg_processor import KnowledgeGraphProcessor
-from whisper_transcriber import WhisperTranscriber
 
 # Import pandas safely
 try:
@@ -50,9 +49,6 @@ kg_processor = KnowledgeGraphProcessor(
     neo4j_manager=neo4j_manager,
     groq_api_key=app.config['GROQ_API_KEY']
 )
-
-# Initialize Whisper transcriber
-whisper_transcriber = WhisperTranscriber()
 
 
 @app.route('/')

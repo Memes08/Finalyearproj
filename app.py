@@ -41,9 +41,9 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs('data/triples', exist_ok=True)
 
 # Flag to indicate if optional dependencies are available
-app.config['HAS_VIDEO_PROCESSING'] = False
 app.config['HAS_NEO4J'] = False
 app.config['HAS_LLM'] = False
+app.config['HAS_PANDAS'] = True
 
 # Neo4j configuration
 app.config['NEO4J_URI'] = os.environ.get("NEO4J_URI")
