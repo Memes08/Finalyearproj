@@ -1,99 +1,278 @@
-/* Neo4j Relationship Graph Styling */
+/* Neo4j Relationship Graph Styling with Cyberpunk Theme */
 .neo4j-graph {
     position: relative;
-    background-color: #1a1d21;
-    border-radius: 8px;
-    border: 1px solid #17a2b8;
-    padding: 10px;
+    background-color: #0c1220;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 100, 200, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(120, 0, 200, 0.05) 0%, transparent 40%);
+    border-radius: 12px;
+    border: 1px solid rgba(23, 162, 184, 0.5);
+    box-shadow: 0 0 30px rgba(23, 162, 184, 0.1);
+    padding: 15px;
     margin-bottom: 15px;
-    min-height: 100px;
+    min-height: 110px;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.neo4j-graph:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(23, 162, 184, 0.03), transparent);
+    pointer-events: none;
+}
+
+.neo4j-graph:hover {
+    box-shadow: 0 0 40px rgba(23, 162, 184, 0.15);
 }
 
 .neo4j-node {
     position: relative;
-    border-radius: 8px;
-    padding: 6px 12px;
+    border-radius: 10px;
+    padding: 8px 15px;
     display: inline-flex;
     align-items: center;
-    font-weight: 500;
+    font-weight: 600;
     color: white;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+    z-index: 3;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .neo4j-node:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.neo4j-node:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.neo4j-node:hover:after {
+    opacity: 1;
 }
 
 .neo4j-node.person {
-    background: linear-gradient(135deg, #5ac8fa, #4a98ba);
+    background: linear-gradient(135deg, #007aff, #00a1ff);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .neo4j-node.movie {
-    background: linear-gradient(135deg, #8a65cc, #6a45ac);
+    background: linear-gradient(135deg, #9d4edd, #7b2cbf);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .neo4j-node.generic {
-    background: linear-gradient(135deg, #61bd4f, #2e8b57);
+    background: linear-gradient(135deg, #02c39a, #00a896);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .neo4j-node i {
-    margin-right: 6px;
-    font-size: 0.9em;
+    margin-right: 8px;
+    font-size: 1em;
+    filter: drop-shadow(0 0 1px rgba(255,255,255,0.8));
 }
 
 .neo4j-relationship {
     position: relative;
     color: white;
-    font-size: 0.8em;
+    font-size: 0.85em;
+    font-weight: bold;
     background-color: #17a2b8;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 5px 12px;
+    border-radius: 25px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 15px rgba(23, 162, 184, 0.5);
     z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+    border: 1px solid rgba(255,255,255,0.3);
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+.neo4j-relationship:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(23, 162, 184, 0.7);
 }
 
 .neo4j-arrow {
     color: rgba(255,255,255,0.7);
     font-size: 0.9em;
-    margin: 0 5px;
+    margin: 0 8px;
+    transform: scale(1.2);
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 2px rgba(23, 162, 184, 0.5));
+}
+
+.neo4j-triple:hover .neo4j-arrow {
+    color: rgba(255,255,255,0.9);
+    transform: scale(1.3);
 }
 
 .neo4j-triple {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
-    padding: 5px;
-    animation: fadeInUp 0.5s ease forwards;
+    margin-bottom: 12px;
+    padding: 8px;
+    animation: fadeInUp 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
     animation-delay: var(--delay, 0s);
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden; /* For ripple effect */
+    cursor: pointer;
 }
 
 .neo4j-triple:hover {
-    background-color: rgba(23, 162, 184, 0.05);
-    border-radius: 8px;
+    background-color: rgba(23, 162, 184, 0.08);
+    transform: translateY(-2px);
 }
 
-/* Pulse animation for relationship */
+.neo4j-triple:hover:before {
+    opacity: 1;
+}
+
+.neo4j-triple:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(23, 162, 184, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+/* Active state for expanded view */
+.neo4j-triple.active {
+    background-color: rgba(23, 162, 184, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+.neo4j-triple.active .neo4j-relationship {
+    transform: scale(1.08);
+}
+
+.neo4j-triple.active .neo4j-node {
+    transform: scale(1.05);
+}
+
+/* Highlight effect for expand all */
+.neo4j-triple.highlight-expand {
+    background-color: rgba(23, 162, 184, 0.15);
+    animation: highlightExpand 1s ease;
+}
+
+@keyframes highlightExpand {
+    0% { background-color: rgba(23, 162, 184, 0.05); }
+    50% { background-color: rgba(23, 162, 184, 0.2); }
+    100% { background-color: rgba(23, 162, 184, 0.08); }
+}
+
+/* Ripple effect */
+.neo4j-ripple {
+    position: absolute;
+    background: radial-gradient(circle, rgba(23, 162, 184, 0.4) 0%, rgba(23, 162, 184, 0) 70%);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.neo4j-ripple.active {
+    width: 100px;
+    height: 100px;
+    margin-left: -50px;
+    margin-top: -50px;
+    opacity: 1;
+}
+
+/* Special hover pulse for relationships */
+.neo4j-relationship.hover-pulse {
+    animation: hoverPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes hoverPulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+/* Glow and pulse animations */
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4); }
-    70% { box-shadow: 0 0 0 6px rgba(23, 162, 184, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(23, 162, 184, 0); }
     100% { box-shadow: 0 0 0 0 rgba(23, 162, 184, 0); }
 }
 
+@keyframes neon-glow {
+    0% { 
+        text-shadow: 0 0 5px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.5); 
+        box-shadow: 0 0 10px rgba(23, 162, 184, 0.5), 0 0 20px rgba(23, 162, 184, 0.3);
+    }
+    50% { 
+        text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.6);
+        box-shadow: 0 0 15px rgba(23, 162, 184, 0.6), 0 0 30px rgba(23, 162, 184, 0.4);
+    }
+    100% { 
+        text-shadow: 0 0 5px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.5);
+        box-shadow: 0 0 10px rgba(23, 162, 184, 0.5), 0 0 20px rgba(23, 162, 184, 0.3);
+    }
+}
+
+@keyframes flowing-line {
+    0% { 
+        background-position: 0% 50%;
+    }
+    100% { 
+        background-position: 200% 50%;
+    }
+}
+
 .pulse {
-    animation: pulse 2s infinite;
+    animation: pulse 2s infinite, neon-glow 3s infinite;
 }
 
 /* Fade in animation */
 @keyframes fadeInUp {
     0% { 
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(15px);
     }
     100% { 
         opacity: 1;
@@ -101,47 +280,107 @@
     }
 }
 
-/* Special styling for relationship types */
+/* Special styling for relationship types with gradient backgrounds */
 .neo4j-relationship.acted_in {
-    background-color: #ff9500;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    background-size: 200% auto;
+    animation: flowing-line 5s infinite linear;
 }
 
 .neo4j-relationship.directed {
-    background-color: #ff2d55;
+    background: linear-gradient(to right, #f5576c, #f093fb);
+    background-size: 200% auto;
+    animation: flowing-line 5s infinite linear;
 }
 
 .neo4j-relationship.wrote {
-    background-color: #5856d6;
+    background: linear-gradient(to right, #4776e6, #8e54e9);
+    background-size: 200% auto;
+    animation: flowing-line 5s infinite linear;
 }
 
 .neo4j-relationship.produced {
-    background-color: #34c759;
+    background: linear-gradient(to right, #02aab0, #00cdac);
+    background-size: 200% auto;
+    animation: flowing-line 5s infinite linear;
 }
 
-/* Compact view for small screens */
+.neo4j-relationship.has_actor {
+    background: linear-gradient(to right, #f953c6, #b91d73);
+    background-size: 200% auto;
+    animation: flowing-line 5s infinite linear;
+}
+
+.neo4j-relationship.has_genre {
+    background: linear-gradient(to right, #56ccf2, #2f80ed);
+    background-size: 200% auto;
+    animation: flowing-line 5s infinite linear;
+}
+
+/* Connector line effect */
+.neo4j-triple:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, 
+        rgba(23, 162, 184, 0), 
+        rgba(23, 162, 184, 0.3), 
+        rgba(23, 162, 184, 0.5), 
+        rgba(23, 162, 184, 0.3),
+        rgba(23, 162, 184, 0));
+    transform: translateY(-50%);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.neo4j-triple:hover:after {
+    opacity: 1;
+}
+
+/* Compact view for small screens with improved styling */
 @media (max-width: 768px) {
     .neo4j-triple {
         flex-direction: column;
         text-align: center;
+        padding: 15px 10px;
     }
     
     .neo4j-arrow {
-        transform: rotate(90deg);
+        transform: rotate(90deg) scale(1.2);
+        margin: 8px 0;
+    }
+    
+    .neo4j-triple:hover .neo4j-arrow {
+        transform: rotate(90deg) scale(1.4);
+    }
+    
+    .neo4j-node {
         margin: 5px 0;
+        width: 80%;
+        justify-content: center;
+    }
+    
+    .neo4j-relationship {
+        margin: 8px 0;
+        padding: 6px 15px;
     }
 }
 
 /* Fade out animation */
 @keyframes fadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
 }
 
 .fade-out {
     animation: fadeOut 0.5s ease forwards;
 }
 
-/* Graph Controls */
+/* Graph Controls with improved design */
 .neo4j-controls {
     display: flex;
     justify-content: flex-end;
@@ -150,27 +389,33 @@
 
 .neo4j-controls button {
     margin-left: 5px;
-    background: rgba(23, 162, 184, 0.2);
-    border: 1px solid rgba(23, 162, 184, 0.5);
+    background: rgba(23, 162, 184, 0.15);
+    border: 1px solid rgba(23, 162, 184, 0.6);
     color: #17a2b8;
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-size: 0.8em;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.85em;
+    font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(23, 162, 184, 0.5);
 }
 
 .neo4j-controls button:hover {
-    background: rgba(23, 162, 184, 0.4);
-    transform: translateY(-1px);
+    background: rgba(23, 162, 184, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
 }
 
-/* Empty state */
+/* Empty state with improved design */
 .neo4j-empty {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px;
+    height: 170px;
     color: rgba(255,255,255,0.6);
     font-style: italic;
+    background: linear-gradient(135deg, rgba(23, 162, 184, 0.05), rgba(0, 0, 0, 0));
+    border-radius: 10px;
+    border: 1px dashed rgba(23, 162, 184, 0.3);
 }

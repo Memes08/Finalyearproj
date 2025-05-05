@@ -292,8 +292,13 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Modern Neo4j Style Graph -->
+                                    <!-- Modern Neo4j Style Graph with Cyberpunk Theme -->
                                     <div class="neo4j-graph mb-2">
+                                        <div class="neo4j-controls">
+                                            <button type="button" id="expand-all" title="Expand all relationships">
+                                                <i class="fas fa-expand-arrows-alt me-1"></i> Expand all
+                                            </button>
+                                        </div>
                                         <div class="neo4j-relationships">
                                             {% for line in result.split('\n')[1:] %}
                                                 {% if line.strip() and "[" in line and "]" in line %}
@@ -303,22 +308,38 @@
                                                     {% set relation = remaining[0].strip() %}
                                                     {% set entity2 = remaining[1].strip() %}
                                                     
-                                                    {% set nodeType1 = 'movie' if loop.index % 2 == 0 else 'person' %}
-                                                    {% set nodeIcon1 = 'film' if nodeType1 == 'movie' else 'user' %}
-                                                    
-                                                    {% set nodeType2 = 'person' if loop.index % 2 == 0 else 'movie' %}
-                                                    {% set nodeIcon2 = 'user' if nodeType2 == 'person' else 'film' %}
+                                                    {% if "direct" in relation|lower %}
+                                                        {% set nodeType1 = 'person' %}
+                                                        {% set nodeIcon1 = 'user' %}
+                                                        {% set nodeType2 = 'movie' %}
+                                                        {% set nodeIcon2 = 'film' %}
+                                                    {% elif "act" in relation|lower %}
+                                                        {% set nodeType1 = 'person' %}
+                                                        {% set nodeIcon1 = 'user' %}
+                                                        {% set nodeType2 = 'movie' %}
+                                                        {% set nodeIcon2 = 'film' %}
+                                                    {% elif loop.index % 2 == 0 %}
+                                                        {% set nodeType1 = 'movie' %}
+                                                        {% set nodeIcon1 = 'film' %}
+                                                        {% set nodeType2 = 'person' %}
+                                                        {% set nodeIcon2 = 'user' %}
+                                                    {% else %}
+                                                        {% set nodeType1 = 'person' %}
+                                                        {% set nodeIcon1 = 'user' %}
+                                                        {% set nodeType2 = 'movie' %}
+                                                        {% set nodeIcon2 = 'film' %}
+                                                    {% endif %}
                                                     
                                                     {% set relClass = relation|lower|replace(' ', '_') %}
                                                     
-                                                    <div class="neo4j-triple" style="--delay: {{ loop.index * 0.05 }}s">
+                                                    <div class="neo4j-triple" style="--delay: {{ loop.index * 0.08 }}s">
                                                         <div class="neo4j-node {{ nodeType1 }}" title="{{ entity1 }}">
                                                             <i class="fas fa-{{ nodeIcon1 }}"></i>
                                                             <span>{{ entity1 }}</span>
                                                         </div>
                                                         
                                                         <div class="neo4j-arrow">
-                                                            <i class="fas fa-long-arrow-alt-right"></i>
+                                                            <i class="fas fa-arrow-right"></i>
                                                         </div>
                                                         
                                                         <div class="neo4j-relationship {{ relClass }} pulse">
@@ -326,7 +347,7 @@
                                                         </div>
                                                         
                                                         <div class="neo4j-arrow">
-                                                            <i class="fas fa-long-arrow-alt-right"></i>
+                                                            <i class="fas fa-arrow-right"></i>
                                                         </div>
                                                         
                                                         <div class="neo4j-node {{ nodeType2 }}" title="{{ entity2 }}">
@@ -1239,6 +1260,66 @@
                 });
             });
         }
+        
+        // Neo4j Graph Interactions
+        const expandAllBtn = document.getElementById('expand-all');
+        if (expandAllBtn) {
+            expandAllBtn.addEventListener('click', function() {
+                const relationships = document.querySelectorAll('.neo4j-triple');
+                relationships.forEach((rel, index) => {
+                    setTimeout(() => {
+                        rel.classList.add('active');
+                        // Add a temporary class for highlight effect
+                        rel.classList.add('highlight-expand');
+                        // Remove the highlight effect after animation
+                        setTimeout(() => {
+                            rel.classList.remove('highlight-expand');
+                        }, 1000);
+                    }, index * 100); // Staggered expansion
+                });
+            });
+        }
+        
+        // Make each relationship interactive
+        const relationshipItems = document.querySelectorAll('.neo4j-triple');
+        relationshipItems.forEach(item => {
+            item.addEventListener('click', function(event) {
+                // Toggle active state for expanded view
+                this.classList.toggle('active');
+                
+                // Add a ripple effect from the clicked point
+                const ripple = document.createElement('span');
+                ripple.classList.add('neo4j-ripple');
+                this.appendChild(ripple);
+                
+                // Get position of click relative to the element
+                const rect = this.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                
+                // Set position and start animation
+                ripple.style.top = y + 'px';
+                ripple.style.left = x + 'px';
+                ripple.classList.add('active');
+                
+                // Remove ripple after animation completes
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+            
+            // Add hover effects for relationships
+            const relationship = item.querySelector('.neo4j-relationship');
+            if (relationship) {
+                relationship.addEventListener('mouseenter', function() {
+                    this.classList.add('hover-pulse');
+                });
+                
+                relationship.addEventListener('mouseleave', function() {
+                    this.classList.remove('hover-pulse');
+                });
+            }
+        });
     });
 </script>
 {% endblock %}
