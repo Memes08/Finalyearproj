@@ -262,11 +262,101 @@ class KnowledgeGraphProcessor:
             logging.error(f"Error saving triples to CSV: {e}")
             raise RuntimeError(f"Failed to save triples to CSV: {e}")
     
+    def _general_search(self, query_text, nodes, relationships, node_label_map):
+        """Helper method to perform a general search for any query"""
+        query_lower = query_text.lower()
+        
+        # Extract potential search terms (names, titles, etc.)
+        # Skip common words that are likely not entity names
+        skip_words = {"what", "which", "who", "where", "when", "how", "did", "does", "is", "are", "was", "were", 
+                     "has", "have", "had", "the", "a", "an", "in", "on", "at", "by", "to", "for", "with", 
+                     "from", "about", "movies", "actors", "directors", "character", "film", "star", "direct"}
+        
+        search_terms = []
+        for term in query_lower.split():
+            if term not in skip_words and len(term) > 2:  # Skip short terms like "of", "as", etc.
+                search_terms.append(term)
+        
+        # Combine consecutive terms to catch multi-word entities
+        phrase_search_terms = []
+        if len(search_terms) >= 2:
+            for i in range(len(search_terms) - 1):
+                phrase_search_terms.append(f"{search_terms[i]} {search_terms[i+1]}")
+        
+        # Add triple word phrases
+        if len(search_terms) >= 3:
+            for i in range(len(search_terms) - 2):
+                phrase_search_terms.append(f"{search_terms[i]} {search_terms[i+1]} {search_terms[i+2]}")
+        
+        # Search for nodes that match search terms
+        matching_nodes = []
+        # First try exact multi-word phrase matches
+        for phrase in phrase_search_terms:
+            for node in nodes:
+                node_label = node.get("label", "").lower()
+                if phrase in node_label and node not in matching_nodes:
+                    matching_nodes.append(node)
+        
+        # Then try individual word matches
+        if not matching_nodes:
+            for node in nodes:
+                node_label = node.get("label", "").lower()
+                if any(term in node_label for term in search_terms) and node not in matching_nodes:
+                    matching_nodes.append(node)
+        
+        # Extract the relationships involving the matching nodes
+        matching_node_ids = [node.get("id") for node in matching_nodes]
+        matching_relations = []
+        for rel in relationships:
+            source_id = rel.get("source")
+            target_id = rel.get("target")
+            if source_id in matching_node_ids or target_id in matching_node_ids:
+                matching_relations.append(rel)
+        
+        # Format the results
+        if matching_relations:
+            result_lines = ["Found these relationships:"]
+            
+            for rel in matching_relations:
+                source_id = rel.get("source")
+                target_id = rel.get("target") 
+                relation_type = rel.get("type")
+                
+                source_label = node_label_map.get(source_id, "Unknown")
+                target_label = node_label_map.get(target_id, "Unknown")
+                
+                result_lines.append(f"- {source_label} [{relation_type}] {target_label}")
+            
+            return "\n".join(result_lines)
+        elif matching_nodes:
+            return f"Found {len(matching_nodes)} entities matching your query, but no relationships."
+        else:
+            return "No matching entities found for your query."
+
     def query_knowledge_graph(self, query_text, graph_id):
         """Query the knowledge graph using natural language"""
         try:
             # Since we can't use LLM-based querying, we'll provide a rule-based search function
             nodes, relationships = self.neo4j_manager.get_graph_data(graph_id)
+            
+            # Debug information about the graph
+            logging.info(f"Graph query received: '{query_text}'")
+            logging.info(f"Graph has {len(nodes)} nodes and {len(relationships)} relationships")
+            
+            # Check for any Inception movie nodes
+            inception_nodes = []
+            for node in nodes:
+                if "inception" in node.get("label", "").lower():
+                    inception_nodes.append(node)
+                    logging.info(f"Found Inception node: {node}")
+            
+            # Check for actor relationships to Inception
+            actor_relationships = []
+            for rel in relationships:
+                if rel.get("type") == "HAS_ACTOR":
+                    actor_relationships.append(rel)
+                    
+            logging.info(f"Found {len(actor_relationships)} actor relationships")
             
             # Create node maps for efficient lookup
             node_label_map = {node.get("id"): node.get("label") for node in nodes}
@@ -365,8 +455,34 @@ class KnowledgeGraphProcessor:
                 logging.info(f"Searching for actors in movie: '{movie_name}'")
                 
                 if movie_name:
-                    # Find all HAS_ACTOR relationships related to this movie
+                    # Find all actor relationships related to this movie
                     movie_actors = []
+                    
+                    # Log the full list of relationships for Inception
+                    logging.info(f"Checking all relationships for movie: '{movie_name}'")
+                    inception_rels = []
+                    for rel in relationships:
+                        # Check source nodes for movie name
+                        source_id = rel.get("source")
+                        source_label = node_label_map.get(source_id, "").lower()
+                        # Check target nodes for movie name
+                        target_id = rel.get("target")
+                        target_label = node_label_map.get(target_id, "").lower()
+                        
+                        # If either the source or target is our movie, log it
+                        if (movie_name in source_label or movie_name in target_label):
+                            inception_rels.append((
+                                rel.get("type"),
+                                node_label_map.get(source_id, "Unknown"),
+                                node_label_map.get(target_id, "Unknown")
+                            ))
+                    
+                    if inception_rels:
+                        logging.info(f"Found {len(inception_rels)} relationships involving '{movie_name}':")
+                        for rel_type, source, target in inception_rels:
+                            logging.info(f"  {source} [{rel_type}] {target}")
+                    
+                    # FIRST CHECK: Conventional direction - Movie is the source, Actor is the target
                     for rel in relationships:
                         # Check if this is an actor relationship
                         if rel.get("type") == "HAS_ACTOR":
@@ -374,17 +490,60 @@ class KnowledgeGraphProcessor:
                             source_id = rel.get("source")
                             movie_label = node_label_map.get(source_id, "").lower()
                             
-                            # Use more precise matching with different approaches
-                            # 1. Exact match
-                            # 2. The movie name is a substring of the movie label (with word boundaries)
-                            # 3. Fuzzy match for handling typos (at least 80% similar)
+                            # Use flexible matching for the movie name
                             if (movie_name == movie_label or 
-                                f" {movie_name} " in f" {movie_label} " or
-                                movie_name in movie_label.split()):
+                                movie_name in movie_label or 
+                                movie_label in movie_name):
+                                
                                 # Get target (actor) label
                                 target_id = rel.get("target")
                                 actor_label = node_label_map.get(target_id, "Unknown")
                                 movie_actors.append((node_label_map.get(source_id, "Unknown"), actor_label))
+                    
+                    # SECOND CHECK: Reverse direction - Actor is the source, Movie is the target
+                    if not movie_actors:  # Only if we haven't found anything with the conventional direction
+                        for rel in relationships:
+                            # Check if this is an actor relationship
+                            if rel.get("type") == "HAS_ACTOR":
+                                # Get target (could be movie) label
+                                target_id = rel.get("target")
+                                movie_label = node_label_map.get(target_id, "").lower()
+                                
+                                # Use flexible matching for the movie name
+                                if (movie_name == movie_label or 
+                                    movie_name in movie_label or 
+                                    movie_label in movie_name):
+                                    
+                                    # Get source (could be actor) label
+                                    source_id = rel.get("source")
+                                    actor_label = node_label_map.get(source_id, "Unknown")
+                                    movie_actors.append((node_label_map.get(target_id, "Unknown"), actor_label))
+                    
+                    # THIRD CHECK: Check all nodes and relationship types for this movie
+                    if not movie_actors:
+                        for node in nodes:
+                            node_label = node.get("label", "").lower()
+                            node_id = node.get("id")
+                            
+                            # If the node label contains the movie name, it might be our movie
+                            if movie_name in node_label:
+                                # Find any relationships with this node
+                                for rel in relationships:
+                                    rel_type = rel.get("type")
+                                    
+                                    # If this node is the source of a relationship
+                                    if rel.get("source") == node_id:
+                                        target_id = rel.get("target")
+                                        target_label = node_label_map.get(target_id, "Unknown")
+                                        # Include all relationships, not just HAS_ACTOR
+                                        movie_actors.append((node_label_map.get(node_id, "Unknown"), target_label))
+                                        
+                                    # If this node is the target of a relationship
+                                    elif rel.get("target") == node_id:
+                                        source_id = rel.get("source")
+                                        source_label = node_label_map.get(source_id, "Unknown")
+                                        # Include all relationships, not just HAS_ACTOR
+                                        movie_actors.append((node_label_map.get(node_id, "Unknown"), source_label))
                     
                     if movie_actors:
                         result_lines = ["Found these relationships:"]
@@ -392,7 +551,34 @@ class KnowledgeGraphProcessor:
                             result_lines.append(f"- {movie} [HAS_ACTOR] {actor}")
                         return "\n".join(result_lines)
                     else:
-                        return f"No actors found for movie '{movie_name}'. Please check the movie name and try again."
+                        # Fallback to generic search
+                        result_lines = [f"No actor relationships found for movie '{movie_name}'. Showing all relationships instead:"]
+                        
+                        # Find any relationships involving a node with this movie name
+                        found_rels = False
+                        for node in nodes:
+                            node_label = node.get("label", "").lower()
+                            if movie_name in node_label:
+                                node_id = node.get("id")
+                                for rel in relationships:
+                                    rel_type = rel.get("type")
+                                    
+                                    if rel.get("source") == node_id:
+                                        target_id = rel.get("target")
+                                        target_label = node_label_map.get(target_id, "Unknown")
+                                        result_lines.append(f"- {node_label_map.get(node_id, 'Unknown')} [{rel_type}] {target_label}")
+                                        found_rels = True
+                                    
+                                    elif rel.get("target") == node_id:
+                                        source_id = rel.get("source")
+                                        source_label = node_label_map.get(source_id, "Unknown")
+                                        result_lines.append(f"- {source_label} [{rel_type}] {node_label_map.get(node_id, 'Unknown')}")
+                                        found_rels = True
+                        
+                        if found_rels:
+                            return "\n".join(result_lines)
+                        else:
+                            return f"No relationships found for movie '{movie_name}'. Please check the movie name and try again."
             
             # Handle general queries by searching for entities in the query
             
