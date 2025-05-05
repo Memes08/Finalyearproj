@@ -249,18 +249,26 @@
                     </div>
                     
                     <!-- Graph Theme Switcher -->
-                    <div class="mb-3">
-                        <label class="form-label">Graph Theme</label>
-                        <select id="theme-select" class="form-select mb-2">
+                    <div class="p-3 mb-4 border border-info rounded bg-dark">
+                        <h5 class="d-flex align-items-center text-info mb-3">
+                            <i class="fas fa-palette me-2"></i>
+                            Theme Customizer
+                            <span class="badge bg-danger ms-2 pulse">New!</span>
+                        </h5>
+                        <label class="form-label fw-bold">Graph Appearance</label>
+                        <select id="theme-select" class="form-select form-select-lg mb-3 border-info">
                             <option value="dark">Dark Theme</option>
                             <option value="light">Light Theme</option>
                             <option value="custom">Custom Theme</option>
                         </select>
                         
                         <!-- Custom color palette (initially hidden) -->
-                        <div id="custom-palette-container" class="mt-2 d-none">
-                            <label class="form-label small">Custom Color Palette</label>
-                            <div class="d-flex flex-wrap gap-1 mb-2">
+                        <div id="custom-palette-container" class="mt-3 d-none">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-bold mb-0">Custom Color Palette</label>
+                                <span class="badge bg-info">Click to Select</span>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2 mb-3 p-2 border border-secondary rounded">
                                 <div class="color-swatch" data-color="#5E3E9C" style="background-color: #5E3E9C;"></div>
                                 <div class="color-swatch" data-color="#4A90E2" style="background-color: #4A90E2;"></div>
                                 <div class="color-swatch" data-color="#43B88E" style="background-color: #43B88E;"></div>
@@ -268,9 +276,23 @@
                                 <div class="color-swatch" data-color="#E2CC5B" style="background-color: #E2CC5B;"></div>
                                 <div class="color-swatch" data-color="#B05B85" style="background-color: #B05B85;"></div>
                             </div>
-                            <button id="save-theme" class="btn btn-sm btn-outline-info w-100">Save Theme</button>
+                            <button id="save-theme" class="btn btn-info w-100">
+                                <i class="fas fa-save me-2"></i>Save Custom Theme
+                            </button>
                         </div>
                     </div>
+                    
+                    <style>
+                    .pulse {
+                        animation: pulse-animation 2s infinite;
+                    }
+                    
+                    @keyframes pulse-animation {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.2); }
+                        100% { transform: scale(1); }
+                    }
+                    </style>
                     
                     <!-- Zoom controls -->
                     <div class="mb-3">

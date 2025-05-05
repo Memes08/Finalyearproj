@@ -34,106 +34,306 @@
                 </div>
             </div>
             
-            <div class="card">
-                <div class="card-header bg-dark">
-                    <h5 class="mb-0">Query Examples</h5>
+            <div class="card border-info">
+                <div class="card-header bg-info text-dark">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Try These Example Queries
+                    </h5>
                 </div>
-                <div class="card-body">
-                    <div class="list-group example-queries">
-                        {% if graph.domain == 'movie' %}
-                            <button class="list-group-item list-group-item-action query-example">
-                                What movies did Christopher Nolan direct?
+                <div class="card-body bg-dark p-0">
+                    {% if graph.domain == 'movie' %}
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-primary" style="top: 10px; right: 10px;">Director Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">What movies did Christopher Nolan direct?</h6>
+                                <p class="small text-light mb-0">Finds all movies directed by Christopher Nolan in the knowledge graph</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                Which actors starred in Inception?
+                        </div>
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-success" style="top: 10px; right: 10px;">Actor Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">Which actors starred in Inception?</h6>
+                                <p class="small text-light mb-0">Lists all actors who appeared in the movie Inception</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                What sci-fi movies have an IMDB rating above 8?
+                        </div>
+                        <div class="p-3 position-relative example-query-container">
+                            <span class="position-absolute badge bg-warning text-dark" style="top: 10px; right: 10px;">Rating Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">What sci-fi movies have an IMDB rating above 8?</h6>
+                                <p class="small text-light mb-0">Filters movies by genre (sci-fi) and minimum rating (8+)</p>
                             </button>
-                        {% elif graph.domain == 'book' %}
-                            <button class="list-group-item list-group-item-action query-example">
-                                What books were written by J.K. Rowling?
+                        </div>
+                    {% elif graph.domain == 'book' %}
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-primary" style="top: 10px; right: 10px;">Author Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">What books were written by J.K. Rowling?</h6>
+                                <p class="small text-light mb-0">Lists all books authored by J.K. Rowling</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                Which fantasy novels were published after 2010?
+                        </div>
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-success" style="top: 10px; right: 10px;">Genre Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">Which fantasy novels were published after 2010?</h6>
+                                <p class="small text-light mb-0">Filters books by genre (fantasy) and publication date (after 2010)</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                Who published The Great Gatsby?
+                        </div>
+                        <div class="p-3 position-relative example-query-container">
+                            <span class="position-absolute badge bg-warning text-dark" style="top: 10px; right: 10px;">Publisher Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">Who published The Great Gatsby?</h6>
+                                <p class="small text-light mb-0">Finds the publisher of a specific book (The Great Gatsby)</p>
                             </button>
-                        {% elif graph.domain == 'music' %}
-                            <button class="list-group-item list-group-item-action query-example">
-                                What songs did Taylor Swift perform?
+                        </div>
+                    {% elif graph.domain == 'music' %}
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-primary" style="top: 10px; right: 10px;">Artist Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">What songs did Taylor Swift perform?</h6>
+                                <p class="small text-light mb-0">Lists all songs performed by Taylor Swift</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                Which albums include the song Bohemian Rhapsody?
+                        </div>
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-success" style="top: 10px; right: 10px;">Album Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">Which albums include the song Bohemian Rhapsody?</h6>
+                                <p class="small text-light mb-0">Finds all albums containing the song Bohemian Rhapsody</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                What rock songs were released in the 1970s?
+                        </div>
+                        <div class="p-3 position-relative example-query-container">
+                            <span class="position-absolute badge bg-warning text-dark" style="top: 10px; right: 10px;">Genre Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">What rock songs were released in the 1970s?</h6>
+                                <p class="small text-light mb-0">Filters songs by genre (rock) and time period (1970s)</p>
                             </button>
-                        {% else %}
-                            <button class="list-group-item list-group-item-action query-example">
-                                Show me all relationships for [entity name]
+                        </div>
+                    {% else %}
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-primary" style="top: 10px; right: 10px;">Entity Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">Show me all relationships for [entity name]</h6>
+                                <p class="small text-light mb-0">Lists all connections to a specific entity</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                What is the connection between [entity1] and [entity2]?
+                        </div>
+                        <div class="p-3 border-bottom border-info position-relative example-query-container">
+                            <span class="position-absolute badge bg-success" style="top: 10px; right: 10px;">Relationship Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">What is the connection between [entity1] and [entity2]?</h6>
+                                <p class="small text-light mb-0">Finds relationships between two specific entities</p>
                             </button>
-                            <button class="list-group-item list-group-item-action query-example">
-                                List all entities of type [entity type]
+                        </div>
+                        <div class="p-3 position-relative example-query-container">
+                            <span class="position-absolute badge bg-warning text-dark" style="top: 10px; right: 10px;">Type Query</span>
+                            <button class="btn btn-link text-decoration-none text-start p-0 w-100 query-example">
+                                <h6 class="text-info mb-2">List all entities of type [entity type]</h6>
+                                <p class="small text-light mb-0">Shows all entities of a specific category or type</p>
                             </button>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-dark text-center border-top border-info">
+                    <small class="text-muted">Click any example to use it in your search</small>
                 </div>
             </div>
+            
+            <style>
+                .example-query-container:hover {
+                    background-color: rgba(23, 162, 184, 0.1);
+                    transition: background-color 0.3s;
+                }
+            </style>
         </div>
         
         <div class="col-md-8">
             <div class="card mb-4">
-                <div class="card-header bg-dark">
-                    <h5 class="mb-0">Query Your Knowledge Graph</h5>
+                <div class="card-header bg-info text-dark">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-robot me-2"></i>
+                        AI-Powered Knowledge Graph Search
+                    </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body bg-dark">
                     <form method="POST" action="{{ url_for('query_graph', graph_id=graph.id) }}">
                         {{ form.hidden_tag() }}
                         
-                        <div class="mb-3">
-                            {{ form.query(class="form-control" + (" is-invalid" if form.query.errors else ""), rows=3, placeholder="Ask a question about your knowledge graph...") }}
+                        <div class="mb-4">
+                            <div class="p-2 mb-2 bg-dark border border-info rounded">
+                                <span class="badge bg-info mb-2">Query Assistant</span>
+                                <p class="small mb-0">Ask anything about your knowledge graph. Try questions like "What movies did Christopher Nolan direct?" or "Which actors starred in Inception?"</p>
+                            </div>
+                            
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark text-info border-info">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                {{ form.query(class="form-control bg-dark text-light border-info" + (" is-invalid" if form.query.errors else ""), 
+                                   rows=3, 
+                                   placeholder="Type your question here...",
+                                   style="resize: none;") }}
+                            </div>
+                            
                             {% if form.query.errors %}
-                                <div class="invalid-feedback">
+                                <div class="invalid-feedback d-block mt-2">
                                     {% for error in form.query.errors %}
-                                        {{ error }}
+                                        <i class="fas fa-exclamation-triangle me-1"></i> {{ error }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                            <div class="form-text">
-                                Ask questions in natural language about entities and relationships in your knowledge graph.
-                            </div>
                         </div>
                         
-                        <div class="d-grid">
-                            {{ form.submit(class="btn btn-primary") }}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="form-text text-light">
+                                <i class="fas fa-info-circle me-1"></i> Natural language questions work best
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-secondary me-2" id="clear-query">
+                                    <i class="fas fa-times me-1"></i> Clear
+                                </button>
+                                {{ form.submit(class="btn btn-info px-4") }}
+                            </div>
                         </div>
                     </form>
                 </div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Clear query button
+                        document.getElementById('clear-query').addEventListener('click', function() {
+                            document.getElementById('{{ form.query.id }}').value = '';
+                            document.getElementById('{{ form.query.id }}').focus();
+                        });
+                        
+                        // Auto-resize textarea
+                        const textarea = document.getElementById('{{ form.query.id }}');
+                        textarea.addEventListener('input', function() {
+                            this.style.height = 'auto';
+                            this.style.height = (this.scrollHeight) + 'px';
+                        });
+                    });
+                </script>
             </div>
             
             {% if result %}
-                <div class="card">
-                    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Query Results</h5>
-                        <button class="btn btn-sm btn-outline-info" id="copy-result" title="Copy to clipboard">
-                            <i class="fas fa-copy"></i>
+                <div class="card border-info mb-4">
+                    <div class="card-header bg-info text-dark d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 d-flex align-items-center">
+                            <i class="fas fa-brain me-2"></i>
+                            Knowledge Graph Results
+                        </h5>
+                        <div>
+                            <button class="btn btn-sm btn-dark" id="copy-result" title="Copy to clipboard">
+                                <i class="fas fa-copy me-1"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body bg-dark">
+                        <div class="query-result bg-dark p-3 rounded" id="result-text" style="white-space: pre-wrap; font-family: 'Courier New', monospace;">
+                            {% if "Found these relationships:" in result %}
+                                <div class="text-info mb-3">{{ result.split('\n')[0] }}</div>
+                                <div class="relationship-results">
+                                    {% for line in result.split('\n')[1:] %}
+                                        {% if line.strip() %}
+                                            <div class="relationship-item mb-2 p-2 border border-secondary rounded">
+                                                {% if "[" in line and "]" in line %}
+                                                    {% set parts = line.replace('- ', '').split('[') %}
+                                                    {% set entity1 = parts[0].strip() %}
+                                                    {% set remaining = parts[1].split(']') %}
+                                                    {% set relation = remaining[0].strip() %}
+                                                    {% set entity2 = remaining[1].strip() %}
+                                                    
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="entity-badge px-3 py-2 bg-primary rounded me-2">{{ entity1 }}</span>
+                                                        <span class="relation-arrow text-light px-2">
+                                                            <i class="fas fa-long-arrow-alt-right"></i>
+                                                        </span>
+                                                        <span class="relation-badge px-2 py-1 bg-info text-dark rounded-pill mx-2">{{ relation }}</span>
+                                                        <span class="relation-arrow text-light px-2">
+                                                            <i class="fas fa-long-arrow-alt-right"></i>
+                                                        </span>
+                                                        <span class="entity-badge px-3 py-2 bg-success rounded ms-2">{{ entity2 }}</span>
+                                                    </div>
+                                                {% else %}
+                                                    {{ line }}
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% elif "IMDB" in result and "sci-fi" in result %}
+                                <div class="mb-3">
+                                    <h6 class="text-info">{{ result.split('\n')[0] }}</h6>
+                                    <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
+                                        {% for line in result.split('\n')[1:] %}
+                                            {% if line.strip() %}
+                                                <div class="col">
+                                                    <div class="card h-100 bg-dark border border-info">
+                                                        <div class="card-body p-3">
+                                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                {% set movie = line.split('(IMDB:')[0].replace('- ', '').strip() %}
+                                                                {% set rating = line.split('(IMDB:')[1].replace(')', '').strip() %}
+                                                                <h6 class="mb-0">{{ movie }}</h6>
+                                                                <span class="badge bg-warning text-dark">{{ rating }}</span>
+                                                            </div>
+                                                            <div class="small text-muted">
+                                                                <i class="fas fa-film me-1"></i> Sci-Fi Movie
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                {{ result }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer bg-dark text-center border-top border-info">
+                        <button class="btn btn-sm btn-outline-info" id="view-visualization">
+                            <i class="fas fa-project-diagram me-1"></i> View in Graph Visualization
                         </button>
                     </div>
-                    <div class="card-body">
-                        <div class="query-result" id="result-text">{{ result }}</div>
+                </div>
+                
+                <div class="alert alert-dark border border-info">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="fas fa-lightbulb text-warning fa-2x"></i>
+                        </div>
+                        <div>
+                            <h6 class="alert-heading">Search Tips</h6>
+                            <p class="mb-0 small">Try asking specific questions about entities like movies, actors, or directors. Ask about relationships between entities, like "Who directed Inception?" or "What movies from 2010 have ratings above 8?"</p>
+                        </div>
                     </div>
                 </div>
             {% elif request.method == 'POST' %}
-                <div class="alert alert-info">
-                    <h5 class="alert-heading">No Results Found</h5>
-                    <p>Your query didn't return any results. Try rephrasing your question or check if your knowledge graph contains relevant data.</p>
+                <div class="alert bg-dark border border-info">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                            <i class="fas fa-search text-info fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5 class="alert-heading text-info">No Results Found</h5>
+                            <p>Your query didn't return any results. Try rephrasing your question or check if your knowledge graph contains relevant data.</p>
+                            <hr>
+                            <p class="mb-0 small">For best results, be specific about what you're looking for. Ask about specific entities or relationships.</p>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const viewVisualizationBtn = document.getElementById('view-visualization');
+                    if (viewVisualizationBtn) {
+                        viewVisualizationBtn.addEventListener('click', function() {
+                            window.location.href = "{{ url_for('visualization', graph_id=graph.id) }}";
+                        });
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>
