@@ -970,10 +970,86 @@
             const node = e.detail.node;
             const connections = e.detail.connections;
             
-            // Update node detail card
+            // Show node panel and hide relationship panel
+            document.getElementById('node-tab').click();
+            
+            // Hide placeholder and show node detail card
+            document.getElementById('node-details-placeholder').classList.add('d-none');
             document.getElementById('node-detail-card').classList.remove('d-none');
-            document.getElementById('selected-node-label').textContent = node.label;
-            document.getElementById('selected-node-category').textContent = node.category;
+            
+            // Switch to node tab
+            document.getElementById('relationship-details-placeholder').classList.remove('d-none');
+            document.getElementById('relationship-detail-card').classList.add('d-none');
+            
+            // Update node identity section
+            document.getElementById('selected-node-label').textContent = node.label || 'Untitled Node';
+            document.getElementById('selected-node-category').textContent = node.category || 'Unknown';
+            document.getElementById('selected-node-id').textContent = node.id || '';
+            
+            // Set creation date if available (or provide estimated date)
+            const createdDate = node.created_at ? new Date(node.created_at).toLocaleDateString() : 'N/A';
+            document.getElementById('selected-node-created-date').textContent = createdDate;
+            
+            // Calculate centrality (either from node data or estimate based on connections)
+            const incomingCount = connections.incoming.length;
+            const outgoingCount = connections.outgoing.length;
+            const totalConnections = incomingCount + outgoingCount;
+            
+            // Update connection counts
+            document.getElementById('incoming-count').textContent = incomingCount;
+            document.getElementById('outgoing-count').textContent = outgoingCount;
+            document.getElementById('total-connections-badge').textContent = totalConnections;
+            
+            // Calculate node importance score (0-100)
+            const importanceScore = Math.min(100, Math.round((totalConnections / 5) * 30 + 40));
+            const nodeImportanceValue = document.getElementById('node-importance-value');
+            const nodeImportanceCircle = document.getElementById('node-importance-circle');
+            const nodeImportanceDescription = document.getElementById('node-importance-description');
+            
+            // Update importance indicators
+            nodeImportanceValue.textContent = importanceScore;
+            const circumference = 2 * Math.PI * 15; // r=15
+            const dashoffset = circumference - (importanceScore / 100) * circumference;
+            nodeImportanceCircle.style.strokeDashoffset = dashoffset;
+            nodeImportanceCircle.style.strokeDasharray = circumference;
+            
+            // Update centrality if available (or estimate)
+            const centrality = node.centrality || (totalConnections / 20).toFixed(2);
+            document.getElementById('selected-node-centrality').textContent = centrality;
+            
+            // Set importance description based on score
+            if (importanceScore >= 80) {
+                nodeImportanceDescription.innerHTML = 'This is a <strong>key node</strong> with high connectivity and significance in the graph.';
+                nodeImportanceCircle.style.stroke = '#28a745'; // success
+            } else if (importanceScore >= 50) {
+                nodeImportanceDescription.innerHTML = 'This node has <strong>moderate importance</strong> with a good number of connections.';
+                nodeImportanceCircle.style.stroke = '#0dcaf0'; // info
+            } else {
+                nodeImportanceDescription.innerHTML = 'This is a <strong>peripheral node</strong> with limited connections to other entities.';
+                nodeImportanceCircle.style.stroke = '#ffc107'; // warning
+            }
+            
+            // Populate node properties table
+            const propertiesTable = document.getElementById('node-properties-table');
+            propertiesTable.innerHTML = '';
+            
+            // Get properties from node (exclude internal properties)
+            const excludedProps = ['id', 'label', 'category', 'x', 'y', 'vx', 'vy', 'index', 'fx', 'fy'];
+            const properties = Object.keys(node)
+                .filter(key => !excludedProps.includes(key) && node[key] !== null && node[key] !== undefined);
+            
+            if (properties.length === 0) {
+                propertiesTable.innerHTML = '<tr><td colspan="2" class="text-center text-muted">No additional properties available</td></tr>';
+            } else {
+                properties.forEach(prop => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="text-info">${prop}</td>
+                        <td>${node[prop]}</td>
+                    `;
+                    propertiesTable.appendChild(row);
+                });
+            }
             
             // Update incoming connections
             const incomingList = document.getElementById('incoming-connections-list');
@@ -984,13 +1060,22 @@
             } else {
                 connections.incoming.forEach(conn => {
                     const item = document.createElement('li');
-                    item.className = 'list-group-item bg-dark';
+                    item.className = 'list-group-item bg-dark list-group-item-action';
                     item.innerHTML = `
                         <div class="d-flex justify-content-between align-items-center">
-                            <span>${conn.node.label}</span>
-                            <span class="badge bg-secondary">${conn.relationship}</span>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-arrow-left text-info me-2"></i>
+                                <span>${conn.node.label}</span>
+                            </div>
+                            <span class="badge bg-warning">${conn.relationship}</span>
                         </div>
                     `;
+                    // Add click event to focus on this connection
+                    item.addEventListener('click', () => {
+                        if (graphViz) {
+                            graphViz.focusOnNode(conn.node.id);
+                        }
+                    });
                     incomingList.appendChild(item);
                 });
             }
@@ -1004,16 +1089,65 @@
             } else {
                 connections.outgoing.forEach(conn => {
                     const item = document.createElement('li');
-                    item.className = 'list-group-item bg-dark';
+                    item.className = 'list-group-item bg-dark list-group-item-action';
                     item.innerHTML = `
                         <div class="d-flex justify-content-between align-items-center">
-                            <span>${conn.node.label}</span>
-                            <span class="badge bg-secondary">${conn.relationship}</span>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-arrow-right text-info me-2"></i>
+                                <span>${conn.node.label}</span>
+                            </div>
+                            <span class="badge bg-warning">${conn.relationship}</span>
                         </div>
                     `;
+                    // Add click event to focus on this connection
+                    item.addEventListener('click', () => {
+                        if (graphViz) {
+                            graphViz.focusOnNode(conn.node.id);
+                        }
+                    });
                     outgoingList.appendChild(item);
                 });
             }
+            
+            // Setup action buttons
+            document.getElementById('focus-selected-node').onclick = function() {
+                if (graphViz) graphViz.focusOnNode(node.id);
+            };
+            
+            document.getElementById('expand-selected-node').onclick = function() {
+                if (graphViz && graphViz.expandNode) {
+                    graphViz.expandNode(node.id);
+                } else {
+                    console.warn('Expand node functionality not available');
+                }
+            };
+            
+            document.getElementById('export-node-data').onclick = function() {
+                // Create downloadable JSON of node data
+                const nodeData = {
+                    ...node,
+                    connections: {
+                        incoming: connections.incoming.map(c => ({
+                            source: c.node.label,
+                            relationship: c.relationship
+                        })),
+                        outgoing: connections.outgoing.map(c => ({
+                            target: c.node.label,
+                            relationship: c.relationship
+                        }))
+                    }
+                };
+                
+                const blob = new Blob([JSON.stringify(nodeData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `node-${node.id || 'export'}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
             
             // Update node badge
             document.getElementById('graph-node-badge').textContent = 'Node Selected';
