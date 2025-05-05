@@ -989,6 +989,48 @@ class KnowledgeGraphVisualizer {
         this.stopSimulation();
     }
     
+    // Theme management
+    applyTheme(themeName) {
+        // Apply the selected theme to the graph visualization
+        this.currentTheme = themeName;
+        const theme = this.nodeThemes[themeName] || this.nodeThemes.dark;
+        
+        // Update node colors
+        this.svg.selectAll(".node")
+            .transition()
+            .duration(500)
+            .attr("fill", d => theme.fill(d.category))
+            .attr("stroke", theme.stroke);
+        
+        // Update text colors
+        this.svg.selectAll(".node-label")
+            .transition()
+            .duration(500)
+            .attr("fill", theme.text);
+        
+        // Update background if needed
+        if (themeName === 'light') {
+            this.svg.transition().duration(500).style("background-color", "#f8f9fa");
+        } else {
+            this.svg.transition().duration(500).style("background-color", "#212529");
+        }
+        
+        // Dispatch theme change event for potential UI updates
+        document.dispatchEvent(new CustomEvent('graphThemeChanged', {
+            detail: { theme: themeName }
+        }));
+    }
+    
+    updateCustomPalette(colors) {
+        // Update the custom theme with new colors
+        this.nodeThemes.custom.fill = d3.scaleOrdinal(colors);
+        
+        // If current theme is custom, apply changes immediately
+        if (this.currentTheme === 'custom') {
+            this.applyTheme('custom');
+        }
+    }
+    
     // Export graph functionality
     exportGraph(format = 'png') {
         if (this.exportInProgress) return;

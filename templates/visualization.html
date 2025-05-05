@@ -629,6 +629,111 @@
             }
         });
         
+        // Theme switcher functionality
+        document.getElementById('theme-select').addEventListener('change', function() {
+            const selectedTheme = this.value;
+            
+            // Show/hide custom palette selector based on theme choice
+            if (selectedTheme === 'custom') {
+                document.getElementById('custom-palette-container').classList.remove('d-none');
+            } else {
+                document.getElementById('custom-palette-container').classList.add('d-none');
+                
+                // Apply the selected theme immediately
+                if (graphViz) {
+                    graphViz.applyTheme(selectedTheme);
+                }
+                
+                // Store theme preference in localStorage
+                localStorage.setItem('graphTheme', selectedTheme);
+            }
+        });
+        
+        // Color swatch selection
+        const colorSwatches = document.querySelectorAll('.color-swatch');
+        colorSwatches.forEach(swatch => {
+            swatch.addEventListener('click', function() {
+                // Toggle selection visual state
+                colorSwatches.forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Get the selected color
+                const selectedColor = this.getAttribute('data-color');
+                
+                // Preview this color as primary in the custom theme
+                const customPalette = Array.from(document.querySelectorAll('.color-swatch'))
+                    .map(swatch => swatch.getAttribute('data-color'));
+                
+                // Apply the updated custom theme
+                if (graphViz) {
+                    graphViz.updateCustomPalette(customPalette);
+                }
+            });
+        });
+        
+        // Save custom theme
+        document.getElementById('save-theme').addEventListener('click', function() {
+            // Store custom theme in localStorage
+            const customColors = Array.from(document.querySelectorAll('.color-swatch'))
+                .map(swatch => swatch.getAttribute('data-color'));
+            
+            localStorage.setItem('customGraphPalette', JSON.stringify(customColors));
+            localStorage.setItem('graphTheme', 'custom');
+            
+            // Show saved confirmation
+            const saveBtn = this;
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = "Theme Saved!";
+            saveBtn.classList.add('btn-success');
+            saveBtn.classList.remove('btn-outline-info');
+            
+            setTimeout(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.classList.remove('btn-success');
+                saveBtn.classList.add('btn-outline-info');
+            }, 2000);
+        });
+        
+        // Load saved theme preference if any
+        const savedTheme = localStorage.getItem('graphTheme') || 'dark';
+        document.getElementById('theme-select').value = savedTheme;
+        
+        // Load custom palette if saved
+        if (savedTheme === 'custom') {
+            document.getElementById('custom-palette-container').classList.remove('d-none');
+            
+            const savedPalette = localStorage.getItem('customGraphPalette');
+            if (savedPalette) {
+                try {
+                    const colors = JSON.parse(savedPalette);
+                    // Apply saved custom colors to the swatches
+                    const swatches = document.querySelectorAll('.color-swatch');
+                    colors.forEach((color, index) => {
+                        if (swatches[index]) {
+                            swatches[index].style.backgroundColor = color;
+                            swatches[index].setAttribute('data-color', color);
+                        }
+                    });
+                    
+                    // Apply the custom theme when graph is ready
+                    setTimeout(() => {
+                        if (graphViz) {
+                            graphViz.updateCustomPalette(colors);
+                        }
+                    }, 1000);
+                } catch (e) {
+                    console.error('Error loading custom palette:', e);
+                }
+            }
+        }
+        
+        // Initialize with the saved theme after a short delay
+        setTimeout(() => {
+            if (graphViz) {
+                graphViz.applyTheme(savedTheme);
+            }
+        }, 1000);
+        
         // Observer for visible node/relationship counts
         const observer = new MutationObserver(function() {
             document.getElementById('visible-node-count').textContent = 
