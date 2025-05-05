@@ -385,6 +385,28 @@
                 <div class="card-header bg-dark d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Knowledge Graph Visualization</h5>
                     <div class="d-flex align-items-center">
+                        <!-- Progressive Disclosure Controls -->
+                        <div class="dropdown me-2">
+                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="explorationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-glasses me-1"></i> Exploration
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="explorationDropdown">
+                                <li><a class="dropdown-item" href="#" id="progressive-disclosure">
+                                    <i class="fas fa-eye me-1"></i> Progressive Disclosure
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" id="reset-disclosure">
+                                    <i class="fas fa-undo me-1"></i> Reset Full View
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="expand-one-level">
+                                    <i class="fas fa-project-diagram me-1"></i> Expand One Level
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" id="focus-high-degree">
+                                    <i class="fas fa-star me-1"></i> Focus on Key Nodes
+                                </a></li>
+                            </ul>
+                        </div>
+                        
                         <div class="dropdown me-2">
                             <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-download me-1"></i> Export
@@ -642,6 +664,70 @@
             if (graphViz) {
                 graphViz.exportGraph('png');
             }
+        });
+        
+        // Progressive Disclosure listeners
+        document.getElementById('progressive-disclosure').addEventListener('click', function() {
+            // Add active class to indicate it's enabled
+            this.classList.toggle('active');
+            const isActive = this.classList.contains('active');
+            
+            // Update text to show status
+            this.innerHTML = isActive ? 
+                '<i class="fas fa-eye me-1"></i> Progressive Disclosure (ON)' : 
+                '<i class="fas fa-eye me-1"></i> Progressive Disclosure';
+                
+            if (graphViz) {
+                // Initialize progressive disclosure mode
+                graphViz.enableProgressiveDisclosure(isActive);
+            }
+            
+            // Show status badge
+            if (isActive) {
+                document.getElementById('graph-filter-badge').style.display = 'inline-block';
+                document.getElementById('graph-filter-badge').textContent = 'Progressive View';
+                document.getElementById('graph-filter-badge').className = 'badge bg-primary me-2';
+            } else {
+                document.getElementById('graph-filter-badge').style.display = 'none';
+                document.getElementById('graph-filter-badge').className = 'badge bg-secondary me-2';
+            }
+        });
+        
+        // Reset disclosure view
+        document.getElementById('reset-disclosure').addEventListener('click', function() {
+            // Reset the progressive disclosure button if it's active
+            const progressiveButton = document.getElementById('progressive-disclosure');
+            if (progressiveButton.classList.contains('active')) {
+                progressiveButton.classList.remove('active');
+                progressiveButton.innerHTML = '<i class="fas fa-eye me-1"></i> Progressive Disclosure';
+            }
+            
+            // Reset badge
+            document.getElementById('graph-filter-badge').style.display = 'none';
+            
+            if (graphViz) {
+                // Reset to full view
+                graphViz.resetDisclosure();
+            }
+        });
+        
+        // Expand one level of nodes around visible nodes
+        document.getElementById('expand-one-level').addEventListener('click', function() {
+            if (graphViz) {
+                graphViz.expandOneLevel();
+            }
+        });
+        
+        // Focus on high-degree (key) nodes
+        document.getElementById('focus-high-degree').addEventListener('click', function() {
+            if (graphViz) {
+                graphViz.focusOnKeyNodes();
+            }
+            
+            // Show status badge
+            document.getElementById('graph-filter-badge').style.display = 'inline-block';
+            document.getElementById('graph-filter-badge').textContent = 'Key Nodes Focus';
+            document.getElementById('graph-filter-badge').className = 'badge bg-warning text-dark me-2';
         });
         
         document.getElementById('export-svg').addEventListener('click', function(e) {

@@ -19,7 +19,15 @@ class KnowledgeGraphVisualizer {
             clusterForce: 0.1,
             enableClustering: true,
             enablePhysics: true,
-            stabilizationIterations: 50
+            stabilizationIterations: 50,
+            // Progressive disclosure settings
+            initialNodeLimit: 20,           // Initial number of nodes to show
+            initialNodeSelectionStrategy: 'degree', // 'degree', 'random', 'category'
+            expansionIncrement: 10,         // How many nodes to add when expanding
+            expansionStrategy: 'neighbors', // How to choose nodes to expand
+            highDegreeThreshold: 5,         // Threshold for "high degree" nodes
+            animateDuration: 750,           // Animation duration in ms 
+            progressiveDisclosureEnabled: false // Whether progressive disclosure is enabled
         }, options);
         
         // Visualization elements
