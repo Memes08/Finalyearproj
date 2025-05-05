@@ -149,8 +149,8 @@
             <div class="card mb-4">
                 <div class="card-header bg-info text-dark">
                     <h5 class="mb-0 d-flex align-items-center">
-                        <i class="fas fa-robot me-2"></i>
-                        AI-Powered Knowledge Graph Search
+                        <i class="fas fa-project-diagram me-2"></i>
+                        Cypher Query Search
                     </h5>
                 </div>
                 <div class="card-body bg-dark">
@@ -215,26 +215,47 @@
             </div>
             
             {% if result %}
-                <div class="card border-info mb-4">
+                <div class="card border-info mb-4 shadow-lg result-card">
                     <div class="card-header bg-info text-dark d-flex justify-content-between align-items-center">
                         <h5 class="mb-0 d-flex align-items-center">
-                            <i class="fas fa-brain me-2"></i>
+                            <i class="fas fa-project-diagram me-2"></i>
                             Knowledge Graph Results
                         </h5>
                         <div>
-                            <button class="btn btn-sm btn-dark" id="copy-result" title="Copy to clipboard">
+                            <button class="btn btn-sm btn-dark" id="toggle-view" title="Toggle visualization mode">
+                                <i class="fas fa-chart-network me-1"></i> Toggle View
+                            </button>
+                            <button class="btn btn-sm btn-dark ms-2" id="copy-result" title="Copy to clipboard">
                                 <i class="fas fa-copy me-1"></i> Copy
                             </button>
                         </div>
                     </div>
-                    <div class="card-body bg-dark">
-                        <div class="query-result bg-dark p-3 rounded" id="result-text" style="white-space: pre-wrap; font-family: 'Courier New', monospace;">
-                            {% if "Found these relationships:" in result %}
-                                <div class="text-info mb-3">{{ result.split('\n')[0] }}</div>
-                                <div class="relationship-results">
-                                    {% for line in result.split('\n')[1:] %}
-                                        {% if line.strip() %}
-                                            <div class="relationship-item mb-2 p-2 border border-secondary rounded">
+                    
+                    <!-- Visual Graph View (Initially Hidden) -->
+                    <div id="visual-graph-view" class="d-none">
+                        <div class="graph-container p-4 bg-dark" style="min-height: 400px;">
+                            <div id="graph-visualization-container" class="w-100" style="height: 400px; position: relative;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Text Result View -->
+                    <div id="text-result-view">
+                        <div class="card-body bg-dark">
+                            <div class="query-result bg-dark p-3 rounded" id="result-text" style="white-space: pre-wrap; font-family: 'Courier New', monospace;">
+                                {% if "Found these relationships:" in result %}
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="result-icon me-3">
+                                            <i class="fas fa-network-wired fa-2x text-info"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="text-info mb-1">{{ result.split('\n')[0] }}</h5>
+                                            <p class="text-light small mb-0">The following connections were discovered in your knowledge graph</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="relationship-results">
+                                        {% for line in result.split('\n')[1:] %}
+                                            {% if line.strip() %}
                                                 {% if "[" in line and "]" in line %}
                                                     {% set parts = line.replace('- ', '').split('[') %}
                                                     {% set entity1 = parts[0].strip() %}
@@ -242,41 +263,83 @@
                                                     {% set relation = remaining[0].strip() %}
                                                     {% set entity2 = remaining[1].strip() %}
                                                     
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="entity-badge px-3 py-2 bg-primary rounded me-2">{{ entity1 }}</span>
-                                                        <span class="relation-arrow text-light px-2">
-                                                            <i class="fas fa-long-arrow-alt-right"></i>
-                                                        </span>
-                                                        <span class="relation-badge px-2 py-1 bg-info text-dark rounded-pill mx-2">{{ relation }}</span>
-                                                        <span class="relation-arrow text-light px-2">
-                                                            <i class="fas fa-long-arrow-alt-right"></i>
-                                                        </span>
-                                                        <span class="entity-badge px-3 py-2 bg-success rounded ms-2">{{ entity2 }}</span>
+                                                    <div class="relationship-item mb-3 p-3 border border-info rounded relationship-card animate-in" 
+                                                         style="--delay: {{ loop.index * 0.1 }}s">
+                                                        <div class="relationship-visual">
+                                                            <div class="node-container position-relative mb-3">
+                                                                <div class="node node-1 d-flex flex-column align-items-center">
+                                                                    <div class="node-icon mb-2">
+                                                                        <i class="fas fa-circle text-primary"></i>
+                                                                    </div>
+                                                                    <div class="node-label px-3 py-2 bg-primary rounded shadow-sm entity-label">
+                                                                        {{ entity1 }}
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="relationship-line">
+                                                                    <div class="d-flex flex-column align-items-center">
+                                                                        <i class="fas fa-long-arrow-alt-down text-info pulse-arrow"></i>
+                                                                        <span class="relation-badge px-3 py-1 bg-info text-dark rounded-pill my-2 relation-label">
+                                                                            {{ relation }}
+                                                                        </span>
+                                                                        <i class="fas fa-long-arrow-alt-down text-info pulse-arrow"></i>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="node node-2 d-flex flex-column align-items-center">
+                                                                    <div class="node-icon mb-2">
+                                                                        <i class="fas fa-circle text-success"></i>
+                                                                    </div>
+                                                                    <div class="node-label px-3 py-2 bg-success rounded shadow-sm entity-label">
+                                                                        {{ entity2 }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 {% else %}
-                                                    {{ line }}
+                                                    <div class="p-3 border border-secondary rounded mb-3">
+                                                        {{ line }}
+                                                    </div>
                                                 {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% elif "IMDB" in result and "sci-fi" in result %}
-                                <div class="mb-3">
-                                    <h6 class="text-info">{{ result.split('\n')[0] }}</h6>
-                                    <div class="row row-cols-1 row-cols-md-2 g-3 mt-2">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% elif "IMDB" in result and "sci-fi" in result %}
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="result-icon me-3">
+                                            <i class="fas fa-film fa-2x text-info"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="text-info mb-1">{{ result.split('\n')[0] }}</h5>
+                                            <p class="text-light small mb-0">Filtered movies that match your criteria</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="movie-grid">
                                         {% for line in result.split('\n')[1:] %}
                                             {% if line.strip() %}
-                                                <div class="col">
-                                                    <div class="card h-100 bg-dark border border-info">
+                                                {% set movie = line.split('(IMDB:')[0].replace('- ', '').strip() %}
+                                                {% set rating = line.split('(IMDB:')[1].replace(')', '').strip() %}
+                                                
+                                                <div class="movie-card animate-in" style="--delay: {{ loop.index * 0.1 }}s">
+                                                    <div class="card h-100 bg-dark border border-info hover-card">
                                                         <div class="card-body p-3">
                                                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                                                {% set movie = line.split('(IMDB:')[0].replace('- ', '').strip() %}
-                                                                {% set rating = line.split('(IMDB:')[1].replace(')', '').strip() %}
-                                                                <h6 class="mb-0">{{ movie }}</h6>
-                                                                <span class="badge bg-warning text-dark">{{ rating }}</span>
+                                                                <h6 class="mb-0 text-light">{{ movie }}</h6>
+                                                                <div class="rating-badge">
+                                                                    <span class="badge bg-warning text-dark d-flex align-items-center">
+                                                                        <i class="fas fa-star me-1"></i> {{ rating }}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div class="small text-muted">
-                                                                <i class="fas fa-film me-1"></i> Sci-Fi Movie
+                                                            <div class="d-flex align-items-center mt-3">
+                                                                <span class="badge bg-secondary me-2">
+                                                                    <i class="fas fa-film me-1"></i> Sci-Fi
+                                                                </span>
+                                                                <span class="badge bg-secondary">
+                                                                    <i class="fas fa-award me-1"></i> High Rated
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -284,18 +347,122 @@
                                             {% endif %}
                                         {% endfor %}
                                     </div>
-                                </div>
-                            {% else %}
-                                {{ result }}
-                            {% endif %}
+                                {% else %}
+                                    <div class="mb-3 p-3 border border-info rounded">
+                                        {{ result }}
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-dark text-center border-top border-info">
-                        <button class="btn btn-sm btn-outline-info" id="view-visualization">
-                            <i class="fas fa-project-diagram me-1"></i> View in Graph Visualization
+                    
+                    <div class="card-footer bg-dark d-flex justify-content-between align-items-center border-top border-info">
+                        <div>
+                            <span class="badge bg-secondary me-2">
+                                <i class="fas fa-info-circle me-1"></i> Results displayed visually
+                            </span>
+                        </div>
+                        <button class="btn btn-info px-4" id="view-visualization">
+                            <i class="fas fa-project-diagram me-1"></i> Full Graph Visualization
                         </button>
                     </div>
                 </div>
+                
+                <style>
+                    /* Animation for relationship items */
+                    @keyframes fadeInUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(20px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                    
+                    .animate-in {
+                        opacity: 0;
+                        animation: fadeInUp 0.5s ease forwards;
+                        animation-delay: var(--delay, 0s);
+                    }
+                    
+                    /* Relationship display */
+                    .relationship-visual {
+                        position: relative;
+                    }
+                    
+                    .node-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: space-between;
+                        min-height: 200px;
+                    }
+                    
+                    .node {
+                        z-index: 2;
+                    }
+                    
+                    .relationship-line {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        z-index: 1;
+                    }
+                    
+                    .entity-label {
+                        transition: transform 0.3s, box-shadow 0.3s;
+                    }
+                    
+                    .entity-label:hover {
+                        transform: scale(1.05);
+                        box-shadow: 0 0 10px rgba(23, 162, 184, 0.5);
+                    }
+                    
+                    .relation-label {
+                        transition: transform 0.3s;
+                    }
+                    
+                    .relation-label:hover {
+                        transform: scale(1.1);
+                    }
+                    
+                    /* Pulse arrow animation */
+                    @keyframes pulse {
+                        0% { opacity: 0.6; }
+                        50% { opacity: 1; }
+                        100% { opacity: 0.6; }
+                    }
+                    
+                    .pulse-arrow {
+                        animation: pulse 1.5s infinite;
+                    }
+                    
+                    /* Movie grid */
+                    .movie-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                        gap: 1rem;
+                    }
+                    
+                    .hover-card {
+                        transition: transform 0.3s, box-shadow 0.3s;
+                    }
+                    
+                    .hover-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+                    }
+                    
+                    /* Graph visualization container */
+                    #graph-visualization-container {
+                        background-color: #1a1d21;
+                        border-radius: 5px;
+                        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+                    }
+                </style>
                 
                 <div class="alert alert-dark border border-info">
                     <div class="d-flex">
@@ -326,11 +493,256 @@
             
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
+                    // Handle full visualization view button
                     const viewVisualizationBtn = document.getElementById('view-visualization');
                     if (viewVisualizationBtn) {
                         viewVisualizationBtn.addEventListener('click', function() {
                             window.location.href = "{{ url_for('visualization', graph_id=graph.id) }}";
                         });
+                    }
+                    
+                    // Toggle between text and visual views
+                    const toggleViewBtn = document.getElementById('toggle-view');
+                    const textResultView = document.getElementById('text-result-view');
+                    const visualGraphView = document.getElementById('visual-graph-view');
+                    
+                    if (toggleViewBtn) {
+                        toggleViewBtn.addEventListener('click', function() {
+                            if (textResultView.classList.contains('d-none')) {
+                                // Switch to text view
+                                textResultView.classList.remove('d-none');
+                                visualGraphView.classList.add('d-none');
+                                toggleViewBtn.innerHTML = '<i class="fas fa-chart-network me-1"></i> Graph View';
+                            } else {
+                                // Switch to graph view
+                                textResultView.classList.add('d-none');
+                                visualGraphView.classList.remove('d-none');
+                                toggleViewBtn.innerHTML = '<i class="fas fa-list me-1"></i> Text View';
+                                
+                                // Render a simple force-directed graph
+                                renderSimpleGraph();
+                            }
+                        });
+                    }
+                    
+                    // Simple force-directed graph rendering with D3.js
+                    function renderSimpleGraph() {
+                        // Only render if we have D3.js
+                        if (typeof d3 === 'undefined') {
+                            // Add D3.js dynamically
+                            const script = document.createElement('script');
+                            script.src = 'https://d3js.org/d3.v7.min.js';
+                            script.onload = initGraph;
+                            document.head.appendChild(script);
+                        } else {
+                            initGraph();
+                        }
+                    }
+                    
+                    function initGraph() {
+                        const container = document.getElementById('graph-visualization-container');
+                        container.innerHTML = '';
+                        
+                        // Extract entities and relationships from the result
+                        let nodes = [];
+                        let links = [];
+                        let nodeMap = {};
+                        
+                        {% if "Found these relationships:" in result %}
+                            {% for line in result.split('\n')[1:] %}
+                                {% if line.strip() and "[" in line and "]" in line %}
+                                    {% set parts = line.replace('- ', '').split('[') %}
+                                    {% set entity1 = parts[0].strip() %}
+                                    {% set remaining = parts[1].split(']') %}
+                                    {% set relation = remaining[0].strip() %}
+                                    {% set entity2 = remaining[1].strip() %}
+                                    
+                                    // Add nodes if they don't exist
+                                    if (!nodeMap["{{ entity1 }}"]) {
+                                        const node1 = {
+                                            id: "{{ entity1 }}",
+                                            name: "{{ entity1 }}",
+                                            type: "source",
+                                            group: 1
+                                        };
+                                        nodes.push(node1);
+                                        nodeMap["{{ entity1 }}"] = node1;
+                                    }
+                                    
+                                    if (!nodeMap["{{ entity2 }}"]) {
+                                        const node2 = {
+                                            id: "{{ entity2 }}",
+                                            name: "{{ entity2 }}",
+                                            type: "target",
+                                            group: 2
+                                        };
+                                        nodes.push(node2);
+                                        nodeMap["{{ entity2 }}"] = node2;
+                                    }
+                                    
+                                    // Add link
+                                    links.push({
+                                        source: "{{ entity1 }}",
+                                        target: "{{ entity2 }}",
+                                        type: "{{ relation }}",
+                                        value: 1
+                                    });
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        
+                        const width = container.clientWidth;
+                        const height = container.clientHeight;
+                        
+                        // Create SVG
+                        const svg = d3.select(container)
+                            .append("svg")
+                            .attr("width", width)
+                            .attr("height", height)
+                            .attr("viewBox", [0, 0, width, height]);
+                        
+                        // Create container group with zoom capabilities
+                        const g = svg.append("g");
+                        
+                        // Add zoom behavior
+                        const zoom = d3.zoom()
+                            .scaleExtent([0.2, 3])
+                            .on("zoom", (event) => {
+                                g.attr("transform", event.transform);
+                            });
+                        
+                        svg.call(zoom);
+                        
+                        // Initialize the simulation
+                        const simulation = d3.forceSimulation(nodes)
+                            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+                            .force("charge", d3.forceManyBody().strength(-300))
+                            .force("center", d3.forceCenter(width / 2, height / 2))
+                            .force("x", d3.forceX(width / 2).strength(0.1))
+                            .force("y", d3.forceY(height / 2).strength(0.1));
+                        
+                        // Define arrowhead marker
+                        svg.append("defs").selectAll("marker")
+                            .data(["arrow"])
+                            .join("marker")
+                            .attr("id", d => `arrow-${d}`)
+                            .attr("viewBox", "0 -5 10 10")
+                            .attr("refX", 25)
+                            .attr("refY", 0)
+                            .attr("markerWidth", 6)
+                            .attr("markerHeight", 6)
+                            .attr("orient", "auto")
+                            .append("path")
+                            .attr("fill", "#17a2b8")
+                            .attr("d", "M0,-5L10,0L0,5");
+                        
+                        // Create links
+                        const link = g.append("g")
+                            .selectAll("g")
+                            .data(links)
+                            .join("g");
+                        
+                        // Add path for each link
+                        link.append("path")
+                            .attr("stroke", "#17a2b8")
+                            .attr("stroke-opacity", 0.6)
+                            .attr("stroke-width", 2)
+                            .attr("fill", "none")
+                            .attr("marker-end", "url(#arrow-arrow)")
+                            .attr("class", "link-path");
+                        
+                        // Add text labels for relationships
+                        link.append("text")
+                            .attr("dy", -5)
+                            .attr("text-anchor", "middle")
+                            .attr("fill", "#ffffff")
+                            .attr("font-size", 10)
+                            .attr("pointer-events", "none")
+                            .text(d => d.type);
+                        
+                        // Create nodes
+                        const node = g.append("g")
+                            .selectAll(".node")
+                            .data(nodes)
+                            .join("g")
+                            .attr("class", "node")
+                            .call(drag(simulation));
+                        
+                        // Add circles for nodes
+                        node.append("circle")
+                            .attr("r", 15)
+                            .attr("fill", d => d.group === 1 ? "#007bff" : "#28a745")
+                            .attr("stroke", "#17a2b8")
+                            .attr("stroke-width", 2);
+                        
+                        // Add text labels for nodes
+                        node.append("text")
+                            .attr("dy", 25)
+                            .attr("text-anchor", "middle")
+                            .attr("fill", "#ffffff")
+                            .attr("font-size", 10)
+                            .text(d => truncateText(d.name, 15));
+                        
+                        // Update positions on each tick
+                        simulation.on("tick", () => {
+                            // Update link paths
+                            link.selectAll("path")
+                                .attr("d", d => {
+                                    const dx = d.target.x - d.source.x;
+                                    const dy = d.target.y - d.source.y;
+                                    const dr = Math.sqrt(dx * dx + dy * dy);
+                                    
+                                    // Calculate the normalized vector for the path
+                                    const normX = dx / dr;
+                                    const normY = dy / dr;
+                                    
+                                    // Adjust start and end points to match the edges of the circles
+                                    const sourceX = d.source.x + (normX * 15);
+                                    const sourceY = d.source.y + (normY * 15);
+                                    const targetX = d.target.x - (normX * 15);
+                                    const targetY = d.target.y - (normY * 15);
+                                    
+                                    return `M${sourceX},${sourceY} L${targetX},${targetY}`;
+                                });
+                            
+                            // Update link texts
+                            link.selectAll("text")
+                                .attr("x", d => (d.source.x + d.target.x) / 2)
+                                .attr("y", d => (d.source.y + d.target.y) / 2);
+                            
+                            // Update node positions
+                            node.attr("transform", d => `translate(${d.x}, ${d.y})`);
+                        });
+                        
+                        // Drag behavior for nodes
+                        function drag(simulation) {
+                            function dragstarted(event) {
+                                if (!event.active) simulation.alphaTarget(0.3).restart();
+                                event.subject.fx = event.subject.x;
+                                event.subject.fy = event.subject.y;
+                            }
+                            
+                            function dragged(event) {
+                                event.subject.fx = event.x;
+                                event.subject.fy = event.y;
+                            }
+                            
+                            function dragended(event) {
+                                if (!event.active) simulation.alphaTarget(0);
+                                event.subject.fx = null;
+                                event.subject.fy = null;
+                            }
+                            
+                            return d3.drag()
+                                .on("start", dragstarted)
+                                .on("drag", dragged)
+                                .on("end", dragended);
+                        }
+                        
+                        // Helper function to truncate text
+                        function truncateText(text, maxLength) {
+                            return text.length > maxLength ? text.substr(0, maxLength) + '...' : text;
+                        }
                     }
                 });
             </script>
