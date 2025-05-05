@@ -124,6 +124,116 @@
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         z-index: 1000;
     }
+    
+    /* Contextual Info Panel Styles */
+    .progress-ring {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .progress-text {
+        position: absolute;
+        font-size: 12px;
+        font-weight: bold;
+        color: #f8f9fa;
+    }
+    
+    .progress-ring-circle-bg {
+        fill: transparent;
+        stroke: #2c3e50;
+        stroke-width: 3;
+    }
+    
+    .progress-ring-circle {
+        fill: transparent;
+        stroke: #0dcaf0;
+        stroke-width: 3;
+        stroke-linecap: round;
+        transform-origin: center;
+        transform: rotate(-90deg);
+        transition: stroke-dashoffset 0.5s ease;
+    }
+    
+    .relationship-visualization {
+        position: relative;
+    }
+    
+    .node-box {
+        padding: 8px 12px;
+        background-color: #2c3e50;
+        border-radius: 4px;
+        font-weight: bold;
+        min-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+    }
+    
+    .arrow-container {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin: 0 10px;
+        min-width: 80px;
+    }
+    
+    .arrow-line {
+        height: 2px;
+        background-color: #0dcaf0;
+        width: 100%;
+        position: relative;
+        animation: flow 1.5s infinite linear;
+        background: linear-gradient(to right, #2c3e50, #0dcaf0, #2c3e50);
+        background-size: 200% 100%;
+    }
+    
+    @keyframes flow {
+        0% { background-position: 100% 0; }
+        100% { background-position: -100% 0; }
+    }
+    
+    .arrow-head {
+        width: 0;
+        height: 0;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-left: 10px solid #0dcaf0;
+        position: absolute;
+        right: -5px;
+    }
+    
+    .relationship-label {
+        position: absolute;
+        top: -24px;
+        font-size: 12px;
+        background-color: rgba(13, 202, 240, 0.2);
+        padding: 2px 8px;
+        border-radius: 10px;
+        white-space: nowrap;
+    }
+    
+    .connection-scroll {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    .connection-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .connection-scroll::-webkit-scrollbar-track {
+        background: #2c3e50;
+    }
+    
+    .connection-scroll::-webkit-scrollbar-thumb {
+        background-color: #495057;
+        border-radius: 3px;
+    }
 </style>
 {% endblock %}
 
@@ -365,36 +475,289 @@
             </div>
             
             <!-- Node Detail Card (initially hidden) -->
-            <div id="node-detail-card" class="card mb-4 shadow-sm d-none">
-                <div class="card-header bg-dark">
-                    <h5 class="mb-0">Node Details</h5>
-                </div>
-                <div class="card-body">
-                    <h6 id="selected-node-label" class="border-bottom pb-2">-</h6>
-                    
-                    <div class="small mb-3">
-                        <strong>Category:</strong> <span id="selected-node-category">-</span>
-                    </div>
-                    
-                    <div id="node-connections" class="mb-3">
-                        <h6>Connections:</h6>
-                        
-                        <div id="incoming-connections" class="mb-2">
-                            <small class="text-muted d-block mb-1">Incoming:</small>
-                            <ul class="list-group list-group-flush small" id="incoming-connections-list">
-                            </ul>
+            <!-- Contextual Info Panels -->
+            <div class="mb-4">
+                <!-- Tabs for Node and Relationship Details -->
+                <ul class="nav nav-tabs nav-fill" id="contextInfoTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="node-tab" data-bs-toggle="tab" data-bs-target="#node-panel" type="button" role="tab" aria-controls="node-panel" aria-selected="true">
+                            <i class="fas fa-dot-circle me-1"></i> Node Details
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="relationship-tab" data-bs-toggle="tab" data-bs-target="#relationship-panel" type="button" role="tab" aria-controls="relationship-panel" aria-selected="false">
+                            <i class="fas fa-exchange-alt me-1"></i> Relationship Details
+                        </button>
+                    </li>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content" id="contextInfoTabContent">
+                    <!-- Node Details Panel -->
+                    <div class="tab-pane fade show active" id="node-panel" role="tabpanel" aria-labelledby="node-tab">
+                        <div id="node-detail-card" class="card shadow-sm d-none">
+                            <div class="card-header bg-dark d-flex justify-content-between">
+                                <h5 class="mb-0">Node Details</h5>
+                                <span class="badge bg-info" id="selected-node-id"></span>
+                            </div>
+                            <div class="card-body">
+                                <!-- Node Identity -->
+                                <div class="mb-3">
+                                    <h6 id="selected-node-label" class="border-bottom pb-2 text-info">-</h6>
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <div>
+                                            <span class="badge bg-secondary me-2" id="selected-node-category">-</span>
+                                            <small class="text-muted" id="selected-node-created-date"></small>
+                                        </div>
+                                        <div id="node-metrics-badge" class="badge bg-dark border border-info px-2 py-1">
+                                            <small>Centrality: <span id="selected-node-centrality">-</span></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Node Properties -->
+                                <div class="mb-3">
+                                    <h6 class="d-flex justify-content-between align-items-center">
+                                        <span>Properties</span>
+                                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#nodePropertiesCollapse">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                    </h6>
+                                    <div class="collapse show" id="nodePropertiesCollapse">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-dark table-bordered mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Property</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="node-properties-table">
+                                                    <tr>
+                                                        <td colspan="2" class="text-center text-muted">No properties available</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Node Connections -->
+                                <div id="node-connections" class="mb-3">
+                                    <h6 class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Connections</span>
+                                        <span class="badge bg-secondary" id="total-connections-badge">0</span>
+                                    </h6>
+                                    
+                                    <!-- Connection Tabs -->
+                                    <ul class="nav nav-pills nav-fill small mb-3" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="incoming-tab" data-bs-toggle="pill" data-bs-target="#incoming-connections" type="button" role="tab">
+                                                <i class="fas fa-arrow-down me-1"></i> Incoming <span class="badge bg-dark" id="incoming-count">0</span>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="outgoing-tab" data-bs-toggle="pill" data-bs-target="#outgoing-connections" type="button" role="tab">
+                                                <i class="fas fa-arrow-up me-1"></i> Outgoing <span class="badge bg-dark" id="outgoing-count">0</span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- Connection Content -->
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="incoming-connections" role="tabpanel">
+                                            <div class="connection-scroll" style="max-height: 200px; overflow-y: auto;">
+                                                <ul class="list-group list-group-flush" id="incoming-connections-list">
+                                                    <li class="list-group-item bg-dark text-muted">Select a node to view connections</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="outgoing-connections" role="tabpanel">
+                                            <div class="connection-scroll" style="max-height: 200px; overflow-y: auto;">
+                                                <ul class="list-group list-group-flush" id="outgoing-connections-list">
+                                                    <li class="list-group-item bg-dark text-muted">Select a node to view connections</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Node Insights -->
+                                <div class="mb-3">
+                                    <h6>Node Insights</h6>
+                                    <div class="p-2 border border-secondary rounded bg-dark">
+                                        <div id="node-insights">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3">
+                                                    <div class="progress-ring">
+                                                        <svg width="40" height="40">
+                                                            <circle class="progress-ring-circle-bg" cx="20" cy="20" r="15" />
+                                                            <circle class="progress-ring-circle" id="node-importance-circle" cx="20" cy="20" r="15" 
+                                                                stroke-dasharray="94.2" stroke-dashoffset="94.2" />
+                                                        </svg>
+                                                        <span class="progress-text" id="node-importance-value">-</span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-1">Node Importance</h6>
+                                                    <p class="mb-0 small text-muted">Based on connectivity and centrality metrics</p>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 small" id="node-importance-description">
+                                                Select a node to view its importance in the graph.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="d-flex gap-2">
+                                    <button id="focus-selected-node" class="btn btn-sm btn-outline-info flex-grow-1">
+                                        <i class="fas fa-crosshairs me-1"></i> Focus
+                                    </button>
+                                    <button id="expand-selected-node" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                                        <i class="fas fa-project-diagram me-1"></i> Expand
+                                    </button>
+                                    <button id="export-node-data" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                        <i class="fas fa-file-export me-1"></i> Export
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div id="outgoing-connections">
-                            <small class="text-muted d-block mb-1">Outgoing:</small>
-                            <ul class="list-group list-group-flush small" id="outgoing-connections-list">
-                            </ul>
+                        <!-- Node Details Placeholder -->
+                        <div id="node-details-placeholder" class="card shadow-sm bg-dark">
+                            <div class="card-body text-center py-5">
+                                <div class="mb-3">
+                                    <i class="fas fa-dot-circle fa-3x text-muted"></i>
+                                </div>
+                                <h5 class="text-muted mb-3">Node Details</h5>
+                                <p class="text-muted mb-0">Select a node in the graph to view detailed information</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <button id="focus-selected-node" class="btn btn-sm btn-outline-info w-100 mb-2">
-                        <i class="fas fa-crosshairs me-1"></i> Focus on This Node
-                    </button>
+                    <!-- Relationship Details Panel -->
+                    <div class="tab-pane fade" id="relationship-panel" role="tabpanel" aria-labelledby="relationship-tab">
+                        <div id="relationship-detail-card" class="card shadow-sm d-none">
+                            <div class="card-header bg-dark d-flex justify-content-between">
+                                <h5 class="mb-0">Relationship Details</h5>
+                                <span class="badge bg-info" id="selected-relationship-id"></span>
+                            </div>
+                            <div class="card-body">
+                                <!-- Relationship Type -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-warning py-2 px-3 me-2" id="selected-relationship-type">-</span>
+                                        <span class="text-muted small" id="selected-relationship-created-date"></span>
+                                    </div>
+                                    <div class="relationship-visualization mt-3 p-3 border border-secondary rounded bg-dark text-center">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="node-box" id="relationship-source-node">
+                                                Source
+                                            </div>
+                                            <div class="arrow-container mx-3">
+                                                <div class="arrow-line"></div>
+                                                <div class="arrow-head"></div>
+                                                <span class="relationship-label" id="relationship-label-display">Relation</span>
+                                            </div>
+                                            <div class="node-box" id="relationship-target-node">
+                                                Target
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Relationship Properties -->
+                                <div class="mb-3">
+                                    <h6 class="d-flex justify-content-between align-items-center">
+                                        <span>Properties</span>
+                                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#relationshipPropertiesCollapse">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                    </h6>
+                                    <div class="collapse show" id="relationshipPropertiesCollapse">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-dark table-bordered mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Property</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="relationship-properties-table">
+                                                    <tr>
+                                                        <td colspan="2" class="text-center text-muted">No properties available</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Relationship Semantics -->
+                                <div class="mb-3">
+                                    <h6>Relationship Semantics</h6>
+                                    <div class="p-3 border border-secondary rounded bg-dark">
+                                        <div id="relationship-semantics-content">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <i class="fas fa-info-circle text-info"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="mb-0 small" id="relationship-description">
+                                                        Select a relationship to view its semantic description.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="small mt-2 pt-2 border-top border-secondary">
+                                                <p class="mb-0 text-muted" id="relationship-additional-info">
+                                                    Additional information about this relationship will appear here.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Similar Relationships -->
+                                <div class="mb-3">
+                                    <h6 class="d-flex justify-content-between align-items-center">
+                                        <span>Similar Relationships</span>
+                                        <span class="badge bg-secondary" id="similar-relationships-count">0</span>
+                                    </h6>
+                                    <ul class="list-group list-group-flush small" id="similar-relationships-list">
+                                        <li class="list-group-item bg-dark text-muted">
+                                            Select a relationship to view similar patterns
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="d-flex gap-2">
+                                    <button id="highlight-relationship" class="btn btn-sm btn-outline-info flex-grow-1">
+                                        <i class="fas fa-highlighter me-1"></i> Highlight
+                                    </button>
+                                    <button id="find-similar-relationships" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                                        <i class="fas fa-search me-1"></i> Find Similar
+                                    </button>
+                                    <button id="export-relationship-data" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                        <i class="fas fa-file-export me-1"></i> Export
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Relationship Details Placeholder -->
+                        <div id="relationship-details-placeholder" class="card shadow-sm bg-dark">
+                            <div class="card-body text-center py-5">
+                                <div class="mb-3">
+                                    <i class="fas fa-exchange-alt fa-3x text-muted"></i>
+                                </div>
+                                <h5 class="text-muted mb-3">Relationship Details</h5>
+                                <p class="text-muted mb-0">Select a relationship (edge) in the graph to view detailed information</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
