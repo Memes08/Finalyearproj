@@ -721,8 +721,10 @@
                         let nodeMap = {};
                         let nodeTypes = new Set(); // Track node types for coloring
                         
-                        // Only process relationships if result exists and contains relationships
-                        {% if result is defined and result and "Found these relationships:" in result %}
+                        // We need to separate the Jinja2 processing from JavaScript execution
+                        // Create initial nodes and links arrays
+                        {% if result %}
+                            {% if "Found these relationships:" in result %}
                             {% for line in result.split('\n')[1:] %}
                                 {% if line.strip() and "[" in line and "]" in line %}
                                     {% set parts = line.replace('- ', '').split('[') %}
@@ -770,6 +772,7 @@
                                     });
                                 {% endif %}
                             {% endfor %}
+                            {% endif %}
                         {% endif %}
                         
                         const width = container.clientWidth;
