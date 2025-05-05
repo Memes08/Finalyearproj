@@ -1,0 +1,2722 @@
+entity1,relation,entity2
+Toy Story,HAS_ACTOR,Jim Varney
+Toy Story,HAS_ACTOR,Tim Allen
+Toy Story,HAS_ACTOR,Tom Hanks
+Toy Story,HAS_ACTOR,Don Rickles
+Toy Story,HAS_DIRECTOR,John Lasseter
+Toy Story,IN_GENRE,Adventure
+Toy Story,IN_GENRE,Animation
+Toy Story,IN_GENRE,Children
+Toy Story,IN_GENRE,Comedy
+Toy Story,IN_GENRE,Fantasy
+Toy Story,RELEASED_ON,1995-11-22
+Toy Story,HAS_IMDB_RATING,8.3
+Jumanji,HAS_ACTOR,Robin Williams
+Jumanji,HAS_ACTOR,Bradley Pierce
+Jumanji,HAS_ACTOR,Kirsten Dunst
+Jumanji,HAS_ACTOR,Jonathan Hyde
+Jumanji,HAS_DIRECTOR,Joe Johnston
+Jumanji,IN_GENRE,Adventure
+Jumanji,IN_GENRE,Children
+Jumanji,IN_GENRE,Fantasy
+Jumanji,RELEASED_ON,1995-12-15
+Jumanji,HAS_IMDB_RATING,6.9
+Grumpier Old Men,HAS_ACTOR,Walter Matthau
+Grumpier Old Men,HAS_ACTOR,Ann-Margret
+Grumpier Old Men,HAS_ACTOR,Jack Lemmon
+Grumpier Old Men,HAS_ACTOR,Sophia Loren
+Grumpier Old Men,HAS_DIRECTOR,Howard Deutch
+Grumpier Old Men,IN_GENRE,Comedy
+Grumpier Old Men,IN_GENRE,Romance
+Grumpier Old Men,RELEASED_ON,1995-12-22
+Grumpier Old Men,HAS_IMDB_RATING,6.6
+Waiting to Exhale,HAS_ACTOR,Whitney Houston
+Waiting to Exhale,HAS_ACTOR,Lela Rochon
+Waiting to Exhale,HAS_ACTOR,Angela Bassett
+Waiting to Exhale,HAS_ACTOR,Loretta Devine
+Waiting to Exhale,HAS_DIRECTOR,Forest Whitaker
+Waiting to Exhale,IN_GENRE,Romance
+Waiting to Exhale,IN_GENRE,Drama
+Waiting to Exhale,IN_GENRE,Comedy
+Waiting to Exhale,RELEASED_ON,1995-12-22
+Waiting to Exhale,HAS_IMDB_RATING,5.6
+Father of the Bride Part II,HAS_ACTOR,Steve Martin
+Father of the Bride Part II,HAS_ACTOR,Kimberly Williams-Paisley
+Father of the Bride Part II,HAS_ACTOR,Diane Keaton
+Father of the Bride Part II,HAS_ACTOR,Martin Short
+Father of the Bride Part II,HAS_DIRECTOR,Charles Shyer
+Father of the Bride Part II,IN_GENRE,Comedy
+Father of the Bride Part II,RELEASED_ON,1995-12-08
+Father of the Bride Part II,HAS_IMDB_RATING,5.9
+Heat,HAS_ACTOR,Al Pacino
+Heat,HAS_ACTOR,Robert De Niro
+Heat,HAS_ACTOR,Val Kilmer
+Heat,HAS_ACTOR,Jon Voight
+Heat,HAS_DIRECTOR,Michael Mann
+Heat,IN_GENRE,Action
+Heat,IN_GENRE,Crime
+Heat,IN_GENRE,Thriller
+Heat,RELEASED_ON,1995-12-15
+Heat,HAS_IMDB_RATING,8.2
+Sabrina,HAS_ACTOR,Julia Ormond
+Sabrina,HAS_ACTOR,Harrison Ford
+Sabrina,HAS_ACTOR,Nancy Marchand
+Sabrina,HAS_ACTOR,Greg Kinnear
+Sabrina,HAS_DIRECTOR,Sydney Pollack
+Sabrina,IN_GENRE,Comedy
+Sabrina,IN_GENRE,Romance
+Sabrina,RELEASED_ON,1995-12-15
+Sabrina,HAS_IMDB_RATING,6.2
+Tom and Huck,HAS_ACTOR,Jonathan Taylor Thomas
+Tom and Huck,HAS_ACTOR,Brad Renfro
+Tom and Huck,HAS_ACTOR,Eric Schweig
+Tom and Huck,HAS_ACTOR,Charles Rocket
+Tom and Huck,HAS_DIRECTOR,Peter Hewitt
+Tom and Huck,IN_GENRE,Children
+Tom and Huck,IN_GENRE,Adventure
+Tom and Huck,RELEASED_ON,1995-12-22
+Tom and Huck,HAS_IMDB_RATING,5.6
+Sudden Death,HAS_ACTOR,Jean-Claude Van Damme
+Sudden Death,HAS_ACTOR,Powers Boothe
+Sudden Death,HAS_ACTOR,Raymond J. Barry
+Sudden Death,HAS_ACTOR,Whittni Wright
+Sudden Death,HAS_DIRECTOR,Peter Hyams
+Sudden Death,IN_GENRE,Action
+Sudden Death,RELEASED_ON,1995-12-22
+Sudden Death,HAS_IMDB_RATING,5.7
+GoldenEye,HAS_ACTOR,Pierce Brosnan
+GoldenEye,HAS_ACTOR,Famke Janssen
+GoldenEye,HAS_ACTOR,Sean Bean
+GoldenEye,HAS_ACTOR,Izabella Scorupco
+GoldenEye,HAS_DIRECTOR,Martin Campbell
+GoldenEye,IN_GENRE,Adventure
+GoldenEye,IN_GENRE,Action
+GoldenEye,IN_GENRE,Thriller
+GoldenEye,RELEASED_ON,1995-11-17
+GoldenEye,HAS_IMDB_RATING,7.2
+"American President, The",HAS_ACTOR,Martin Sheen
+"American President, The",HAS_ACTOR,Michael J. Fox
+"American President, The",HAS_ACTOR,Michael Douglas
+"American President, The",HAS_ACTOR,Annette Bening
+"American President, The",HAS_DIRECTOR,Rob Reiner
+"American President, The",IN_GENRE,Comedy
+"American President, The",IN_GENRE,Romance
+"American President, The",IN_GENRE,Drama
+"American President, The",RELEASED_ON,1995-11-17
+"American President, The",HAS_IMDB_RATING,6.8
+Dracula: Dead and Loving It,HAS_ACTOR,Peter MacNicol
+Dracula: Dead and Loving It,HAS_ACTOR,Leslie Nielsen
+Dracula: Dead and Loving It,HAS_ACTOR,Steven Weber
+Dracula: Dead and Loving It,HAS_ACTOR,Amy Yasbeck
+Dracula: Dead and Loving It,HAS_DIRECTOR,Mel Brooks
+Dracula: Dead and Loving It,IN_GENRE,Comedy
+Dracula: Dead and Loving It,IN_GENRE,Horror
+Dracula: Dead and Loving It,RELEASED_ON,1995-12-22
+Dracula: Dead and Loving It,HAS_IMDB_RATING,5.8
+Balto,HAS_ACTOR,Kevin Bacon
+Balto,HAS_ACTOR,Bob Hoskins
+Balto,HAS_ACTOR,Jim Cummings
+Balto,HAS_ACTOR,Bridget Fonda
+Balto,HAS_DIRECTOR,Simon Wells
+Balto,IN_GENRE,Children
+Balto,IN_GENRE,Adventure
+Balto,IN_GENRE,Animation
+Balto,RELEASED_ON,1995-12-22
+Balto,HAS_IMDB_RATING,7.1
+Nixon,HAS_ACTOR,Ed Harris
+Nixon,HAS_ACTOR,Anthony Hopkins
+Nixon,HAS_ACTOR,Powers Boothe
+Nixon,HAS_ACTOR,Joan Allen
+Nixon,HAS_DIRECTOR,Oliver Stone
+Nixon,IN_GENRE,Drama
+Nixon,RELEASED_ON,1996-01-05
+Nixon,HAS_IMDB_RATING,7.1
+Cutthroat Island,HAS_ACTOR,Geena Davis
+Cutthroat Island,HAS_ACTOR,Frank Langella
+Cutthroat Island,HAS_ACTOR,Matthew Modine
+Cutthroat Island,HAS_ACTOR,Maury Chaykin
+Cutthroat Island,HAS_DIRECTOR,Renny Harlin
+Cutthroat Island,IN_GENRE,Romance
+Cutthroat Island,IN_GENRE,Adventure
+Cutthroat Island,IN_GENRE,Action
+Cutthroat Island,RELEASED_ON,1995-12-22
+Cutthroat Island,HAS_IMDB_RATING,5.6
+Casino,HAS_ACTOR,Robert De Niro
+Casino,HAS_ACTOR,Joe Pesci
+Casino,HAS_ACTOR,Sharon Stone
+Casino,HAS_ACTOR,James Woods
+Casino,HAS_DIRECTOR,Martin Scorsese
+Casino,IN_GENRE,Drama
+Casino,IN_GENRE,Crime
+Casino,RELEASED_ON,1995-11-22
+Casino,HAS_IMDB_RATING,8.2
+Sense and Sensibility,HAS_ACTOR,James Fleet
+Sense and Sensibility,HAS_ACTOR,Kate Winslet
+Sense and Sensibility,HAS_ACTOR,Tom Wilkinson
+Sense and Sensibility,HAS_ACTOR,Harriet Walter
+Sense and Sensibility,HAS_DIRECTOR,Ang Lee
+Sense and Sensibility,IN_GENRE,Drama
+Sense and Sensibility,IN_GENRE,Romance
+Sense and Sensibility,RELEASED_ON,1996-01-26
+Sense and Sensibility,HAS_IMDB_RATING,7.7
+Four Rooms,HAS_ACTOR,Amanda De Cadenet
+Four Rooms,HAS_ACTOR,Valeria Golino
+Four Rooms,HAS_ACTOR,Madonna
+Four Rooms,HAS_ACTOR,Sammi Davis
+Four Rooms,HAS_DIRECTOR,Allison Anders|Robert Rodriguez|Quentin Tarantino| Alexandre Rockwell
+Four Rooms,IN_GENRE,Comedy
+Four Rooms,RELEASED_ON,1995-12-25
+Four Rooms,HAS_IMDB_RATING,6.7
+Ace Ventura: When Nature Calls,HAS_ACTOR,Jim Carrey
+Ace Ventura: When Nature Calls,HAS_ACTOR,Ian McNeice
+Ace Ventura: When Nature Calls,HAS_ACTOR,Simon Callow
+Ace Ventura: When Nature Calls,HAS_ACTOR,Maynard Eziashi
+Ace Ventura: When Nature Calls,HAS_DIRECTOR,Steve Oedekerk
+Ace Ventura: When Nature Calls,IN_GENRE,Comedy
+Ace Ventura: When Nature Calls,RELEASED_ON,1995-11-10
+Ace Ventura: When Nature Calls,HAS_IMDB_RATING,6.3
+Money Train,HAS_ACTOR,Wesley Snipes
+Money Train,HAS_ACTOR,Robert Blake
+Money Train,HAS_ACTOR,Woody Harrelson
+Money Train,HAS_ACTOR,Jennifer Lopez
+Money Train,HAS_DIRECTOR,Joseph Ruben
+Money Train,IN_GENRE,Crime
+Money Train,IN_GENRE,Comedy
+Money Train,IN_GENRE,Thriller
+Money Train,IN_GENRE,Drama
+Money Train,IN_GENRE,Action
+Money Train,RELEASED_ON,1995-11-22
+Money Train,HAS_IMDB_RATING,5.6
+Get Shorty,HAS_ACTOR,Danny DeVito
+Get Shorty,HAS_ACTOR,Gene Hackman
+Get Shorty,HAS_ACTOR,Rene Russo
+Get Shorty,HAS_ACTOR,John Travolta
+Get Shorty,HAS_DIRECTOR,Barry Sonnenfeld
+Get Shorty,IN_GENRE,Thriller
+Get Shorty,IN_GENRE,Crime
+Get Shorty,IN_GENRE,Comedy
+Get Shorty,RELEASED_ON,1995-10-20
+Get Shorty,HAS_IMDB_RATING,6.9
+Copycat,HAS_ACTOR,Sigourney Weaver
+Copycat,HAS_ACTOR,Holly Hunter
+Copycat,HAS_ACTOR,Dermot Mulroney
+Copycat,HAS_ACTOR,William McNamara
+Copycat,HAS_DIRECTOR,Jon Amiel
+Copycat,IN_GENRE,Drama
+Copycat,IN_GENRE,Horror
+Copycat,IN_GENRE,Mystery
+Copycat,IN_GENRE,Thriller
+Copycat,IN_GENRE,Crime
+Copycat,RELEASED_ON,1995-10-27
+Copycat,HAS_IMDB_RATING,6.6
+Assassins,HAS_ACTOR,Sylvester Stallone
+Assassins,HAS_ACTOR,Anatoli Davydov
+Assassins,HAS_ACTOR,Antonio Banderas
+Assassins,HAS_ACTOR,Julianne Moore
+Assassins,HAS_DIRECTOR,Richard Donner
+Assassins,IN_GENRE,Action
+Assassins,IN_GENRE,Crime
+Assassins,IN_GENRE,Thriller
+Assassins,RELEASED_ON,1995-10-06
+Assassins,HAS_IMDB_RATING,6.3
+Powder,HAS_ACTOR,Mary Steenburgen
+Powder,HAS_ACTOR,Jeff Goldblum
+Powder,HAS_ACTOR,Lance Henriksen
+Powder,HAS_ACTOR,Sean Patrick Flanery
+Powder,HAS_DIRECTOR,Victor Salva
+Powder,IN_GENRE,Sci-Fi
+Powder,IN_GENRE,Drama
+Powder,RELEASED_ON,1995-10-27
+Powder,HAS_IMDB_RATING,6.5
+Leaving Las Vegas,HAS_ACTOR,Nicolas Cage
+Leaving Las Vegas,HAS_ACTOR,Elisabeth Shue
+Leaving Las Vegas,HAS_ACTOR,Julian Sands
+Leaving Las Vegas,HAS_ACTOR,Richard Lewis
+Leaving Las Vegas,HAS_DIRECTOR,Mike Figgis
+Leaving Las Vegas,IN_GENRE,Romance
+Leaving Las Vegas,IN_GENRE,Drama
+Leaving Las Vegas,RELEASED_ON,1996-02-09
+Leaving Las Vegas,HAS_IMDB_RATING,7.6
+Othello,HAS_ACTOR,Irène Jacob
+Othello,HAS_ACTOR,Laurence Fishburne
+Othello,HAS_ACTOR,Kenneth Branagh
+Othello,HAS_ACTOR,Nathaniel Parker
+Othello,HAS_DIRECTOR,Oliver Parker
+Othello,IN_GENRE,Drama
+Othello,RELEASED_ON,1996-01-19
+Othello,HAS_IMDB_RATING,7.0
+Now and Then,HAS_ACTOR,Melanie Griffith
+Now and Then,HAS_ACTOR,Thora Birch
+Now and Then,HAS_ACTOR,Rosie O'Donnell
+Now and Then,HAS_ACTOR,Christina Ricci
+Now and Then,HAS_DIRECTOR,Lesli Linka Glatter
+Now and Then,IN_GENRE,Drama
+Now and Then,IN_GENRE,Children
+Now and Then,RELEASED_ON,1995-10-20
+Now and Then,HAS_IMDB_RATING,6.7
+Persuasion,HAS_ACTOR,Amanda Root
+Persuasion,HAS_ACTOR,Susan Fleetwood
+Persuasion,HAS_ACTOR,Ciarán Hinds
+Persuasion,HAS_ACTOR,Corin Redgrave
+Persuasion,HAS_DIRECTOR,Roger Michell
+Persuasion,IN_GENRE,Romance
+Persuasion,IN_GENRE,Drama
+Persuasion,RELEASED_ON,1995-09-27
+Persuasion,HAS_IMDB_RATING,7.7
+"City of Lost Children, The (Cité des enfants perdus, La)",HAS_ACTOR,Ron Perlman
+"City of Lost Children, The (Cité des enfants perdus, La)",HAS_ACTOR,Judith Vittet
+"City of Lost Children, The (Cité des enfants perdus, La)",HAS_ACTOR,Daniel Emilfork
+"City of Lost Children, The (Cité des enfants perdus, La)",HAS_ACTOR,Dominique Pinon
+"City of Lost Children, The (Cité des enfants perdus, La)",HAS_DIRECTOR,Jean-Pierre Jeunet|Marc Caro
+"City of Lost Children, The (Cité des enfants perdus, La)",IN_GENRE,Adventure
+"City of Lost Children, The (Cité des enfants perdus, La)",IN_GENRE,Drama
+"City of Lost Children, The (Cité des enfants perdus, La)",IN_GENRE,Fantasy
+"City of Lost Children, The (Cité des enfants perdus, La)",IN_GENRE,Mystery
+"City of Lost Children, The (Cité des enfants perdus, La)",IN_GENRE,Sci-Fi
+"City of Lost Children, The (Cité des enfants perdus, La)",RELEASED_ON,1995-12-15
+"City of Lost Children, The (Cité des enfants perdus, La)",HAS_IMDB_RATING,7.7
+Shanghai Triad (Yao a yao yao dao waipo qiao),HAS_ACTOR,Gong Li
+Shanghai Triad (Yao a yao yao dao waipo qiao),HAS_ACTOR,Li Baotian
+Shanghai Triad (Yao a yao yao dao waipo qiao),HAS_ACTOR,Wang Xiaoxiao
+Shanghai Triad (Yao a yao yao dao waipo qiao),HAS_ACTOR,Xuejian Li
+Shanghai Triad (Yao a yao yao dao waipo qiao),HAS_DIRECTOR,Yimou Zhang
+Shanghai Triad (Yao a yao yao dao waipo qiao),IN_GENRE,Drama
+Shanghai Triad (Yao a yao yao dao waipo qiao),IN_GENRE,Crime
+Shanghai Triad (Yao a yao yao dao waipo qiao),RELEASED_ON,1995-12-22
+Shanghai Triad (Yao a yao yao dao waipo qiao),HAS_IMDB_RATING,7.2
+Dangerous Minds,HAS_ACTOR,Michelle Pfeiffer
+Dangerous Minds,HAS_ACTOR,Robin Bartlett
+Dangerous Minds,HAS_ACTOR,George Dzundza
+Dangerous Minds,HAS_ACTOR,Courtney B. Vance
+Dangerous Minds,HAS_DIRECTOR,John N. Smith
+Dangerous Minds,IN_GENRE,Drama
+Dangerous Minds,RELEASED_ON,1995-08-11
+Dangerous Minds,HAS_IMDB_RATING,6.4
+Twelve Monkeys (a.k.a. 12 Monkeys),HAS_ACTOR,Bruce Willis
+Twelve Monkeys (a.k.a. 12 Monkeys),HAS_ACTOR,Jon Seda
+Twelve Monkeys (a.k.a. 12 Monkeys),HAS_ACTOR,Michael Chance
+Twelve Monkeys (a.k.a. 12 Monkeys),HAS_ACTOR,Joseph Melito
+Twelve Monkeys (a.k.a. 12 Monkeys),HAS_DIRECTOR,Terry Gilliam
+Twelve Monkeys (a.k.a. 12 Monkeys),IN_GENRE,Mystery
+Twelve Monkeys (a.k.a. 12 Monkeys),IN_GENRE,Sci-Fi
+Twelve Monkeys (a.k.a. 12 Monkeys),IN_GENRE,Thriller
+Twelve Monkeys (a.k.a. 12 Monkeys),RELEASED_ON,1996-01-05
+Twelve Monkeys (a.k.a. 12 Monkeys),HAS_IMDB_RATING,8.1
+Babe,HAS_ACTOR,Hugo Weaving
+Babe,HAS_ACTOR,Christine Cavanaugh
+Babe,HAS_ACTOR,Danny Mann
+Babe,HAS_ACTOR,Miriam Margolyes
+Babe,HAS_DIRECTOR,Chris Noonan
+Babe,IN_GENRE,Children
+Babe,IN_GENRE,Drama
+Babe,RELEASED_ON,1995-08-04
+Babe,HAS_IMDB_RATING,6.8
+Carrington,HAS_ACTOR,Steven Waddington
+Carrington,HAS_ACTOR,Emma Thompson
+Carrington,HAS_ACTOR,Samuel West
+Carrington,HAS_ACTOR,Jonathan Pryce
+Carrington,HAS_DIRECTOR,Christopher Hampton
+Carrington,IN_GENRE,Romance
+Carrington,IN_GENRE,Drama
+Carrington,RELEASED_ON,1995-11-10
+Carrington,HAS_IMDB_RATING,6.9
+Dead Man Walking,HAS_ACTOR,Susan Sarandon
+Dead Man Walking,HAS_ACTOR,Raymond J. Barry
+Dead Man Walking,HAS_ACTOR,Robert Prosky
+Dead Man Walking,HAS_ACTOR,Sean Penn
+Dead Man Walking,HAS_DIRECTOR,Tim Robbins
+Dead Man Walking,IN_GENRE,Drama
+Dead Man Walking,IN_GENRE,Crime
+Dead Man Walking,RELEASED_ON,1996-02-02
+Dead Man Walking,HAS_IMDB_RATING,7.6
+Across the Sea of Time,HAS_ACTOR,Victor Steinbach
+Across the Sea of Time,HAS_ACTOR,Peter Reznick
+Across the Sea of Time,HAS_ACTOR,John McDonough
+Across the Sea of Time,HAS_ACTOR,Avi Hoffman
+Across the Sea of Time,HAS_DIRECTOR,Stephen Low
+Across the Sea of Time,IN_GENRE,IMAX
+Across the Sea of Time,IN_GENRE,Documentary
+Across the Sea of Time,RELEASED_ON,1995-10-20
+Across the Sea of Time,HAS_IMDB_RATING,6.6
+It Takes Two,HAS_ACTOR,Kirstie Alley
+It Takes Two,HAS_ACTOR,Steve Guttenberg
+It Takes Two,HAS_ACTOR,Mary-Kate Olsen
+It Takes Two,HAS_ACTOR,Ashley Olsen
+It Takes Two,HAS_DIRECTOR,Andy Tennant
+It Takes Two,IN_GENRE,Comedy
+It Takes Two,IN_GENRE,Children
+It Takes Two,RELEASED_ON,1995-11-17
+It Takes Two,HAS_IMDB_RATING,5.7
+Clueless,HAS_ACTOR,Alicia Silverstone
+Clueless,HAS_ACTOR,Paul Rudd
+Clueless,HAS_ACTOR,Brittany Murphy
+Clueless,HAS_ACTOR,Stacey Dash
+Clueless,HAS_DIRECTOR,Amy Heckerling
+Clueless,IN_GENRE,Comedy
+Clueless,IN_GENRE,Romance
+Clueless,RELEASED_ON,1995-07-19
+Clueless,HAS_IMDB_RATING,6.8
+"Cry, the Beloved Country",HAS_ACTOR,James Earl Jones
+"Cry, the Beloved Country",HAS_ACTOR,Vusi Kunene
+"Cry, the Beloved Country",HAS_ACTOR,Richard Harris
+"Cry, the Beloved Country",HAS_ACTOR,Charles S. Dutton
+"Cry, the Beloved Country",HAS_DIRECTOR,Darrell James Roodt
+"Cry, the Beloved Country",IN_GENRE,Drama
+"Cry, the Beloved Country",RELEASED_ON,1995-12-15
+"Cry, the Beloved Country",HAS_IMDB_RATING,6.9
+Richard III,HAS_ACTOR,Ian McKellen
+Richard III,HAS_ACTOR,Jim Broadbent
+Richard III,HAS_ACTOR,Annette Bening
+Richard III,HAS_ACTOR,Robert Downey Jr.
+Richard III,HAS_DIRECTOR,Richard Loncraine
+Richard III,IN_GENRE,Drama
+Richard III,IN_GENRE,War
+Richard III,RELEASED_ON,1995-12-29
+Richard III,HAS_IMDB_RATING,7.5
+Dead Presidents,HAS_ACTOR,Larenz Tate
+Dead Presidents,HAS_ACTOR,Freddy Rodríguez
+Dead Presidents,HAS_ACTOR,Chris Tucker
+Dead Presidents,HAS_ACTOR,Keith David
+Dead Presidents,HAS_DIRECTOR,Albert Hughes| Allen Hughes
+Dead Presidents,IN_GENRE,Drama
+Dead Presidents,IN_GENRE,Action
+Dead Presidents,IN_GENRE,Crime
+Dead Presidents,RELEASED_ON,1995-10-06
+Dead Presidents,HAS_IMDB_RATING,6.8
+Restoration,HAS_ACTOR,Sam Neill
+Restoration,HAS_ACTOR,David Thewlis
+Restoration,HAS_ACTOR,Robert Downey Jr.
+Restoration,HAS_ACTOR,Polly Walker
+Restoration,HAS_DIRECTOR,Michael Hoffman
+Restoration,IN_GENRE,Drama
+Restoration,RELEASED_ON,1996-02-02
+Restoration,HAS_IMDB_RATING,6.7
+Mortal Kombat,HAS_ACTOR,Christopher Lambert
+Mortal Kombat,HAS_ACTOR,Linden Ashby
+Mortal Kombat,HAS_ACTOR,Robin Shou
+Mortal Kombat,HAS_ACTOR,Cary-Hiroyuki Tagawa
+Mortal Kombat,HAS_DIRECTOR,Paul W.S. Anderson
+Mortal Kombat,IN_GENRE,Adventure
+Mortal Kombat,IN_GENRE,Action
+Mortal Kombat,IN_GENRE,Fantasy
+Mortal Kombat,RELEASED_ON,1995-08-18
+Mortal Kombat,HAS_IMDB_RATING,5.8
+To Die For,HAS_ACTOR,Joaquin Phoenix
+To Die For,HAS_ACTOR,Matt Dillon
+To Die For,HAS_ACTOR,Casey Affleck
+To Die For,HAS_ACTOR,Nicole Kidman
+To Die For,HAS_DIRECTOR,Gus Van Sant
+To Die For,IN_GENRE,Drama
+To Die For,IN_GENRE,Thriller
+To Die For,IN_GENRE,Comedy
+To Die For,RELEASED_ON,1995-10-06
+To Die For,HAS_IMDB_RATING,6.8
+How to Make an American Quilt,HAS_ACTOR,Anne Bancroft
+How to Make an American Quilt,HAS_ACTOR,Winona Ryder
+How to Make an American Quilt,HAS_ACTOR,Adam Baldwin
+How to Make an American Quilt,HAS_ACTOR,Kate Capshaw
+How to Make an American Quilt,HAS_DIRECTOR,Jocelyn Moorhouse
+How to Make an American Quilt,IN_GENRE,Romance
+How to Make an American Quilt,IN_GENRE,Drama
+How to Make an American Quilt,RELEASED_ON,1995-10-06
+How to Make an American Quilt,HAS_IMDB_RATING,6.2
+Seven (a.k.a. Se7en),HAS_ACTOR,Morgan Freeman
+Seven (a.k.a. Se7en),HAS_ACTOR,Brad Pitt
+Seven (a.k.a. Se7en),HAS_ACTOR,Andrew Kevin Walker
+Seven (a.k.a. Se7en),HAS_ACTOR,Daniel Zacapa
+Seven (a.k.a. Se7en),HAS_DIRECTOR,David Fincher
+Seven (a.k.a. Se7en),IN_GENRE,Mystery
+Seven (a.k.a. Se7en),IN_GENRE,Thriller
+Seven (a.k.a. Se7en),RELEASED_ON,1995-09-22
+Seven (a.k.a. Se7en),HAS_IMDB_RATING,8.6
+Pocahontas,HAS_ACTOR,Mel Gibson
+Pocahontas,HAS_ACTOR,Irene Bedard
+Pocahontas,HAS_ACTOR,David Ogden Stiers
+Pocahontas,HAS_ACTOR,Judy Kuhn
+Pocahontas,HAS_DIRECTOR,Eric Goldberg|Mike Gabriel
+Pocahontas,IN_GENRE,Drama
+Pocahontas,IN_GENRE,Musical
+Pocahontas,IN_GENRE,Animation
+Pocahontas,IN_GENRE,Children
+Pocahontas,IN_GENRE,Romance
+Pocahontas,RELEASED_ON,1995-06-23
+Pocahontas,HAS_IMDB_RATING,6.6
+When Night Is Falling,HAS_ACTOR,Henry Czerny
+When Night Is Falling,HAS_ACTOR,Rachael Crawford
+When Night Is Falling,HAS_ACTOR,David Fox
+When Night Is Falling,HAS_ACTOR,Pascale Bussières
+When Night Is Falling,HAS_DIRECTOR,Patricia Rozema
+When Night Is Falling,IN_GENRE,Drama
+When Night Is Falling,IN_GENRE,Romance
+When Night Is Falling,RELEASED_ON,1995-11-17
+When Night Is Falling,HAS_IMDB_RATING,6.8
+"Usual Suspects, The",HAS_ACTOR,Gabriel Byrne
+"Usual Suspects, The",HAS_ACTOR,Stephen Baldwin
+"Usual Suspects, The",HAS_ACTOR,Benicio Del Toro
+"Usual Suspects, The",HAS_ACTOR,Kevin Pollak
+"Usual Suspects, The",HAS_DIRECTOR,Bryan Singer
+"Usual Suspects, The",IN_GENRE,Thriller
+"Usual Suspects, The",IN_GENRE,Mystery
+"Usual Suspects, The",IN_GENRE,Crime
+"Usual Suspects, The",RELEASED_ON,1995-09-15
+"Usual Suspects, The",HAS_IMDB_RATING,8.6
+Mighty Aphrodite,HAS_ACTOR,Woody Allen
+Mighty Aphrodite,HAS_ACTOR,Mira Sorvino
+Mighty Aphrodite,HAS_ACTOR,Rene Ceballos
+Mighty Aphrodite,HAS_ACTOR,George De La Pena
+Mighty Aphrodite,HAS_DIRECTOR,Woody Allen
+Mighty Aphrodite,IN_GENRE,Drama
+Mighty Aphrodite,IN_GENRE,Comedy
+Mighty Aphrodite,IN_GENRE,Romance
+Mighty Aphrodite,RELEASED_ON,1995-11-10
+Mighty Aphrodite,HAS_IMDB_RATING,7.1
+Lamerica,HAS_ACTOR,Enrico Lo Verso
+Lamerica,HAS_ACTOR,Carmelo Di Mazzarelli
+Lamerica,HAS_ACTOR,Piro Milkani
+Lamerica,HAS_ACTOR,Michele Placido
+Lamerica,HAS_DIRECTOR,Gianni Amelio
+Lamerica,IN_GENRE,Adventure
+Lamerica,IN_GENRE,Drama
+Lamerica,RELEASED_ON,1995-10-04
+Lamerica,HAS_IMDB_RATING,7.6
+"Big Green, The",HAS_ACTOR,Olivia d'Abo
+"Big Green, The",HAS_ACTOR,Jay O. Sanders
+"Big Green, The",HAS_ACTOR,Steve Guttenberg
+"Big Green, The",HAS_ACTOR,John Terry
+"Big Green, The",HAS_DIRECTOR,Holly Goldberg Sloan
+"Big Green, The",IN_GENRE,Children
+"Big Green, The",IN_GENRE,Comedy
+"Big Green, The",RELEASED_ON,1995-09-29
+"Big Green, The",HAS_IMDB_RATING,5.4
+Georgia,HAS_ACTOR,Jennifer Jason Leigh
+Georgia,HAS_ACTOR,Max Perlich
+Georgia,HAS_ACTOR,Mare Winningham
+Georgia,HAS_ACTOR,Ted Levine
+Georgia,HAS_DIRECTOR,Ulu Grosbard
+Georgia,IN_GENRE,Drama
+Georgia,RELEASED_ON,1995-12-08
+Georgia,HAS_IMDB_RATING,6.4
+Home for the Holidays,HAS_ACTOR,Holly Hunter
+Home for the Holidays,HAS_ACTOR,Charles Durning
+Home for the Holidays,HAS_ACTOR,Robert Downey Jr.
+Home for the Holidays,HAS_ACTOR,Anne Bancroft
+Home for the Holidays,HAS_DIRECTOR,Jodie Foster
+Home for the Holidays,IN_GENRE,Drama
+Home for the Holidays,RELEASED_ON,1995-11-03
+Home for the Holidays,HAS_IMDB_RATING,6.6
+"Postman, The (Postino, Il)",HAS_ACTOR,Philippe Noiret
+"Postman, The (Postino, Il)",HAS_ACTOR,Renato Scarpa
+"Postman, The (Postino, Il)",HAS_ACTOR,Maria Grazia Cucinotta
+"Postman, The (Postino, Il)",HAS_ACTOR,Massimo Troisi
+"Postman, The (Postino, Il)",HAS_DIRECTOR,Michael Radford
+"Postman, The (Postino, Il)",IN_GENRE,Comedy
+"Postman, The (Postino, Il)",IN_GENRE,Romance
+"Postman, The (Postino, Il)",IN_GENRE,Drama
+"Postman, The (Postino, Il)",RELEASED_ON,1996-03-22
+"Postman, The (Postino, Il)",HAS_IMDB_RATING,7.8
+"Confessional, The (Confessionnal, Le)",HAS_ACTOR,Patrick Goyette
+"Confessional, The (Confessionnal, Le)",HAS_ACTOR,Jean-Louis Millette
+"Confessional, The (Confessionnal, Le)",HAS_ACTOR,Kristin Scott Thomas
+"Confessional, The (Confessionnal, Le)",HAS_ACTOR,Lothaire Bluteau
+"Confessional, The (Confessionnal, Le)",HAS_DIRECTOR,Robert Lepage
+"Confessional, The (Confessionnal, Le)",IN_GENRE,Drama
+"Confessional, The (Confessionnal, Le)",IN_GENRE,Mystery
+"Confessional, The (Confessionnal, Le)",RELEASED_ON,1996-08-16
+"Confessional, The (Confessionnal, Le)",HAS_IMDB_RATING,7.6
+"Indian in the Cupboard, The",HAS_ACTOR,Hal Scardino
+"Indian in the Cupboard, The",HAS_ACTOR,Litefoot
+"Indian in the Cupboard, The",HAS_ACTOR,Lindsay Crouse
+"Indian in the Cupboard, The",HAS_ACTOR,Richard Jenkins
+"Indian in the Cupboard, The",HAS_DIRECTOR,Frank Oz
+"Indian in the Cupboard, The",IN_GENRE,Fantasy
+"Indian in the Cupboard, The",IN_GENRE,Adventure
+"Indian in the Cupboard, The",IN_GENRE,Children
+"Indian in the Cupboard, The",RELEASED_ON,1995-07-14
+"Indian in the Cupboard, The",HAS_IMDB_RATING,5.9
+Eye for an Eye,HAS_ACTOR,Sally Field
+Eye for an Eye,HAS_ACTOR,Ed Harris
+Eye for an Eye,HAS_ACTOR,Olivia Burnette
+Eye for an Eye,HAS_ACTOR,Alexandra Kyle
+Eye for an Eye,HAS_DIRECTOR,John Schlesinger
+Eye for an Eye,IN_GENRE,Drama
+Eye for an Eye,IN_GENRE,Thriller
+Eye for an Eye,RELEASED_ON,1996-01-12
+Eye for an Eye,HAS_IMDB_RATING,6.1
+Mr. Holland's Opus,HAS_ACTOR,Jay Thomas
+Mr. Holland's Opus,HAS_ACTOR,Glenne Headly
+Mr. Holland's Opus,HAS_ACTOR,Olympia Dukakis
+Mr. Holland's Opus,HAS_ACTOR,Richard Dreyfuss
+Mr. Holland's Opus,HAS_DIRECTOR,Stephen Herek
+Mr. Holland's Opus,IN_GENRE,Drama
+Mr. Holland's Opus,RELEASED_ON,1996-01-19
+Mr. Holland's Opus,HAS_IMDB_RATING,7.3
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,HAS_ACTOR,Chris Spencer
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,HAS_ACTOR,Tracey Cherelle Jones
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,HAS_ACTOR,Marlon Wayans
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,HAS_ACTOR,Shawn Wayans
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,HAS_DIRECTOR,Paris Barclay
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,IN_GENRE,Comedy
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,IN_GENRE,Crime
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,RELEASED_ON,1996-01-12
+Don't Be a Menace to South Central While Drinking Your Juice in the Hood,HAS_IMDB_RATING,6.6
+Two if by Sea,HAS_ACTOR,Denis Leary
+Two if by Sea,HAS_ACTOR,Sandra Bullock
+Two if by Sea,HAS_ACTOR,Stephen Dillane
+Two if by Sea,HAS_ACTOR,Yaphet Kotto
+Two if by Sea,HAS_DIRECTOR,Bill Bennett
+Two if by Sea,IN_GENRE,Comedy
+Two if by Sea,IN_GENRE,Romance
+Two if by Sea,RELEASED_ON,1996-01-12
+Two if by Sea,HAS_IMDB_RATING,5.2
+Bio-Dome,HAS_ACTOR,William Atherton
+Bio-Dome,HAS_ACTOR,Denise Dowse
+Bio-Dome,HAS_ACTOR,Dara Tomanovich
+Bio-Dome,HAS_ACTOR,Kevin West
+Bio-Dome,HAS_DIRECTOR,Jason Bloom
+Bio-Dome,IN_GENRE,Comedy
+Bio-Dome,RELEASED_ON,1996-01-12
+Bio-Dome,HAS_IMDB_RATING,4.3
+Lawnmower Man 2: Beyond Cyberspace,HAS_ACTOR,Patrick Bergin
+Lawnmower Man 2: Beyond Cyberspace,HAS_ACTOR,Matt Frewer
+Lawnmower Man 2: Beyond Cyberspace,HAS_ACTOR,Ely Pouget
+Lawnmower Man 2: Beyond Cyberspace,HAS_ACTOR,Austin O'Brien
+Lawnmower Man 2: Beyond Cyberspace,HAS_DIRECTOR,Farhad Mann
+Lawnmower Man 2: Beyond Cyberspace,IN_GENRE,Thriller
+Lawnmower Man 2: Beyond Cyberspace,IN_GENRE,Sci-Fi
+Lawnmower Man 2: Beyond Cyberspace,IN_GENRE,Action
+Lawnmower Man 2: Beyond Cyberspace,RELEASED_ON,1996-01-12
+Lawnmower Man 2: Beyond Cyberspace,HAS_IMDB_RATING,2.4
+French Twist (Gazon maudit),HAS_ACTOR,Ticky Holgado
+French Twist (Gazon maudit),HAS_ACTOR,Alain Chabat
+French Twist (Gazon maudit),HAS_ACTOR,Josiane Balasko
+French Twist (Gazon maudit),HAS_ACTOR,Victoria Abril
+French Twist (Gazon maudit),HAS_DIRECTOR,Josiane Balasko
+French Twist (Gazon maudit),IN_GENRE,Romance
+French Twist (Gazon maudit),IN_GENRE,Comedy
+French Twist (Gazon maudit),RELEASED_ON,1996-01-19
+French Twist (Gazon maudit),HAS_IMDB_RATING,6.4
+Friday,HAS_ACTOR,Tommy 'Tiny' Lister
+Friday,HAS_ACTOR,Nia Long
+Friday,HAS_ACTOR,Chris Tucker
+Friday,HAS_ACTOR,Ice Cube
+Friday,HAS_DIRECTOR,F. Gary Gray
+Friday,IN_GENRE,Comedy
+Friday,RELEASED_ON,1995-04-26
+Friday,HAS_IMDB_RATING,7.3
+From Dusk Till Dawn,HAS_ACTOR,George Clooney
+From Dusk Till Dawn,HAS_ACTOR,Quentin Tarantino
+From Dusk Till Dawn,HAS_ACTOR,Harvey Keitel
+From Dusk Till Dawn,HAS_ACTOR,Juliette Lewis
+From Dusk Till Dawn,HAS_DIRECTOR,Robert Rodriguez
+From Dusk Till Dawn,IN_GENRE,Thriller
+From Dusk Till Dawn,IN_GENRE,Action
+From Dusk Till Dawn,IN_GENRE,Comedy
+From Dusk Till Dawn,IN_GENRE,Horror
+From Dusk Till Dawn,RELEASED_ON,1996-01-19
+From Dusk Till Dawn,HAS_IMDB_RATING,7.3
+Fair Game,HAS_ACTOR,William Baldwin
+Fair Game,HAS_ACTOR,Christopher McDonald
+Fair Game,HAS_ACTOR,Steven Berkoff
+Fair Game,HAS_ACTOR,Cindy Crawford
+Fair Game,HAS_DIRECTOR,Andrew Sipes
+Fair Game,IN_GENRE,Action
+Fair Game,RELEASED_ON,1995-11-03
+Fair Game,HAS_IMDB_RATING,4.1
+Kicking and Screaming,HAS_ACTOR,Josh Hamilton
+Kicking and Screaming,HAS_ACTOR,Jonathan Baumbach
+Kicking and Screaming,HAS_ACTOR,Samuel Gould
+Kicking and Screaming,HAS_ACTOR,Catherine Kellner
+Kicking and Screaming,HAS_DIRECTOR,Noah Baumbach
+Kicking and Screaming,IN_GENRE,Drama
+Kicking and Screaming,IN_GENRE,Comedy
+Kicking and Screaming,RELEASED_ON,1995-10-06
+Kicking and Screaming,HAS_IMDB_RATING,7.1
+"Misérables, Les",HAS_ACTOR,Jean-Paul Belmondo
+"Misérables, Les",HAS_ACTOR,Michel Boujenah
+"Misérables, Les",HAS_ACTOR,Alessandra Martines
+"Misérables, Les",HAS_ACTOR,Salomé Lelouch
+"Misérables, Les",HAS_DIRECTOR, Claude Lelouch
+"Misérables, Les",IN_GENRE,War
+"Misérables, Les",IN_GENRE,Drama
+"Misérables, Les",RELEASED_ON,1995-11-03
+"Misérables, Les",HAS_IMDB_RATING,7.5
+Bed of Roses,HAS_ACTOR,Christian Slater
+Bed of Roses,HAS_ACTOR,Mary Stuart Masterson
+Bed of Roses,HAS_ACTOR,Josh Brolin
+Bed of Roses,HAS_ACTOR,Pamela Adlon
+Bed of Roses,HAS_DIRECTOR,Michael Goldenberg
+Bed of Roses,IN_GENRE,Romance
+Bed of Roses,IN_GENRE,Drama
+Bed of Roses,RELEASED_ON,1996-01-26
+Bed of Roses,HAS_IMDB_RATING,6.0
+Screamers,HAS_ACTOR,Peter Weller
+Screamers,HAS_ACTOR,Andrew Lauer
+Screamers,HAS_ACTOR,Jennifer Rubin
+Screamers,HAS_ACTOR,Roy Dupuis
+Screamers,HAS_DIRECTOR,Christian Duguay
+Screamers,IN_GENRE,Action
+Screamers,IN_GENRE,Sci-Fi
+Screamers,IN_GENRE,Thriller
+Screamers,RELEASED_ON,1996-01-26
+Screamers,HAS_IMDB_RATING,6.4
+Nico Icon,HAS_ACTOR,Christian Aaron Boulogne
+Nico Icon,HAS_ACTOR,Christian Päffgen
+Nico Icon,HAS_ACTOR,Tina Aumont
+Nico Icon,HAS_ACTOR,Nico
+Nico Icon,HAS_DIRECTOR,Susanne Ofteringer
+Nico Icon,IN_GENRE,Documentary
+Nico Icon,RELEASED_ON,1995-11-16
+Nico Icon,HAS_IMDB_RATING,7.3
+"Crossing Guard, The",HAS_ACTOR,Jack Nicholson
+"Crossing Guard, The",HAS_ACTOR,Anjelica Huston
+"Crossing Guard, The",HAS_ACTOR,David Morse
+"Crossing Guard, The",HAS_ACTOR,Robin Wright
+"Crossing Guard, The",HAS_DIRECTOR,Sean Penn
+"Crossing Guard, The",IN_GENRE,Action
+"Crossing Guard, The",IN_GENRE,Crime
+"Crossing Guard, The",IN_GENRE,Drama
+"Crossing Guard, The",IN_GENRE,Thriller
+"Crossing Guard, The",RELEASED_ON,1995-11-16
+"Crossing Guard, The",HAS_IMDB_RATING,6.4
+"Juror, The",HAS_ACTOR,Alec Baldwin
+"Juror, The",HAS_ACTOR,Demi Moore
+"Juror, The",HAS_ACTOR,Anne Heche
+"Juror, The",HAS_ACTOR,Joseph Gordon-Levitt
+"Juror, The",HAS_DIRECTOR,Brian Gibson
+"Juror, The",IN_GENRE,Drama
+"Juror, The",IN_GENRE,Thriller
+"Juror, The",RELEASED_ON,1996-02-02
+"Juror, The",HAS_IMDB_RATING,5.6
+"White Balloon, The (Badkonake sefid)",HAS_ACTOR,Anna Borkowska
+"White Balloon, The (Badkonake sefid)",HAS_ACTOR,Aida Mohammadkhani
+"White Balloon, The (Badkonake sefid)",HAS_ACTOR,Mohsen Kafili
+"White Balloon, The (Badkonake sefid)",HAS_ACTOR,Fereshteh Sadre Orafaiy
+"White Balloon, The (Badkonake sefid)",HAS_DIRECTOR,Jafar Panahi
+"White Balloon, The (Badkonake sefid)",IN_GENRE,Children
+"White Balloon, The (Badkonake sefid)",IN_GENRE,Drama
+"White Balloon, The (Badkonake sefid)",RELEASED_ON,1995-11-27
+"White Balloon, The (Badkonake sefid)",HAS_IMDB_RATING,7.8
+Things to Do in Denver When You're Dead,HAS_ACTOR,Andy Garcia
+Things to Do in Denver When You're Dead,HAS_ACTOR,Bill Nunn
+Things to Do in Denver When You're Dead,HAS_ACTOR,Christopher Lloyd
+Things to Do in Denver When You're Dead,HAS_ACTOR,William Forsythe
+Things to Do in Denver When You're Dead,HAS_DIRECTOR,Gary Fleder
+Things to Do in Denver When You're Dead,IN_GENRE,Crime
+Things to Do in Denver When You're Dead,IN_GENRE,Drama
+Things to Do in Denver When You're Dead,IN_GENRE,Romance
+Things to Do in Denver When You're Dead,RELEASED_ON,1995-12-01
+Things to Do in Denver When You're Dead,HAS_IMDB_RATING,6.8
+Antonia's Line (Antonia),HAS_ACTOR,Veerle van Overloop
+Antonia's Line (Antonia),HAS_ACTOR,Els Dottermans
+Antonia's Line (Antonia),HAS_ACTOR,Dora van der Groen
+Antonia's Line (Antonia),HAS_ACTOR,Willeke van Ammelrooy
+Antonia's Line (Antonia),HAS_DIRECTOR,Marleen Gorris
+Antonia's Line (Antonia),IN_GENRE,Drama
+Antonia's Line (Antonia),IN_GENRE,Comedy
+Antonia's Line (Antonia),RELEASED_ON,1996-02-02
+Antonia's Line (Antonia),HAS_IMDB_RATING,7.5
+Once Upon a Time... When We Were Colored,HAS_ACTOR,Al Freeman Jr.
+Once Upon a Time... When We Were Colored,HAS_ACTOR,Leon
+Once Upon a Time... When We Were Colored,HAS_ACTOR,Phylicia Rashad
+Once Upon a Time... When We Were Colored,HAS_ACTOR,Paula Kelly
+Once Upon a Time... When We Were Colored,HAS_DIRECTOR,Tim Reid
+Once Upon a Time... When We Were Colored,IN_GENRE,Drama
+Once Upon a Time... When We Were Colored,IN_GENRE,Romance
+Once Upon a Time... When We Were Colored,RELEASED_ON,1996-01-26
+Once Upon a Time... When We Were Colored,HAS_IMDB_RATING,7.3
+Last Summer in the Hamptons,HAS_ACTOR,Victoria Foyt
+Last Summer in the Hamptons,HAS_ACTOR,Jon Robin Baitz
+Last Summer in the Hamptons,HAS_ACTOR,Viveca Lindfors
+Last Summer in the Hamptons,HAS_ACTOR,Savannah Smith Boucher
+Last Summer in the Hamptons,HAS_DIRECTOR,Henry Jaglom
+Last Summer in the Hamptons,IN_GENRE,Drama
+Last Summer in the Hamptons,IN_GENRE,Comedy
+Last Summer in the Hamptons,RELEASED_ON,1996-09-15
+Last Summer in the Hamptons,HAS_IMDB_RATING,6.1
+Angels and Insects,HAS_ACTOR,Patsy Kensit
+Angels and Insects,HAS_ACTOR,Kristin Scott Thomas
+Angels and Insects,HAS_ACTOR,Mark Rylance
+Angels and Insects,HAS_ACTOR,Jeremy Kemp
+Angels and Insects,HAS_DIRECTOR,Philip Haas
+Angels and Insects,IN_GENRE,Drama
+Angels and Insects,IN_GENRE,Romance
+Angels and Insects,RELEASED_ON,1996-01-26
+Angels and Insects,HAS_IMDB_RATING,7.0
+White Squall,HAS_ACTOR,Jeff Bridges
+White Squall,HAS_ACTOR,Scott Wolf
+White Squall,HAS_ACTOR,John Savage
+White Squall,HAS_ACTOR,Caroline Goodall
+White Squall,HAS_DIRECTOR,Ridley Scott
+White Squall,IN_GENRE,Action
+White Squall,IN_GENRE,Drama
+White Squall,IN_GENRE,Adventure
+White Squall,RELEASED_ON,1996-02-02
+White Squall,HAS_IMDB_RATING,6.6
+Dunston Checks In,HAS_ACTOR,Jason Alexander
+Dunston Checks In,HAS_ACTOR,Faye Dunaway
+Dunston Checks In,HAS_ACTOR,Rupert Everett
+Dunston Checks In,HAS_ACTOR,Eric Lloyd
+Dunston Checks In,HAS_DIRECTOR,Ken Kwapis
+Dunston Checks In,IN_GENRE,Comedy
+Dunston Checks In,IN_GENRE,Children
+Dunston Checks In,RELEASED_ON,1996-01-12
+Dunston Checks In,HAS_IMDB_RATING,5.2
+Black Sheep,HAS_ACTOR,Chris Farley
+Black Sheep,HAS_ACTOR,Christine Ebersole
+Black Sheep,HAS_ACTOR,Tim Matheson
+Black Sheep,HAS_ACTOR,David Spade
+Black Sheep,HAS_DIRECTOR,Penelope Spheeris
+Black Sheep,IN_GENRE,Comedy
+Black Sheep,RELEASED_ON,1996-02-02
+Black Sheep,HAS_IMDB_RATING,6.2
+Nick of Time,HAS_ACTOR,Christopher Walken
+Nick of Time,HAS_ACTOR,Courtney Chase
+Nick of Time,HAS_ACTOR,Charles S. Dutton
+Nick of Time,HAS_ACTOR,Johnny Depp
+Nick of Time,HAS_DIRECTOR,John Badham
+Nick of Time,IN_GENRE,Action
+Nick of Time,IN_GENRE,Thriller
+Nick of Time,RELEASED_ON,1995-11-22
+Nick of Time,HAS_IMDB_RATING,6.3
+Mary Reilly,HAS_ACTOR,Julia Roberts
+Mary Reilly,HAS_ACTOR,George Cole
+Mary Reilly,HAS_ACTOR,Michael Gambon
+Mary Reilly,HAS_ACTOR,John Malkovich
+Mary Reilly,HAS_DIRECTOR,Stephen Frears
+Mary Reilly,IN_GENRE,Horror
+Mary Reilly,IN_GENRE,Thriller
+Mary Reilly,IN_GENRE,Drama
+Mary Reilly,RELEASED_ON,1996-02-23
+Mary Reilly,HAS_IMDB_RATING,5.8
+Vampire in Brooklyn,HAS_ACTOR,Eddie Murphy
+Vampire in Brooklyn,HAS_ACTOR,Kadeem Hardison
+Vampire in Brooklyn,HAS_ACTOR,Angela Bassett
+Vampire in Brooklyn,HAS_ACTOR,Allen Payne
+Vampire in Brooklyn,HAS_DIRECTOR,Wes Craven
+Vampire in Brooklyn,IN_GENRE,Comedy
+Vampire in Brooklyn,IN_GENRE,Horror
+Vampire in Brooklyn,IN_GENRE,Romance
+Vampire in Brooklyn,RELEASED_ON,1995-10-27
+Vampire in Brooklyn,HAS_IMDB_RATING,4.5
+Beautiful Girls,HAS_ACTOR,Annabeth Gish
+Beautiful Girls,HAS_ACTOR,Matt Dillon
+Beautiful Girls,HAS_ACTOR,Lauren Holly
+Beautiful Girls,HAS_ACTOR,Noah Emmerich
+Beautiful Girls,HAS_DIRECTOR,Ted Demme
+Beautiful Girls,IN_GENRE,Drama
+Beautiful Girls,IN_GENRE,Romance
+Beautiful Girls,IN_GENRE,Comedy
+Beautiful Girls,RELEASED_ON,1996-02-09
+Beautiful Girls,HAS_IMDB_RATING,7.2
+Broken Arrow,HAS_ACTOR,John Travolta
+Broken Arrow,HAS_ACTOR,Christian Slater
+Broken Arrow,HAS_ACTOR,Samantha Mathis
+Broken Arrow,HAS_ACTOR,Delroy Lindo
+Broken Arrow,HAS_DIRECTOR,John Woo
+Broken Arrow,IN_GENRE,Adventure
+Broken Arrow,IN_GENRE,Action
+Broken Arrow,IN_GENRE,Thriller
+Broken Arrow,RELEASED_ON,1996-02-09
+Broken Arrow,HAS_IMDB_RATING,6.0
+In the Bleak Midwinter,HAS_ACTOR,Nicholas Farrell
+In the Bleak Midwinter,HAS_ACTOR,Richard Briers
+In the Bleak Midwinter,HAS_ACTOR,Joan Collins
+In the Bleak Midwinter,HAS_ACTOR,Hetta Charnley
+In the Bleak Midwinter,HAS_DIRECTOR,Kenneth Branagh
+In the Bleak Midwinter,IN_GENRE,Comedy
+In the Bleak Midwinter,IN_GENRE,Drama
+In the Bleak Midwinter,RELEASED_ON,1996-02-16
+In the Bleak Midwinter,HAS_IMDB_RATING,7.3
+"Hate (Haine, La)",HAS_ACTOR,Vincent Cassel
+"Hate (Haine, La)",HAS_ACTOR,Abdel Ahmed Ghili
+"Hate (Haine, La)",HAS_ACTOR,Saïd Taghmaoui
+"Hate (Haine, La)",HAS_ACTOR,Hubert Koundé
+"Hate (Haine, La)",HAS_DIRECTOR,Mathieu Kassovitz
+"Hate (Haine, La)",IN_GENRE,Drama
+"Hate (Haine, La)",IN_GENRE,Crime
+"Hate (Haine, La)",RELEASED_ON,1996-02-23
+"Hate (Haine, La)",HAS_IMDB_RATING,8.1
+Shopping,HAS_ACTOR,Fraser James
+Shopping,HAS_ACTOR,Sean Pertwee
+Shopping,HAS_ACTOR,Jude Law
+Shopping,HAS_ACTOR,Sadie Frost
+Shopping,HAS_DIRECTOR,Paul W.S. Anderson
+Shopping,IN_GENRE,Thriller
+Shopping,IN_GENRE,Action
+Shopping,RELEASED_ON,1996-02-09
+Shopping,HAS_IMDB_RATING,5.4
+Heidi Fleiss: Hollywood Madam,HAS_ACTOR,Heidi Fleiss
+Heidi Fleiss: Hollywood Madam,HAS_ACTOR,Nick Broomfield
+Heidi Fleiss: Hollywood Madam,HAS_ACTOR,Corinne Bohrer
+Heidi Fleiss: Hollywood Madam,HAS_ACTOR,Madam Alex
+Heidi Fleiss: Hollywood Madam,HAS_DIRECTOR,Nick Broomfield
+Heidi Fleiss: Hollywood Madam,IN_GENRE,Documentary
+Heidi Fleiss: Hollywood Madam,RELEASED_ON,1996-02-09
+Heidi Fleiss: Hollywood Madam,HAS_IMDB_RATING,6.6
+City Hall,HAS_ACTOR,Al Pacino
+City Hall,HAS_ACTOR,John Cusack
+City Hall,HAS_ACTOR,Bridget Fonda
+City Hall,HAS_ACTOR,Danny Aiello
+City Hall,HAS_DIRECTOR,Harold Becker
+City Hall,IN_GENRE,Thriller
+City Hall,IN_GENRE,Drama
+City Hall,RELEASED_ON,1996-02-16
+City Hall,HAS_IMDB_RATING,6.2
+Bottle Rocket,HAS_ACTOR,Owen Wilson
+Bottle Rocket,HAS_ACTOR,Luke Wilson
+Bottle Rocket,HAS_ACTOR,Ned Dowd
+Bottle Rocket,HAS_ACTOR,Shea Fowler
+Bottle Rocket,HAS_DIRECTOR,Wes Anderson
+Bottle Rocket,IN_GENRE,Romance
+Bottle Rocket,IN_GENRE,Crime
+Bottle Rocket,IN_GENRE,Comedy
+Bottle Rocket,IN_GENRE,Adventure
+Bottle Rocket,RELEASED_ON,1996-02-21
+Bottle Rocket,HAS_IMDB_RATING,7.1
+Mr. Wrong,HAS_ACTOR,Dean Stockwell
+Mr. Wrong,HAS_ACTOR,Joan Cusack
+Mr. Wrong,HAS_ACTOR,Bill Pullman
+Mr. Wrong,HAS_ACTOR,Ellen DeGeneres
+Mr. Wrong,HAS_DIRECTOR,Nick Castle
+Mr. Wrong,IN_GENRE,Comedy
+Mr. Wrong,RELEASED_ON,1996-02-16
+Mr. Wrong,HAS_IMDB_RATING,3.7
+Unforgettable,HAS_ACTOR,Ray Liotta
+Unforgettable,HAS_ACTOR,Linda Fiorentino
+Unforgettable,HAS_ACTOR,Peter Coyote
+Unforgettable,HAS_ACTOR,Christopher McDonald
+Unforgettable,HAS_DIRECTOR,John Dahl
+Unforgettable,IN_GENRE,Thriller
+Unforgettable,IN_GENRE,Sci-Fi
+Unforgettable,IN_GENRE,Mystery
+Unforgettable,RELEASED_ON,1996-02-23
+Unforgettable,HAS_IMDB_RATING,6.0
+Happy Gilmore,HAS_ACTOR,Adam Sandler
+Happy Gilmore,HAS_ACTOR,Christopher McDonald
+Happy Gilmore,HAS_ACTOR,Frances Bay
+Happy Gilmore,HAS_ACTOR,Julie Bowen
+Happy Gilmore,HAS_DIRECTOR,Dennis Dugan
+Happy Gilmore,IN_GENRE,Comedy
+Happy Gilmore,RELEASED_ON,1996-02-16
+Happy Gilmore,HAS_IMDB_RATING,7.0
+"Bridges of Madison County, The",HAS_ACTOR,Clint Eastwood
+"Bridges of Madison County, The",HAS_ACTOR,Meryl Streep
+"Bridges of Madison County, The",HAS_ACTOR,Annie Corley
+"Bridges of Madison County, The",HAS_ACTOR,Victor Slezak
+"Bridges of Madison County, The",HAS_DIRECTOR,Clint Eastwood
+"Bridges of Madison County, The",IN_GENRE,Drama
+"Bridges of Madison County, The",IN_GENRE,Romance
+"Bridges of Madison County, The",RELEASED_ON,1995-06-02
+"Bridges of Madison County, The",HAS_IMDB_RATING,7.5
+Muppet Treasure Island,HAS_ACTOR,Tim Curry
+Muppet Treasure Island,HAS_ACTOR,Billy Connolly
+Muppet Treasure Island,HAS_ACTOR,Jennifer Saunders
+Muppet Treasure Island,HAS_ACTOR,Kevin Bishop
+Muppet Treasure Island,HAS_DIRECTOR,Brian Henson
+Muppet Treasure Island,IN_GENRE,Children
+Muppet Treasure Island,IN_GENRE,Comedy
+Muppet Treasure Island,IN_GENRE,Musical
+Muppet Treasure Island,IN_GENRE,Adventure
+Muppet Treasure Island,RELEASED_ON,1996-02-16
+Muppet Treasure Island,HAS_IMDB_RATING,6.9
+Catwalk,HAS_ACTOR,Christy Turlington
+Catwalk,HAS_ACTOR,Giorgio Armani
+Catwalk,HAS_ACTOR,Azzedine Alaïa
+Catwalk,HAS_ACTOR,Nadja Auermann
+Catwalk,HAS_DIRECTOR,Robert Leacock
+Catwalk,IN_GENRE,Documentary
+Catwalk,RELEASED_ON,1996-05-16
+Catwalk,HAS_IMDB_RATING,6.4
+Braveheart,HAS_ACTOR,James Robinson
+Braveheart,HAS_ACTOR,Sandy Nelson
+Braveheart,HAS_ACTOR,Sean Lawlor
+Braveheart,HAS_ACTOR,James Cosmo
+Braveheart,HAS_DIRECTOR,Mel Gibson
+Braveheart,IN_GENRE,War
+Braveheart,IN_GENRE,Drama
+Braveheart,IN_GENRE,Action
+Braveheart,RELEASED_ON,1995-05-24
+Braveheart,HAS_IMDB_RATING,8.4
+Taxi Driver,HAS_ACTOR,Diahnne Abbott
+Taxi Driver,HAS_ACTOR,Gino Ardito
+Taxi Driver,HAS_ACTOR,Frank Adu
+Taxi Driver,HAS_ACTOR,Victor Argo
+Taxi Driver,HAS_DIRECTOR,Martin Scorsese
+Taxi Driver,IN_GENRE,Thriller
+Taxi Driver,IN_GENRE,Drama
+Taxi Driver,IN_GENRE,Crime
+Taxi Driver,RELEASED_ON,1976-02-08
+Taxi Driver,HAS_IMDB_RATING,8.3
+Rumble in the Bronx (Hont faan kui),HAS_ACTOR,Bill Tung
+Rumble in the Bronx (Hont faan kui),HAS_ACTOR,Anita Mui
+Rumble in the Bronx (Hont faan kui),HAS_ACTOR,Françoise Yip
+Rumble in the Bronx (Hont faan kui),HAS_ACTOR,Jackie Chan
+Rumble in the Bronx (Hont faan kui),HAS_DIRECTOR,Stanley Tong
+Rumble in the Bronx (Hont faan kui),IN_GENRE,Crime
+Rumble in the Bronx (Hont faan kui),IN_GENRE,Comedy
+Rumble in the Bronx (Hont faan kui),IN_GENRE,Adventure
+Rumble in the Bronx (Hont faan kui),IN_GENRE,Action
+Rumble in the Bronx (Hont faan kui),RELEASED_ON,1996-02-23
+Rumble in the Bronx (Hont faan kui),HAS_IMDB_RATING,6.7
+Before and After,HAS_ACTOR,Meryl Streep
+Before and After,HAS_ACTOR,Julia Weldon
+Before and After,HAS_ACTOR,Edward Furlong
+Before and After,HAS_ACTOR,Liam Neeson
+Before and After,HAS_DIRECTOR,Barbet Schroeder
+Before and After,IN_GENRE,Drama
+Before and After,IN_GENRE,Mystery
+Before and After,RELEASED_ON,1996-02-23
+Before and After,HAS_IMDB_RATING,6.1
+Margaret's Museum,HAS_ACTOR,Helena Bonham Carter
+Margaret's Museum,HAS_ACTOR,Craig Anthony Olejnik
+Margaret's Museum,HAS_ACTOR,Clive Russell
+Margaret's Museum,HAS_ACTOR,Kate Nelligan
+Margaret's Museum,HAS_DIRECTOR,Mort Ransen
+Margaret's Museum,IN_GENRE,Drama
+Margaret's Museum,RELEASED_ON,1996-01-26
+Margaret's Museum,HAS_IMDB_RATING,7.3
+Anne Frank Remembered,HAS_ACTOR,Kenneth Branagh
+Anne Frank Remembered,HAS_ACTOR,Glenn Close
+Anne Frank Remembered,HAS_ACTOR,Janny Brandes-Brilslijper
+Anne Frank Remembered,HAS_DIRECTOR,Jon Blair
+Anne Frank Remembered,IN_GENRE,Documentary
+Anne Frank Remembered,RELEASED_ON,1995-08-31
+Anne Frank Remembered,HAS_IMDB_RATING,8.2
+"Young Poisoner's Handbook, The",HAS_ACTOR,Tobias Arnold
+"Young Poisoner's Handbook, The",HAS_ACTOR,Roger Lloyd Pack
+"Young Poisoner's Handbook, The",HAS_ACTOR,Ruth Sheen
+"Young Poisoner's Handbook, The",HAS_ACTOR,Hugh O'Conor
+"Young Poisoner's Handbook, The",HAS_DIRECTOR,Benjamin Ross
+"Young Poisoner's Handbook, The",IN_GENRE,Drama
+"Young Poisoner's Handbook, The",IN_GENRE,Crime
+"Young Poisoner's Handbook, The",RELEASED_ON,1996-02-23
+"Young Poisoner's Handbook, The",HAS_IMDB_RATING,7.1
+If Lucy Fell,HAS_ACTOR,Ben Stiller
+If Lucy Fell,HAS_ACTOR,Sarah Jessica Parker
+If Lucy Fell,HAS_ACTOR,Eric Schaeffer
+If Lucy Fell,HAS_ACTOR,Elle Macpherson
+If Lucy Fell,HAS_DIRECTOR,Eric Schaeffer
+If Lucy Fell,IN_GENRE,Romance
+If Lucy Fell,IN_GENRE,Comedy
+If Lucy Fell,RELEASED_ON,1996-03-08
+If Lucy Fell,HAS_IMDB_RATING,4.9
+"Steal Big, Steal Little",HAS_ACTOR,Andy Garcia
+"Steal Big, Steal Little",HAS_ACTOR,Rachel Ticotin
+"Steal Big, Steal Little",HAS_ACTOR,Alan Arkin
+"Steal Big, Steal Little",HAS_ACTOR,Joe Pantoliano
+"Steal Big, Steal Little",HAS_DIRECTOR,Andrew Davis
+"Steal Big, Steal Little",IN_GENRE,Comedy
+"Steal Big, Steal Little",RELEASED_ON,1995-09-29
+"Steal Big, Steal Little",HAS_IMDB_RATING,4.8
+"Boys of St. Vincent, The",HAS_ACTOR,Philip Dinn
+"Boys of St. Vincent, The",HAS_ACTOR,Brian Dooley
+"Boys of St. Vincent, The",HAS_ACTOR,Johnny Morina
+"Boys of St. Vincent, The",HAS_ACTOR,Henry Czerny
+"Boys of St. Vincent, The",HAS_DIRECTOR,John N. Smith
+"Boys of St. Vincent, The",IN_GENRE,Drama
+"Boys of St. Vincent, The",RELEASED_ON,1992-12-06
+"Boys of St. Vincent, The",HAS_IMDB_RATING,7.8
+Boomerang,HAS_ACTOR,Eddie Murphy
+Boomerang,HAS_ACTOR,Halle Berry
+Boomerang,HAS_ACTOR,Robin Givens
+Boomerang,HAS_ACTOR,David Alan Grier
+Boomerang,HAS_DIRECTOR,Reginald Hudlin
+Boomerang,IN_GENRE,Romance
+Boomerang,IN_GENRE,Comedy
+Boomerang,RELEASED_ON,1992-07-01
+Boomerang,HAS_IMDB_RATING,5.4
+Chungking Express (Chung Hing sam lam),HAS_ACTOR,Tony Leung Chiu-Wai
+Chungking Express (Chung Hing sam lam),HAS_ACTOR,Brigitte Lin
+Chungking Express (Chung Hing sam lam),HAS_ACTOR,Takeshi Kaneshiro
+Chungking Express (Chung Hing sam lam),HAS_ACTOR,Faye Wong
+Chungking Express (Chung Hing sam lam),HAS_DIRECTOR, Kar-wai Wong
+Chungking Express (Chung Hing sam lam),IN_GENRE,Mystery
+Chungking Express (Chung Hing sam lam),IN_GENRE,Drama
+Chungking Express (Chung Hing sam lam),IN_GENRE,Romance
+Chungking Express (Chung Hing sam lam),RELEASED_ON,1996-03-08
+Chungking Express (Chung Hing sam lam),HAS_IMDB_RATING,8.1
+"Star Maker, The (Uomo delle stelle, L')",HAS_ACTOR,Sergio Castellitto
+"Star Maker, The (Uomo delle stelle, L')",HAS_ACTOR,Franco Scaldati
+"Star Maker, The (Uomo delle stelle, L')",HAS_ACTOR,Tiziana Lodato
+"Star Maker, The (Uomo delle stelle, L')",HAS_ACTOR,Leopoldo Trieste
+"Star Maker, The (Uomo delle stelle, L')",HAS_DIRECTOR,Giuseppe Tornatore
+"Star Maker, The (Uomo delle stelle, L')",IN_GENRE,Drama
+"Star Maker, The (Uomo delle stelle, L')",RELEASED_ON,1996-03-08
+"Star Maker, The (Uomo delle stelle, L')",HAS_IMDB_RATING,7.3
+Flirting With Disaster,HAS_ACTOR,Mary Tyler Moore
+Flirting With Disaster,HAS_ACTOR,Téa Leoni
+Flirting With Disaster,HAS_ACTOR,Patricia Arquette
+Flirting With Disaster,HAS_ACTOR,Ben Stiller
+Flirting With Disaster,HAS_DIRECTOR,David O. Russell
+Flirting With Disaster,IN_GENRE,Comedy
+Flirting With Disaster,RELEASED_ON,1996-04-12
+Flirting With Disaster,HAS_IMDB_RATING,6.8
+"NeverEnding Story III, The",HAS_ACTOR,Jack Black
+"NeverEnding Story III, The",HAS_ACTOR,Melody Kay
+"NeverEnding Story III, The",HAS_ACTOR,Carole Finn
+"NeverEnding Story III, The",HAS_ACTOR,Jason James Richter
+"NeverEnding Story III, The",HAS_DIRECTOR,Peter MacDonald
+"NeverEnding Story III, The",IN_GENRE,Fantasy
+"NeverEnding Story III, The",IN_GENRE,Children
+"NeverEnding Story III, The",IN_GENRE,Adventure
+"NeverEnding Story III, The",RELEASED_ON,1994-10-27
+"NeverEnding Story III, The",HAS_IMDB_RATING,3.1
+Pie in the Sky,HAS_ACTOR,Josh Charles
+Pie in the Sky,HAS_ACTOR,Christine Lahti
+Pie in the Sky,HAS_ACTOR,Anne Heche
+Pie in the Sky,HAS_ACTOR,John Goodman
+Pie in the Sky,HAS_DIRECTOR,Bryan Gordon
+Pie in the Sky,IN_GENRE,Romance
+Pie in the Sky,IN_GENRE,Comedy
+Pie in the Sky,RELEASED_ON,1996-02-09
+Pie in the Sky,HAS_IMDB_RATING,5.9
+Angela,HAS_ACTOR,John Ventimiglia
+Angela,HAS_ACTOR,Anna Levine
+Angela,HAS_ACTOR,Charlotte Eve Blythe
+Angela,HAS_ACTOR,Miranda Rhyne
+Angela,HAS_DIRECTOR,Rebecca Miller
+Angela,IN_GENRE,Drama
+Angela,RELEASED_ON,1995-01-01
+Angela,HAS_IMDB_RATING,6.4
+Frankie Starlight,HAS_ACTOR,Gabriel Byrne
+Frankie Starlight,HAS_ACTOR,Niall Toibin
+Frankie Starlight,HAS_ACTOR,Owen Roe
+Frankie Starlight,HAS_ACTOR,Corban Walker
+Frankie Starlight,HAS_DIRECTOR,Michael Lindsay-Hogg
+Frankie Starlight,IN_GENRE,Drama
+Frankie Starlight,IN_GENRE,Romance
+Frankie Starlight,RELEASED_ON,1995-11-22
+Frankie Starlight,HAS_IMDB_RATING,6.7
+Jade,HAS_ACTOR,David Caruso
+Jade,HAS_ACTOR,Chazz Palminteri
+Jade,HAS_ACTOR,Linda Fiorentino
+Jade,HAS_ACTOR,Richard Crenna
+Jade,HAS_DIRECTOR,William Friedkin
+Jade,IN_GENRE,Thriller
+Jade,RELEASED_ON,1995-10-13
+Jade,HAS_IMDB_RATING,5.1
+Down Periscope,HAS_ACTOR,Lauren Holly
+Down Periscope,HAS_ACTOR,Kelsey Grammer
+Down Periscope,HAS_ACTOR,Harry Dean Stanton
+Down Periscope,HAS_ACTOR,Rob Schneider
+Down Periscope,HAS_DIRECTOR,David S. Ward
+Down Periscope,IN_GENRE,Comedy
+Down Periscope,RELEASED_ON,1996-03-01
+Down Periscope,HAS_IMDB_RATING,6.0
+Man of the Year,HAS_ACTOR,Vivian Paxton
+Man of the Year,HAS_ACTOR,Michael Ornstein
+Man of the Year,HAS_ACTOR,Claudette Sutherland
+Man of the Year,HAS_ACTOR,Cal Bartlett
+Man of the Year,HAS_DIRECTOR,Dirk Shafer
+Man of the Year,IN_GENRE,Documentary
+Man of the Year,RELEASED_ON,1996-03-15
+Man of the Year,HAS_IMDB_RATING,6.1
+Up Close and Personal,HAS_ACTOR,Robert Redford
+Up Close and Personal,HAS_ACTOR,Michelle Pfeiffer
+Up Close and Personal,HAS_ACTOR,Stockard Channing
+Up Close and Personal,HAS_ACTOR,Joe Mantegna
+Up Close and Personal,HAS_DIRECTOR,Jon Avnet
+Up Close and Personal,IN_GENRE,Romance
+Up Close and Personal,IN_GENRE,Drama
+Up Close and Personal,RELEASED_ON,1996-03-01
+Up Close and Personal,HAS_IMDB_RATING,6.1
+"Birdcage, The",HAS_ACTOR,Nathan Lane
+"Birdcage, The",HAS_ACTOR,Dianne Wiest
+"Birdcage, The",HAS_ACTOR,Robin Williams
+"Birdcage, The",HAS_ACTOR,Gene Hackman
+"Birdcage, The",HAS_DIRECTOR,Mike Nichols
+"Birdcage, The",IN_GENRE,Comedy
+"Birdcage, The",RELEASED_ON,1996-03-08
+"Birdcage, The",HAS_IMDB_RATING,6.9
+"Brothers McMullen, The",HAS_ACTOR,Shari Albert
+"Brothers McMullen, The",HAS_ACTOR,Maxine Bahns
+"Brothers McMullen, The",HAS_ACTOR,Catharine Bolz
+"Brothers McMullen, The",HAS_ACTOR,Connie Britton
+"Brothers McMullen, The",HAS_DIRECTOR,Edward Burns
+"Brothers McMullen, The",IN_GENRE,Comedy
+"Brothers McMullen, The",RELEASED_ON,1995-08-09
+"Brothers McMullen, The",HAS_IMDB_RATING,6.6
+Bad Boys,HAS_ACTOR,Michael Taliferro
+Bad Boys,HAS_ACTOR,Lisa Boyle
+Bad Boys,HAS_ACTOR,Martin Lawrence
+Bad Boys,HAS_ACTOR,Will Smith
+Bad Boys,HAS_DIRECTOR,Michael Bay
+Bad Boys,IN_GENRE,Thriller
+Bad Boys,IN_GENRE,Drama
+Bad Boys,IN_GENRE,Crime
+Bad Boys,IN_GENRE,Action
+Bad Boys,IN_GENRE,Comedy
+Bad Boys,RELEASED_ON,1995-04-07
+Bad Boys,HAS_IMDB_RATING,6.8
+"Amazing Panda Adventure, The",HAS_ACTOR,Wang Fei
+"Amazing Panda Adventure, The",HAS_ACTOR,Stephen Lang
+"Amazing Panda Adventure, The",HAS_ACTOR,Yi Ding
+"Amazing Panda Adventure, The",HAS_ACTOR,Ryan Slater
+"Amazing Panda Adventure, The",HAS_DIRECTOR,Christopher Cain
+"Amazing Panda Adventure, The",IN_GENRE,Children
+"Amazing Panda Adventure, The",IN_GENRE,Adventure
+"Amazing Panda Adventure, The",RELEASED_ON,1995-08-25
+"Amazing Panda Adventure, The",HAS_IMDB_RATING,5.8
+"Basketball Diaries, The",HAS_ACTOR,Leonardo DiCaprio
+"Basketball Diaries, The",HAS_ACTOR,Marilyn Sokol
+"Basketball Diaries, The",HAS_ACTOR,Lorraine Bracco
+"Basketball Diaries, The",HAS_ACTOR,James Madio
+"Basketball Diaries, The",HAS_DIRECTOR,Scott Kalvert
+"Basketball Diaries, The",IN_GENRE,Drama
+"Basketball Diaries, The",RELEASED_ON,1995-04-21
+"Basketball Diaries, The",HAS_IMDB_RATING,7.3
+"Awfully Big Adventure, An",HAS_ACTOR,Alan Rickman
+"Awfully Big Adventure, An",HAS_ACTOR,Alun Armstrong
+"Awfully Big Adventure, An",HAS_ACTOR,Georgina Cates
+"Awfully Big Adventure, An",HAS_ACTOR,Hugh Grant
+"Awfully Big Adventure, An",HAS_DIRECTOR,Mike Newell
+"Awfully Big Adventure, An",IN_GENRE,Drama
+"Awfully Big Adventure, An",RELEASED_ON,1995-07-21
+"Awfully Big Adventure, An",HAS_IMDB_RATING,6.1
+Amateur,HAS_ACTOR,Isabelle Huppert
+Amateur,HAS_ACTOR,Martin Donovan
+Amateur,HAS_ACTOR,Elina Löwensohn
+Amateur,HAS_ACTOR,Damian Young
+Amateur,HAS_DIRECTOR,Hal Hartley
+Amateur,IN_GENRE,Drama
+Amateur,IN_GENRE,Thriller
+Amateur,IN_GENRE,Crime
+Amateur,RELEASED_ON,1995-05-19
+Amateur,HAS_IMDB_RATING,7.0
+Apollo 13,HAS_ACTOR,Bill Paxton
+Apollo 13,HAS_ACTOR,Kevin Bacon
+Apollo 13,HAS_ACTOR,Tom Hanks
+Apollo 13,HAS_ACTOR,Gary Sinise
+Apollo 13,HAS_DIRECTOR,Ron Howard
+Apollo 13,IN_GENRE,Drama
+Apollo 13,IN_GENRE,Adventure
+Apollo 13,IN_GENRE,IMAX
+Apollo 13,RELEASED_ON,1995-06-30
+Apollo 13,HAS_IMDB_RATING,7.6
+Rob Roy,HAS_ACTOR,Liam Neeson
+Rob Roy,HAS_ACTOR,Jessica Lange
+Rob Roy,HAS_ACTOR,John Hurt
+Rob Roy,HAS_ACTOR,Tim Roth
+Rob Roy,HAS_DIRECTOR,Michael Caton-Jones
+Rob Roy,IN_GENRE,Romance
+Rob Roy,IN_GENRE,Drama
+Rob Roy,IN_GENRE,Action
+Rob Roy,IN_GENRE,War
+Rob Roy,RELEASED_ON,1995-04-14
+Rob Roy,HAS_IMDB_RATING,6.9
+"Addiction, The",HAS_ACTOR,Lili Taylor
+"Addiction, The",HAS_ACTOR,Christopher Walken
+"Addiction, The",HAS_ACTOR,Annabella Sciorra
+"Addiction, The",HAS_ACTOR,Edie Falco
+"Addiction, The",HAS_DIRECTOR,Abel Ferrara
+"Addiction, The",IN_GENRE,Horror
+"Addiction, The",IN_GENRE,Drama
+"Addiction, The",RELEASED_ON,1995-10-06
+"Addiction, The",HAS_IMDB_RATING,6.4
+Batman Forever,HAS_ACTOR,Nicole Kidman
+Batman Forever,HAS_ACTOR,Jim Carrey
+Batman Forever,HAS_ACTOR,Tommy Lee Jones
+Batman Forever,HAS_ACTOR,Val Kilmer
+Batman Forever,HAS_DIRECTOR,Joel Schumacher
+Batman Forever,IN_GENRE,Action
+Batman Forever,IN_GENRE,Adventure
+Batman Forever,IN_GENRE,Comedy
+Batman Forever,IN_GENRE,Crime
+Batman Forever,RELEASED_ON,1995-06-16
+Batman Forever,HAS_IMDB_RATING,5.4
+Beauty of the Day (Belle de jour),HAS_ACTOR,Catherine Deneuve
+Beauty of the Day (Belle de jour),HAS_ACTOR,Jean Sorel
+Beauty of the Day (Belle de jour),HAS_ACTOR,Michel Piccoli
+Beauty of the Day (Belle de jour),HAS_ACTOR,Geneviève Page
+Beauty of the Day (Belle de jour),HAS_DIRECTOR,Luis Buñuel
+Beauty of the Day (Belle de jour),IN_GENRE,Drama
+Beauty of the Day (Belle de jour),RELEASED_ON,1968-04-10
+Beauty of the Day (Belle de jour),HAS_IMDB_RATING,7.8
+Beyond Rangoon,HAS_ACTOR,Spalding Gray
+Beyond Rangoon,HAS_ACTOR,Patricia Arquette
+Beyond Rangoon,HAS_ACTOR,Frances McDormand
+Beyond Rangoon,HAS_ACTOR,U Aung Ko
+Beyond Rangoon,HAS_DIRECTOR,John Boorman
+Beyond Rangoon,IN_GENRE,War
+Beyond Rangoon,IN_GENRE,Drama
+Beyond Rangoon,IN_GENRE,Adventure
+Beyond Rangoon,RELEASED_ON,1995-08-25
+Beyond Rangoon,HAS_IMDB_RATING,6.6
+Blue in the Face,HAS_ACTOR,Michael J. Fox
+Blue in the Face,HAS_ACTOR,Mel Gorham
+Blue in the Face,HAS_ACTOR,Roseanne Barr
+Blue in the Face,HAS_ACTOR,Lou Reed
+Blue in the Face,HAS_DIRECTOR,Wayne Wang|Paul Auster| Harvey Wang
+Blue in the Face,IN_GENRE,Drama
+Blue in the Face,IN_GENRE,Comedy
+Blue in the Face,RELEASED_ON,1995-10-13
+Blue in the Face,HAS_IMDB_RATING,6.7
+Canadian Bacon,HAS_ACTOR,John Candy
+Canadian Bacon,HAS_ACTOR,Alan Alda
+Canadian Bacon,HAS_ACTOR,Rhea Perlman
+Canadian Bacon,HAS_ACTOR,Kevin Pollak
+Canadian Bacon,HAS_DIRECTOR,Michael Moore
+Canadian Bacon,IN_GENRE,War
+Canadian Bacon,IN_GENRE,Comedy
+Canadian Bacon,RELEASED_ON,1995-09-22
+Canadian Bacon,HAS_IMDB_RATING,5.9
+Casper,HAS_ACTOR,Chauncey Leopardi
+Casper,HAS_ACTOR,Cathy Moriarty
+Casper,HAS_ACTOR,Malachi Pearson
+Casper,HAS_ACTOR,Spencer Vrooman
+Casper,HAS_DIRECTOR,Brad Silberling
+Casper,IN_GENRE,Children
+Casper,IN_GENRE,Adventure
+Casper,RELEASED_ON,1995-05-26
+Casper,HAS_IMDB_RATING,6.0
+Clockers,HAS_ACTOR,Harvey Keitel
+Clockers,HAS_ACTOR,Delroy Lindo
+Clockers,HAS_ACTOR,John Turturro
+Clockers,HAS_ACTOR,Mekhi Phifer
+Clockers,HAS_DIRECTOR,Spike Lee
+Clockers,IN_GENRE,Drama
+Clockers,IN_GENRE,Mystery
+Clockers,IN_GENRE,Crime
+Clockers,RELEASED_ON,1995-09-13
+Clockers,HAS_IMDB_RATING,6.9
+Congo,HAS_ACTOR,Tim Curry
+Congo,HAS_ACTOR,Laura Linney
+Congo,HAS_ACTOR,Dylan Walsh
+Congo,HAS_ACTOR,Ernie Hudson
+Congo,HAS_DIRECTOR,Frank Marshall
+Congo,IN_GENRE,Adventure
+Congo,IN_GENRE,Action
+Congo,IN_GENRE,Sci-Fi
+Congo,IN_GENRE,Mystery
+Congo,RELEASED_ON,1995-06-09
+Congo,HAS_IMDB_RATING,5.0
+Crimson Tide,HAS_ACTOR,Denzel Washington
+Crimson Tide,HAS_ACTOR,Gene Hackman
+Crimson Tide,HAS_ACTOR,Matt Craven
+Crimson Tide,HAS_ACTOR,George Dzundza
+Crimson Tide,HAS_DIRECTOR,Tony Scott
+Crimson Tide,IN_GENRE,Thriller
+Crimson Tide,IN_GENRE,Drama
+Crimson Tide,IN_GENRE,War
+Crimson Tide,RELEASED_ON,1995-05-12
+Crimson Tide,HAS_IMDB_RATING,7.3
+Crumb,HAS_ACTOR,Aline Kominsky
+Crumb,HAS_ACTOR,Robert Crumb
+Crumb,HAS_ACTOR,Maxon Crumb
+Crumb,HAS_ACTOR,Charles Crumb
+Crumb,HAS_DIRECTOR,Terry Zwigoff
+Crumb,IN_GENRE,Documentary
+Crumb,RELEASED_ON,1995-04-28
+Crumb,HAS_IMDB_RATING,8.0
+Desperado,HAS_ACTOR,Antonio Banderas
+Desperado,HAS_ACTOR,Cheech Marin
+Desperado,HAS_ACTOR,Joaquim de Almeida
+Desperado,HAS_ACTOR,Salma Hayek
+Desperado,HAS_DIRECTOR,Robert Rodriguez
+Desperado,IN_GENRE,Romance
+Desperado,IN_GENRE,Action
+Desperado,IN_GENRE,Western
+Desperado,RELEASED_ON,1995-08-25
+Desperado,HAS_IMDB_RATING,7.2
+Devil in a Blue Dress,HAS_ACTOR,Denzel Washington
+Devil in a Blue Dress,HAS_ACTOR,Jennifer Beals
+Devil in a Blue Dress,HAS_ACTOR,Tom Sizemore
+Devil in a Blue Dress,HAS_ACTOR,Don Cheadle
+Devil in a Blue Dress,HAS_DIRECTOR,Carl Franklin
+Devil in a Blue Dress,IN_GENRE,Mystery
+Devil in a Blue Dress,IN_GENRE,Film-Noir
+Devil in a Blue Dress,IN_GENRE,Thriller
+Devil in a Blue Dress,IN_GENRE,Crime
+Devil in a Blue Dress,RELEASED_ON,1995-09-29
+Devil in a Blue Dress,HAS_IMDB_RATING,6.7
+Die Hard: With a Vengeance,HAS_ACTOR,Bruce Willis
+Die Hard: With a Vengeance,HAS_ACTOR,Samuel L. Jackson
+Die Hard: With a Vengeance,HAS_ACTOR,Jeremy Irons
+Die Hard: With a Vengeance,HAS_ACTOR,Graham Greene
+Die Hard: With a Vengeance,HAS_DIRECTOR,John McTiernan
+Die Hard: With a Vengeance,IN_GENRE,Crime
+Die Hard: With a Vengeance,IN_GENRE,Thriller
+Die Hard: With a Vengeance,IN_GENRE,Action
+Die Hard: With a Vengeance,RELEASED_ON,1995-05-19
+Die Hard: With a Vengeance,HAS_IMDB_RATING,7.6
+"Doom Generation, The",HAS_ACTOR,Rose McGowan
+"Doom Generation, The",HAS_ACTOR,Johnathon Schaech
+"Doom Generation, The",HAS_ACTOR,Cress Williams
+"Doom Generation, The",HAS_ACTOR,James Duval
+"Doom Generation, The",HAS_DIRECTOR,Gregg Araki
+"Doom Generation, The",IN_GENRE,Drama
+"Doom Generation, The",IN_GENRE,Crime
+"Doom Generation, The",IN_GENRE,Comedy
+"Doom Generation, The",RELEASED_ON,1995-10-27
+"Doom Generation, The",HAS_IMDB_RATING,5.9
+Feast of July,HAS_ACTOR,Embeth Davidtz
+Feast of July,HAS_ACTOR,James Purefoy
+Feast of July,HAS_ACTOR,Tom Bell
+Feast of July,HAS_ACTOR,Gemma Jones
+Feast of July,HAS_DIRECTOR,Christopher Menaul
+Feast of July,IN_GENRE,Drama
+Feast of July,RELEASED_ON,1995-10-13
+Feast of July,HAS_IMDB_RATING,6.4
+First Knight,HAS_ACTOR,Sean Connery
+First Knight,HAS_ACTOR,Julia Ormond
+First Knight,HAS_ACTOR,Richard Gere
+First Knight,HAS_ACTOR,Ben Cross
+First Knight,HAS_DIRECTOR, Jerry Zucker
+First Knight,IN_GENRE,Romance
+First Knight,IN_GENRE,Action
+First Knight,IN_GENRE,Drama
+First Knight,RELEASED_ON,1995-07-07
+First Knight,HAS_IMDB_RATING,5.9
+Free Willy 2: The Adventure Home,HAS_ACTOR,Francis Capra
+Free Willy 2: The Adventure Home,HAS_ACTOR,Mary Kate Schellhardt
+Free Willy 2: The Adventure Home,HAS_ACTOR,August Schellenberg
+Free Willy 2: The Adventure Home,HAS_ACTOR,Jason James Richter
+Free Willy 2: The Adventure Home,HAS_DIRECTOR,Dwight H. Little
+Free Willy 2: The Adventure Home,IN_GENRE,Adventure
+Free Willy 2: The Adventure Home,IN_GENRE,Drama
+Free Willy 2: The Adventure Home,IN_GENRE,Children
+Free Willy 2: The Adventure Home,RELEASED_ON,1995-07-19
+Free Willy 2: The Adventure Home,HAS_IMDB_RATING,4.9
+Hackers,HAS_ACTOR,Jesse Bradford
+Hackers,HAS_ACTOR,Jonny Lee Miller
+Hackers,HAS_ACTOR,Matthew Lillard
+Hackers,HAS_ACTOR,Angelina Jolie
+Hackers,HAS_DIRECTOR,Iain Softley
+Hackers,IN_GENRE,Action
+Hackers,IN_GENRE,Adventure
+Hackers,IN_GENRE,Crime
+Hackers,IN_GENRE,Thriller
+Hackers,RELEASED_ON,1995-09-15
+Hackers,HAS_IMDB_RATING,6.2
+Jeffrey,HAS_ACTOR,Patrick Stewart
+Jeffrey,HAS_ACTOR,Michael T. Weiss
+Jeffrey,HAS_ACTOR,Steven Weber
+Jeffrey,HAS_ACTOR,David Thornton
+Jeffrey,HAS_DIRECTOR,Christopher Ashley
+Jeffrey,IN_GENRE,Comedy
+Jeffrey,IN_GENRE,Drama
+Jeffrey,RELEASED_ON,1995-08-18
+Jeffrey,HAS_IMDB_RATING,6.7
+Johnny Mnemonic,HAS_ACTOR,Takeshi Kitano
+Johnny Mnemonic,HAS_ACTOR,Keanu Reeves
+Johnny Mnemonic,HAS_ACTOR,Ice-T
+Johnny Mnemonic,HAS_ACTOR,Dina Meyer
+Johnny Mnemonic,HAS_DIRECTOR,Robert Longo
+Johnny Mnemonic,IN_GENRE,Sci-Fi
+Johnny Mnemonic,IN_GENRE,Action
+Johnny Mnemonic,IN_GENRE,Thriller
+Johnny Mnemonic,RELEASED_ON,1995-05-26
+Johnny Mnemonic,HAS_IMDB_RATING,5.5
+Judge Dredd,HAS_ACTOR,Jürgen Prochnow
+Judge Dredd,HAS_ACTOR,Sylvester Stallone
+Judge Dredd,HAS_ACTOR,Rob Schneider
+Judge Dredd,HAS_ACTOR,Armand Assante
+Judge Dredd,HAS_DIRECTOR,Danny Cannon
+Judge Dredd,IN_GENRE,Sci-Fi
+Judge Dredd,IN_GENRE,Crime
+Judge Dredd,IN_GENRE,Action
+Judge Dredd,RELEASED_ON,1995-06-30
+Judge Dredd,HAS_IMDB_RATING,5.4
+Jury Duty,HAS_ACTOR,Pauly Shore
+Jury Duty,HAS_ACTOR,Brian Doyle-Murray
+Jury Duty,HAS_ACTOR,Stanley Tucci
+Jury Duty,HAS_ACTOR,Tia Carrere
+Jury Duty,HAS_DIRECTOR,John Fortenberry
+Jury Duty,IN_GENRE,Comedy
+Jury Duty,RELEASED_ON,1995-04-12
+Jury Duty,HAS_IMDB_RATING,4.0
+Kids,HAS_ACTOR,Leo Fitzpatrick
+Kids,HAS_ACTOR,Joseph Chan
+Kids,HAS_ACTOR,Sarah Henderson
+Kids,HAS_ACTOR,Justin Pierce
+Kids,HAS_DIRECTOR,Larry Clark
+Kids,IN_GENRE,Drama
+Kids,RELEASED_ON,1995-09-01
+Kids,HAS_IMDB_RATING,7.0
+Living in Oblivion,HAS_ACTOR,Steve Buscemi
+Living in Oblivion,HAS_ACTOR,Danielle von Zerneck
+Living in Oblivion,HAS_ACTOR,Dermot Mulroney
+Living in Oblivion,HAS_ACTOR,Catherine Keener
+Living in Oblivion,HAS_DIRECTOR,Tom DiCillo
+Living in Oblivion,IN_GENRE,Comedy
+Living in Oblivion,RELEASED_ON,1995-07-21
+Living in Oblivion,HAS_IMDB_RATING,7.6
+Lord of Illusions,HAS_ACTOR,Sheila Tousey
+Lord of Illusions,HAS_ACTOR,Joseph Latimore
+Lord of Illusions,HAS_ACTOR,Kevin J. O'Connor
+Lord of Illusions,HAS_ACTOR,Scott Bakula
+Lord of Illusions,HAS_DIRECTOR,Clive Barker
+Lord of Illusions,IN_GENRE,Horror
+Lord of Illusions,RELEASED_ON,1995-08-25
+Lord of Illusions,HAS_IMDB_RATING,6.0
+Love & Human Remains,HAS_ACTOR,Thomas Gibson
+Love & Human Remains,HAS_ACTOR,Ruth Marshall
+Love & Human Remains,HAS_ACTOR,Cameron Bancroft
+Love & Human Remains,HAS_ACTOR,Mia Kirshner
+Love & Human Remains,HAS_DIRECTOR,Denys Arcand
+Love & Human Remains,IN_GENRE,Drama
+Love & Human Remains,IN_GENRE,Comedy
+Love & Human Remains,RELEASED_ON,1995-06-23
+Love & Human Remains,HAS_IMDB_RATING,6.8
+Mad Love,HAS_ACTOR,Chris O'Donnell
+Mad Love,HAS_ACTOR,Richard Chaim
+Mad Love,HAS_ACTOR,Drew Barrymore
+Mad Love,HAS_ACTOR,Matthew Lillard
+Mad Love,HAS_DIRECTOR,Antonia Bird
+Mad Love,IN_GENRE,Romance
+Mad Love,IN_GENRE,Drama
+Mad Love,RELEASED_ON,1995-05-26
+Mad Love,HAS_IMDB_RATING,5.2
+Mallrats,HAS_ACTOR,Shannen Doherty
+Mallrats,HAS_ACTOR,Jason Lee
+Mallrats,HAS_ACTOR,Jeremy London
+Mallrats,HAS_ACTOR,Claire Forlani
+Mallrats,HAS_DIRECTOR,Kevin Smith
+Mallrats,IN_GENRE,Comedy
+Mallrats,IN_GENRE,Romance
+Mallrats,RELEASED_ON,1995-10-20
+Mallrats,HAS_IMDB_RATING,7.2
+Mighty Morphin Power Rangers: The Movie,HAS_ACTOR,Karan Ashley
+Mighty Morphin Power Rangers: The Movie,HAS_ACTOR,Johnny Yong Bosch
+Mighty Morphin Power Rangers: The Movie,HAS_ACTOR,Steve Cardenas
+Mighty Morphin Power Rangers: The Movie,HAS_ACTOR,Jason David Frank
+Mighty Morphin Power Rangers: The Movie,HAS_DIRECTOR,Bryan Spicer
+Mighty Morphin Power Rangers: The Movie,IN_GENRE,Children
+Mighty Morphin Power Rangers: The Movie,IN_GENRE,Action
+Mighty Morphin Power Rangers: The Movie,RELEASED_ON,1995-06-30
+Mighty Morphin Power Rangers: The Movie,HAS_IMDB_RATING,5.0
+Mute Witness,HAS_ACTOR,Fay Ripley
+Mute Witness,HAS_ACTOR,Evan Richards
+Mute Witness,HAS_ACTOR,Oleg Yankovskiy
+Mute Witness,HAS_ACTOR,Marina Zudina
+Mute Witness,HAS_DIRECTOR,Anthony Waller
+Mute Witness,IN_GENRE,Thriller
+Mute Witness,IN_GENRE,Horror
+Mute Witness,IN_GENRE,Comedy
+Mute Witness,RELEASED_ON,1995-09-15
+Mute Witness,HAS_IMDB_RATING,6.8
+Nadja,HAS_ACTOR,Elina Löwensohn
+Nadja,HAS_ACTOR,Nic Ratner
+Nadja,HAS_ACTOR,Karl Geary
+Nadja,HAS_ACTOR,Peter Fonda
+Nadja,HAS_DIRECTOR,Michael Almereyda
+Nadja,IN_GENRE,Drama
+Nadja,RELEASED_ON,1995-09-01
+Nadja,HAS_IMDB_RATING,6.0
+"Net, The",HAS_ACTOR,Sandra Bullock
+"Net, The",HAS_ACTOR,Diane Baker
+"Net, The",HAS_ACTOR,Jeremy Northam
+"Net, The",HAS_ACTOR,Dennis Miller
+"Net, The",HAS_DIRECTOR,Irwin Winkler
+"Net, The",IN_GENRE,Action
+"Net, The",IN_GENRE,Crime
+"Net, The",IN_GENRE,Thriller
+"Net, The",RELEASED_ON,1995-07-28
+"Net, The",HAS_IMDB_RATING,5.8
+Nine Months,HAS_ACTOR,Hugh Grant
+Nine Months,HAS_ACTOR,Joan Cusack
+Nine Months,HAS_ACTOR,Tom Arnold
+Nine Months,HAS_ACTOR,Julianne Moore
+Nine Months,HAS_DIRECTOR,Chris Columbus
+Nine Months,IN_GENRE,Romance
+Nine Months,IN_GENRE,Comedy
+Nine Months,RELEASED_ON,1995-07-12
+Nine Months,HAS_IMDB_RATING,5.4
+Party Girl,HAS_ACTOR,Guillermo Díaz
+Party Girl,HAS_ACTOR,Anthony DeSando
+Party Girl,HAS_ACTOR,Donna Mitchell
+Party Girl,HAS_ACTOR,Parker Posey
+Party Girl,HAS_DIRECTOR,Daisy von Scherler Mayer
+Party Girl,IN_GENRE,Comedy
+Party Girl,RELEASED_ON,1995-06-09
+Party Girl,HAS_IMDB_RATING,6.6
+"Prophecy, The",HAS_ACTOR,Christopher Walken
+"Prophecy, The",HAS_ACTOR,Eric Stoltz
+"Prophecy, The",HAS_ACTOR,Virginia Madsen
+"Prophecy, The",HAS_ACTOR,Elias Koteas
+"Prophecy, The",HAS_DIRECTOR,Gregory Widen
+"Prophecy, The",IN_GENRE,Fantasy
+"Prophecy, The",IN_GENRE,Horror
+"Prophecy, The",IN_GENRE,Mystery
+"Prophecy, The",RELEASED_ON,1995-09-01
+"Prophecy, The",HAS_IMDB_RATING,6.6
+Reckless,HAS_ACTOR,Mary-Louise Parker
+Reckless,HAS_ACTOR,Scott Glenn
+Reckless,HAS_ACTOR,Tony Goldwyn
+Reckless,HAS_ACTOR,Mia Farrow
+Reckless,HAS_DIRECTOR,Norman René
+Reckless,IN_GENRE,Fantasy
+Reckless,IN_GENRE,Comedy
+Reckless,RELEASED_ON,1995-11-17
+Reckless,HAS_IMDB_RATING,5.0
+Safe,HAS_ACTOR,Julianne Moore
+Safe,HAS_ACTOR,Julie Burgess
+Safe,HAS_ACTOR,Dean Norris
+Safe,HAS_ACTOR,Xander Berkeley
+Safe,HAS_DIRECTOR,Todd Haynes
+Safe,IN_GENRE,Thriller
+Safe,RELEASED_ON,1995-06-30
+Safe,HAS_IMDB_RATING,7.1
+"Scarlet Letter, The",HAS_ACTOR,Demi Moore
+"Scarlet Letter, The",HAS_ACTOR,Robert Duvall
+"Scarlet Letter, The",HAS_ACTOR,Gary Oldman
+"Scarlet Letter, The",HAS_ACTOR,Lisa Andoh
+"Scarlet Letter, The",HAS_DIRECTOR,Roland Joffé
+"Scarlet Letter, The",IN_GENRE,Drama
+"Scarlet Letter, The",IN_GENRE,Romance
+"Scarlet Letter, The",RELEASED_ON,1995-10-13
+"Scarlet Letter, The",HAS_IMDB_RATING,5.1
+Showgirls,HAS_ACTOR,Glenn Plummer
+Showgirls,HAS_ACTOR,Kyle MacLachlan
+Showgirls,HAS_ACTOR,Gina Gershon
+Showgirls,HAS_ACTOR,Elizabeth Berkley
+Showgirls,HAS_DIRECTOR,Paul Verhoeven
+Showgirls,IN_GENRE,Drama
+Showgirls,RELEASED_ON,1995-09-22
+Showgirls,HAS_IMDB_RATING,4.6
+Smoke,HAS_ACTOR,Giancarlo Esposito
+Smoke,HAS_ACTOR,Stephen Gevedon
+Smoke,HAS_ACTOR,José Zúñiga
+Smoke,HAS_ACTOR,Harvey Keitel
+Smoke,HAS_DIRECTOR,Paul Auster|Wayne Wang
+Smoke,IN_GENRE,Comedy
+Smoke,IN_GENRE,Drama
+Smoke,RELEASED_ON,1995-06-09
+Smoke,HAS_IMDB_RATING,7.4
+Something to Talk About,HAS_ACTOR,Julia Roberts
+Something to Talk About,HAS_ACTOR,Robert Duvall
+Something to Talk About,HAS_ACTOR,Dennis Quaid
+Something to Talk About,HAS_ACTOR,Gena Rowlands
+Something to Talk About,HAS_DIRECTOR,Lasse Hallström
+Something to Talk About,IN_GENRE,Drama
+Something to Talk About,IN_GENRE,Romance
+Something to Talk About,IN_GENRE,Comedy
+Something to Talk About,RELEASED_ON,1995-08-04
+Something to Talk About,HAS_IMDB_RATING,5.7
+Species,HAS_ACTOR,Alfred Molina
+Species,HAS_ACTOR,Michael Madsen
+Species,HAS_ACTOR,Forest Whitaker
+Species,HAS_ACTOR,Ben Kingsley
+Species,HAS_DIRECTOR,Roger Donaldson
+Species,IN_GENRE,Sci-Fi
+Species,IN_GENRE,Horror
+Species,RELEASED_ON,1995-07-07
+Species,HAS_IMDB_RATING,5.8
+Strange Days,HAS_ACTOR,Ralph Fiennes
+Strange Days,HAS_ACTOR,Angela Bassett
+Strange Days,HAS_ACTOR,Juliette Lewis
+Strange Days,HAS_ACTOR,Tom Sizemore
+Strange Days,HAS_DIRECTOR,Kathryn Bigelow
+Strange Days,IN_GENRE,Crime
+Strange Days,IN_GENRE,Action
+Strange Days,IN_GENRE,Thriller
+Strange Days,IN_GENRE,Sci-Fi
+Strange Days,IN_GENRE,Mystery
+Strange Days,IN_GENRE,Drama
+Strange Days,RELEASED_ON,1995-10-13
+Strange Days,HAS_IMDB_RATING,7.2
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",HAS_ACTOR,Catherine Deneuve
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",HAS_ACTOR,Marc Michel
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",HAS_ACTOR,Anne Vernon
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",HAS_ACTOR,Nino Castelnuovo
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",HAS_DIRECTOR,Jacques Demy
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",IN_GENRE,Drama
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",IN_GENRE,Musical
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",IN_GENRE,Romance
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",RELEASED_ON,1964-12-16
+"Umbrellas of Cherbourg, The (Parapluies de Cherbourg, Les)",HAS_IMDB_RATING,7.8
+"Tie That Binds, The",HAS_ACTOR,Keith Carradine
+"Tie That Binds, The",HAS_ACTOR,Daryl Hannah
+"Tie That Binds, The",HAS_ACTOR,Vincent Spano
+"Tie That Binds, The",HAS_ACTOR,Moira Kelly
+"Tie That Binds, The",HAS_DIRECTOR,Wesley Strick
+"Tie That Binds, The",IN_GENRE,Thriller
+"Tie That Binds, The",RELEASED_ON,1995-09-08
+"Tie That Binds, The",HAS_IMDB_RATING,5.0
+Three Wishes,HAS_ACTOR,Patrick Swayze
+Three Wishes,HAS_ACTOR,Seth Mumy
+Three Wishes,HAS_ACTOR,Mary Elizabeth Mastrantonio
+Three Wishes,HAS_ACTOR,Joseph Mazzello
+Three Wishes,HAS_DIRECTOR,Martha Coolidge
+Three Wishes,IN_GENRE,Drama
+Three Wishes,IN_GENRE,Fantasy
+Three Wishes,RELEASED_ON,1995-10-27
+Three Wishes,HAS_IMDB_RATING,6.1
+Total Eclipse,HAS_ACTOR,David Thewlis
+Total Eclipse,HAS_ACTOR,Leonardo DiCaprio
+Total Eclipse,HAS_ACTOR,Dominique Blanc
+Total Eclipse,HAS_ACTOR,Romane Bohringer
+Total Eclipse,HAS_DIRECTOR,Agnieszka Holland
+Total Eclipse,IN_GENRE,Drama
+Total Eclipse,IN_GENRE,Romance
+Total Eclipse,RELEASED_ON,1995-11-03
+Total Eclipse,HAS_IMDB_RATING,6.5
+"To Wong Foo, Thanks for Everything! Julie Newmar",HAS_ACTOR,Wesley Snipes
+"To Wong Foo, Thanks for Everything! Julie Newmar",HAS_ACTOR,Stockard Channing
+"To Wong Foo, Thanks for Everything! Julie Newmar",HAS_ACTOR,Patrick Swayze
+"To Wong Foo, Thanks for Everything! Julie Newmar",HAS_ACTOR,John Leguizamo
+"To Wong Foo, Thanks for Everything! Julie Newmar",HAS_DIRECTOR,Beeban Kidron
+"To Wong Foo, Thanks for Everything! Julie Newmar",IN_GENRE,Comedy
+"To Wong Foo, Thanks for Everything! Julie Newmar",RELEASED_ON,1995-09-08
+"To Wong Foo, Thanks for Everything! Julie Newmar",HAS_IMDB_RATING,6.3
+Under Siege 2: Dark Territory,HAS_ACTOR,Eric Bogosian
+Under Siege 2: Dark Territory,HAS_ACTOR,Everett McGill
+Under Siege 2: Dark Territory,HAS_ACTOR,Katherine Heigl
+Under Siege 2: Dark Territory,HAS_ACTOR,Steven Seagal
+Under Siege 2: Dark Territory,HAS_DIRECTOR,Geoff Murphy
+Under Siege 2: Dark Territory,IN_GENRE,Action
+Under Siege 2: Dark Territory,RELEASED_ON,1995-07-14
+Under Siege 2: Dark Territory,HAS_IMDB_RATING,5.4
+Unstrung Heroes,HAS_ACTOR,Andie MacDowell
+Unstrung Heroes,HAS_ACTOR,Michael Richards
+Unstrung Heroes,HAS_ACTOR,John Turturro
+Unstrung Heroes,HAS_ACTOR,Maury Chaykin
+Unstrung Heroes,HAS_DIRECTOR,Diane Keaton
+Unstrung Heroes,IN_GENRE,Drama
+Unstrung Heroes,IN_GENRE,Comedy
+Unstrung Heroes,RELEASED_ON,1995-09-22
+Unstrung Heroes,HAS_IMDB_RATING,6.8
+Unzipped,HAS_ACTOR,Isaac Mizrahi
+Unzipped,HAS_ACTOR,Roseanne Barr
+Unzipped,HAS_ACTOR,Sandra Bernhard
+Unzipped,HAS_ACTOR,Natane Boudreau
+Unzipped,HAS_DIRECTOR,Douglas Keeve
+Unzipped,IN_GENRE,Documentary
+Unzipped,RELEASED_ON,1995-08-11
+Unzipped,HAS_IMDB_RATING,6.4
+"Walk in the Clouds, A",HAS_ACTOR,Keanu Reeves
+"Walk in the Clouds, A",HAS_ACTOR,Giancarlo Giannini
+"Walk in the Clouds, A",HAS_ACTOR,Anthony Quinn
+"Walk in the Clouds, A",HAS_ACTOR,Aitana Sánchez-Gijón
+"Walk in the Clouds, A",HAS_DIRECTOR,Alfonso Arau
+"Walk in the Clouds, A",IN_GENRE,Drama
+"Walk in the Clouds, A",IN_GENRE,Romance
+"Walk in the Clouds, A",RELEASED_ON,1995-08-11
+"Walk in the Clouds, A",HAS_IMDB_RATING,6.6
+Waterworld,HAS_ACTOR,Kevin Costner
+Waterworld,HAS_ACTOR,R.D. Call
+Waterworld,HAS_ACTOR,Rick Aviles
+Waterworld,HAS_ACTOR,Chaim Jeraffi
+Waterworld,HAS_DIRECTOR,Kevin Reynolds
+Waterworld,IN_GENRE,Adventure
+Waterworld,IN_GENRE,Sci-Fi
+Waterworld,IN_GENRE,Action
+Waterworld,RELEASED_ON,1995-07-28
+Waterworld,HAS_IMDB_RATING,6.1
+White Man's Burden,HAS_ACTOR,Harry Belafonte
+White Man's Burden,HAS_ACTOR,John Travolta
+White Man's Burden,HAS_ACTOR,Kelly Lynch
+White Man's Burden,HAS_ACTOR,Margaret Avery
+White Man's Burden,HAS_DIRECTOR,Desmond Nakano
+White Man's Burden,IN_GENRE,Drama
+White Man's Burden,RELEASED_ON,1995-12-01
+White Man's Burden,HAS_IMDB_RATING,5.2
+"Browning Version, The",HAS_ACTOR,Greta Scacchi
+"Browning Version, The",HAS_ACTOR,Albert Finney
+"Browning Version, The",HAS_ACTOR,Julian Sands
+"Browning Version, The",HAS_ACTOR,Matthew Modine
+"Browning Version, The",HAS_DIRECTOR,Mike Figgis
+"Browning Version, The",IN_GENRE,Drama
+"Browning Version, The",RELEASED_ON,1994-10-12
+"Browning Version, The",HAS_IMDB_RATING,7.3
+Burnt by the Sun (Utomlyonnye solntsem),HAS_ACTOR,Nikita Mikhalkov
+Burnt by the Sun (Utomlyonnye solntsem),HAS_ACTOR,Ingeborga Dapkunaite
+Burnt by the Sun (Utomlyonnye solntsem),HAS_ACTOR,Nadezhda Mikhalkova
+Burnt by the Sun (Utomlyonnye solntsem),HAS_ACTOR,Oleg Menshikov
+Burnt by the Sun (Utomlyonnye solntsem),HAS_DIRECTOR,Nikita Mikhalkov
+Burnt by the Sun (Utomlyonnye solntsem),IN_GENRE,Drama
+Burnt by the Sun (Utomlyonnye solntsem),RELEASED_ON,1995-04-21
+Burnt by the Sun (Utomlyonnye solntsem),HAS_IMDB_RATING,8.0
+Before the Rain (Pred dozhdot),HAS_ACTOR,Katrin Cartlidge
+Before the Rain (Pred dozhdot),HAS_ACTOR,Labina Mitevska
+Before the Rain (Pred dozhdot),HAS_ACTOR,Grégoire Colin
+Before the Rain (Pred dozhdot),HAS_ACTOR,Rade Serbedzija
+Before the Rain (Pred dozhdot),HAS_DIRECTOR,Milcho Manchevski
+Before the Rain (Pred dozhdot),IN_GENRE,Drama
+Before the Rain (Pred dozhdot),IN_GENRE,War
+Before the Rain (Pred dozhdot),RELEASED_ON,1995-02-24
+Before the Rain (Pred dozhdot),HAS_IMDB_RATING,8.1
+Before Sunrise,HAS_ACTOR,Andrea Eckert
+Before Sunrise,HAS_ACTOR,Julie Delpy
+Before Sunrise,HAS_ACTOR,Ethan Hawke
+Before Sunrise,HAS_ACTOR,Hanno Pöschl
+Before Sunrise,HAS_DIRECTOR,Richard Linklater
+Before Sunrise,IN_GENRE,Romance
+Before Sunrise,IN_GENRE,Drama
+Before Sunrise,RELEASED_ON,1995-01-27
+Before Sunrise,HAS_IMDB_RATING,8.1
+Billy Madison,HAS_ACTOR,Bridgette Wilson
+Billy Madison,HAS_ACTOR,Adam Sandler
+Billy Madison,HAS_ACTOR,Darren McGavin
+Billy Madison,HAS_ACTOR,Bradley Whitford
+Billy Madison,HAS_DIRECTOR,Tamra Davis
+Billy Madison,IN_GENRE,Comedy
+Billy Madison,RELEASED_ON,1995-02-10
+Billy Madison,HAS_IMDB_RATING,6.4
+"Babysitter, The",HAS_ACTOR,Alicia Silverstone
+"Babysitter, The",HAS_ACTOR,J.T. Walsh
+"Babysitter, The",HAS_ACTOR,Jeremy London
+"Babysitter, The",HAS_ACTOR,Lee Garlington
+"Babysitter, The",HAS_DIRECTOR,Guy Ferland
+"Babysitter, The",IN_GENRE,Drama
+"Babysitter, The",IN_GENRE,Thriller
+"Babysitter, The",RELEASED_ON,1995-10-17
+"Babysitter, The",HAS_IMDB_RATING,4.2
+Boys on the Side,HAS_ACTOR,Whoopi Goldberg
+Boys on the Side,HAS_ACTOR,Drew Barrymore
+Boys on the Side,HAS_ACTOR,Mary-Louise Parker
+Boys on the Side,HAS_ACTOR,Matthew McConaughey
+Boys on the Side,HAS_DIRECTOR,Herbert Ross
+Boys on the Side,IN_GENRE,Comedy
+Boys on the Side,IN_GENRE,Drama
+Boys on the Side,RELEASED_ON,1995-02-03
+Boys on the Side,HAS_IMDB_RATING,6.4
+"Cure, The",HAS_ACTOR,Joseph Mazzello
+"Cure, The",HAS_ACTOR,Annabella Sciorra
+"Cure, The",HAS_ACTOR,Brad Renfro
+"Cure, The",HAS_ACTOR,Aeryk Egan
+"Cure, The",HAS_DIRECTOR,Peter Horton
+"Cure, The",IN_GENRE,Drama
+"Cure, The",RELEASED_ON,1995-04-21
+"Cure, The",HAS_IMDB_RATING,7.7
+Castle Freak,HAS_ACTOR,Jeffrey Combs
+Castle Freak,HAS_ACTOR,Jonathan Fuller
+Castle Freak,HAS_ACTOR,Barbara Crampton
+Castle Freak,HAS_ACTOR,Jessica Dollarhide
+Castle Freak,HAS_DIRECTOR,Stuart Gordon
+Castle Freak,IN_GENRE,Horror
+Castle Freak,RELEASED_ON,1995-11-14
+Castle Freak,HAS_IMDB_RATING,5.9
+Circle of Friends,HAS_ACTOR,Chris O'Donnell
+Circle of Friends,HAS_ACTOR,Saffron Burrows
+Circle of Friends,HAS_ACTOR,Minnie Driver
+Circle of Friends,HAS_ACTOR,Geraldine O'Rawe
+Circle of Friends,HAS_DIRECTOR,Pat O'Connor
+Circle of Friends,IN_GENRE,Drama
+Circle of Friends,IN_GENRE,Romance
+Circle of Friends,RELEASED_ON,1995-04-07
+Circle of Friends,HAS_IMDB_RATING,6.6
+Clerks,HAS_ACTOR,Jason Mewes
+Clerks,HAS_ACTOR,Brian O'Halloran
+Clerks,HAS_ACTOR,Jeff Anderson
+Clerks,HAS_ACTOR,Marilyn Ghigliotti
+Clerks,HAS_DIRECTOR,Kevin Smith
+Clerks,IN_GENRE,Comedy
+Clerks,RELEASED_ON,1994-11-04
+Clerks,HAS_IMDB_RATING,7.8
+Don Juan DeMarco,HAS_ACTOR,Johnny Depp
+Don Juan DeMarco,HAS_ACTOR,Marlon Brando
+Don Juan DeMarco,HAS_ACTOR,Faye Dunaway
+Don Juan DeMarco,HAS_ACTOR,Géraldine Pailhas
+Don Juan DeMarco,HAS_DIRECTOR,Jeremy Leven
+Don Juan DeMarco,IN_GENRE,Drama
+Don Juan DeMarco,IN_GENRE,Romance
+Don Juan DeMarco,IN_GENRE,Comedy
+Don Juan DeMarco,RELEASED_ON,1995-04-07
+Don Juan DeMarco,HAS_IMDB_RATING,6.8
+Disclosure,HAS_ACTOR,Michael Douglas
+Disclosure,HAS_ACTOR,Donald Sutherland
+Disclosure,HAS_ACTOR,Demi Moore
+Disclosure,HAS_ACTOR,Caroline Goodall
+Disclosure,HAS_DIRECTOR,Barry Levinson
+Disclosure,IN_GENRE,Thriller
+Disclosure,IN_GENRE,Drama
+Disclosure,RELEASED_ON,1994-12-09
+Disclosure,HAS_IMDB_RATING,6.0
+Drop Zone,HAS_ACTOR,Wesley Snipes
+Drop Zone,HAS_ACTOR,Gary Busey
+Drop Zone,HAS_ACTOR,Michael Jeter
+Drop Zone,HAS_ACTOR,Yancy Butler
+Drop Zone,HAS_DIRECTOR,John Badham
+Drop Zone,IN_GENRE,Thriller
+Drop Zone,IN_GENRE,Action
+Drop Zone,RELEASED_ON,1994-12-09
+Drop Zone,HAS_IMDB_RATING,5.6
+Destiny Turns on the Radio,HAS_ACTOR,James Le Gros
+Destiny Turns on the Radio,HAS_ACTOR,Dylan McDermott
+Destiny Turns on the Radio,HAS_ACTOR,Nancy Travis
+Destiny Turns on the Radio,HAS_ACTOR,Quentin Tarantino
+Destiny Turns on the Radio,HAS_DIRECTOR,Jack Baran
+Destiny Turns on the Radio,IN_GENRE,Comedy
+Destiny Turns on the Radio,RELEASED_ON,1995-04-28
+Destiny Turns on the Radio,HAS_IMDB_RATING,4.4
+Death and the Maiden,HAS_ACTOR,Ben Kingsley
+Death and the Maiden,HAS_ACTOR,Sigourney Weaver
+Death and the Maiden,HAS_ACTOR,Stuart Wilson
+Death and the Maiden,HAS_ACTOR,Krystia Mova
+Death and the Maiden,HAS_DIRECTOR,Roman Polanski
+Death and the Maiden,IN_GENRE,Thriller
+Death and the Maiden,IN_GENRE,Drama
+Death and the Maiden,RELEASED_ON,1995-01-27
+Death and the Maiden,HAS_IMDB_RATING,7.3
+Dolores Claiborne,HAS_ACTOR,Kathy Bates
+Dolores Claiborne,HAS_ACTOR,Judy Parfitt
+Dolores Claiborne,HAS_ACTOR,Christopher Plummer
+Dolores Claiborne,HAS_ACTOR,Jennifer Jason Leigh
+Dolores Claiborne,HAS_DIRECTOR,Taylor Hackford
+Dolores Claiborne,IN_GENRE,Thriller
+Dolores Claiborne,IN_GENRE,Drama
+Dolores Claiborne,RELEASED_ON,1995-03-24
+Dolores Claiborne,HAS_IMDB_RATING,7.4
+Dumb & Dumber (Dumb and Dumber),HAS_ACTOR,Jim Carrey
+Dumb & Dumber (Dumb and Dumber),HAS_ACTOR,Mike Starr
+Dumb & Dumber (Dumb and Dumber),HAS_ACTOR,Jeff Daniels
+Dumb & Dumber (Dumb and Dumber),HAS_ACTOR,Lauren Holly
+Dumb & Dumber (Dumb and Dumber),HAS_DIRECTOR, Peter Farrelly
+Dumb & Dumber (Dumb and Dumber),IN_GENRE,Comedy
+Dumb & Dumber (Dumb and Dumber),IN_GENRE,Adventure
+Dumb & Dumber (Dumb and Dumber),RELEASED_ON,1994-12-16
+Dumb & Dumber (Dumb and Dumber),HAS_IMDB_RATING,7.3
+Eat Drink Man Woman (Yin shi nan nu),HAS_ACTOR,Sihung Lung
+Eat Drink Man Woman (Yin shi nan nu),HAS_ACTOR,Yu-Wen Wang
+Eat Drink Man Woman (Yin shi nan nu),HAS_ACTOR,Chien-Lien Wu
+Eat Drink Man Woman (Yin shi nan nu),HAS_ACTOR,Kuei-Mei Yang
+Eat Drink Man Woman (Yin shi nan nu),HAS_DIRECTOR,Ang Lee
+Eat Drink Man Woman (Yin shi nan nu),IN_GENRE,Romance
+Eat Drink Man Woman (Yin shi nan nu),IN_GENRE,Drama
+Eat Drink Man Woman (Yin shi nan nu),IN_GENRE,Comedy
+Eat Drink Man Woman (Yin shi nan nu),RELEASED_ON,1994-08-03
+Eat Drink Man Woman (Yin shi nan nu),HAS_IMDB_RATING,7.8
+Exotica,HAS_ACTOR,David Hemblen
+Exotica,HAS_ACTOR,Calvin Green
+Exotica,HAS_ACTOR,Don McKellar
+Exotica,HAS_ACTOR,Peter Krantz
+Exotica,HAS_DIRECTOR,Atom Egoyan
+Exotica,IN_GENRE,Drama
+Exotica,RELEASED_ON,1995-03-24
+Exotica,HAS_IMDB_RATING,7.2
+Exit to Eden,HAS_ACTOR,Dana Delany
+Exit to Eden,HAS_ACTOR,Dan Aykroyd
+Exit to Eden,HAS_ACTOR,Paul Mercurio
+Exit to Eden,HAS_ACTOR,Rosie O'Donnell
+Exit to Eden,HAS_DIRECTOR,Garry Marshall
+Exit to Eden,IN_GENRE,Comedy
+Exit to Eden,RELEASED_ON,1994-10-14
+Exit to Eden,HAS_IMDB_RATING,4.1
+Ed Wood,HAS_ACTOR,Sarah Jessica Parker
+Ed Wood,HAS_ACTOR,Martin Landau
+Ed Wood,HAS_ACTOR,Johnny Depp
+Ed Wood,HAS_ACTOR,Patricia Arquette
+Ed Wood,HAS_DIRECTOR,Tim Burton
+Ed Wood,IN_GENRE,Comedy
+Ed Wood,IN_GENRE,Drama
+Ed Wood,RELEASED_ON,1994-10-07
+Ed Wood,HAS_IMDB_RATING,7.9
+French Kiss,HAS_ACTOR,Meg Ryan
+French Kiss,HAS_ACTOR,Jean Reno
+French Kiss,HAS_ACTOR,Timothy Hutton
+French Kiss,HAS_ACTOR,Kevin Kline
+French Kiss,HAS_DIRECTOR,Lawrence Kasdan
+French Kiss,IN_GENRE,Romance
+French Kiss,IN_GENRE,Comedy
+French Kiss,IN_GENRE,Action
+French Kiss,RELEASED_ON,1995-05-05
+French Kiss,HAS_IMDB_RATING,6.5
+Forget Paris,HAS_ACTOR,Billy Crystal
+Forget Paris,HAS_ACTOR,Joe Mantegna
+Forget Paris,HAS_ACTOR,Debra Winger
+Forget Paris,HAS_ACTOR,Cynthia Stevenson
+Forget Paris,HAS_DIRECTOR,Billy Crystal
+Forget Paris,IN_GENRE,Comedy
+Forget Paris,IN_GENRE,Romance
+Forget Paris,RELEASED_ON,1995-05-19
+Forget Paris,HAS_IMDB_RATING,6.4
+Far From Home: The Adventures of Yellow Dog,HAS_ACTOR,Jesse Bradford
+Far From Home: The Adventures of Yellow Dog,HAS_ACTOR,Mimi Rogers
+Far From Home: The Adventures of Yellow Dog,HAS_ACTOR,Tom Bower
+Far From Home: The Adventures of Yellow Dog,HAS_ACTOR,Bruce Davison
+Far From Home: The Adventures of Yellow Dog,HAS_DIRECTOR,Phillip Borsos
+Far From Home: The Adventures of Yellow Dog,IN_GENRE,Adventure
+Far From Home: The Adventures of Yellow Dog,IN_GENRE,Children
+Far From Home: The Adventures of Yellow Dog,RELEASED_ON,1995-01-13
+Far From Home: The Adventures of Yellow Dog,HAS_IMDB_RATING,6.4
+"Goofy Movie, A",HAS_ACTOR,Bill Farmer
+"Goofy Movie, A",HAS_ACTOR,Kellie Martin
+"Goofy Movie, A",HAS_ACTOR,Jason Marsden
+"Goofy Movie, A",HAS_ACTOR,Jim Cummings
+"Goofy Movie, A",HAS_DIRECTOR,Kevin Lima
+"Goofy Movie, A",IN_GENRE,Animation
+"Goofy Movie, A",IN_GENRE,Children
+"Goofy Movie, A",IN_GENRE,Comedy
+"Goofy Movie, A",IN_GENRE,Romance
+"Goofy Movie, A",RELEASED_ON,1995-04-07
+"Goofy Movie, A",HAS_IMDB_RATING,6.8
+Hideaway,HAS_ACTOR,Jeff Goldblum
+Hideaway,HAS_ACTOR,Alicia Silverstone
+Hideaway,HAS_ACTOR,Christine Lahti
+Hideaway,HAS_ACTOR,Jeremy Sisto
+Hideaway,HAS_DIRECTOR,Brett Leonard
+Hideaway,IN_GENRE,Thriller
+Hideaway,RELEASED_ON,1995-03-03
+Hideaway,HAS_IMDB_RATING,5.3
+Fluke,HAS_ACTOR,Samuel L. Jackson
+Fluke,HAS_ACTOR,Nancy Travis
+Fluke,HAS_ACTOR,Matthew Modine
+Fluke,HAS_ACTOR,Eric Stoltz
+Fluke,HAS_DIRECTOR,Carlo Carlei
+Fluke,IN_GENRE,Children
+Fluke,IN_GENRE,Drama
+Fluke,RELEASED_ON,1995-06-02
+Fluke,HAS_IMDB_RATING,6.7
+Farinelli: il castrato,HAS_ACTOR,Stefano Dionisi
+Farinelli: il castrato,HAS_ACTOR,Enrico Lo Verso
+Farinelli: il castrato,HAS_ACTOR,Jeroen Krabbé
+Farinelli: il castrato,HAS_ACTOR,Elsa Zylberstein
+Farinelli: il castrato,HAS_DIRECTOR,Gérard Corbiau
+Farinelli: il castrato,IN_GENRE,Drama
+Farinelli: il castrato,IN_GENRE,Musical
+Farinelli: il castrato,RELEASED_ON,1995-03-17
+Farinelli: il castrato,HAS_IMDB_RATING,6.9
+Gordy,HAS_ACTOR,Doug Stone
+Gordy,HAS_ACTOR,Deborah Hobart
+Gordy,HAS_ACTOR,Kristy Young
+Gordy,HAS_ACTOR,James Donadio
+Gordy,HAS_DIRECTOR,Mark Lewis
+Gordy,IN_GENRE,Comedy
+Gordy,IN_GENRE,Children
+Gordy,IN_GENRE,Fantasy
+Gordy,RELEASED_ON,1995-05-12
+Gordy,HAS_IMDB_RATING,3.9
+Gumby: The Movie,HAS_ACTOR,Dal McKennon
+Gumby: The Movie,HAS_ACTOR,Manny La Carruba
+Gumby: The Movie,HAS_ACTOR,Gloria Clokey
+Gumby: The Movie,HAS_ACTOR,Art Clokey
+Gumby: The Movie,HAS_DIRECTOR,Art Clokey
+Gumby: The Movie,IN_GENRE,Animation
+Gumby: The Movie,IN_GENRE,Children
+Gumby: The Movie,RELEASED_ON,1995-12-01
+Gumby: The Movie,HAS_IMDB_RATING,6.2
+The Glass Shield,HAS_ACTOR,Monty Bane
+The Glass Shield,HAS_ACTOR,Thomas Babson
+The Glass Shield,HAS_ACTOR,Richard Anderson
+The Glass Shield,HAS_ACTOR,Erich Anderson
+The Glass Shield,HAS_DIRECTOR,Charles Burnett
+The Glass Shield,IN_GENRE,Crime
+The Glass Shield,IN_GENRE,Drama
+The Glass Shield,RELEASED_ON,1995-06-02
+The Glass Shield,HAS_IMDB_RATING,6.6
+Hoop Dreams,HAS_ACTOR,Dick Vitale
+Hoop Dreams,HAS_ACTOR,Steve James
+Hoop Dreams,HAS_ACTOR,Arthur Agee
+Hoop Dreams,HAS_ACTOR,William Gates
+Hoop Dreams,HAS_DIRECTOR,Steve James
+Hoop Dreams,IN_GENRE,Documentary
+Hoop Dreams,RELEASED_ON,1994-10-14
+Hoop Dreams,HAS_IMDB_RATING,8.3
+Heavenly Creatures,HAS_ACTOR,Kate Winslet
+Heavenly Creatures,HAS_ACTOR,Melanie Lynskey
+Heavenly Creatures,HAS_ACTOR,Diana Kent
+Heavenly Creatures,HAS_ACTOR,Sarah Peirse
+Heavenly Creatures,HAS_DIRECTOR,Peter Jackson
+Heavenly Creatures,IN_GENRE,Crime
+Heavenly Creatures,IN_GENRE,Drama
+Heavenly Creatures,RELEASED_ON,1994-10-14
+Heavenly Creatures,HAS_IMDB_RATING,7.4
+Houseguest,HAS_ACTOR,Phil Hartman
+Houseguest,HAS_ACTOR,Sinbad
+Houseguest,HAS_ACTOR,Kim Murphy
+Houseguest,HAS_ACTOR,Kim Greist
+Houseguest,HAS_DIRECTOR,Randall Miller
+Houseguest,IN_GENRE,Comedy
+Houseguest,RELEASED_ON,1995-01-06
+Houseguest,HAS_IMDB_RATING,5.9
+Immortal Beloved,HAS_ACTOR,Isabella Rossellini
+Immortal Beloved,HAS_ACTOR,Jeroen Krabbé
+Immortal Beloved,HAS_ACTOR,Gary Oldman
+Immortal Beloved,HAS_ACTOR,Johanna ter Steege
+Immortal Beloved,HAS_DIRECTOR,Bernard Rose
+Immortal Beloved,IN_GENRE,Drama
+Immortal Beloved,IN_GENRE,Romance
+Immortal Beloved,RELEASED_ON,1995-01-27
+Immortal Beloved,HAS_IMDB_RATING,7.5
+Heavyweights (Heavy Weights),HAS_ACTOR,David Goldman
+Heavyweights (Heavy Weights),HAS_ACTOR,Joseph Wayne Miller
+Heavyweights (Heavy Weights),HAS_ACTOR,Allen Covert
+Heavyweights (Heavy Weights),HAS_ACTOR,Cody Burger
+Heavyweights (Heavy Weights),HAS_DIRECTOR,Steven Brill
+Heavyweights (Heavy Weights),IN_GENRE,Children
+Heavyweights (Heavy Weights),IN_GENRE,Comedy
+Heavyweights (Heavy Weights),RELEASED_ON,1995-02-17
+Heavyweights (Heavy Weights),HAS_IMDB_RATING,6.7
+"Hunted, The",HAS_ACTOR,John Lone
+"Hunted, The",HAS_ACTOR,Christopher Lambert
+"Hunted, The",HAS_ACTOR,Yoshio Harada
+"Hunted, The",HAS_ACTOR,Joan Chen
+"Hunted, The",HAS_DIRECTOR,J. F. Lawton|J.F. Lawton
+"Hunted, The",IN_GENRE,Action
+"Hunted, The",RELEASED_ON,1995-02-24
+"Hunted, The",HAS_IMDB_RATING,5.9
+I.Q.,HAS_ACTOR,Tim Robbins
+I.Q.,HAS_ACTOR,Meg Ryan
+I.Q.,HAS_ACTOR,Walter Matthau
+I.Q.,HAS_ACTOR,Lou Jacobi
+I.Q.,HAS_DIRECTOR,Fred Schepisi
+I.Q.,IN_GENRE,Comedy
+I.Q.,IN_GENRE,Romance
+I.Q.,RELEASED_ON,1994-12-25
+I.Q.,HAS_IMDB_RATING,6.2
+Interview with the Vampire: The Vampire Chronicles,HAS_ACTOR,Tom Cruise
+Interview with the Vampire: The Vampire Chronicles,HAS_ACTOR,Brad Pitt
+Interview with the Vampire: The Vampire Chronicles,HAS_ACTOR,Christian Slater
+Interview with the Vampire: The Vampire Chronicles,HAS_ACTOR,Virginia McCollam
+Interview with the Vampire: The Vampire Chronicles,HAS_DIRECTOR,Neil Jordan
+Interview with the Vampire: The Vampire Chronicles,IN_GENRE,Horror
+Interview with the Vampire: The Vampire Chronicles,IN_GENRE,Drama
+Interview with the Vampire: The Vampire Chronicles,RELEASED_ON,1994-11-11
+Interview with the Vampire: The Vampire Chronicles,HAS_IMDB_RATING,7.6
+Jefferson in Paris,HAS_ACTOR,Greta Scacchi
+Jefferson in Paris,HAS_ACTOR,Gwyneth Paltrow
+Jefferson in Paris,HAS_ACTOR,Thandie Newton
+Jefferson in Paris,HAS_ACTOR,Nick Nolte
+Jefferson in Paris,HAS_DIRECTOR,James Ivory
+Jefferson in Paris,IN_GENRE,Drama
+Jefferson in Paris,RELEASED_ON,1995-03-31
+Jefferson in Paris,HAS_IMDB_RATING,5.7
+"Jerky Boys, The",HAS_ACTOR,William Hickey
+"Jerky Boys, The",HAS_ACTOR,Alan Arkin
+"Jerky Boys, The",HAS_ACTOR,Kamal Ahmed
+"Jerky Boys, The",HAS_ACTOR,John G. Brennan
+"Jerky Boys, The",HAS_DIRECTOR,James Melkonian
+"Jerky Boys, The",IN_GENRE,Comedy
+"Jerky Boys, The",RELEASED_ON,1995-02-03
+"Jerky Boys, The",HAS_IMDB_RATING,4.5
+Junior,HAS_ACTOR,Arnold Schwarzenegger
+Junior,HAS_ACTOR,Danny DeVito
+Junior,HAS_ACTOR,Emma Thompson
+Junior,HAS_ACTOR,Frank Langella
+Junior,HAS_DIRECTOR,Ivan Reitman
+Junior,IN_GENRE,Comedy
+Junior,IN_GENRE,Sci-Fi
+Junior,RELEASED_ON,1994-11-23
+Junior,HAS_IMDB_RATING,4.5
+Just Cause,HAS_ACTOR,Sean Connery
+Just Cause,HAS_ACTOR,Laurence Fishburne
+Just Cause,HAS_ACTOR,Blair Underwood
+Just Cause,HAS_ACTOR,Kate Capshaw
+Just Cause,HAS_DIRECTOR,Arne Glimcher
+Just Cause,IN_GENRE,Mystery
+Just Cause,IN_GENRE,Thriller
+Just Cause,RELEASED_ON,1995-02-17
+Just Cause,HAS_IMDB_RATING,6.4
+"Kid in King Arthur's Court, A",HAS_ACTOR,Thomas Ian Nicholas
+"Kid in King Arthur's Court, A",HAS_ACTOR,Paloma Baeza
+"Kid in King Arthur's Court, A",HAS_ACTOR,Joss Ackland
+"Kid in King Arthur's Court, A",HAS_ACTOR,Art Malik
+"Kid in King Arthur's Court, A",HAS_DIRECTOR,Michael Gottlieb
+"Kid in King Arthur's Court, A",IN_GENRE,Adventure
+"Kid in King Arthur's Court, A",IN_GENRE,Children
+"Kid in King Arthur's Court, A",IN_GENRE,Romance
+"Kid in King Arthur's Court, A",IN_GENRE,Comedy
+"Kid in King Arthur's Court, A",IN_GENRE,Fantasy
+"Kid in King Arthur's Court, A",RELEASED_ON,1995-08-11
+"Kid in King Arthur's Court, A",HAS_IMDB_RATING,4.8
+Kiss of Death,HAS_ACTOR,Nicolas Cage
+Kiss of Death,HAS_ACTOR,David Caruso
+Kiss of Death,HAS_ACTOR,Helen Hunt
+Kiss of Death,HAS_ACTOR,Samuel L. Jackson
+Kiss of Death,HAS_DIRECTOR,Barbet Schroeder
+Kiss of Death,IN_GENRE,Crime
+Kiss of Death,IN_GENRE,Thriller
+Kiss of Death,IN_GENRE,Drama
+Kiss of Death,RELEASED_ON,1995-04-21
+Kiss of Death,HAS_IMDB_RATING,5.9
+Star Wars: Episode IV - A New Hope,HAS_ACTOR,Peter Cushing
+Star Wars: Episode IV - A New Hope,HAS_ACTOR,Mark Hamill
+Star Wars: Episode IV - A New Hope,HAS_ACTOR,Harrison Ford
+Star Wars: Episode IV - A New Hope,HAS_ACTOR,Carrie Fisher
+Star Wars: Episode IV - A New Hope,HAS_DIRECTOR,George Lucas
+Star Wars: Episode IV - A New Hope,IN_GENRE,Sci-Fi
+Star Wars: Episode IV - A New Hope,IN_GENRE,Action
+Star Wars: Episode IV - A New Hope,IN_GENRE,Adventure
+Star Wars: Episode IV - A New Hope,RELEASED_ON,1977-05-25
+Star Wars: Episode IV - A New Hope,HAS_IMDB_RATING,8.7
+Little Women,HAS_ACTOR,Gabriel Byrne
+Little Women,HAS_ACTOR,Winona Ryder
+Little Women,HAS_ACTOR,Samantha Mathis
+Little Women,HAS_ACTOR,Trini Alvarado
+Little Women,HAS_DIRECTOR,Gillian Armstrong
+Little Women,IN_GENRE,Drama
+Little Women,RELEASED_ON,1994-12-25
+Little Women,HAS_IMDB_RATING,7.3
+"Little Princess, A",HAS_ACTOR,Liesel Matthews
+"Little Princess, A",HAS_ACTOR,Eleanor Bron
+"Little Princess, A",HAS_ACTOR,Liam Cunningham
+"Little Princess, A",HAS_ACTOR,Rusty Schwimmer
+"Little Princess, A",HAS_DIRECTOR,Alfonso Cuarón
+"Little Princess, A",IN_GENRE,Drama
+"Little Princess, A",IN_GENRE,Children
+"Little Princess, A",RELEASED_ON,1995-05-19
+"Little Princess, A",HAS_IMDB_RATING,7.7
+Ladybird Ladybird,HAS_ACTOR,Vladimir Vega
+Ladybird Ladybird,HAS_ACTOR,Crissy Rock
+Ladybird Ladybird,HAS_ACTOR,Mauricio Venegas
+Ladybird Ladybird,HAS_ACTOR,Sandie Lavelle
+Ladybird Ladybird,HAS_DIRECTOR,Ken Loach
+Ladybird Ladybird,IN_GENRE,Drama
+Ladybird Ladybird,RELEASED_ON,1995-01-01
+Ladybird Ladybird,HAS_IMDB_RATING,7.5
+"Enfer, L'",HAS_ACTOR,Emmanuelle Béart
+"Enfer, L'",HAS_ACTOR,François Cluzet
+"Enfer, L'",HAS_ACTOR,Nathalie Cardone
+"Enfer, L'",HAS_ACTOR,André Wilms
+"Enfer, L'",HAS_DIRECTOR,Claude Chabrol
+"Enfer, L'",IN_GENRE,Drama
+"Enfer, L'",RELEASED_ON,1994-11-01
+"Enfer, L'",HAS_IMDB_RATING,7.2
+Like Water for Chocolate (Como agua para chocolate),HAS_ACTOR,Mario Iván Martínez
+Like Water for Chocolate (Como agua para chocolate),HAS_ACTOR,Regina Torné
+Like Water for Chocolate (Como agua para chocolate),HAS_ACTOR,Lumi Cavazos
+Like Water for Chocolate (Como agua para chocolate),HAS_ACTOR,Marco Leonardi
+Like Water for Chocolate (Como agua para chocolate),HAS_DIRECTOR,Alfonso Arau
+Like Water for Chocolate (Como agua para chocolate),IN_GENRE,Romance
+Like Water for Chocolate (Como agua para chocolate),IN_GENRE,Drama
+Like Water for Chocolate (Como agua para chocolate),IN_GENRE,Fantasy
+Like Water for Chocolate (Como agua para chocolate),RELEASED_ON,1993-05-28
+Like Water for Chocolate (Como agua para chocolate),HAS_IMDB_RATING,7.2
+Legends of the Fall,HAS_ACTOR,Brad Pitt
+Legends of the Fall,HAS_ACTOR,Aidan Quinn
+Legends of the Fall,HAS_ACTOR,Julia Ormond
+Legends of the Fall,HAS_ACTOR,Anthony Hopkins
+Legends of the Fall,HAS_DIRECTOR,Edward Zwick
+Legends of the Fall,IN_GENRE,Drama
+Legends of the Fall,IN_GENRE,Romance
+Legends of the Fall,IN_GENRE,War
+Legends of the Fall,IN_GENRE,Western
+Legends of the Fall,RELEASED_ON,1995-01-13
+Legends of the Fall,HAS_IMDB_RATING,7.5
+Major Payne,HAS_ACTOR,Orlando Brown
+Major Payne,HAS_ACTOR,Damon Wayans
+Major Payne,HAS_ACTOR,Joseph Blaire
+Major Payne,HAS_ACTOR,Michael Ironside
+Major Payne,HAS_DIRECTOR,Nick Castle
+Major Payne,IN_GENRE,Comedy
+Major Payne,RELEASED_ON,1995-03-24
+Major Payne,HAS_IMDB_RATING,6.1
+Little Odessa,HAS_ACTOR,Tim Roth
+Little Odessa,HAS_ACTOR,Vanessa Redgrave
+Little Odessa,HAS_ACTOR,Edward Furlong
+Little Odessa,HAS_ACTOR,Moira Kelly
+Little Odessa,HAS_DIRECTOR,James Gray
+Little Odessa,IN_GENRE,Drama
+Little Odessa,IN_GENRE,Crime
+Little Odessa,RELEASED_ON,1995-05-19
+Little Odessa,HAS_IMDB_RATING,6.8
+My Crazy Life (Mi vida loca),HAS_ACTOR,Marlo Marron
+My Crazy Life (Mi vida loca),HAS_ACTOR,Angel Aviles
+My Crazy Life (Mi vida loca),HAS_ACTOR,Jacob Vargas
+My Crazy Life (Mi vida loca),HAS_ACTOR,Seidy Lopez
+My Crazy Life (Mi vida loca),HAS_DIRECTOR,Allison Anders
+My Crazy Life (Mi vida loca),IN_GENRE,Drama
+My Crazy Life (Mi vida loca),RELEASED_ON,1994-07-15
+My Crazy Life (Mi vida loca),HAS_IMDB_RATING,6.6
+Love Affair,HAS_ACTOR,Katharine Hepburn
+Love Affair,HAS_ACTOR,Annette Bening
+Love Affair,HAS_ACTOR,Warren Beatty
+Love Affair,HAS_ACTOR,Garry Shandling
+Love Affair,HAS_DIRECTOR,Glenn Gordon Caron
+Love Affair,IN_GENRE,Romance
+Love Affair,IN_GENRE,Drama
+Love Affair,RELEASED_ON,1994-10-21
+Love Affair,HAS_IMDB_RATING,5.9
+Losing Isaiah,HAS_ACTOR,Jessica Lange
+Losing Isaiah,HAS_ACTOR,Cuba Gooding Jr.
+Losing Isaiah,HAS_ACTOR,David Strathairn
+Losing Isaiah,HAS_ACTOR,Halle Berry
+Losing Isaiah,HAS_DIRECTOR,Stephen Gyllenhaal
+Losing Isaiah,IN_GENRE,Drama
+Losing Isaiah,RELEASED_ON,1995-03-17
+Losing Isaiah,HAS_IMDB_RATING,6.4
+"Madness of King George, The",HAS_ACTOR,Nigel Hawthorne
+"Madness of King George, The",HAS_ACTOR,Rupert Graves
+"Madness of King George, The",HAS_ACTOR,Amanda Donohoe
+"Madness of King George, The",HAS_ACTOR,Helen Mirren
+"Madness of King George, The",HAS_DIRECTOR,Nicholas Hytner
+"Madness of King George, The",IN_GENRE,Drama
+"Madness of King George, The",IN_GENRE,Comedy
+"Madness of King George, The",RELEASED_ON,1994-12-28
+"Madness of King George, The",HAS_IMDB_RATING,7.3
+Mary Shelley's Frankenstein (Frankenstein),HAS_ACTOR,Tom Hulce
+Mary Shelley's Frankenstein (Frankenstein),HAS_ACTOR,Helena Bonham Carter
+Mary Shelley's Frankenstein (Frankenstein),HAS_ACTOR,Robert De Niro
+Mary Shelley's Frankenstein (Frankenstein),HAS_ACTOR,Kenneth Branagh
+Mary Shelley's Frankenstein (Frankenstein),HAS_DIRECTOR,Kenneth Branagh
+Mary Shelley's Frankenstein (Frankenstein),IN_GENRE,Horror
+Mary Shelley's Frankenstein (Frankenstein),IN_GENRE,Drama
+Mary Shelley's Frankenstein (Frankenstein),IN_GENRE,Sci-Fi
+Mary Shelley's Frankenstein (Frankenstein),RELEASED_ON,1994-11-04
+Mary Shelley's Frankenstein (Frankenstein),HAS_IMDB_RATING,6.4
+Man of the House,HAS_ACTOR,Chevy Chase
+Man of the House,HAS_ACTOR,George Wendt
+Man of the House,HAS_ACTOR,Farrah Fawcett
+Man of the House,HAS_ACTOR,Jonathan Taylor Thomas
+Man of the House,HAS_DIRECTOR,James Orr
+Man of the House,IN_GENRE,Comedy
+Man of the House,RELEASED_ON,1995-03-03
+Man of the House,HAS_IMDB_RATING,4.9
+Mixed Nuts,HAS_ACTOR,Anthony LaPaglia
+Mixed Nuts,HAS_ACTOR,Robert Klein
+Mixed Nuts,HAS_ACTOR,Madeline Kahn
+Mixed Nuts,HAS_ACTOR,Steve Martin
+Mixed Nuts,HAS_DIRECTOR,Nora Ephron
+Mixed Nuts,IN_GENRE,Comedy
+Mixed Nuts,RELEASED_ON,1994-12-21
+Mixed Nuts,HAS_IMDB_RATING,5.3
+Milk Money,HAS_ACTOR,Malcolm McDowell
+Milk Money,HAS_ACTOR,Melanie Griffith
+Milk Money,HAS_ACTOR,Ed Harris
+Milk Money,HAS_ACTOR,Michael Patrick Carter
+Milk Money,HAS_DIRECTOR,Richard Benjamin
+Milk Money,IN_GENRE,Romance
+Milk Money,IN_GENRE,Comedy
+Milk Money,RELEASED_ON,1994-08-31
+Milk Money,HAS_IMDB_RATING,5.4
+Miracle on 34th Street,HAS_ACTOR,Richard Attenborough
+Miracle on 34th Street,HAS_ACTOR,J.T. Walsh
+Miracle on 34th Street,HAS_ACTOR,Dylan McDermott
+Miracle on 34th Street,HAS_ACTOR,Elizabeth Perkins
+Miracle on 34th Street,HAS_DIRECTOR,Les Mayfield
+Miracle on 34th Street,IN_GENRE,Drama
+Miracle on 34th Street,RELEASED_ON,1994-11-18
+Miracle on 34th Street,HAS_IMDB_RATING,6.4
+Miami Rhapsody,HAS_ACTOR,Mia Farrow
+Miami Rhapsody,HAS_ACTOR,Gil Bellows
+Miami Rhapsody,HAS_ACTOR,Sarah Jessica Parker
+Miami Rhapsody,HAS_ACTOR,Antonio Banderas
+Miami Rhapsody,HAS_DIRECTOR,David Frankel
+Miami Rhapsody,IN_GENRE,Comedy
+Miami Rhapsody,RELEASED_ON,1995-01-27
+Miami Rhapsody,HAS_IMDB_RATING,5.3
+My Family,HAS_ACTOR,Jimmy Smits
+My Family,HAS_ACTOR,Edward James Olmos
+My Family,HAS_ACTOR,Rafael Cortes
+My Family,HAS_ACTOR,Amelia Zapata
+My Family,HAS_DIRECTOR,Gregory Nava
+My Family,IN_GENRE,Drama
+My Family,RELEASED_ON,1995-05-03
+My Family,HAS_IMDB_RATING,7.3
+Murder in the First,HAS_ACTOR,Christian Slater
+Murder in the First,HAS_ACTOR,Gary Oldman
+Murder in the First,HAS_ACTOR,Kevin Bacon
+Murder in the First,HAS_ACTOR,Embeth Davidtz
+Murder in the First,HAS_DIRECTOR,Marc Rocco
+Murder in the First,IN_GENRE,Drama
+Murder in the First,IN_GENRE,Thriller
+Murder in the First,RELEASED_ON,1995-01-20
+Murder in the First,HAS_IMDB_RATING,7.3
+Nobody's Fool,HAS_ACTOR,Paul Newman
+Nobody's Fool,HAS_ACTOR,Jessica Tandy
+Nobody's Fool,HAS_ACTOR,Bruce Willis
+Nobody's Fool,HAS_ACTOR,Melanie Griffith
+Nobody's Fool,HAS_DIRECTOR,Robert Benton
+Nobody's Fool,IN_GENRE,Romance
+Nobody's Fool,IN_GENRE,Comedy
+Nobody's Fool,IN_GENRE,Drama
+Nobody's Fool,RELEASED_ON,1995-01-13
+Nobody's Fool,HAS_IMDB_RATING,7.4
+Nell,HAS_ACTOR,Jodie Foster
+Nell,HAS_ACTOR,Richard Libertini
+Nell,HAS_ACTOR,Liam Neeson
+Nell,HAS_ACTOR,Natasha Richardson
+Nell,HAS_DIRECTOR,Michael Apted
+Nell,IN_GENRE,Drama
+Nell,RELEASED_ON,1994-12-23
+Nell,HAS_IMDB_RATING,6.5
+New Jersey Drive,HAS_ACTOR,Shar-Ron Corley
+New Jersey Drive,HAS_ACTOR,Gwen McGee
+New Jersey Drive,HAS_ACTOR,Gabriel Casseus
+New Jersey Drive,HAS_ACTOR,Saul Stein
+New Jersey Drive,HAS_DIRECTOR,Nick Gomez
+New Jersey Drive,IN_GENRE,Crime
+New Jersey Drive,IN_GENRE,Drama
+New Jersey Drive,RELEASED_ON,1995-04-19
+New Jersey Drive,HAS_IMDB_RATING,6.6
+Beyond Bedlam,HAS_ACTOR,Keith Allen
+Beyond Bedlam,HAS_ACTOR,Elizabeth Hurley
+Beyond Bedlam,HAS_ACTOR,Anita Dobson
+Beyond Bedlam,HAS_ACTOR,Craig Fairbrass
+Beyond Bedlam,HAS_DIRECTOR,Vadim Jean
+Beyond Bedlam,IN_GENRE,Drama
+Beyond Bedlam,IN_GENRE,Horror
+Beyond Bedlam,RELEASED_ON,1994-04-22
+Beyond Bedlam,HAS_IMDB_RATING,3.4
+Nina Takes a Lover,HAS_ACTOR,Laura San Giacomo
+Nina Takes a Lover,HAS_ACTOR,Paul Rhys
+Nina Takes a Lover,HAS_ACTOR,Michael O'Keefe
+Nina Takes a Lover,HAS_ACTOR,Cristi Conaway
+Nina Takes a Lover,HAS_DIRECTOR,Alan Jacobs
+Nina Takes a Lover,IN_GENRE,Comedy
+Nina Takes a Lover,IN_GENRE,Romance
+Nina Takes a Lover,RELEASED_ON,1995-03-03
+Nina Takes a Lover,HAS_IMDB_RATING,5.7
+Natural Born Killers,HAS_ACTOR,Woody Harrelson
+Natural Born Killers,HAS_ACTOR,Tom Sizemore
+Natural Born Killers,HAS_ACTOR,Juliette Lewis
+Natural Born Killers,HAS_ACTOR,Rodney Dangerfield
+Natural Born Killers,HAS_DIRECTOR,Oliver Stone
+Natural Born Killers,IN_GENRE,Thriller
+Natural Born Killers,IN_GENRE,Action
+Natural Born Killers,IN_GENRE,Crime
+Natural Born Killers,RELEASED_ON,1994-08-26
+Natural Born Killers,HAS_IMDB_RATING,7.3
+Only You,HAS_ACTOR,Marisa Tomei
+Only You,HAS_ACTOR,Bonnie Hunt
+Only You,HAS_ACTOR,Robert Downey Jr.
+Only You,HAS_ACTOR,Joaquim de Almeida
+Only You,HAS_DIRECTOR,Norman Jewison
+Only You,IN_GENRE,Comedy
+Only You,IN_GENRE,Romance
+Only You,RELEASED_ON,1994-10-07
+Only You,HAS_IMDB_RATING,6.5
+Once Were Warriors,HAS_ACTOR,Mamaengaroa Kerr-Bell
+Once Were Warriors,HAS_ACTOR,Temuera Morrison
+Once Were Warriors,HAS_ACTOR,Julian Arahanga
+Once Were Warriors,HAS_ACTOR,Rena Owen
+Once Were Warriors,HAS_DIRECTOR,Lee Tamahori
+Once Were Warriors,IN_GENRE,Crime
+Once Were Warriors,IN_GENRE,Drama
+Once Were Warriors,RELEASED_ON,1995-03-03
+Once Were Warriors,HAS_IMDB_RATING,8.0
+Poison Ivy II,HAS_ACTOR,Belinda Bauer
+Poison Ivy II,HAS_ACTOR,Xander Berkeley
+Poison Ivy II,HAS_ACTOR,Johnathon Schaech
+Poison Ivy II,HAS_ACTOR,Alyssa Milano
+Poison Ivy II,HAS_DIRECTOR,Anne Goursaud
+Poison Ivy II,IN_GENRE,Thriller
+Poison Ivy II,IN_GENRE,Drama
+Poison Ivy II,RELEASED_ON,1996-01-16
+Poison Ivy II,HAS_IMDB_RATING,4.4
+Outbreak,HAS_ACTOR,Dustin Hoffman
+Outbreak,HAS_ACTOR,Rene Russo
+Outbreak,HAS_ACTOR,Morgan Freeman
+Outbreak,HAS_ACTOR,Kevin Spacey
+Outbreak,HAS_DIRECTOR,Wolfgang Petersen
+Outbreak,IN_GENRE,Thriller
+Outbreak,IN_GENRE,Drama
+Outbreak,IN_GENRE,Sci-Fi
+Outbreak,IN_GENRE,Action
+Outbreak,RELEASED_ON,1995-03-10
+Outbreak,HAS_IMDB_RATING,6.6
+Léon: The Professional (a.k.a. The Professional) (Léon),HAS_ACTOR,Jean Reno
+Léon: The Professional (a.k.a. The Professional) (Léon),HAS_ACTOR,Gary Oldman
+Léon: The Professional (a.k.a. The Professional) (Léon),HAS_ACTOR,Natalie Portman
+Léon: The Professional (a.k.a. The Professional) (Léon),HAS_ACTOR,Danny Aiello
+Léon: The Professional (a.k.a. The Professional) (Léon),HAS_DIRECTOR,Luc Besson
+Léon: The Professional (a.k.a. The Professional) (Léon),IN_GENRE,Crime
+Léon: The Professional (a.k.a. The Professional) (Léon),IN_GENRE,Drama
+Léon: The Professional (a.k.a. The Professional) (Léon),IN_GENRE,Action
+Léon: The Professional (a.k.a. The Professional) (Léon),IN_GENRE,Thriller
+Léon: The Professional (a.k.a. The Professional) (Léon),RELEASED_ON,1994-11-18
+Léon: The Professional (a.k.a. The Professional) (Léon),HAS_IMDB_RATING,8.6
+"Perez Family, The",HAS_ACTOR,Marisa Tomei
+"Perez Family, The",HAS_ACTOR,Anjelica Huston
+"Perez Family, The",HAS_ACTOR,Alfred Molina
+"Perez Family, The",HAS_ACTOR,Chazz Palminteri
+"Perez Family, The",HAS_DIRECTOR,Mira Nair
+"Perez Family, The",IN_GENRE,Comedy
+"Perez Family, The",IN_GENRE,Romance
+"Perez Family, The",RELEASED_ON,1995-05-12
+"Perez Family, The",HAS_IMDB_RATING,6.1
+"Pyromaniac's Love Story, A",HAS_ACTOR,Sadie Frost
+"Pyromaniac's Love Story, A",HAS_ACTOR,William Baldwin
+"Pyromaniac's Love Story, A",HAS_ACTOR,Erika Eleniak
+"Pyromaniac's Love Story, A",HAS_ACTOR,John Leguizamo
+"Pyromaniac's Love Story, A",HAS_DIRECTOR,Joshua Brand
+"Pyromaniac's Love Story, A",IN_GENRE,Comedy
+"Pyromaniac's Love Story, A",IN_GENRE,Romance
+"Pyromaniac's Love Story, A",RELEASED_ON,1995-04-28
+"Pyromaniac's Love Story, A",HAS_IMDB_RATING,5.4
+Pulp Fiction,HAS_ACTOR,Tim Roth
+Pulp Fiction,HAS_ACTOR,John Travolta
+Pulp Fiction,HAS_ACTOR,Laura Lovelace
+Pulp Fiction,HAS_ACTOR,Samuel L. Jackson
+Pulp Fiction,HAS_DIRECTOR,Quentin Tarantino
+Pulp Fiction,IN_GENRE,Drama
+Pulp Fiction,IN_GENRE,Crime
+Pulp Fiction,IN_GENRE,Comedy
+Pulp Fiction,IN_GENRE,Thriller
+Pulp Fiction,RELEASED_ON,1994-10-14
+Pulp Fiction,HAS_IMDB_RATING,8.9
+Priest,HAS_ACTOR,Tom Wilkinson
+Priest,HAS_ACTOR,Robert Carlyle
+Priest,HAS_ACTOR,Cathy Tyson
+Priest,HAS_ACTOR,Linus Roache
+Priest,HAS_DIRECTOR,Antonia Bird
+Priest,IN_GENRE,Drama
+Priest,RELEASED_ON,1995-03-24
+Priest,HAS_IMDB_RATING,7.2
+Quiz Show,HAS_ACTOR,John Turturro
+Quiz Show,HAS_ACTOR,Paul Scofield
+Quiz Show,HAS_ACTOR,Ralph Fiennes
+Quiz Show,HAS_ACTOR,Rob Morrow
+Quiz Show,HAS_DIRECTOR,Robert Redford
+Quiz Show,IN_GENRE,Drama
+Quiz Show,RELEASED_ON,1994-10-07
+Quiz Show,HAS_IMDB_RATING,7.5
+Picture Bride (Bijo photo),HAS_ACTOR,Youki Kudoh
+Picture Bride (Bijo photo),HAS_ACTOR,Akira Takayama
+Picture Bride (Bijo photo),HAS_ACTOR,Cary-Hiroyuki Tagawa
+Picture Bride (Bijo photo),HAS_ACTOR,Tamlyn Tomita
+Picture Bride (Bijo photo),HAS_DIRECTOR,Kayo Hatta
+Picture Bride (Bijo photo),IN_GENRE,Drama
+Picture Bride (Bijo photo),IN_GENRE,Romance
+Picture Bride (Bijo photo),RELEASED_ON,1995-05-05
+Picture Bride (Bijo photo),HAS_IMDB_RATING,6.8
+"Queen Margot (Reine Margot, La)",HAS_ACTOR,Jean-Hugues Anglade
+"Queen Margot (Reine Margot, La)",HAS_ACTOR,Isabelle Adjani
+"Queen Margot (Reine Margot, La)",HAS_ACTOR,Vincent Perez
+"Queen Margot (Reine Margot, La)",HAS_ACTOR,Daniel Auteuil
+"Queen Margot (Reine Margot, La)",HAS_DIRECTOR,Patrice Chéreau
+"Queen Margot (Reine Margot, La)",IN_GENRE,Drama
+"Queen Margot (Reine Margot, La)",IN_GENRE,Romance
+"Queen Margot (Reine Margot, La)",RELEASED_ON,1994-12-09
+"Queen Margot (Reine Margot, La)",HAS_IMDB_RATING,7.5
+"Quick and the Dead, The",HAS_ACTOR,Sharon Stone
+"Quick and the Dead, The",HAS_ACTOR,Russell Crowe
+"Quick and the Dead, The",HAS_ACTOR,Gene Hackman
+"Quick and the Dead, The",HAS_ACTOR,Leonardo DiCaprio
+"Quick and the Dead, The",HAS_DIRECTOR,Sam Raimi
+"Quick and the Dead, The",IN_GENRE,Western
+"Quick and the Dead, The",IN_GENRE,Thriller
+"Quick and the Dead, The",IN_GENRE,Action
+"Quick and the Dead, The",RELEASED_ON,1995-02-10
+"Quick and the Dead, The",HAS_IMDB_RATING,6.4
+Roommates,HAS_ACTOR,Peter Falk
+Roommates,HAS_ACTOR,D.B. Sweeney
+Roommates,HAS_ACTOR,Julianne Moore
+Roommates,HAS_ACTOR,Ellen Burstyn
+Roommates,HAS_DIRECTOR,Peter Yates
+Roommates,IN_GENRE,Drama
+Roommates,IN_GENRE,Comedy
+Roommates,RELEASED_ON,1995-03-03
+Roommates,HAS_IMDB_RATING,6.5
+Ready to Wear (Pret-A-Porter),HAS_ACTOR,Sophia Loren
+Ready to Wear (Pret-A-Porter),HAS_ACTOR,Jean-Pierre Cassel
+Ready to Wear (Pret-A-Porter),HAS_ACTOR,Kim Basinger
+Ready to Wear (Pret-A-Porter),HAS_ACTOR,Marcello Mastroianni
+Ready to Wear (Pret-A-Porter),HAS_DIRECTOR,Robert Altman
+Ready to Wear (Pret-A-Porter),IN_GENRE,Comedy
+Ready to Wear (Pret-A-Porter),RELEASED_ON,1994-12-25
+Ready to Wear (Pret-A-Porter),HAS_IMDB_RATING,5.0
+Three Colors: Red (Trois couleurs: Rouge),HAS_ACTOR,Irène Jacob
+Three Colors: Red (Trois couleurs: Rouge),HAS_ACTOR,Jean-Pierre Lorit
+Three Colors: Red (Trois couleurs: Rouge),HAS_ACTOR,Frédérique Feder
+Three Colors: Red (Trois couleurs: Rouge),HAS_ACTOR,Jean-Louis Trintignant
+Three Colors: Red (Trois couleurs: Rouge),HAS_DIRECTOR,Krzysztof Kieślowski
+Three Colors: Red (Trois couleurs: Rouge),IN_GENRE,Drama
+Three Colors: Red (Trois couleurs: Rouge),RELEASED_ON,1994-11-23
+Three Colors: Red (Trois couleurs: Rouge),HAS_IMDB_RATING,8.1
+Three Colors: Blue (Trois couleurs: Bleu),HAS_ACTOR,Juliette Binoche
+Three Colors: Blue (Trois couleurs: Bleu),HAS_ACTOR,Florence Pernel
+Three Colors: Blue (Trois couleurs: Bleu),HAS_ACTOR,Benoît Régent
+Three Colors: Blue (Trois couleurs: Bleu),HAS_ACTOR,Charlotte Véry
+Three Colors: Blue (Trois couleurs: Bleu),HAS_DIRECTOR,Krzysztof Kieślowski
+Three Colors: Blue (Trois couleurs: Bleu),IN_GENRE,Drama
+Three Colors: Blue (Trois couleurs: Bleu),RELEASED_ON,1993-09-08
+Three Colors: Blue (Trois couleurs: Bleu),HAS_IMDB_RATING,8.0
+Three Colors: White (Trzy kolory: Bialy),HAS_ACTOR,Jerzy Stuhr
+Three Colors: White (Trzy kolory: Bialy),HAS_ACTOR,Janusz Gajos
+Three Colors: White (Trzy kolory: Bialy),HAS_ACTOR,Julie Delpy
+Three Colors: White (Trzy kolory: Bialy),HAS_ACTOR,Zbigniew Zamachowski
+Three Colors: White (Trzy kolory: Bialy),HAS_DIRECTOR,Krzysztof Kieślowski
+Three Colors: White (Trzy kolory: Bialy),IN_GENRE,Drama
+Three Colors: White (Trzy kolory: Bialy),IN_GENRE,Comedy
+Three Colors: White (Trzy kolory: Bialy),RELEASED_ON,1994-06-10
+Three Colors: White (Trzy kolory: Bialy),HAS_IMDB_RATING,7.7
+"Red Firecracker, Green Firecracker (Pao Da Shuang Deng)",HAS_ACTOR,Ning Jing
+"Red Firecracker, Green Firecracker (Pao Da Shuang Deng)",HAS_ACTOR,Wu Gang
+"Red Firecracker, Green Firecracker (Pao Da Shuang Deng)",HAS_DIRECTOR,He Ping
+"Red Firecracker, Green Firecracker (Pao Da Shuang Deng)",IN_GENRE,Drama
+"Red Firecracker, Green Firecracker (Pao Da Shuang Deng)",RELEASED_ON,1995-06-02
+"Red Firecracker, Green Firecracker (Pao Da Shuang Deng)",HAS_IMDB_RATING,6.9
+Stuart Saves His Family,HAS_ACTOR,Laura San Giacomo
+Stuart Saves His Family,HAS_ACTOR,Vincent D'Onofrio
+Stuart Saves His Family,HAS_ACTOR,Shirley Knight
+Stuart Saves His Family,HAS_ACTOR,Al Franken
+Stuart Saves His Family,HAS_DIRECTOR,Harold Ramis
+Stuart Saves His Family,IN_GENRE,Comedy
+Stuart Saves His Family,RELEASED_ON,1995-04-12
+Stuart Saves His Family,HAS_IMDB_RATING,5.3
+"Swan Princess, The",HAS_ACTOR,Jack Palance
+"Swan Princess, The",HAS_ACTOR,Howard McGillin
+"Swan Princess, The",HAS_ACTOR,Michelle Nicastro
+"Swan Princess, The",HAS_ACTOR,Liz Callaway
+"Swan Princess, The",HAS_DIRECTOR,Richard Rich
+"Swan Princess, The",IN_GENRE,Children
+"Swan Princess, The",IN_GENRE,Animation
+"Swan Princess, The",RELEASED_ON,1994-11-18
+"Swan Princess, The",HAS_IMDB_RATING,6.4
+"Secret of Roan Inish, The",HAS_ACTOR,Pat Slowey
+"Secret of Roan Inish, The",HAS_ACTOR,Dave Duffy
+"Secret of Roan Inish, The",HAS_ACTOR,Declan Hannigan
+"Secret of Roan Inish, The",HAS_ACTOR,Jeni Courtney
+"Secret of Roan Inish, The",HAS_DIRECTOR,John Sayles
+"Secret of Roan Inish, The",IN_GENRE,Mystery
+"Secret of Roan Inish, The",IN_GENRE,Fantasy
+"Secret of Roan Inish, The",IN_GENRE,Drama
+"Secret of Roan Inish, The",IN_GENRE,Children
+"Secret of Roan Inish, The",RELEASED_ON,1995-02-03
+"Secret of Roan Inish, The",HAS_IMDB_RATING,7.5
+"Specialist, The",HAS_ACTOR,Sylvester Stallone
+"Specialist, The",HAS_ACTOR,James Woods
+"Specialist, The",HAS_ACTOR,Sharon Stone
+"Specialist, The",HAS_ACTOR,Rod Steiger
+"Specialist, The",HAS_DIRECTOR,Luis Llosa
+"Specialist, The",IN_GENRE,Action
+"Specialist, The",IN_GENRE,Thriller
+"Specialist, The",IN_GENRE,Drama
+"Specialist, The",RELEASED_ON,1994-10-07
+"Specialist, The",HAS_IMDB_RATING,5.4
+Stargate,HAS_ACTOR,Kurt Russell
+Stargate,HAS_ACTOR,Jaye Davidson
+Stargate,HAS_ACTOR,James Spader
+Stargate,HAS_ACTOR,Viveca Lindfors
+Stargate,HAS_DIRECTOR,Roland Emmerich
+Stargate,IN_GENRE,Adventure
+Stargate,IN_GENRE,Action
+Stargate,IN_GENRE,Sci-Fi
+Stargate,RELEASED_ON,1994-10-28
+Stargate,HAS_IMDB_RATING,7.0
+"Santa Clause, The",HAS_ACTOR,Tim Allen
+"Santa Clause, The",HAS_ACTOR,Wendy Crewson
+"Santa Clause, The",HAS_ACTOR,Judge Reinhold
+"Santa Clause, The",HAS_ACTOR,Eric Lloyd
+"Santa Clause, The",HAS_DIRECTOR,John Pasquin
+"Santa Clause, The",IN_GENRE,Comedy
+"Santa Clause, The",IN_GENRE,Fantasy
+"Santa Clause, The",IN_GENRE,Drama
+"Santa Clause, The",RELEASED_ON,1994-11-11
+"Santa Clause, The",HAS_IMDB_RATING,6.4
+"Shawshank Redemption, The",HAS_ACTOR,Tim Robbins
+"Shawshank Redemption, The",HAS_ACTOR,William Sadler
+"Shawshank Redemption, The",HAS_ACTOR,Bob Gunton
+"Shawshank Redemption, The",HAS_ACTOR,Morgan Freeman
+"Shawshank Redemption, The",HAS_DIRECTOR,Frank Darabont
+"Shawshank Redemption, The",IN_GENRE,Drama
+"Shawshank Redemption, The",IN_GENRE,Crime
+"Shawshank Redemption, The",RELEASED_ON,1994-10-14
+"Shawshank Redemption, The",HAS_IMDB_RATING,9.3
+Shallow Grave,HAS_ACTOR,Christopher Eccleston
+Shallow Grave,HAS_ACTOR,Ewan McGregor
+Shallow Grave,HAS_ACTOR,Ken Stott
+Shallow Grave,HAS_ACTOR,Kerry Fox
+Shallow Grave,HAS_DIRECTOR,Danny Boyle
+Shallow Grave,IN_GENRE,Thriller
+Shallow Grave,IN_GENRE,Comedy
+Shallow Grave,IN_GENRE,Drama
+Shallow Grave,RELEASED_ON,1995-02-10
+Shallow Grave,HAS_IMDB_RATING,7.4
+Suture,HAS_ACTOR,Dennis Haysbert
+Suture,HAS_ACTOR,Mel Harris
+Suture,HAS_ACTOR,Sab Shimono
+Suture,HAS_ACTOR,Dina Merrill
+Suture,HAS_DIRECTOR,David Siegel|Scott McGehee
+Suture,IN_GENRE,Film-Noir
+Suture,IN_GENRE,Thriller
+Suture,RELEASED_ON,1994-08-24
+Suture,HAS_IMDB_RATING,6.7
+Strawberry and Chocolate (Fresa y chocolate),HAS_ACTOR,Jorge Perugorría
+Strawberry and Chocolate (Fresa y chocolate),HAS_ACTOR,Francisco Gattorno
+Strawberry and Chocolate (Fresa y chocolate),HAS_ACTOR,Vladimir Cruz
+Strawberry and Chocolate (Fresa y chocolate),HAS_ACTOR,Mirta Ibarra
+Strawberry and Chocolate (Fresa y chocolate),HAS_DIRECTOR,Juan Carlos Tabío|Tomás Gutiérrez Alea
+Strawberry and Chocolate (Fresa y chocolate),IN_GENRE,Drama
+Strawberry and Chocolate (Fresa y chocolate),RELEASED_ON,1995-01-20
+Strawberry and Chocolate (Fresa y chocolate),HAS_IMDB_RATING,7.4
+Swimming with Sharks,HAS_ACTOR,Kevin Spacey
+Swimming with Sharks,HAS_ACTOR,Frank Whaley
+Swimming with Sharks,HAS_ACTOR,Benicio Del Toro
+Swimming with Sharks,HAS_ACTOR,Michelle Forbes
+Swimming with Sharks,HAS_DIRECTOR,George Huang
+Swimming with Sharks,IN_GENRE,Drama
+Swimming with Sharks,IN_GENRE,Comedy
+Swimming with Sharks,RELEASED_ON,1995-04-21
+Swimming with Sharks,HAS_IMDB_RATING,7.1
+"Sum of Us, The",HAS_ACTOR,Jack Thompson
+"Sum of Us, The",HAS_ACTOR,Russell Crowe
+"Sum of Us, The",HAS_ACTOR,John Polson
+"Sum of Us, The",HAS_ACTOR,Deborah Kennedy
+"Sum of Us, The",HAS_DIRECTOR, Kevin Dowling|Geoff Burton
+"Sum of Us, The",IN_GENRE,Drama
+"Sum of Us, The",IN_GENRE,Comedy
+"Sum of Us, The",RELEASED_ON,1995-03-08
+"Sum of Us, The",HAS_IMDB_RATING,7.4
+National Lampoon's Senior Trip,HAS_ACTOR,Matt Frewer
+National Lampoon's Senior Trip,HAS_ACTOR,Tommy Chong
+National Lampoon's Senior Trip,HAS_ACTOR,Valerie Mahaffey
+National Lampoon's Senior Trip,HAS_ACTOR,Lawrence Dane
+National Lampoon's Senior Trip,HAS_DIRECTOR,Kelly Makin
+National Lampoon's Senior Trip,IN_GENRE,Comedy
+National Lampoon's Senior Trip,RELEASED_ON,1995-09-08
+National Lampoon's Senior Trip,HAS_IMDB_RATING,5.5
+To Live (Huozhe),HAS_ACTOR,Jiang Wu
+To Live (Huozhe),HAS_ACTOR,Ge You
+To Live (Huozhe),HAS_ACTOR,Gong Li
+To Live (Huozhe),HAS_ACTOR,Ben Niu
+To Live (Huozhe),HAS_DIRECTOR,Yimou Zhang
+To Live (Huozhe),IN_GENRE,Drama
+To Live (Huozhe),RELEASED_ON,1994-12-16
+To Live (Huozhe),HAS_IMDB_RATING,8.3
+Tank Girl,HAS_ACTOR,Lori Petty
+Tank Girl,HAS_ACTOR,Don Harvey
+Tank Girl,HAS_ACTOR,Naomi Watts
+Tank Girl,HAS_ACTOR,Ice-T
+Tank Girl,HAS_DIRECTOR,Rachel Talalay
+Tank Girl,IN_GENRE,Comedy
+Tank Girl,IN_GENRE,Action
+Tank Girl,IN_GENRE,Sci-Fi
+Tank Girl,RELEASED_ON,1995-03-31
+Tank Girl,HAS_IMDB_RATING,5.2
+Tales from the Crypt Presents: Demon Knight,HAS_ACTOR,John Kassir
+Tales from the Crypt Presents: Demon Knight,HAS_ACTOR,Jada Pinkett Smith
+Tales from the Crypt Presents: Demon Knight,HAS_ACTOR,William Sadler
+Tales from the Crypt Presents: Demon Knight,HAS_ACTOR,Billy Zane
+Tales from the Crypt Presents: Demon Knight,HAS_DIRECTOR,Ernest R. Dickerson
+Tales from the Crypt Presents: Demon Knight,IN_GENRE,Thriller
+Tales from the Crypt Presents: Demon Knight,IN_GENRE,Horror
+Tales from the Crypt Presents: Demon Knight,RELEASED_ON,1995-01-13
+Tales from the Crypt Presents: Demon Knight,HAS_IMDB_RATING,6.7
+Star Trek: Generations,HAS_ACTOR,Patrick Stewart
+Star Trek: Generations,HAS_ACTOR,Brent Spiner
+Star Trek: Generations,HAS_ACTOR,Jonathan Frakes
+Star Trek: Generations,HAS_ACTOR,LeVar Burton
+Star Trek: Generations,HAS_DIRECTOR,David Carson
+Star Trek: Generations,IN_GENRE,Drama
+Star Trek: Generations,IN_GENRE,Sci-Fi
+Star Trek: Generations,IN_GENRE,Adventure
+Star Trek: Generations,RELEASED_ON,1994-11-18
+Star Trek: Generations,HAS_IMDB_RATING,6.6
+Tales from the Hood,HAS_ACTOR,Samuel Monroe Jr.
+Tales from the Hood,HAS_ACTOR,De'aundre Bonds
+Tales from the Hood,HAS_ACTOR,Joe Torry
+Tales from the Hood,HAS_ACTOR,Clarence Williams III
+Tales from the Hood,HAS_DIRECTOR,Rusty Cundieff
+Tales from the Hood,IN_GENRE,Action
+Tales from the Hood,IN_GENRE,Crime
+Tales from the Hood,IN_GENRE,Horror
+Tales from the Hood,RELEASED_ON,1995-05-24
+Tales from the Hood,HAS_IMDB_RATING,6.1
+Tom & Viv,HAS_ACTOR,Willem Dafoe
+Tom & Viv,HAS_ACTOR,Miranda Richardson
+Tom & Viv,HAS_ACTOR,Tim Dutton
+Tom & Viv,HAS_ACTOR,Rosemary Harris
+Tom & Viv,HAS_DIRECTOR,Brian Gilbert
+Tom & Viv,IN_GENRE,Drama
+Tom & Viv,RELEASED_ON,1994-12-02
+Tom & Viv,HAS_IMDB_RATING,6.5
+Village of the Damned,HAS_ACTOR,Christopher Reeve
+Village of the Damned,HAS_ACTOR,Michael Paré
+Village of the Damned,HAS_ACTOR,Kirstie Alley
+Village of the Damned,HAS_ACTOR,Linda Kozlowski
+Village of the Damned,HAS_DIRECTOR,John Carpenter
+Village of the Damned,IN_GENRE,Horror
+Village of the Damned,IN_GENRE,Sci-Fi
+Village of the Damned,RELEASED_ON,1995-04-28
+Village of the Damned,HAS_IMDB_RATING,5.6
+Tommy Boy,HAS_ACTOR,Chris Farley
+Tommy Boy,HAS_ACTOR,Bo Derek
+Tommy Boy,HAS_ACTOR,David Spade
+Tommy Boy,HAS_ACTOR,Brian Dennehy
+Tommy Boy,HAS_DIRECTOR,Peter Segal
+Tommy Boy,IN_GENRE,Comedy
+Tommy Boy,RELEASED_ON,1995-03-31
+Tommy Boy,HAS_IMDB_RATING,7.0

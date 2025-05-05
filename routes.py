@@ -334,17 +334,56 @@ def graph_analytics(graph_id):
         nodes, relationships = neo4j_manager.get_graph_data(graph.id)
         data = {"nodes": nodes, "relationships": relationships}
         
-        # Calculate analytics metrics
-        analytics = {
-            'total_nodes': len(nodes),
-            'total_relationships': len(relationships),
+        # Calculate centrality for top nodes
+        centrality_scores = calculate_centrality(data)
+        top_nodes = []
+        
+        # Sort nodes by centrality
+        node_centrality_pairs = list(centrality_scores.items())
+        node_centrality_pairs.sort(key=lambda x: x[1], reverse=True)
+        
+        # Get top 10 or fewer nodes
+        for node_id, score in node_centrality_pairs[:10]:
+            for node in nodes:
+                if node['id'] == node_id:
+                    node_info = {
+                        'id': node_id,
+                        'label': node.get('label', 'Unknown'),
+                        'category': node.get('category', 'Other'),
+                        'centrality': score
+                    }
+                    top_nodes.append(node_info)
+                    break
+        
+        # Count categories
+        category_counts = {}
+        for node in nodes:
+            category = node.get('category', 'Other')
+            category_counts[category] = category_counts.get(category, 0) + 1
+        
+        # Count relationship types
+        relationship_counts = {}
+        for rel in relationships:
+            rel_type = rel.get('type', 'Other')
+            relationship_counts[rel_type] = relationship_counts.get(rel_type, 0) + 1
+        
+        # Prepare graph data for the template and export functionality
+        graph_data = {
+            'node_count': len(nodes),
+            'relationship_count': len(relationships),
             'density': calculate_graph_density(data),
-            'centrality': calculate_centrality(data),
+            'avg_degree': sum(centrality_scores.values()) / max(1, len(centrality_scores)),
+            'avg_path_length': 0,  # Would require more complex computation
+            'isolated_nodes': sum(1 for score in centrality_scores.values() if score == 0),
+            'clustering_coefficient': 0,  # Would require more complex computation
+            'central_nodes': top_nodes,
+            'category_counts': category_counts,
+            'relationship_counts': relationship_counts,
             'communities': detect_communities(data),
             'domain': graph.domain,
         }
         
-        return render_template('analytics.html', graph=graph, analytics=analytics)
+        return render_template('analytics.html', graph=graph, graph_data=graph_data)
     except Exception as e:
         flash(f'Error generating analytics: {str(e)}', 'danger')
         return redirect(url_for('visualization', graph_id=graph_id))
@@ -388,14 +427,7 @@ def calculate_centrality(data):
     # Count connections for each node
     centrality = {}
     for node in data['nodes']:
-        centrality[node['id']] = {
-            'id': node['id'],
-            'label': node['label'],
-            'category': node.get('category', 'Unknown'),
-            'in_degree': 0,
-            'out_degree': 0,
-            'total_degree': 0
-        }
+        centrality[node['id']] = 0
     
     # Count actual connections
     for rel in data['relationships']:
@@ -403,22 +435,12 @@ def calculate_centrality(data):
         target_id = rel['target']
         
         if source_id in centrality:
-            centrality[source_id]['out_degree'] += 1
-            centrality[source_id]['total_degree'] += 1
+            centrality[source_id] += 1
         
         if target_id in centrality:
-            centrality[target_id]['in_degree'] += 1
-            centrality[target_id]['total_degree'] += 1
+            centrality[target_id] += 1
     
-    # Sort by total degree (highest first)
-    sorted_centrality = sorted(
-        centrality.values(), 
-        key=lambda x: x['total_degree'], 
-        reverse=True
-    )
-    
-    # Return top 10 nodes by centrality
-    return sorted_centrality[:10]
+    return centrality
 
 def detect_communities(data):
     """Simplified community detection based on node categories"""
