@@ -373,7 +373,69 @@
         
         // Export report functionality
         document.getElementById('export-analytics').addEventListener('click', function() {
-            alert('Analytics report export feature will be implemented soon.');
+            // Create analytics data object
+            const analyticsData = {
+                graphInfo: {
+                    name: "{{ graph.name }}",
+                    description: "{{ graph.description }}",
+                    domain: "{{ graph.domain }}",
+                    created: "{{ graph.created_at.strftime('%Y-%m-%d') }}",
+                    updated: "{{ graph.updated_at.strftime('%Y-%m-%d') }}"
+                },
+                metrics: {
+                    nodeCount: {{ graph_data.node_count }},
+                    relationshipCount: {{ graph_data.relationship_count }},
+                    density: {{ "%.4f"|format(graph_data.density) }},
+                    avgConnections: {{ "%.2f"|format(graph_data.avg_degree) }},
+                    avgPathLength: {{ "%.2f"|format(graph_data.avg_path_length or 0) }},
+                    isolatedNodes: {{ graph_data.isolated_nodes }},
+                    clusteringCoefficient: {{ "%.4f"|format(graph_data.clustering_coefficient or 0) }},
+                    mostConnectedNodes: [
+                        {% for node in graph_data.central_nodes[:5] %}
+                            {
+                                id: "{{ node.id }}",
+                                label: "{{ node.label }}",
+                                category: "{{ node.category }}",
+                                centrality: {{ "%.2f"|format(node.centrality) }}
+                            }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    categoryDistribution: {
+                        {% for category, count in graph_data.category_counts.items() %}
+                            "{{ category }}": {{ count }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    },
+                    relationshipDistribution: {
+                        {% for rel_type, count in graph_data.relationship_counts.items() %}
+                            "{{ rel_type }}": {{ count }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    }
+                }
+            };
+            
+            // Format timestamp for filename
+            const now = new Date();
+            const timestamp = now.toISOString().replace(/:/g, '-').replace(/\..+/, '');
+            
+            // Convert to JSON string with nice formatting
+            const jsonData = JSON.stringify(analyticsData, null, 2);
+            
+            // Create a blob and download link
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            // Create link and trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `graph-analytics-${timestamp}.json`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
         });
         
         // Schedule analysis functionality
