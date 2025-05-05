@@ -27,23 +27,10 @@
                             <h5 class="mb-3">Select Input Source</h5>
                             
                             <div class="input-options">
-                                <div class="form-check-card mb-3">
-                                    <input type="radio" name="input_type" id="input_type_video" value="video" class="form-check-input" checked>
-                                    <label class="form-check-label p-3 border rounded d-flex" for="input_type_video">
-                                        <div class="me-3 fs-3">
-                                            <i class="fas fa-film text-primary"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-1">Video File</h6>
-                                            <small class="text-muted">
-                                                Upload a video file to be transcribed and analyzed.
-                                            </small>
-                                        </div>
-                                    </label>
-                                </div>
+
                                 
                                 <div class="form-check-card mb-3">
-                                    <input type="radio" name="input_type" id="input_type_csv" value="csv" class="form-check-input">
+                                    <input type="radio" name="input_type" id="input_type_csv" value="csv" class="form-check-input" checked>
                                     <label class="form-check-label p-3 border rounded d-flex" for="input_type_csv">
                                         <div class="me-3 fs-3">
                                             <i class="fas fa-file-csv text-success"></i>
@@ -84,30 +71,8 @@
                         
                         <hr class="my-4">
                         
-                        <!-- Video Upload Section -->
-                        <div id="video-form-group" class="mb-4 input-section">
-                            <h5 class="mb-3">Upload Video File</h5>
-                            <div class="input-group">
-                                {{ form.video_file(class="form-control" + (" is-invalid" if form.video_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
-                                <label class="input-group-text" for="{{ form.video_file.id }}">Browse</label>
-                                <span class="form-control video-file-label">No file selected</span>
-                            </div>
-                            {% if form.video_file.errors %}
-                                <div class="text-danger mt-2">
-                                    {% for error in form.video_file.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            <div class="alert alert-info mt-3 small">
-                                <i class="fas fa-info-circle me-2"></i> 
-                                The video will be transcribed and relationships extracted from the content.
-                                Supports MP4, AVI, MOV, and MKV formats.
-                            </div>
-                        </div>
-                        
                         <!-- CSV Upload Section -->
-                        <div id="csv-form-group" class="mb-4 input-section" style="display: none;">
+                        <div id="csv-form-group" class="mb-4 input-section">
                             <h5 class="mb-3">Upload CSV File</h5>
                             <div class="input-group">
                                 {{ form.csv_file(class="form-control" + (" is-invalid" if form.csv_file.errors else ""), style="display: none;", onchange="updateFileLabel(this)") }}
@@ -221,8 +186,7 @@
 <script>
     function updateFileLabel(input) {
         if (input.files && input.files[0]) {
-            const fileType = input.id === '{{ form.video_file.id }}' ? 'video' : 'csv';
-            const label = document.querySelector(`.${fileType}-file-label`);
+            const label = document.querySelector(`.csv-file-label`);
             if (label) {
                 label.textContent = input.files[0].name;
             }
@@ -232,7 +196,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Get form elements
         const inputTypeRadios = document.querySelectorAll('input[name="input_type"]');
-        const videoFormGroup = document.getElementById('video-form-group');
         const csvFormGroup = document.getElementById('csv-form-group');
         const urlFormGroup = document.getElementById('url-form-group');
         
@@ -240,7 +203,6 @@
             const selectedValue = document.querySelector('input[name="input_type"]:checked')?.value;
             
             // Show/hide form groups based on selection
-            if (videoFormGroup) videoFormGroup.style.display = selectedValue === 'video' ? 'block' : 'none';
             if (csvFormGroup) csvFormGroup.style.display = selectedValue === 'csv' ? 'block' : 'none';
             if (urlFormGroup) urlFormGroup.style.display = selectedValue === 'url' ? 'block' : 'none';
         }
