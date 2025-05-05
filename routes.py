@@ -316,10 +316,54 @@ def graph_data(graph_id):
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    return render_template('profile.html', KnowledgeGraph=KnowledgeGraph)
+    from forms import ProfileUpdateForm
+    
+    form = ProfileUpdateForm(
+        original_username=current_user.username,
+        original_email=current_user.email
+    )
+    
+    # Pre-populate form with current user data
+    if request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    
+    if form.validate_on_submit():
+        # Update username and email
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        
+        # Update password if provided
+        if form.current_password.data and form.new_password.data:
+            # Verify current password
+            if current_user.check_password(form.current_password.data):
+                current_user.set_password(form.new_password.data)
+                flash('Your password has been updated.', 'success')
+            else:
+                flash('Current password is incorrect.', 'danger')
+                return redirect(url_for('profile'))
+        
+        # Save changes
+        db.session.commit()
+        flash('Your profile has been updated.', 'success')
+        return redirect(url_for('profile'))
+    
+    # Get user's knowledge graphs
+    user_graphs = KnowledgeGraph.query.filter_by(user_id=current_user.id).all()
+    
+    # Get account statistics
+    stats = {
+        'total_graphs': len(user_graphs),
+        'total_entities': sum([sum([s.entity_count for s in graph.input_sources]) for graph in user_graphs]),
+        'total_relationships': sum([sum([s.relationship_count for s in graph.input_sources]) for graph in user_graphs]),
+        'member_since': current_user.created_at,
+        'last_login': current_user.last_login
+    }
+    
+    return render_template('profile.html', form=form, stats=stats, graphs=user_graphs)
 
 
 @app.route('/graph/<int:graph_id>/delete', methods=['POST'])
