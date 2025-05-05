@@ -295,6 +295,9 @@ class KnowledgeGraphVisualizer {
         
         // Update legend
         this.updateLegend();
+        
+        // Make graph static after a brief period
+        setTimeout(() => this.stopSimulation(), 2000);
     }
     
     getCategoryColor(category) {
@@ -393,8 +396,12 @@ class KnowledgeGraphVisualizer {
             })
             .on("end", (event, d) => {
                 if (!event.active) this.simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
+                // Keep nodes fixed in place
+                d.fx = d.x;
+                d.fy = d.y;
+                
+                // Stop the simulation after a brief moment to let nodes settle
+                setTimeout(() => this.stopSimulation(), 500);
             });
     }
     
@@ -750,8 +757,11 @@ class KnowledgeGraphVisualizer {
                 break;
         }
         
-        // Restart simulation
+        // Restart simulation briefly to apply layout
         this.simulation.alpha(1).restart();
+        
+        // Then stop after a short time to make it static
+        setTimeout(() => this.stopSimulation(), 1500);
     }
     
     filterByCategory(category) {
@@ -919,6 +929,32 @@ class KnowledgeGraphVisualizer {
         
         this.simulation.force("center", d3.forceCenter(this.width / 2, this.height / 2));
         this.simulation.restart();
+        
+        // Stop simulation after resize to maintain static layout
+        setTimeout(() => this.stopSimulation(), 500);
+    }
+    
+    // Method to stop the simulation completely for a static layout
+    stopSimulation() {
+        // Set alpha to 0 and stop the simulation
+        this.simulation.alpha(0);
+        this.simulation.stop();
+        
+        // Fix node positions
+        if (this.nodes) {
+            this.nodes.forEach(node => {
+                node.fx = node.x;
+                node.fy = node.y;
+            });
+        }
+        
+        console.log("Graph simulation stopped - static layout applied");
+    }
+    
+    // Handler for when simulation naturally reaches end state
+    onSimulationEnd() {
+        console.log("Graph simulation reached end state");
+        this.stopSimulation();
     }
     
     // Export graph functionality
