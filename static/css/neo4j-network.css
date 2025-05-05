@@ -1,0 +1,176 @@
+/* Neo4j Relationship Graph Styling */
+.neo4j-graph {
+    position: relative;
+    background-color: #1a1d21;
+    border-radius: 8px;
+    border: 1px solid #17a2b8;
+    padding: 10px;
+    margin-bottom: 15px;
+    min-height: 100px;
+    overflow: hidden;
+}
+
+.neo4j-node {
+    position: relative;
+    border-radius: 8px;
+    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.neo4j-node:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+}
+
+.neo4j-node.person {
+    background: linear-gradient(135deg, #5ac8fa, #4a98ba);
+}
+
+.neo4j-node.movie {
+    background: linear-gradient(135deg, #8a65cc, #6a45ac);
+}
+
+.neo4j-node.generic {
+    background: linear-gradient(135deg, #61bd4f, #2e8b57);
+}
+
+.neo4j-node i {
+    margin-right: 6px;
+    font-size: 0.9em;
+}
+
+.neo4j-relationship {
+    position: relative;
+    color: white;
+    font-size: 0.8em;
+    background-color: #17a2b8;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.neo4j-arrow {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9em;
+    margin: 0 5px;
+}
+
+.neo4j-triple {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    padding: 5px;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+.neo4j-triple:hover {
+    background-color: rgba(23, 162, 184, 0.05);
+    border-radius: 8px;
+}
+
+/* Pulse animation for relationship */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(23, 162, 184, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(23, 162, 184, 0); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+    0% { 
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Special styling for relationship types */
+.neo4j-relationship.acted_in {
+    background-color: #ff9500;
+}
+
+.neo4j-relationship.directed {
+    background-color: #ff2d55;
+}
+
+.neo4j-relationship.wrote {
+    background-color: #5856d6;
+}
+
+.neo4j-relationship.produced {
+    background-color: #34c759;
+}
+
+/* Compact view for small screens */
+@media (max-width: 768px) {
+    .neo4j-triple {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .neo4j-arrow {
+        transform: rotate(90deg);
+        margin: 5px 0;
+    }
+}
+
+/* Fade out animation */
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}
+
+/* Graph Controls */
+.neo4j-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.neo4j-controls button {
+    margin-left: 5px;
+    background: rgba(23, 162, 184, 0.2);
+    border: 1px solid rgba(23, 162, 184, 0.5);
+    color: #17a2b8;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.neo4j-controls button:hover {
+    background: rgba(23, 162, 184, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Empty state */
+.neo4j-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    color: rgba(255,255,255,0.6);
+    font-style: italic;
+}
