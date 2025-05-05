@@ -169,6 +169,18 @@ def process_data(graph_id):
                 # Save CSV file
                 csv_file = form.csv_file.data
                 filename = secure_filename(csv_file.filename)
+                
+                # Check if this file already exists for this graph
+                existing_source = InputSource.query.filter_by(
+                    graph_id=graph.id,
+                    filename=filename,
+                    source_type='csv'
+                ).first()
+                
+                if existing_source:
+                    flash(f'This file ({filename}) has already been processed for this knowledge graph.', 'warning')
+                    return render_template('process.html', form=form, graph=graph)
+                
                 csv_path = os.path.join(input_dir, filename)
                 csv_file.save(csv_path)
                 
@@ -194,6 +206,18 @@ def process_data(graph_id):
                 if url:
                     try:
                         filename = url.split('/')[-1]
+                        
+                        # Check if this URL already exists for this graph
+                        existing_source = InputSource.query.filter_by(
+                            graph_id=graph.id,
+                            url=url,
+                            source_type='url'
+                        ).first()
+                        
+                        if existing_source:
+                            flash(f'This URL has already been processed for this knowledge graph.', 'warning')
+                            return render_template('process.html', form=form, graph=graph)
+                            
                         csv_path = os.path.join(input_dir, filename)
                         urllib.request.urlretrieve(url, csv_path)
                     except Exception as e:
