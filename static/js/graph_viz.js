@@ -6,9 +6,9 @@ class KnowledgeGraphVisualizer {
         this.width = this.container.offsetWidth;
         this.height = 700;
         this.options = Object.assign({
-            nodeRadius: 12,
-            linkDistance: 150,
-            chargeStrength: -300,
+            nodeRadius: 14,
+            linkDistance: 180,
+            chargeStrength: -500,
             colors: d3.scaleOrdinal(d3.schemeCategory10)
         }, options);
         
@@ -59,28 +59,28 @@ class KnowledgeGraphVisualizer {
         // Create main group element for zooming
         this.g = this.svg.append("g");
         
-        // Initialize the force simulation with optimized parameters
+        // Initialize the force simulation with enhanced parameters for better distribution
         this.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(d => d.id)
                 .distance(d => {
-                    // Dynamic link distance based on node degrees
+                    // Dynamic link distance based on node degrees - increase spacing
                     const sourceConnections = this.countNodeConnections(d.source.id || d.source);
                     const targetConnections = this.countNodeConnections(d.target.id || d.target);
-                    // More connected nodes should be further apart
-                    return this.options.linkDistance * (1 + Math.log(1 + Math.max(sourceConnections, targetConnections) * 0.1));
+                    // More connected nodes should be further apart, with more spread
+                    return this.options.linkDistance * (1 + Math.log(1 + Math.max(sourceConnections, targetConnections) * 0.15));
                 })
-                .strength(0.7)) // More rigid links
+                .strength(0.6)) // Slightly less rigid links for more natural spacing
             .force("charge", d3.forceManyBody()
-                .strength(d => this.options.chargeStrength * (1 + Math.log(1 + this.countNodeConnections(d.id) * 0.2)))
-                .distanceMax(500)) // Limit long-range repulsion
+                .strength(d => this.options.chargeStrength * (1 + Math.log(1 + this.countNodeConnections(d.id) * 0.25)))
+                .distanceMax(700)) // Extend long-range repulsion for better spacing
             .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-            .force("collision", d3.forceCollide().radius(d => this.options.nodeRadius * 1.5 + (this.countNodeConnections(d.id) * 0.5)))
-            .force("x", d3.forceX(this.width / 2).strength(0.05)) // Gentle force toward center X
-            .force("y", d3.forceY(this.height / 2).strength(0.05)) // Gentle force toward center Y
-            .alphaDecay(0.02) // Slower decay for better stabilization
-            .alphaTarget(0.1) // Keep some energy in the simulation
+            .force("collision", d3.forceCollide().radius(d => this.options.nodeRadius * 2.0 + (this.countNodeConnections(d.id) * 0.8)))
+            .force("x", d3.forceX(this.width / 2).strength(0.03)) // Gentler force toward center X
+            .force("y", d3.forceY(this.height / 2).strength(0.03)) // Gentler force toward center Y
+            .alphaDecay(0.015) // Even slower decay for better stabilization
+            .alphaTarget(0.05) // Keep some energy but less than before
             .alpha(1)
-            .velocityDecay(0.4) // Dampen velocity for smoother motion
+            .velocityDecay(0.35) // Slightly less damping for smoother motion
             .on("tick", () => this.ticked());
         
         // Create arrow marker for links
@@ -263,15 +263,15 @@ class KnowledgeGraphVisualizer {
     }
     
     getCategoryColor(category) {
-        // Consistent colors for node categories
+        // Consistent colors for node categories with improved visibility
         const categoryColors = {
-            'Person': '#ff7f0e',      // Orange
-            'Movie': '#1f77b4',       // Blue
-            'Organization': '#2ca02c', // Green
-            'Genre': '#d62728',       // Red
-            'Other': '#9467bd'        // Purple
+            'Person': '#ff9933',      // Brighter Orange
+            'Movie': '#3399ff',       // Brighter Blue
+            'Organization': '#33cc33', // Brighter Green
+            'Genre': '#e63939',       // Brighter Red
+            'Other': '#9966cc'        // Brighter Purple
         };
-        return categoryColors[category] || '#9467bd';
+        return categoryColors[category] || '#9966cc';
     }
     
     truncateLabel(label, maxLength = 10) {
